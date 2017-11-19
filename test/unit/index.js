@@ -1,5 +1,9 @@
 import Vue from 'vue';
 
+// jasmine helpers
+require('jasmine-ajax');
+require('jasmine-promises');
+
 Vue.config.productionTip = false;
 
 // require all test files (files that ends with .spec.js)

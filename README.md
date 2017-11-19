@@ -1,6 +1,12 @@
+[![build][travis-image]][travis-url]
+
+[travis-image]: https://travis-ci.org/jojanper/epsilon.svg?branch=master
+[travis-url]: https://travis-ci.org/jojanper/epsilon
+
 # epsilon
 
-> Vue application playground
+> Vue application playground. Project setup has been generated using [vue-cli](https://github.com/vuejs/vue-cli). Testing framework has been changed from
+[Mocha](https://github.com/mochajs/mocha) to [Jasmine](https://github.com/jasmine/jasmine).
 
 ## Build Setup
 
@@ -8,7 +14,7 @@
 # install dependencies
 npm install
 
-# serve with hot reload at localhost:8080
+# serve with hot reload at localhost:8081
 npm run dev
 
 # build for production with minification
@@ -28,3 +34,7 @@ npm test
 ```
 
 For a detailed explanation on how things work, check out the [guide](http://vuejs-templates.github.io/webpack/) and [docs for vue-loader](http://vuejs.github.io/vue-loader).
+
+## License
+
+[MIT](/LICENSE)
