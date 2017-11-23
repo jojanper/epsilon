@@ -1,7 +1,10 @@
 [![build][travis-image]][travis-url]
+[![codecov.io][codecov-image]][codecov-url]
 
 [travis-image]: https://travis-ci.org/jojanper/epsilon.svg?branch=master
 [travis-url]: https://travis-ci.org/jojanper/epsilon
+[codecov-image]: https://codecov.io/gh/jojanper/epsilon/coverage.svg?branch=master
+[codecov-url]: https://codecov.io/gh/jojanper/epsilon?branch=master
 
 # epsilon
 
