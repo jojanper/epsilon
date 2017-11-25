@@ -14,9 +14,7 @@
 
 # epsilon
 
-> Vue application playground. Project setup has been generated using [vue-cli](https://github.com/vuejs/vue-cli). Testing framework has been changed from
-[Mocha](https://github.com/mochajs/mocha) to [Jasmine](https://github.com/jasmine/jasmine).
-Also unit tests are located in same folder as components.
+> Vue application playground. Project setup has been generated using [vue-cli](https://github.com/vuejs/vue-cli). Testing framework is [Jest](https://facebook.github.io/jest/). Also unit tests are located in same folder as components.
 
 ## Build Setup
 
