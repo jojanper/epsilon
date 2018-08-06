@@ -46,6 +46,7 @@
       "@vue/airbnb"
     ],
     "rules": {
+      "comma-dangle": 0,
       "indent": [
         "error",
         4
