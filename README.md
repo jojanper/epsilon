@@ -14,7 +14,7 @@
 
 # epsilon
 
-> Vue application playground. Project setup has been generated using [vue-cli](https://github.com/vuejs/vue-cli). Testing framework is [Jest](https://facebook.github.io/jest/). Unit tests are located in same folder as components.
+> Vue application playground. Project setup has been generated using [vue-cli 3](https://github.com/vuejs/vue-cli). Testing framework is [Jest](https://facebook.github.io/jest/). Unit tests are located in same folder as components.
 
 ## Build Setup
 
@@ -35,7 +35,7 @@ npm run test:unit
 npm run test:e2e
 ```
 
-For a detailed explanation on how things work, check out the [guide](http://vuejs-templates.github.io/webpack/) and [docs for vue-loader](http://vuejs.github.io/vue-loader).
+For a detailed explanation on how things work, check out the [guide](https://cli.vuejs.org/).
 
 ## License
 
