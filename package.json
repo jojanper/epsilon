@@ -94,6 +94,7 @@
       "!src/store.js"
     ],
     "coverageReporters": [
+      "lcov",
       "text",
       "text-summary"
     ]
