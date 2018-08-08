@@ -1,6 +1,5 @@
 Some thoughts for further development:
 --------------------------------------
 
-- Move tests under components
-  - Avoid by type categorization
-- Travis CI
+- Header, footer views
+- Network component
