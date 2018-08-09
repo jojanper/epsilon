@@ -1,61 +1,54 @@
 <template>
   <div id="app">
-    <nav class="navbar navbar-expand-lg navbar-light bg-light">
-      <router-link class="navbar-brand" :to="{ name: 'home' }">Epsilon</router-link>
-      <button class="navbar-toggler" type="button" data-toggle="collapse"
-        data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false"
-        aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-      <div class="collapse navbar-collapse" id="navbarCollapse">
-        <ul class="navbar-nav mr-auto">
-          <li v-for="(route, index) in routes" :key="index" class="nav-item">
-            <router-link class="nav-link" data-toggle="collapse" data-target=".navbar-collapse.show"
-              active-class="active" exact :to="{ name: route.name }">
-              {{ route.title}}
-            </router-link>
-          </li>
-        </ul>
-      </div>
-    </nav>
+    <draal-header :routes="header.routes" :appName="header.appName"></draal-header>
     <div class="container">
       <router-view/>
     </div>
+    <draal-footer :link="footer.link" :title="footer.name"></draal-footer>
   </div>
 </template>
 
 <script>
+import DraalHeader from '@/components/Header.vue';
+import DraalFooter from '@/components/Footer.vue';
+
 export default {
     name: 'App',
+    components: {
+        DraalHeader,
+        DraalFooter
+    },
     data() {
         return {
-            routes: [
-                {
-                    name: 'home',
-                    title: 'Home'
-                },
-                {
-                    name: 'about',
-                    title: 'About'
-                }
-            ]
+            header: {
+                appName: 'Epsilon',
+                routes: [
+                    {
+                        name: 'home',
+                        title: 'Home'
+                    },
+                    {
+                        name: 'about',
+                        title: 'About'
+                    }
+                ]
+            },
+            footer: {
+                link: 'https://github.com/jojanper/epsilon',
+                name: 'Epsilon powered by Vue'
+            }
         };
     }
 };
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 #app {
   font-family: 'Avenir', Helvetica, Arial, sans-serif;
   text-align: center;
   color: #2c3e50;
 }
-.nav-link {
-    &.router-link-exact-active {
-      font-weight: bold;
-    }
-}
-.navbar-brand {
-    color: #5cb85c!important;
+.container {
+    min-height: 400px;
 }
 </style>

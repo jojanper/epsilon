@@ -23,6 +23,10 @@ describe('Main view', () => {
         cy.get('a.nav-link').eq(1).click();
         cy.contains('h1', aboutTitle);
     });
+
+    it('footer is available', () => {
+        cy.get('footer').should('exist');
+    });
 });
 
 describe('Home page', () => {
