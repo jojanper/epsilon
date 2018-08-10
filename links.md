@@ -8,6 +8,7 @@
 - https://github.com/ndabAP/vue-sails-example
 - https://github.com/vue-bulma/vue-admin/blob/master/client/components/layout/AppMain.vue
 - https://github.com/vuejs/vue-hackernews-2.0?utm_source=mybridge&utm_medium=blog&utm_campaign=read_more
+- https://github.com/sqreen/vue-authentication-example
 
 ### Authentication
 - https://github.com/sqreen/vue-authentication-example
