@@ -13,6 +13,10 @@
 ### Authentication
 - https://github.com/sqreen/vue-authentication-example
 
+### Bootstrap
+- How to add Bootstrap 4 to your Vue project
+  https://medium.com/@BjornKrols/integrating-and-customising-bootstrap-4-in-vue-js-cbc29ba7688e
+
 ### Inheritance
 - https://medium.com/js-dojo/extending-vuejs-components-42fefefc688b
 
