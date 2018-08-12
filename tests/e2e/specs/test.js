@@ -36,7 +36,7 @@ describe('Home page', () => {
             method: 'GET',
             url: 'https://api.iextrading.com/1.0/stock/aapl/batch?types=quote,news,chart&range=1m&last=1',
             status: 200,
-            response: { data: {chart: []} }
+            response: { data: { chart: [] } }
         });
         cy.visit(homeUrl);
         cy.contains('h1', homeTitle);
