@@ -14,14 +14,14 @@
 </template>
 
 <script>
-import { from, throwError } from 'rxjs';
-import { catchError } from 'rxjs/operators';
+// import { from, throwError } from 'rxjs';
+// import { catchError } from 'rxjs/operators';
 
 import DraalHeader from '@/components/Header.vue';
 import DraalFooter from '@/components/Footer.vue';
 import Network from '@/common/network';
 
-function dummyError() {}
+function dummyErrorHandler() {}
 
 export default {
     name: 'App',
@@ -30,32 +30,10 @@ export default {
         DraalFooter
     },
     created() {
-        // console.log('created');
-        const promise =
-            Network.get('https://api.iextrading.com/1.0/sto2ck/aapl/batch?types=quote,news,chart&range=1m&last=1');
-        /*
-            .then((response) => {
-                // console.log(response);
-                response.data.chart.forEach(chart => this.data.push(chart));
-            });
-            /*
-            .catch((response) => {
-                console.log('ERROR');
-                console.log(response);
-            });
-            */
-
-        const observable = from(promise).pipe(catchError((err) => {
-            console.log('CATCH ERROR');
-            console.log(err.response);
-            return throwError(err);
-        }));
-
+        const observable = Network.get('https://api.iextrading.com/1.0/stock/aapl/batch?types=quote,news,chart&range=1m&last=1');
         observable.subscribe(
-            (response) => {
-                console.log(response);
-            },
-            dummyError
+            data => data.chart.forEach(chart => this.data.push(chart)),
+            dummyErrorHandler
         );
     },
     data() {
