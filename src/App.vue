@@ -14,12 +14,9 @@
 </template>
 
 <script>
-// import { from, throwError } from 'rxjs';
-// import { catchError } from 'rxjs/operators';
-
 import DraalHeader from '@/components/Header.vue';
 import DraalFooter from '@/components/Footer.vue';
-import Network from '@/common/network';
+import IEXApi from '@/common/iex_api';
 
 function dummyErrorHandler() {}
 
@@ -29,13 +26,14 @@ export default {
         DraalHeader,
         DraalFooter
     },
+
     created() {
-        const observable = Network.get('https://api.iextrading.com/1.0/stock/aapl/batch?types=quote,news,chart&range=1m&last=1');
-        observable.subscribe(
+        IEXApi.stock('aapl').subscribe(
             data => data.chart.forEach(chart => this.data.push(chart)),
             dummyErrorHandler
         );
     },
+
     data() {
         return {
             header: {

@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { from, throwError } from 'rxjs';
-import { catchError, map } from 'rxjs/operators';
+import { catchError, map, first } from 'rxjs/operators';
 
 
 class Network {
@@ -16,6 +16,7 @@ class Network {
         const promise = this.network[method](...args);
 
         return from(promise).pipe(
+            first(),
             map(response => response.data),
             catchError(err => throwError(err.response))
         );
