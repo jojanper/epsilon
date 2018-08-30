@@ -3,3 +3,26 @@ Some thoughts for further development:
 
 - Header, footer views
 - Network component
+  - https://iextrading.com/developer/docs/#stocks
+
+- https://medium.com/js-dojo/extending-vuejs-components-42fefefc688b
+
+- https://github.com/vuejs/vue-hackernews-2.0?utm_source=mybridge&utm_medium=blog&utm_campaign=read_more
+
+- https://github.com/vue-bulma/vue-admin/blob/master/client/components/layout/AppMain.vue
+
+- https://github.com/ndabAP/vue-sails-example
+
+- https://github.com/PanJiaChen/vue-element-admin/blob/master/src/utils/request.js
+
+- Axios api https://github.com/gothinkster/vue-realworld-example-app/blob/master/src/common/api.service.js
+
+- Examples
+  https://github.com/chrisvfritz/vue-enterprise-boilerplate
+  Router + ngprogress + auth guard
+
+  https://github.com/epicmaxco/vuestic-admin
+  I18 + $te + $t usage
+
+  https://github.com/PanJiaChen/vue-element-admin
+  Store modules

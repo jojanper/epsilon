@@ -3,6 +3,11 @@
     <draal-header :routes="header.routes" :appName="header.appName"></draal-header>
     <div class="container">
       <router-view/>
+      <ul class="list-group">
+        <li v-for="(item, index) in data" :key="index" class="list-group-item">
+            {{ item.date }} - {{ item.close }}
+        </li>
+        </ul>
     </div>
     <draal-footer :link="footer.link" :title="footer.name"></draal-footer>
   </div>
@@ -11,6 +16,9 @@
 <script>
 import DraalHeader from '@/components/Header.vue';
 import DraalFooter from '@/components/Footer.vue';
+import IEXApi from '@/common/iex_api';
+
+function dummyErrorHandler() {}
 
 export default {
     name: 'App',
@@ -18,6 +26,14 @@ export default {
         DraalHeader,
         DraalFooter
     },
+
+    created() {
+        IEXApi.stock('aapl').subscribe(
+            data => data.chart.forEach(chart => this.data.push(chart)),
+            dummyErrorHandler
+        );
+    },
+
     data() {
         return {
             header: {
@@ -36,7 +52,8 @@ export default {
             footer: {
                 link: 'https://github.com/jojanper/epsilon',
                 name: 'Epsilon powered by Vue'
-            }
+            },
+            data: []
         };
     }
 };
