@@ -1,6 +1,7 @@
 <template>
   <div id="app">
     <draal-header :routes="header.routes" :appName="header.appName"></draal-header>
+    <draal-notification></draal-notification>
     <div class="container">
       <router-view/>
       <ul class="list-group">
@@ -16,6 +17,7 @@
 <script>
 import DraalHeader from '@/components/Header.vue';
 import DraalFooter from '@/components/Footer.vue';
+import DraalNotification from '@/components/Notification.vue';
 import IEXApi from '@/common/iex_api';
 
 function dummyErrorHandler() {}
@@ -24,7 +26,8 @@ export default {
     name: 'App',
     components: {
         DraalHeader,
-        DraalFooter
+        DraalFooter,
+        DraalNotification
     },
 
     created() {
