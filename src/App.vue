@@ -4,11 +4,17 @@
     <draal-notification></draal-notification>
     <div class="container">
       <router-view/>
+      <button v-on:click="addAlert()">Add alert</button>
       <ul class="list-group">
         <li v-for="(item, index) in data" :key="index" class="list-group-item">
             {{ item.date }} - {{ item.close }}
         </li>
-        </ul>
+      </ul>
+      <ul class="list-group">
+        <li v-for="(item, index) in appNotifications" :key="index" class="list-group-item">
+            {{ item.type }} - {{ item.title }}
+        </li>
+      </ul>
     </div>
     <draal-footer :link="footer.link" :title="footer.name"></draal-footer>
   </div>
@@ -19,6 +25,7 @@ import DraalHeader from '@/components/Header.vue';
 import DraalFooter from '@/components/Footer.vue';
 import DraalNotification from '@/components/Notification.vue';
 import IEXApi from '@/common/iex_api';
+import { notificationActions, notificationComputed } from '@/store/helpers';
 
 function dummyErrorHandler() {}
 
@@ -35,6 +42,18 @@ export default {
             data => data.chart.forEach(chart => this.data.push(chart)),
             dummyErrorHandler
         );
+
+        /*
+        console.log(this);
+        this.addNotification({
+            type: 'info',
+            title: 'Message 5'
+        });
+        */
+    },
+
+    computed: {
+        ...notificationComputed
     },
 
     data() {
@@ -58,6 +77,16 @@ export default {
             },
             data: []
         };
+    },
+
+    methods: {
+        ...notificationActions,
+        addAlert() {
+            this.addNotification({
+                type: 'info',
+                title: 'Message 5'
+            });
+        }
     }
 };
 </script>

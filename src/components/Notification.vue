@@ -1,6 +1,6 @@
 <template>
     <div>
-        <div v-for="(msg, index) in messages" :key="index" :class="getClass(msg)"
+        <div v-for="(msg, index) in appNotifications" :key="index" :class="getClass(msg)"
             v-on:click.prevent="removeMsg(msg)">
             {{ msg.title }}
         </div>
@@ -8,6 +8,8 @@
 </template>
 
 <script>
+import { notificationComputed } from '@/store/helpers';
+
 const clsMapper = {
     success: 'alert-success',
     warning: 'alert-warning',
@@ -24,6 +26,11 @@ export default {
             default: () => clsMapper
         }
     },
+
+    computed: {
+        ...notificationComputed
+    },
+
     data() {
         return {
             messages: [

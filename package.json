@@ -14,6 +14,7 @@
   },
   "dependencies": {
     "axios": "^0.18.0",
+    "lodash": "^4.17.10",
     "rxjs": "^6.2.2",
     "vue": "^2.5.16",
     "vue-router": "^3.0.1",
@@ -57,6 +58,9 @@
     },
     "parserOptions": {
       "parser": "babel-eslint"
+    },
+    "globals": {
+      "createModuleStore": false
     }
   },
   "postcss": {
@@ -70,6 +74,7 @@
     "not ie <= 8"
   ],
   "jest": {
+    "setupFiles": ["<rootDir>/tests/unit/setup"],
     "moduleFileExtensions": [
       "js",
       "jsx",
