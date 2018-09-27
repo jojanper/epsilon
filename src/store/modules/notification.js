@@ -1,6 +1,13 @@
 export const mutations = {
-    ADD_NOTIFICATION(state, msg) {
-        state.notifications.push(msg);
+    ADD_NOTIFICATION(state, obj) {
+        state.notifications.push(obj);
+        // console.log(state.notifications.length);
+    },
+
+    REMOVE_NOTIFICATION(/* state, obj */) {
+        // state.notifications.push(obj);
+        // console.log(state.notifications.length);
+        // console.log('REMOVE', obj);
     }
 };
 
@@ -11,8 +18,12 @@ export const getters = {
 };
 
 export const actions = {
-    addNotification({ commit }, msg) {
-        commit('ADD_NOTIFICATION', msg);
+    addNotification({ commit }, obj) {
+        commit('ADD_NOTIFICATION', obj);
+    },
+
+    removeNotification({ commit }, obj) {
+        commit('REMOVE_NOTIFICATION', obj);
     }
 };
 

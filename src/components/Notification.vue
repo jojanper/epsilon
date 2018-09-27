@@ -1,14 +1,14 @@
 <template>
     <div>
         <div v-for="(msg, index) in appNotifications" :key="index" :class="getClass(msg)"
-            v-on:click.prevent="removeMsg(msg)">
-            {{ msg.title }}
+            v-on:click.prevent="removeNotification(msg)">
+            {{ msg.data }}
         </div>
     </div>
 </template>
 
 <script>
-import { notificationComputed } from '@/store/helpers';
+import { notificationComputed, notificationActions } from '@/store/helpers';
 
 const clsMapper = {
     success: 'alert-success',
@@ -33,33 +33,12 @@ export default {
 
     data() {
         return {
-            messages: [
-                {
-                    type: 'success',
-                    title: 'Message 1'
-                },
-                {
-                    type: 'error',
-                    title: 'Message 2'
-                },
-                {
-                    type: 'warning',
-                    title: 'Message 3'
-                },
-                {
-                    type: 'info',
-                    title: 'Message 4'
-                }
-            ]
         };
     },
     methods: {
+        ...notificationActions,
         getClass(msg) {
             return `alert ${this.clsMapper[msg.type]}`;
-        },
-
-        removeMsg(/* msg */) {
-            // console.log(msg);
         }
     }
 };

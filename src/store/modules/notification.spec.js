@@ -1,3 +1,4 @@
+import { NotificationMessage, NotificationMessageTypes } from '../../common/handlers';
 import * as notificationModule from './notification';
 
 
@@ -9,15 +10,13 @@ describe('Notification module', () => {
     });
 
     it('notification', (done) => {
-        store.dispatch('addNotification', {
-            type: 'success',
-            title: 'Notification message'
-        }).then(() => {
+        const obj = NotificationMessage.createSuccess('Notification message');
+        store.dispatch('addNotification', obj).then(() => {
             const data = store.getters.appNotifications;
 
             expect(data.length).toEqual(1);
-            expect(data[0].type).toEqual('success');
-            expect(data[0].title).toEqual('Notification message');
+            expect(data[0].type).toEqual(NotificationMessageTypes.SUCCESS);
+            expect(data[0].data).toEqual('Notification message');
             done();
         });
     });

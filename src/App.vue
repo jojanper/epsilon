@@ -12,7 +12,7 @@
       </ul>
       <ul class="list-group">
         <li v-for="(item, index) in appNotifications" :key="index" class="list-group-item">
-            {{ item.type }} - {{ item.title }}
+            {{ item.type }} - {{ item.data }}
         </li>
       </ul>
     </div>
@@ -25,6 +25,7 @@ import DraalHeader from '@/components/Header.vue';
 import DraalFooter from '@/components/Footer.vue';
 import DraalNotification from '@/components/Notification.vue';
 import IEXApi from '@/common/iex_api';
+import { NotificationMessage } from '@/common/handlers';
 import { notificationActions, notificationComputed } from '@/store/helpers';
 
 function dummyErrorHandler() {}
@@ -82,10 +83,7 @@ export default {
     methods: {
         ...notificationActions,
         addAlert() {
-            this.addNotification({
-                type: 'info',
-                title: 'Message 5'
-            });
+            this.addNotification(NotificationMessage.createSuccess('Message 5'));
         }
     }
 };

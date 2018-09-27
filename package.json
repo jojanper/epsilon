@@ -54,6 +54,9 @@
       "indent": [
         "error",
         4
+      ],
+      "no-underscore-dangle": [
+        "error", {"allowAfterThis": true}
       ]
     },
     "parserOptions": {
