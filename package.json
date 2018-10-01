@@ -57,6 +57,14 @@
       ],
       "no-underscore-dangle": [
         "error", {"allowAfterThis": true}
+      ],
+      "no-param-reassign": [
+        "error", {
+          "props": true,
+          "ignorePropertyModificationsFor": [
+            "state"
+          ]
+        }
       ]
     },
     "parserOptions": {

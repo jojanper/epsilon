@@ -1,13 +1,10 @@
 export const mutations = {
     ADD_NOTIFICATION(state, obj) {
         state.notifications.push(obj);
-        // console.log(state.notifications.length);
     },
 
-    REMOVE_NOTIFICATION(/* state, obj */) {
-        // state.notifications.push(obj);
-        // console.log(state.notifications.length);
-        // console.log('REMOVE', obj);
+    REMOVE_NOTIFICATION(state, obj) {
+        state.notifications = state.notifications.filter(item => !(item.id === obj.id));
     }
 };
 

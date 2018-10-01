@@ -4,7 +4,10 @@
     <draal-notification></draal-notification>
     <div class="container">
       <router-view/>
-      <button v-on:click="addAlert()">Add alert</button>
+      <button v-on:click="addAlert('Success')">Add success alert</button>
+      <button v-on:click="addAlert('Info')">Add info alert</button>
+      <button v-on:click="addAlert('Warning')">Add warning alert</button>
+      <button v-on:click="addAlert('Error')">Add error alert</button>
       <ul class="list-group">
         <li v-for="(item, index) in data" :key="index" class="list-group-item">
             {{ item.date }} - {{ item.close }}
@@ -82,8 +85,8 @@ export default {
 
     methods: {
         ...notificationActions,
-        addAlert() {
-            this.addNotification(NotificationMessage.createSuccess('Message 5'));
+        addAlert(mode) {
+            this.addNotification(NotificationMessage[`create${mode}`](`${mode} notification`));
         }
     }
 };
