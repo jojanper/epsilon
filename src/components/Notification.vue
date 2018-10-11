@@ -31,10 +31,6 @@ export default {
         ...notificationComputed
     },
 
-    data() {
-        return {
-        };
-    },
     methods: {
         ...notificationActions,
         getClass(msg) {

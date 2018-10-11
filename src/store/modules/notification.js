@@ -9,6 +9,7 @@ export const mutations = {
 };
 
 export const getters = {
+    // Return notifications array
     appNotifications(state) {
         return state.notifications;
     }
