@@ -36,7 +36,7 @@ describe('Home page', () => {
             method: 'GET',
             url: 'https://api.iextrading.com/1.0/stock/aapl/batch?types=quote,news,chart&range=1m&last=1',
             status: 200,
-            response: { data: { chart: [] } }
+            response: { chart: [] }
         });
         cy.visit(homeUrl);
         cy.contains('h1', homeTitle);
@@ -45,6 +45,13 @@ describe('Home page', () => {
 
 describe('About page', () => {
     it('exists', () => {
+        cy.server();
+        cy.route({
+            method: 'GET',
+            url: 'https://api.iextrading.com/1.0/stock/aapl/batch?types=quote,news,chart&range=1m&last=1',
+            status: 200,
+            response: { chart: [] }
+        });
         cy.visit(aboutUrl);
         cy.contains('h1', aboutTitle);
     });

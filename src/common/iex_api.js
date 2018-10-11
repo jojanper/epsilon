@@ -3,7 +3,7 @@ import Network from './network';
 
 class IEXApi {
     constructor(network) {
-        this.rootUrl = 'https://api.iextrading.com/1.0/';
+        this.rootUrl = 'https://api.iextrading.com/1.0';
         this.network = network;
     }
 
