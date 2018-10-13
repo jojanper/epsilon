@@ -15,7 +15,7 @@ describe('Network', () => {
         moxios.uninstall();
     });
 
-    fit('remote responds with an error message', (done) => {
+    it('remote responds with an error message', (done) => {
         moxios.stubRequest(url, {
             status: 404,
             response: { error: 'Error' }
@@ -32,7 +32,7 @@ describe('Network', () => {
         });
     });
 
-    fit('supports get', (done) => {
+    it('supports get', (done) => {
         moxios.stubRequest(url, {
             status: 200,
             response: [

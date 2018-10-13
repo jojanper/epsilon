@@ -1,13 +1,18 @@
 <template>
   <div id="app">
     <draal-header :routes="header.routes" :appName="header.appName"></draal-header>
+    <draal-notification></draal-notification>
     <div class="container">
       <router-view/>
+      <button v-on:click="addAlert('Success')">Add success alert</button>
+      <button v-on:click="addAlert('Info')">Add info alert</button>
+      <button v-on:click="addAlert('Warning')">Add warning alert</button>
+      <button v-on:click="addAlert('Error')">Add error alert</button>
       <ul class="list-group">
         <li v-for="(item, index) in data" :key="index" class="list-group-item">
             {{ item.date }} - {{ item.close }}
         </li>
-        </ul>
+      </ul>
     </div>
     <draal-footer :link="footer.link" :title="footer.name"></draal-footer>
   </div>
@@ -16,7 +21,10 @@
 <script>
 import DraalHeader from '@/components/Header.vue';
 import DraalFooter from '@/components/Footer.vue';
+import DraalNotification from '@/components/Notification.vue';
 import IEXApi from '@/common/iex_api';
+import { NotificationMessage } from '@/common/handlers';
+import { notificationActions } from '@/store/helpers';
 
 function dummyErrorHandler() {}
 
@@ -24,7 +32,8 @@ export default {
     name: 'App',
     components: {
         DraalHeader,
-        DraalFooter
+        DraalFooter,
+        DraalNotification
     },
 
     created() {
@@ -55,6 +64,13 @@ export default {
             },
             data: []
         };
+    },
+
+    methods: {
+        ...notificationActions,
+        addAlert(mode) {
+            this.addNotification(NotificationMessage[`create${mode}`](`${mode} notification`));
+        }
     }
 };
 </script>
