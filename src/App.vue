@@ -43,20 +43,9 @@ export default {
 
     created() {
         IEXApi.stock('aapl').subscribe(
-            data => {
-                console.log(data);
-                data.chart.forEach(chart => this.data.push(chart));
-            },
+            data => data.chart.forEach(chart => this.data.push(chart)),
             dummyErrorHandler
         );
-
-        /*
-        console.log(this);
-        this.addNotification({
-            type: 'info',
-            title: 'Message 5'
-        });
-        */
     },
 
     computed: {

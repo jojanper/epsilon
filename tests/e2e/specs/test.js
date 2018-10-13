@@ -6,6 +6,13 @@ const aboutUrl = '#/about';
 const homeTitle = 'Welcome to Your Vue.js App';
 const aboutTitle = 'This is an about page';
 
+const IEX_API_CALL = {
+    method: 'GET',
+    url: 'https://api.iextrading.com/1.0/stock/aapl/batch?types=quote,news,chart&range=1m&last=1',
+    status: 200,
+    response: { chart: [] }
+};
+
 
 describe('Main view', () => {
     it('contains menu links', () => {
@@ -32,12 +39,7 @@ describe('Main view', () => {
 describe('Home page', () => {
     it('exists', () => {
         cy.server();
-        cy.route({
-            method: 'GET',
-            url: 'https://api.iextrading.com/1.0/stock/aapl/batch?types=quote,news,chart&range=1m&last=1',
-            status: 200,
-            response: { chart: [] }
-        });
+        cy.route(IEX_API_CALL);
         cy.visit(homeUrl);
         cy.contains('h1', homeTitle);
     });
@@ -46,12 +48,7 @@ describe('Home page', () => {
 describe('About page', () => {
     it('exists', () => {
         cy.server();
-        cy.route({
-            method: 'GET',
-            url: 'https://api.iextrading.com/1.0/stock/aapl/batch?types=quote,news,chart&range=1m&last=1',
-            status: 200,
-            response: { chart: [] }
-        });
+        cy.route(IEX_API_CALL);
         cy.visit(aboutUrl);
         cy.contains('h1', aboutTitle);
     });
