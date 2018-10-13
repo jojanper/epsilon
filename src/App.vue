@@ -13,11 +13,6 @@
             {{ item.date }} - {{ item.close }}
         </li>
       </ul>
-      <ul class="list-group">
-        <li v-for="(item, index) in appNotifications" :key="index" class="list-group-item">
-            {{ item.type }} - {{ item.data }}
-        </li>
-      </ul>
     </div>
     <draal-footer :link="footer.link" :title="footer.name"></draal-footer>
   </div>
@@ -29,7 +24,7 @@ import DraalFooter from '@/components/Footer.vue';
 import DraalNotification from '@/components/Notification.vue';
 import IEXApi from '@/common/iex_api';
 import { NotificationMessage } from '@/common/handlers';
-import { notificationActions, notificationComputed } from '@/store/helpers';
+import { notificationActions } from '@/store/helpers';
 
 function dummyErrorHandler() {}
 
@@ -46,10 +41,6 @@ export default {
             data => data.chart.forEach(chart => this.data.push(chart)),
             dummyErrorHandler
         );
-    },
-
-    computed: {
-        ...notificationComputed
     },
 
     data() {
