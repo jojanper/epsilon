@@ -96,6 +96,10 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+// Style loading bar between pages.
+// https://github.com/rstacruz/nprogress
+@import '~nprogress/nprogress.css';
+
 #app {
   font-family: 'Avenir', Helvetica, Arial, sans-serif;
   text-align: center;
