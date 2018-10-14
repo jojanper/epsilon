@@ -4,6 +4,7 @@
     <draal-notification></draal-notification>
     <div class="container">
       <router-view/>
+        <div>{{ $t('message') }}</div>
       <button v-on:click="addAlert('Success')">Add success alert</button>
       <button v-on:click="addAlert('Info')">Add info alert</button>
       <button v-on:click="addAlert('Warning')">Add warning alert</button>
