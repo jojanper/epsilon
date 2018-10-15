@@ -1,7 +1,7 @@
 <template>
   <div class="home">
     <img src="../assets/logo.png">
-    <draal-hello-world msg="Welcome to Your Vue.js App"/>
+    <draal-hello-world :msg="$t('homepage.message')"/>
   </div>
 </template>
 
