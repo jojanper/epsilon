@@ -3,6 +3,11 @@
     <draal-header :routes="header.routes" :appName="header.appName"></draal-header>
     <draal-notification></draal-notification>
     <div class="container">
+
+      <i class="icon ion-md-create text-success ml-2"></i><span>&nbsp;Sign up</span>
+      <i class="icon ion-md-log-in text-primary ml-2"></i><span>&nbsp;Login</span>
+      <i class="icon ion-md-log-out text-primary ml-2"></i><span>&nbsp;Logout</span>
+
       <router-view/>
       <button v-on:click="addAlert('Success')">Add success alert</button>
       <button v-on:click="addAlert('Info')">Add info alert</button>
