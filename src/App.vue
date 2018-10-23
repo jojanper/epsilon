@@ -1,5 +1,6 @@
 <template>
   <div id="app">
+    <draal-go-2-top></draal-go-2-top>
     <draal-header :routes="header.routes" :appName="header.appName"></draal-header>
     <draal-notification></draal-notification>
     <div class="container">
@@ -27,6 +28,7 @@
 import DraalHeader from '@/components/Header.vue';
 import DraalFooter from '@/components/Footer.vue';
 import DraalNotification from '@/components/Notification.vue';
+import DraalGo2Top from '@/components/utils/Gotop.vue';
 import IEXApi from '@/common/iex_api';
 import { NotificationMessage } from '@/common/handlers';
 import { notificationActions } from '@/store/helpers';
@@ -38,7 +40,8 @@ export default {
     components: {
         DraalHeader,
         DraalFooter,
-        DraalNotification
+        DraalNotification,
+        DraalGo2Top
     },
 
     created() {
