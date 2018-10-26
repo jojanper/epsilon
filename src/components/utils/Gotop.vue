@@ -1,5 +1,5 @@
 <template>
-    <div class="goTop" :class="getClass()" v-if="isVisible" @click="backToTop">
+    <div class="go-top" :class="getClass()" @click="backToTop">
         <i class="icon ion-ios-arrow-dropup-circle text-danger" aria-hidden="true"></i>
     </div>
 </template>
@@ -7,91 +7,72 @@
 <script>
 export default {
     name: 'DraalGo2Top',
-    destroyed() {
-        console.log('DESTROYED');
-        document.removeEventListener('scroll', this.scrollHandler);
+    props: {
+        scrollHeight: {
+            type: Number,
+            required: false,
+            default: 250
+        }
     },
+
+    destroyed() {
+        window.removeEventListener('scroll', this.scrollHandler);
+    },
+
     data() {
         return {
             isVisible: false
         };
     },
+
     methods: {
         getClass() {
-            return this.isVisible ? 'isVisible' : '';
+            return this.isVisible ? 'go-top-visible' : 'go-top-invisible';
         },
-
         scrollHandler() {
-            // const backToTopButton = $('.goTop');
-            // console.log(document.scrollingElement.scrollTop);
-            // console.log(this);
-            if (document.scrollingElement.scrollTop > 250) {
-                // backToTopButton.addClass('isVisible');
-                this.isVisible = true;
-            } else {
-                // backToTopButton.removeClass('isVisible');
-                this.isVisible = false;
-            }
+            this.isVisible = (window.scrollY > this.scrollHeight);
         },
-
-        initToTopButton() {
-            // $(document).bind('scroll', function() {
-            document.addEventListener('scroll', this.scrollHandler);
-        },
-
         backToTop() {
-            // console.log('BACK TOP TOP');
-            /*
-            document.querySelector('body').stop().animate({
-                scrollTop: 0
-            }, 'slow', 'swing');
-            */
-            window.scrollTo({
-                top: 0,
-                behavior: 'smooth'
-            });
+            window.scrollTo({ top: 0, behavior: 'smooth' });
         }
     },
+
     mounted() {
-        this.$nextTick(() => this.initToTopButton());
+        this.$nextTick(() => window.addEventListener('scroll', this.scrollHandler));
     }
 };
 </script>
 
 <style lang="scss">
-.goTop {
-  border-radius: 50%;
-  //background-color: rgb(1,14,27);
-  //background-color: rgba(1, 14, 27, .7);
-  position: fixed;
-  width: 45px;
-  height: 45px;
-  display: block;
-  right: 1.5em;
-  bottom: 2.5em;
-  border: none;
-  opacity: 0;
-  z-index: -1;
-  /*
-  .fa {
-    color: white;
-    font-size: 22px;
-  }
-  */
-  &:hover {
-    opacity: 0.8;
-    //background-color: rgb(1,14,27);
-    //background-color: rgba(1, 14, 27, .9);
-  }
+.go-top {
+    border-radius: 50%;
+    position: fixed;
+    width: 45px;
+    height: 45px;
+    display: block;
+    right: 1.5em;
+    bottom: 2.5em;
+    border: none;
+    z-index: -1;
+    &:hover {
+        opacity: 0.8;
+    }
 
-  i {
+    i {
       font-size: 4em;
-  }
+    }
 }
 
-.isVisible {
-  opacity: 1;
-  z-index: 4;
-  transition: all 0.4s ease-in ease-out;
+.go-top-invisible {
+    opacity: 0;
+    visibility: hidden;
+    transition: visibility 0.5s, opacity 0.5s linear;
+}
+
+.go-top-visible {
+    opacity: 1;
+    z-index: 4;
+    visibility: visible;
+    transition: all 0.5s linear;
 }
 </style>
