@@ -1,13 +1,15 @@
 <template>
-  <div id="app">
+  <v-app id="app">
     <draal-header :routes="header.routes" :appName="header.appName"></draal-header>
     <draal-notification></draal-notification>
     <div class="container">
       <router-view/>
-      <button v-on:click="addAlert('Success')">Add success alert</button>
-      <button v-on:click="addAlert('Info')">Add info alert</button>
-      <button v-on:click="addAlert('Warning')">Add warning alert</button>
-      <button v-on:click="addAlert('Error')">Add error alert</button>
+      <v-flex xs12 sm34 text-xs-center>
+      <v-btn color="primary" v-on:click="addAlert('Success')">Add success alert</v-btn>
+      <v-btn color="info" v-on:click="addAlert('Info')">Add info alert</v-btn>
+      <v-btn color="warning" v-on:click="addAlert('Warning')">Add warning alert</v-btn>
+      <v-btn color="error" v-on:click="addAlert('Error')">Add error alert</v-btn>
+      </v-flex>
       <ul class="list-group">
         <li v-for="(item, index) in data" :key="index" class="list-group-item">
             {{ item.date }} - {{ item.close }}
@@ -15,7 +17,7 @@
       </ul>
     </div>
     <draal-footer :link="footer.link" :title="footer.name"></draal-footer>
-  </div>
+  </v-app>
 </template>
 
 <script>
