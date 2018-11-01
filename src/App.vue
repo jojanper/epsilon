@@ -33,7 +33,7 @@ import DraalNotification from '@/components/Notification.vue';
 import DraalGo2Top from '@/components/utils/Gotop.vue';
 import IEXApi from '@/common/iex_api';
 import { NotificationMessage } from '@/common/handlers';
-import { notificationActions } from '@/store/helpers';
+import { notificationActions, appActions } from '@/store/helpers';
 
 function dummyErrorHandler() {}
 
@@ -47,6 +47,8 @@ export default {
     },
 
     created() {
+        this.setLanguages(this.languages);
+
         IEXApi.stock('aapl').subscribe(
             data => data.chart.forEach(chart => this.data.push(chart)),
             dummyErrorHandler
@@ -55,6 +57,10 @@ export default {
 
     data() {
         return {
+            languages: [
+                { title: 'English', lang: 'en', shortTitle: 'En' },
+                { title: 'Finnish', lang: 'fi', shortTitle: 'Fi' }
+            ],
             header: {
                 appName: 'Epsilon',
                 routes: [
@@ -77,6 +83,7 @@ export default {
     },
 
     methods: {
+        ...appActions,
         ...notificationActions,
         addAlert(mode) {
             this.addNotification(NotificationMessage[`create${mode}`](`${mode} notification`));

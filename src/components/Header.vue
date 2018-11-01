@@ -27,7 +27,7 @@
                 <span>Change language</span>
             </v-tooltip>
             <v-list>
-                <v-list-tile v-for="(item, index) in items"
+                <v-list-tile v-for="(item, index) in appLanguages"
                     :key="index" @click="setLang({lang: item.lang, instance: $i18n})">
                     <v-list-tile-title>{{ item.title }}</v-list-tile-title>
                 </v-list-tile>
@@ -37,7 +37,7 @@
 </template>
 
 <script>
-import { appActions } from '@/store/helpers';
+import { appActions, appComputed } from '@/store/helpers';
 
 export default {
     name: 'DraalHeader',
@@ -52,13 +52,8 @@ export default {
         }
     },
 
-    data() {
-        return {
-            items: [
-                { title: 'English', lang: 'en' },
-                { title: 'Finnish', lang: 'fi' }
-            ]
-        };
+    computed: {
+        ...appComputed
     },
 
     methods: {
