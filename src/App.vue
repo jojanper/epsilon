@@ -1,8 +1,14 @@
 <template>
   <v-app id="app">
+    <draal-go-2-top></draal-go-2-top>
     <draal-header :routes="header.routes" :appName="header.appName"></draal-header>
     <draal-notification></draal-notification>
     <div class="container">
+
+      <i class="icon ion-md-create text-success ml-2"></i><span>&nbsp;Sign up</span>
+      <i class="icon ion-md-log-in text-primary ml-2"></i><span>&nbsp;Login</span>
+      <i class="icon ion-md-log-out text-primary ml-2"></i><span>&nbsp;Logout</span>
+
       <router-view/>
       <v-flex xs12 sm34 text-xs-center>
       <v-btn color="primary" v-on:click="addAlert('Success')">Add success alert</v-btn>
@@ -24,6 +30,7 @@
 import DraalHeader from '@/components/Header.vue';
 import DraalFooter from '@/components/Footer.vue';
 import DraalNotification from '@/components/Notification.vue';
+import DraalGo2Top from '@/components/utils/Gotop.vue';
 import IEXApi from '@/common/iex_api';
 import { NotificationMessage } from '@/common/handlers';
 import { notificationActions } from '@/store/helpers';
@@ -35,7 +42,8 @@ export default {
     components: {
         DraalHeader,
         DraalFooter,
-        DraalNotification
+        DraalNotification,
+        DraalGo2Top
     },
 
     created() {
