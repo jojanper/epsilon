@@ -5,6 +5,7 @@ import Vuetify from 'vuetify';
 import { mount, shallowMount, RouterLinkStub, createLocalVue } from '@vue/test-utils';
 
 import DraalHeader from './Header.vue';
+import { getters } from '@/store/modules/app';
 
 Vue.use(Vuetify);
 Vue.use(VueI18n);
@@ -32,12 +33,35 @@ describe('DraalHeader', () => {
         ]
     };
 
+    let selectedLang = null;
+
+    const store = new Vuex.Store({
+        modules: {
+            app: {
+                namespaced: true,
+                state: {
+                    languages: [
+                        { title: 'English', lang: 'en', shortTitle: 'En' },
+                        { title: 'Finnish', lang: 'fi', shortTitle: 'Fi' }
+                    ]
+                },
+                actions: {
+                    setLang(_state, obj) {
+                        selectedLang = obj.lang;
+                    }
+                },
+                getters
+            }
+        }
+    });
+
     beforeEach(() => {
         localVue = createLocalVue();
     });
 
     it('renders correctly', () => {
         const wrapper = shallowMount(DraalHeader, {
+            store,
             localVue,
             propsData: props,
             stubs: {
@@ -63,23 +87,6 @@ describe('DraalHeader', () => {
                 <draal-header :routes="routes" :appName="appName"></draal-header>
               </v-app>
             `
-        });
-
-        let selectedLang = null;
-
-        const store = new Vuex.Store({
-            modules: {
-                app: {
-                    namespaced: true,
-                    state: {},
-                    actions: {
-                        setLang(_state, obj) {
-                            selectedLang = obj.lang;
-                        }
-                    },
-                    getters: {}
-                }
-            }
         });
 
         const wrapper = mount(App, {
