@@ -21,7 +21,8 @@
                 </ul>
             </div>
         </nav>
-        <v-menu class="float-right mt-1" offset-y>
+        <draal-language-selection></draal-language-selection>
+        <!--v-menu class="float-right mt-1" offset-y>
             <v-tooltip slot="activator" left debounce=200 open-delay=750 close-delay=250>
                 <v-btn slot="activator" depressed flat small>{{ $i18n.locale }}</v-btn>
                 <span>{{ $t('header.selectLanguage') }}</span>
@@ -32,15 +33,19 @@
                     <v-list-tile-title>{{ item.title }}</v-list-tile-title>
                 </v-list-tile>
             </v-list>
-        </v-menu>
+        </v-menu-->
     </div>
 </template>
 
 <script>
 import { appActions } from '@/store/helpers';
+import DraalLanguageSelection from './Language.vue';
 
 export default {
     name: 'DraalHeader',
+    components: {
+        DraalLanguageSelection
+    },
     props: {
         appName: {
             type: String,
