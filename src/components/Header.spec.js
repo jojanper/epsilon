@@ -5,7 +5,6 @@ import Vuetify from 'vuetify';
 import { mount, shallowMount, RouterLinkStub, createLocalVue } from '@vue/test-utils';
 
 import DraalHeader from './Header.vue';
-import { getters } from '@/store/modules/app';
 
 Vue.use(Vuetify);
 Vue.use(VueI18n);
@@ -15,8 +14,24 @@ const i18n = new VueI18n({
     locale: 'en',
     fallbackLocale: 'en',
     messages: {
-        en: {},
-        fi: {}
+        en: {
+            header: {
+                selectLanguage: 'Change language',
+                languageSelections: [
+                    { title: 'English', lang: 'en' },
+                    { title: 'Finnish', lang: 'fi' }
+                ]
+            }
+        },
+        fi: {
+            header: {
+                selectLanguage: 'Vaihda kieli',
+                languageSelections: [
+                    { title: 'Englanti', lang: 'en' },
+                    { title: 'Suomi', lang: 'fi' }
+                ]
+            }
+        }
     }
 });
 
@@ -40,17 +55,13 @@ describe('DraalHeader', () => {
             app: {
                 namespaced: true,
                 state: {
-                    languages: [
-                        { title: 'English', lang: 'en', shortTitle: 'En' },
-                        { title: 'Finnish', lang: 'fi', shortTitle: 'Fi' }
-                    ]
                 },
                 actions: {
                     setLang(_state, obj) {
                         selectedLang = obj.lang;
                     }
                 },
-                getters
+                getters: {}
             }
         }
     });
@@ -62,6 +73,7 @@ describe('DraalHeader', () => {
     it('renders correctly', () => {
         const wrapper = shallowMount(DraalHeader, {
             store,
+            i18n,
             localVue,
             propsData: props,
             stubs: {
@@ -84,7 +96,7 @@ describe('DraalHeader', () => {
             },
             template: `
               <v-app>
-                <draal-header :routes="routes" :appName="appName"></draal-header>
+                <draal-header :routes='routes' :appName='appName'></draal-header>
               </v-app>
             `
         });

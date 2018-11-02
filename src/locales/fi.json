@@ -1,4 +1,11 @@
 {
+    "header": {
+        "selectLanguage": "Vaihda kieli",
+        "languageSelections": [
+            { "title": "Englanti", "lang": "en" },
+            { "title": "Suomi", "lang": "fi" }
+        ]
+    },
     "homepage": {
         "message": "Tervetuloa Vue.js sovellukseen"
     }
