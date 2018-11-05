@@ -1,7 +1,7 @@
 <template>
     <div>
         <v-menu class="float-right mt-1" offset-y>
-            <v-tooltip slot="activator" left debounce=200 open-delay=750 close-delay=250>
+            <v-tooltip slot="activator" left debounce=200 open-delay=500 close-delay=250>
                 <v-btn slot="activator" depressed flat small>{{ $i18n.locale }}</v-btn>
                 <span>{{ $t('header.selectLanguage') }}</span>
             </v-tooltip>

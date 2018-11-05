@@ -37,27 +37,13 @@ const i18n = new VueI18n({
 
 describe('DraalLanguageSelection', () => {
     let localVue;
-
-    /*
-    const props = {
-        appName: 'test',
-        routes: [
-            {
-                name: 'home',
-                title: 'Testing'
-            }
-        ]
-    };
-    */
-
     let selectedLang = null;
 
     const store = new Vuex.Store({
         modules: {
             app: {
                 namespaced: true,
-                state: {
-                },
+                state: {},
                 actions: {
                     setLang(_state, obj) {
                         selectedLang = obj.lang;
@@ -87,7 +73,6 @@ describe('DraalLanguageSelection', () => {
         const wrapper = mount(App, {
             store,
             localVue,
-            // propsData: props,
             stubs: {
                 RouterLink: RouterLinkStub,
                 DraalLanguageSelection
