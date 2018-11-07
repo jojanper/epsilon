@@ -81,7 +81,7 @@ describe('DraalLanguageSelection', () => {
             attachToDocument: true
         });
 
-        // User open the language selection menu
+        // User opens the language selection menu
         const elements = wrapper.findAll('button');
         elements.at(0).trigger('click');
 

@@ -55,10 +55,6 @@ export default {
 
     data() {
         return {
-            languages: [
-                { title: 'English', lang: 'en', shortTitle: 'En' },
-                { title: 'Finnish', lang: 'fi', shortTitle: 'Fi' }
-            ],
             header: {
                 appName: 'Epsilon',
                 routes: [
