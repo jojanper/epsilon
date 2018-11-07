@@ -1,23 +1,31 @@
-import { shallowMount, RouterLinkStub } from '@vue/test-utils';
+import { shallowMount, RouterLinkStub, createLocalVue } from '@vue/test-utils';
 
 import DraalHeader from './Header.vue';
 
 
 describe('DraalHeader', () => {
+    let localVue;
+
+    const props = {
+        appName: 'test',
+        routes: [
+            {
+                name: 'home',
+                title: 'Testing'
+            }
+        ]
+    };
+
+    beforeEach(() => {
+        localVue = createLocalVue();
+    });
+
     it('renders correctly', () => {
-        const props = {
-            appName: 'test',
-            routes: [
-                {
-                    name: 'home',
-                    title: 'Testing'
-                }
-            ]
-        };
         const wrapper = shallowMount(DraalHeader, {
+            localVue,
             propsData: props,
             stubs: {
-                RouterLink: RouterLinkStub
+                RouterLink: RouterLinkStub,
             }
         });
         const elements = wrapper.findAll('a');
