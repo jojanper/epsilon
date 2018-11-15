@@ -3,16 +3,21 @@ import VueI18n from 'vue-i18n';
 
 Vue.use(VueI18n);
 
+// List of locales that are included to the main build,
+// missing locales are lazy loaded upon request.
+const preloadedLocales = ['en'];
+
 function loadLocaleMessages() {
     const locales = require.context('./locales', true, /[A-Za-z0-9-_,\s]+\.json$/i);
     const messages = {};
     locales.keys().forEach((key) => {
         const matched = key.match(/([A-Za-z0-9-_]+)\./i);
-        if (matched && matched.length > 1) {
+        if (matched && matched.length > 1 && preloadedLocales.includes(matched[1])) {
             const locale = matched[1];
             messages[locale] = locales(key);
         }
     });
+
     return messages;
 }
 
