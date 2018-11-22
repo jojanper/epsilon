@@ -2,7 +2,6 @@
   "header": {
     "selectLanguage": "Change language",
     "languageSelections": [
-        { "title": "English", "lang": "en" },
         { "title": "Finnish", "lang": "fi" }
     ]
   },

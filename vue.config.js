@@ -6,5 +6,12 @@ module.exports = {
             localeDir: 'locales',
             enableInSFC: true
         }
+    },
+    devServer: {
+        proxy: {
+            '/locales': {
+                target: 'http://localhost:8090'
+            }
+        }
     }
 };

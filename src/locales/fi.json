@@ -2,8 +2,7 @@
     "header": {
         "selectLanguage": "Vaihda kieli",
         "languageSelections": [
-            { "title": "Englanti", "lang": "en" },
-            { "title": "Suomi", "lang": "fi" }
+            { "title": "Englanti", "lang": "en" }
         ]
     },
     "homepage": {

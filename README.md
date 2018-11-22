@@ -25,6 +25,9 @@ npm install
 # serve with hot reload at localhost:8080
 npm run serve
 
+# Run static server that serves locales (app requests new locales on lazy loaded manner)
+npm run dev-proxy
+
 # build for production with minification
 npm run build
 

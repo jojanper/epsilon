@@ -11,21 +11,27 @@ export const getters = {
 };
 
 export const actions = {
+    // Change locale settings
     async setLang({ commit }, obj) {
         const i18 = obj.instance;
         const { lang } = obj;
+
+        // Language is available
         if (lang in i18.messages) {
             commit('SET_LANG', obj);
         } else {
-            // Lazy load required language
-            const res = await import(/* webpackChunkName: "lang-[request]" */ `@/locales/${lang}.json`);
-            i18.setLocaleMessage(lang, res.default);
-            commit('SET_LANG', obj);
-            /*
-            Network.get(`/static/locales/${lang}.json`).subscribe((response) => {
-                console.log(response);
+            const config = {
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Cache-Control': 'no-cache'
+                }
+            };
+
+            // Lazy load the required language
+            Network.get(`/locales/${lang}.json`, config).subscribe((response) => {
+                i18.setLocaleMessage(lang, response);
+                commit('SET_LANG', obj);
             });
-            */
         }
     }
 };

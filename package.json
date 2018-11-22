@@ -7,6 +7,7 @@
     "build": "vue-cli-service build",
     "http-server": "http-server",
     "lint": "vue-cli-service lint",
+    "dev-proxy": "npm run http-server -- src --p 8090",
     "test:e2e": "vue-cli-service test:e2e",
     "test:unit": "vue-cli-service test:unit --coverage",
     "vue-service": "vue-cli-service"
