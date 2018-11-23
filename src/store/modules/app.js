@@ -20,6 +20,7 @@ export const actions = {
         if (lang in i18.messages) {
             commit('SET_LANG', obj);
         } else {
+            // Do not cache the locale
             const config = {
                 headers: {
                     'Content-Type': 'application/json',
