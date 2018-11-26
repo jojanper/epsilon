@@ -1,4 +1,5 @@
-const CopyWebpackPlugin = require('copy-webpack-plugin')
+/* eslint-disable import/no-extraneous-dependencies */
+const CopyWebpackPlugin = require('copy-webpack-plugin');
 
 module.exports = {
     configureWebpack: {
