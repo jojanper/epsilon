@@ -8,8 +8,8 @@ class Network {
         this.network = axios;
     }
 
-    get(url) {
-        return this.execute('get', [url]);
+    get(url, options = {}) {
+        return this.execute('get', [url, options]);
     }
 
     execute(method, args) {

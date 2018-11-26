@@ -1,3 +1,5 @@
+import Network from '@/common/network';
+
 export const mutations = {
     SET_LANG(state, obj) {
         const i18 = obj.instance;
@@ -9,8 +11,29 @@ export const getters = {
 };
 
 export const actions = {
-    setLang({ commit }, obj) {
-        commit('SET_LANG', obj);
+    // Change locale settings
+    async setLang({ commit }, obj) {
+        const i18 = obj.instance;
+        const { lang } = obj;
+
+        // Language is available
+        if (lang in i18.messages) {
+            commit('SET_LANG', obj);
+        } else {
+            // Do not cache the locale
+            const config = {
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Cache-Control': 'no-cache'
+                }
+            };
+
+            // Lazy load the required language
+            Network.get(`/locales/${lang}.json`, config).subscribe((response) => {
+                i18.setLocaleMessage(lang, response);
+                commit('SET_LANG', obj);
+            });
+        }
     }
 };
 
