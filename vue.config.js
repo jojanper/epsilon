@@ -1,4 +1,13 @@
+const CopyWebpackPlugin = require('copy-webpack-plugin')
+
 module.exports = {
+    configureWebpack: {
+        plugins: [
+            new CopyWebpackPlugin([
+                { from: 'src/locales', to: 'locales' }
+            ])
+        ]
+    },
     pluginOptions: {
         i18n: {
             locale: 'en',

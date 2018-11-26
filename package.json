@@ -8,6 +8,7 @@
     "http-server": "http-server",
     "lint": "vue-cli-service lint",
     "dev-proxy": "npm run http-server -- src --p 8090",
+    "serve-production": "npm run http-server -- dist --p 4200",
     "test:e2e": "vue-cli-service test:e2e",
     "test:unit": "vue-cli-service test:unit --coverage",
     "vue-service": "vue-cli-service"
