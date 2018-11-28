@@ -44,7 +44,6 @@ export default {
 <style lang="scss">
 @mixin alert-image($bgColor, $img, $borderColor) {
     background: $bgColor url($img) no-repeat 10px 12px;
-    background-position-y: 15px;
     border: 1px solid $borderColor;
 }
 
