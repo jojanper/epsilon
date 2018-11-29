@@ -18,6 +18,11 @@ export const getters = {
 export const actions = {
     addNotification({ commit }, obj) {
         commit('ADD_NOTIFICATION', obj);
+
+        // Notification is removed after timeout, if specified
+        if (obj.timeout) {
+            setTimeout(() => commit('REMOVE_NOTIFICATION', obj), obj.timeout);
+        }
     },
 
     removeNotification({ commit }, obj) {

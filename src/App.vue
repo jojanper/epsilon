@@ -79,7 +79,9 @@ export default {
     methods: {
         ...notificationActions,
         addAlert(mode) {
-            this.addNotification(NotificationMessage[`create${mode}`](`${mode} notification`));
+            const timeout = Math.floor(Math.random() * 5000);
+            const msg = `${mode} notification. Timeout ${timeout}msec`;
+            this.addNotification(NotificationMessage[`create${mode}`](msg, { timeout }));
         }
     }
 };
