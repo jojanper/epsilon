@@ -1,4 +1,4 @@
-import { NotificationMessage, NotificationMessageTypes } from '../../common/handlers';
+import { NotificationMessage, NotificationMessageTypes } from '../../common/models';
 import * as notificationModule from './notification';
 
 

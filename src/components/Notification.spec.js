@@ -2,7 +2,7 @@ import Vuex from 'vuex';
 import { shallowMount, createLocalVue } from '@vue/test-utils';
 
 import { getters } from '@/store/modules/notification';
-import { NotificationMessage } from '@/common/handlers';
+import { NotificationMessage } from '@/common/models';
 import DraalNotification from './Notification.vue';
 
 
