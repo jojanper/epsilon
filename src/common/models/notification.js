@@ -18,26 +18,27 @@ export const NotificationMessageTypes = {
 };
 
 export class NotificationMessage {
-    static createSuccess(data) {
-        return new NotificationMessage(NotificationMessageTypes.SUCCESS, data);
+    static createSuccess(data, options) {
+        return new NotificationMessage(NotificationMessageTypes.SUCCESS, data, options);
     }
 
-    static createInfo(data) {
-        return new NotificationMessage(NotificationMessageTypes.INFO, data);
+    static createInfo(data, options) {
+        return new NotificationMessage(NotificationMessageTypes.INFO, data, options);
     }
 
-    static createWarning(data) {
-        return new NotificationMessage(NotificationMessageTypes.WARNING, data);
+    static createWarning(data, options) {
+        return new NotificationMessage(NotificationMessageTypes.WARNING, data, options);
     }
 
-    static createError(data) {
-        return new NotificationMessage(NotificationMessageTypes.ERROR, data);
+    static createError(data, options) {
+        return new NotificationMessage(NotificationMessageTypes.ERROR, data, options);
     }
 
-    constructor(type, data) {
+    constructor(type, data, options) {
         this._type = type;
         this._data = data;
         this.id = uniqueID();
+        this._options = options;
     }
 
     get type() {
@@ -46,5 +47,9 @@ export class NotificationMessage {
 
     get data() {
         return this._data;
+    }
+
+    get timeout() {
+        return (this._options && this._options.timeout) ? this._options.timeout : undefined;
     }
 }

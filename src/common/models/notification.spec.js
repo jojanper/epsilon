@@ -1,4 +1,4 @@
-import { NotificationMessage } from './handlers';
+import { NotificationMessage } from './notification';
 
 
 describe('NotificationMessage', () => {

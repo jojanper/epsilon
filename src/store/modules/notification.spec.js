@@ -1,4 +1,4 @@
-import { NotificationMessage, NotificationMessageTypes } from '../../common/handlers';
+import { NotificationMessage, NotificationMessageTypes } from '../../common/models';
 import * as notificationModule from './notification';
 
 
@@ -9,8 +9,8 @@ describe('Notification module', () => {
         store = createModuleStore(notificationModule);
     });
 
-    async function verifyNotification(mode, msg) {
-        const obj = NotificationMessage[`create${mode}`](msg);
+    async function verifyNotification(mode, msg, options) {
+        const obj = NotificationMessage[`create${mode}`](msg, options);
         await store.dispatch('addNotification', obj);
 
         const data = store.getters.appNotifications;
@@ -53,5 +53,17 @@ describe('Notification module', () => {
         expect(store.getters.appNotifications.length).toEqual(0);
 
         done();
+    });
+
+    it('notification is removed with timeout', async (done) => {
+        const options = { timeout: 1000 };
+        await verifyNotification('Error', 'Errr message', options);
+
+        expect(store.getters.appNotifications.length).toEqual(1);
+
+        setTimeout(() => {
+            expect(store.getters.appNotifications.length).toEqual(0);
+            done();
+        }, options.timeout);
     });
 });

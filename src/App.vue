@@ -32,7 +32,7 @@ import DraalFooter from '@/components/Footer.vue';
 import DraalNotification from '@/components/Notification.vue';
 import DraalGo2Top from '@/components/utils/Gotop.vue';
 import IEXApi from '@/common/iex_api';
-import { NotificationMessage } from '@/common/handlers';
+import { NotificationMessage } from '@/common/models';
 import { notificationActions } from '@/store/helpers';
 
 function dummyErrorHandler() {}
@@ -79,7 +79,9 @@ export default {
     methods: {
         ...notificationActions,
         addAlert(mode) {
-            this.addNotification(NotificationMessage[`create${mode}`](`${mode} notification`));
+            const timeout = Math.floor(Math.random() * 5000);
+            const msg = `${mode} notification. Timeout ${timeout}msec`;
+            this.addNotification(NotificationMessage[`create${mode}`](msg, { timeout }));
         }
     }
 };
