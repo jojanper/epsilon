@@ -11,7 +11,8 @@ import Vuetify, {
 } from 'vuetify/lib';
 import 'vuetify/src/stylus/app.styl';
 
-Vue.use(Vuetify, {
+
+export const CONFIG = {
     customProperties: true,
     components: {
         VApp,
@@ -23,4 +24,10 @@ Vue.use(Vuetify, {
         VBtn,
         VFlex
     }
-});
+};
+
+function init() {
+    Vue.use(Vuetify, CONFIG);
+}
+
+export default init();

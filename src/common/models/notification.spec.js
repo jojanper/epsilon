@@ -10,7 +10,7 @@ describe('NotificationMessage', () => {
     });
 
     it('has timeout', () => {
-        const options = {timeout: 1000};
+        const options = { timeout: 1000 };
         const obj = NotificationMessage.createSuccess('A', options);
         expect(obj.timeout).toEqual(options.timeout);
     });

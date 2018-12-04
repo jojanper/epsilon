@@ -13,11 +13,31 @@ const IEX_API_CALL = {
     response: { chart: [] }
 };
 
+function setUp(cypress) {
+    cypress.server();
+    cypress.route(IEX_API_CALL);
+}
 
 describe('Main view', () => {
+    before(() => setUp(cy));
+
     it('contains menu links', () => {
         cy.visit(homeUrl);
         cy.get('a.nav-link').should('have.length', 2);
+    });
+
+    it('language is changed', () => {
+        cy.visit(homeUrl);
+
+        // Open locale listing
+        cy.get('.v-btn__content').eq(0).click();
+
+        // Click first list entry
+        cy.get('.v-list__tile__title').eq(0).click();
+
+        // Finnish locale is selected
+        cy.wait(500);
+        cy.get('.v-btn__content').eq(0).contains('fi');
     });
 
     it('first link is clicked', () => {
@@ -37,18 +57,18 @@ describe('Main view', () => {
 });
 
 describe('Home page', () => {
+    before(() => setUp(cy));
+
     it('exists', () => {
-        cy.server();
-        cy.route(IEX_API_CALL);
         cy.visit(homeUrl);
         cy.contains('h1', homeTitle);
     });
 });
 
 describe('About page', () => {
+    before(() => setUp(cy));
+
     it('exists', () => {
-        cy.server();
-        cy.route(IEX_API_CALL);
         cy.visit(aboutUrl);
         cy.contains('h1', aboutTitle);
     });

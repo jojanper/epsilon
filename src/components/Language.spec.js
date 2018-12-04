@@ -5,8 +5,10 @@ import Vuetify from 'vuetify';
 import { mount, RouterLinkStub, createLocalVue } from '@vue/test-utils';
 
 import DraalLanguageSelection from './Language.vue';
+import { CONFIG } from '../plugins/vuetify';
 
-Vue.use(Vuetify);
+
+Vue.use(Vuetify, CONFIG);
 Vue.use(VueI18n);
 Vue.use(Vuex);
 
@@ -39,26 +41,26 @@ describe('DraalLanguageSelection', () => {
     let localVue;
     let selectedLang = null;
 
-    const store = new Vuex.Store({
-        modules: {
-            app: {
-                namespaced: true,
-                state: {},
-                actions: {
-                    setLang(_state, obj) {
-                        selectedLang = obj.lang;
-                    }
-                },
-                getters: {}
-            }
-        }
-    });
-
     beforeEach(() => {
         localVue = createLocalVue();
     });
 
     it('user can change language', () => {
+        const store = new Vuex.Store({
+            modules: {
+                app: {
+                    namespaced: true,
+                    state: {},
+                    actions: {
+                        setLang(_state, obj) {
+                            selectedLang = obj.lang;
+                        }
+                    },
+                    getters: {}
+                }
+            }
+        });
+
         const App = localVue.component('TestDraalHeader', {
             components: {
                 DraalLanguageSelection
