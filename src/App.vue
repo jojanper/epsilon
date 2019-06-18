@@ -31,65 +31,65 @@
 </template>
 
 <script>
-import DraalHeader from "@/components/Header.vue";
-import DraalFooter from "@/components/Footer.vue";
-import DraalNotification from "@/components/Notification.vue";
-import DraalGo2Top from "@/components/utils/Gotop.vue";
-import IEXApi from "@/common/iex_api";
-import { NotificationMessage } from "@/common/models";
-import { notificationActions } from "@/store/helpers";
+import DraalHeader from '@/components/Header.vue';
+import DraalFooter from '@/components/Footer.vue';
+import DraalNotification from '@/components/Notification.vue';
+import DraalGo2Top from '@/components/utils/Gotop.vue';
+import IEXApi from '@/common/iex_api';
+import { NotificationMessage } from '@/common/models';
+import { notificationActions } from '@/store/helpers';
 
 function dummyErrorHandler() {}
 
 export default {
-  name: "App",
-  components: {
-    DraalHeader,
-    DraalFooter,
-    DraalNotification,
-    DraalGo2Top
-  },
+    name: 'App',
+    components: {
+        DraalHeader,
+        DraalFooter,
+        DraalNotification,
+        DraalGo2Top
+    },
 
-  created() {
-    IEXApi.stock("aapl").subscribe(
-      data => data.news.forEach(news => this.data.push(news)),
-      dummyErrorHandler
-    );
-  },
+    created() {
+        IEXApi.stock('aapl').subscribe(
+            data => data.news.forEach(news => this.data.push(news)),
+            dummyErrorHandler
+        );
+    },
 
-  data() {
-    return {
-      header: {
-        appName: "Epsilon",
-        routes: [
-          {
-            name: "home",
-            title: "Home"
-          },
-          {
-            name: "about",
-            title: "About"
-          }
-        ]
-      },
-      footer: {
-        link: "https://github.com/jojanper/epsilon",
-        name: "Epsilon powered by Vue"
-      },
-      data: []
-    };
-  },
+    data() {
+        return {
+            header: {
+                appName: 'Epsilon',
+                routes: [
+                    {
+                        name: 'home',
+                        title: 'Home'
+                    },
+                    {
+                        name: 'about',
+                        title: 'About'
+                    }
+                ]
+            },
+            footer: {
+                link: 'https://github.com/jojanper/epsilon',
+                name: 'Epsilon powered by Vue'
+            },
+            data: []
+        };
+    },
 
-  methods: {
-    ...notificationActions,
-    addAlert(mode) {
-      const timeout = Math.floor(Math.random() * 5000);
-      const msg = `${mode} notification. Timeout ${timeout}msec`;
-      this.addNotification(
-        NotificationMessage[`create${mode}`](msg, { timeout })
-      );
+    methods: {
+        ...notificationActions,
+        addAlert(mode) {
+            const timeout = Math.floor(Math.random() * 5000);
+            const msg = `${mode} notification. Timeout ${timeout}msec`;
+            this.addNotification(
+                NotificationMessage[`create${mode}`](msg, { timeout })
+            );
+        }
     }
-  }
 };
 </script>
 
