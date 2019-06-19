@@ -16,7 +16,7 @@
     "webpack-visualizer": "npm run build -- --report-json && webpack-bundle-analyzer dist/report.json"
   },
   "dependencies": {
-    "axios": "^0.18.1",
+    "axios": "^0.19.0",
     "lodash": "^4.17.11",
     "nprogress": "^0.2.0",
     "rxjs": "^6.5.2",
