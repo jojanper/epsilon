@@ -16,6 +16,8 @@
 
 > Vue application playground. Project setup has been generated using [vue-cli 3](https://github.com/vuejs/vue-cli). Testing framework is [Jest](https://facebook.github.io/jest/). Unit tests are located in same folder as components.
 
+Demo available [here](https://jojanper.github.io/epsilon/)
+
 ## Build Setup
 
 ``` bash

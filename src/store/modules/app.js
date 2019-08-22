@@ -29,7 +29,8 @@ export const actions = {
             };
 
             // Lazy load the required language
-            Network.get(`/locales/${lang}.json`, config).subscribe((response) => {
+            const prefix = process.env.PUBLIC_PATH || '';
+            Network.get(`${prefix}locales/${lang}.json`, config).subscribe((response) => {
                 i18.setLocaleMessage(lang, response);
                 commit('SET_LANG', obj);
             });

@@ -2,6 +2,8 @@
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 
 module.exports = {
+    publicPath: process.env.PUBLIC_PATH || '/',
+
     configureWebpack: {
         plugins: [
             new CopyWebpackPlugin([

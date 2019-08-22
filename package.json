@@ -13,7 +13,10 @@
     "test:e2e-ci": "npm run test:e2e -- --headless",
     "test:unit": "vue-cli-service test:unit --coverage",
     "vue-service": "vue-cli-service",
-    "webpack-visualizer": "npm run build -- --report-json && webpack-bundle-analyzer dist/report.json"
+    "webpack-visualizer": "npm run build -- --report-json && webpack-bundle-analyzer dist/report.json",
+    "gh-pages": "npm run gh-pages-build && npm run gh-pages-deploy",
+    "gh-pages-build": "PUBLIC_PATH=/epsilon/ npm run build",
+    "gh-pages-deploy": "cd dist && git init && git add -A && git commit -m \"deploy\" && git push -f git@github.com:jojanper/epsilon.git master:gh-pages"
   },
   "dependencies": {
     "axios": "^0.19.0",
