@@ -1,0 +1,11 @@
+{
+  "header": {
+    "selectLanguage": "Change language",
+    "languageSelections": [
+        { "title": "Finnish", "lang": "fi" }
+    ]
+  },
+  "homepage": {
+    "message": "Welcome to Your Vue.js App"
+  }
+}
