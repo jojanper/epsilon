@@ -15,7 +15,7 @@
     "vue-service": "vue-cli-service",
     "webpack-visualizer": "npm run build -- --report-json && webpack-bundle-analyzer dist/report.json",
     "gh-pages": "npm run gh-pages-build && npm run gh-pages-deploy",
-    "gh-pages-build": "PUBLIC_PATH=/epsilon/ npm run build",
+    "gh-pages-build": "npm run build -- --mode github",
     "gh-pages-deploy": "cd dist && git init && git add -A && git commit -m \"deploy\" && git push -f git@github.com:jojanper/epsilon.git master:gh-pages"
   },
   "dependencies": {
