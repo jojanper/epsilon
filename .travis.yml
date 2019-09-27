@@ -8,6 +8,9 @@ services:
   - xvfb
 addons:
   chrome: stable
+  apt:
+    packages:
+      - libgconf-2-4
 before_script:
   - >-
     LATEST_CHROMEDRIVER_VERSION=`curl -s
