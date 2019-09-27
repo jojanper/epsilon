@@ -19,9 +19,9 @@ describe('App module', () => {
     it('language is changed', async (done) => {
         let counter = 0;
 
-        moxios.stubRequest('/locales/fi.json', {
+        moxios.stubRequest('locales/fi.json', {
             status: 200,
-            response: { }
+            response: {}
         });
 
         const i18 = {

@@ -16,29 +16,37 @@
 
 > Vue application playground. Project setup has been generated using [vue-cli 3](https://github.com/vuejs/vue-cli). Testing framework is [Jest](https://facebook.github.io/jest/). Unit tests are located in same folder as components.
 
+Demo available [here](https://jojanper.github.io/epsilon/)
+
 ## Build Setup
 
 ``` bash
-# install dependencies
+# Install dependencies
 npm install
 
-# serve with hot reload at localhost:8080
+# Serve with hot reload at localhost:8080
 npm run serve
 
 # Run static server that serves locales (app requests new locales on lazy loaded manner)
 npm run dev-proxy
 
-# build for production with minification
+# Build for production with minification
 npm run build
 
-# run unit tests
+# Run unit tests
 npm run test:unit
 
-# run e2e tests
+# Run e2e tests
 npm run test:e2e
 ```
 
 For a detailed explanation on how things work, check out the [guide](https://cli.vuejs.org/).
+
+## Publish to GitHub Pages
+
+``` bash
+npm run gh-pages
+```
 
 ## License
 
