@@ -1,7 +1,7 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
 import VueI18n from 'vue-i18n';
-import Vuetify from 'vuetify';
+import Vuetify from 'vuetify/lib';
 import { mount, RouterLinkStub, createLocalVue } from '@vue/test-utils';
 
 import DraalLanguageSelection from './Language.vue';
@@ -38,28 +38,27 @@ const i18n = new VueI18n({
 });
 
 describe('DraalLanguageSelection', () => {
+    let wrapper;
     let localVue;
     let selectedLang = null;
 
-    beforeEach(() => {
-        localVue = createLocalVue();
+    const store = new Vuex.Store({
+        modules: {
+            app: {
+                namespaced: true,
+                state: {},
+                actions: {
+                    setLang(_state, obj) {
+                        selectedLang = obj.lang;
+                    }
+                },
+                getters: {}
+            }
+        }
     });
 
-    it('user can change language', () => {
-        const store = new Vuex.Store({
-            modules: {
-                app: {
-                    namespaced: true,
-                    state: {},
-                    actions: {
-                        setLang(_state, obj) {
-                            selectedLang = obj.lang;
-                        }
-                    },
-                    getters: {}
-                }
-            }
-        });
+    beforeEach(() => {
+        localVue = createLocalVue();
 
         const App = localVue.component('TestDraalHeader', {
             components: {
@@ -72,7 +71,7 @@ describe('DraalLanguageSelection', () => {
             `
         });
 
-        const wrapper = mount(App, {
+        wrapper = mount(App, {
             store,
             localVue,
             stubs: {
@@ -80,18 +79,25 @@ describe('DraalLanguageSelection', () => {
                 DraalLanguageSelection
             },
             i18n,
-            attachToDocument: true
+            attachToDocument: true,
+            vuetify: new Vuetify()
         });
+    });
 
+    it('user can change language', (done) => {
         // User opens the language selection menu
         const elements = wrapper.findAll('button');
         elements.at(0).trigger('click');
 
-        // And clicks the second language
-        const langEls = wrapper.findAll('a.v-list__tile');
-        langEls.at(1).trigger('click');
+        wrapper.vm.$nextTick(() => {
+            // And clicks the second language
+            const langEls = wrapper.findAll('.v-list-item');
+            langEls.at(1).trigger('click');
 
-        // Language is selected
-        expect(selectedLang).toEqual('fi');
+            // Language is selected
+            expect(selectedLang).toEqual('fi');
+
+            done();
+        });
     });
 });
