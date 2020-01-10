@@ -4,12 +4,12 @@ import Vuetify, {
     VMenu,
     VTooltip,
     VList,
-    VListTile,
-    VListTileTitle,
+    VListItem,
+    VListItemContent,
+    VListItemTitle,
     VBtn,
     VFlex
 } from 'vuetify/lib';
-import 'vuetify/src/stylus/app.styl';
 
 
 export const CONFIG = {
@@ -19,15 +19,15 @@ export const CONFIG = {
         VMenu,
         VTooltip,
         VList,
-        VListTile,
-        VListTileTitle,
+        VListItem,
+        VListItemContent,
+        VListItemTitle,
         VBtn,
         VFlex
     }
 };
 
-function init() {
-    Vue.use(Vuetify, CONFIG);
-}
+Vue.use(Vuetify, CONFIG);
 
-export default init();
+const OPTS = {};
+export const vuetify = new Vuetify(OPTS);

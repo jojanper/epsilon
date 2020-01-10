@@ -33,7 +33,7 @@ describe('Main view', () => {
         cy.get('.v-btn__content').eq(0).click();
 
         // Click first list entry
-        cy.get('.v-list__tile__title').eq(0).click();
+        cy.get('.v-list-item__title').eq(0).click();
 
         // Finnish locale is selected
         cy.wait(500);

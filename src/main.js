@@ -1,5 +1,6 @@
 import Vue from 'vue';
-import './plugins/vuetify';
+
+import { vuetify } from './plugins/vuetify';
 import App from './App.vue';
 import router from './router';
 import store from './store';
@@ -11,7 +12,8 @@ const AppInstance = new Vue({
     router,
     store,
     i18n,
-    render: h => h(App)
+    render: h => h(App),
+    vuetify
 }).$mount('#app');
 
 export default AppInstance;
