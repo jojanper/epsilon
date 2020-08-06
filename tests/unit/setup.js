@@ -3,7 +3,7 @@ import Vuex from 'vuex';
 import { cloneDeep } from 'lodash';
 
 
-global.createModuleStore = (vuexModule) => {
+global.createModuleStore = vuexModule => {
     createLocalVue().use(Vuex);
 
     const store = new Vuex.Store(cloneDeep(vuexModule));
@@ -13,3 +13,5 @@ global.createModuleStore = (vuexModule) => {
 
     return store;
 };
+
+window.URL.createObjectURL = function createObjectURL() { };

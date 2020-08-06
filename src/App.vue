@@ -1,7 +1,7 @@
 <template>
   <v-app id="app">
     <draal-go-2-top></draal-go-2-top>
-    <draal-header :routes="header.routes" :appName="header.appName"></draal-header>
+    <draal-header :homeRoute="home" :routes="header.routes" :appName="header.appName"></draal-header>
     <draal-notification></draal-notification>
     <div class="container">
       <i class="icon ion-md-create text-success ml-2"></i>
@@ -11,7 +11,7 @@
       <i class="icon ion-md-log-out text-primary ml-2"></i>
       <span>&nbsp;Logout</span>
 
-      <router-view/>
+      <router-view />
       <v-flex xs12 sm34 text-xs-center>
         <v-btn color="primary" v-on:click="addAlert('Success')">Add success alert</v-btn>
         <v-btn color="info" v-on:click="addAlert('Info')">Add info alert</v-btn>
@@ -26,7 +26,7 @@
         >{{ item.headline }} - {{ item.summary }}</li>
       </ul>
     </div>
-    <draal-footer :link="footer.link" :title="footer.name"></draal-footer>
+    <draal-footer></draal-footer>
   </v-app>
 </template>
 
@@ -38,6 +38,10 @@ import DraalGo2Top from '@/components/utils/Gotop.vue';
 import IEXApi from '@/common/iex_api';
 import { NotificationMessage } from '@/common/models';
 import { notificationActions } from '@/store/helpers';
+import AppRefresh from '@/common/utils/refresh';
+import { isElectron } from '@/common/utils';
+import { CONFIG } from '@/router/navigation';
+import { appActions } from '@/store/helpers';
 
 function dummyErrorHandler() {}
 
@@ -51,30 +55,28 @@ export default {
     },
 
     created() {
-        IEXApi.stock('aapl').subscribe(
-            data => data.news.forEach(news => this.data.push(news)),
-            dummyErrorHandler
-        );
+        IEXApi.stock('aapl').subscribe(data => data.news.forEach(news => this.data.push(news)), dummyErrorHandler);
+
+        // Get and check initial version
+        this.checkVersion();
+
+        // Initialize application new version detection
+        if (!isElectron()) {
+            // Start version check timer
+            AppRefresh.init({ callback: this.checkVersion.bind(this) }).runCheck();
+        }
     },
 
     data() {
         return {
+            home: CONFIG.home,
             header: {
-                appName: 'Epsilon',
-                routes: [
-                    {
-                        name: 'home',
-                        title: 'Home'
-                    },
-                    {
-                        name: 'about',
-                        title: 'About'
-                    }
-                ]
+                appName: 'OZO Audio',
+                routes: CONFIG.routes
             },
             footer: {
-                link: 'https://github.com/jojanper/epsilon',
-                name: 'Epsilon powered by Vue'
+                link: 'https://ozo.nokia.com/en/products/ozo-audio.html',
+                name: 'OZO Audio'
             },
             data: []
         };
@@ -85,9 +87,7 @@ export default {
         addAlert(mode) {
             const timeout = Math.floor(Math.random() * 5000);
             const msg = `${mode} notification. Timeout ${timeout}msec`;
-            this.addNotification(
-                NotificationMessage[`create${mode}`](msg, { timeout })
-            );
+            this.addNotification(NotificationMessage[`create${mode}`](msg, { timeout }));
         }
     }
 };
@@ -96,14 +96,39 @@ export default {
 <style lang="scss" scoped>
 // Style loading bar between pages.
 // https://github.com/rstacruz/nprogress
-@import "~nprogress/nprogress.css";
+@import '~nprogress/nprogress.css';
 
 #app {
-  font-family: "Avenir", Helvetica, Arial, sans-serif;
-  text-align: center;
-  color: #2c3e50;
+    font-family: 'Avenir', Helvetica, Arial, sans-serif;
+    text-align: center;
 }
 .container {
-  min-height: 400px;
+    min-height: 400px;
+    padding-bottom: 60px;
+}
+</style>
+
+<style lang="scss">
+// No animations for Vuetify
+label.v-label.theme--light.error--text {
+    animation: none !important;
+}
+.remote-input input {
+    cursor: pointer;
+}
+.noselect {
+    -webkit-touch-callout: none; /* iOS Safari */
+    -webkit-user-select: none; /* Safari */
+    -khtml-user-select: none; /* Konqueror HTML */
+    -moz-user-select: none; /* Firefox */
+    -ms-user-select: none; /* Internet Explorer/Edge */
+    user-select: none; /* Non-prefixed version, currently
+                                  supported by Chrome and Opera */
+}
+.dropbox {
+    font-size: 32px;
+}
+.dropbox-highlight {
+    color: red;
 }
 </style>
