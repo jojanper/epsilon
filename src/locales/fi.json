@@ -2,10 +2,55 @@
     "header": {
         "selectLanguage": "Vaihda kieli",
         "languageSelections": [
-            { "title": "Englanti", "lang": "en" }
-        ]
+            {
+                "title": "Englanti",
+                "lang": "en"
+            }
+        ],
+        "newVersion": "Uusi versio saatavilla"
     },
     "homepage": {
-        "message": "Tervetuloa Vue.js sovellukseen"
+        "message": "Tervetuloa Epsilon sovellukseen"
+    },
+    "configuratorPage": {
+        "confPanelTitle": "Configurator",
+        "recCommandPanelTitle": "Recording command",
+        "downloadLink": "Download",
+        "createRec": "Create recording",
+        "clearForm": "Clear"
+    },
+    "licensePage": {
+        "reloadBranches": "Reload available branches",
+        "quickHelp": "Quick help",
+        "helpContentTitle": "Quick help",
+        "helpContent": "License can be created or released for capture and playback. First select the type of license. Then the git branch that contains the desired license from the dropdown list. The second dropdown list contains the available license targets. After the license target has been selected, user can either create or release the license for the selected target. If specific git branch is not available in the dropdown, user should click the reload icon to refresh the git branch list. <div class=\"mt-1 font-weight-bold mb-1\">License creation:</div>This will create downloadable license for the user. A download link will be made available once it's ready. No side effects to the backend systems. <div class=\"mt-1 font-weight-bold mb-1\">Release creation:</div>This will create official license release. Additional confirmation is required from the user to prevent accidental releases. The release is tagged in the git repo and the actual license is uploaded to Artifactory. Accidental releases require manual revert operations so use releasing only when needed. The backend system will abort if target has been already released.",
+        "captureBtn": "Capture license",
+        "playbackBtn": "Playback license",
+        "branchPlaceHolder": "Select license branch name",
+        "branchLabel": "License branch",
+        "targetPlaceHolder": "Select license target",
+        "targetLabel": "License target",
+        "downloadLinkName": "Download license",
+        "confirmTitle": "Create release",
+        "confirmText": "This will create official customer release. Do you want to proceed?",
+        "captureName": "capture",
+        "playbackName": "playback",
+        "clearBtn": "Clear",
+        "captureCreateLicenseBtn": "Create capture license",
+        "playbackCreateLicenseBtn": "Create playback license",
+        "captureCreateReleaseBtn": "Create capture release",
+        "playbackCreateReleaseBtn": "Create playback release",
+        "confirmRelease": "Yes",
+        "cancelRelease": "No"
+    },
+    "licenseUtils": {
+        "uuid": "License UUID",
+        "uuidText": "Extract UUIDs from license file. Drop license file to icon"
+    },
+    "form": {
+        "remoteInputDropTitle": "Drop file here"
+    },
+    "timeline": {
+        "unsaved": "Tallentamaton"
     }
 }

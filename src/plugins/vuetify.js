@@ -1,14 +1,35 @@
 import Vue from 'vue';
 import Vuetify, {
     VApp,
+    VAppBar,
+    VAppBarNavIcon,
     VMenu,
     VTooltip,
+    VToolbar,
     VList,
     VListItem,
     VListItemContent,
     VListItemTitle,
     VBtn,
-    VFlex
+    VFlex,
+    VTextField,
+    VSelect,
+    VCheckbox,
+    VExpansionPanels,
+    VExpansionPanel,
+    VExpansionPanelHeader,
+    VExpansionPanelContent,
+    VIcon,
+    VDialog,
+    VCard,
+    VCardText,
+    VCardTitle,
+    VCardActions,
+    VDataTable,
+    VAutocomplete,
+    VTabs,
+    VTab,
+    VTabItem
 } from 'vuetify/lib';
 
 
@@ -16,15 +37,40 @@ export const CONFIG = {
     customProperties: true,
     components: {
         VApp,
+        VAppBar,
+        VAppBarNavIcon,
         VMenu,
         VTooltip,
+        VToolbar,
         VList,
         VListItem,
         VListItemContent,
         VListItemTitle,
         VBtn,
-        VFlex
-    }
+        VFlex,
+        VTextField,
+        VSelect,
+        VCheckbox,
+        VExpansionPanels,
+        VExpansionPanel,
+        VExpansionPanelHeader,
+        VExpansionPanelContent,
+        VIcon,
+        VDialog,
+        VCard,
+        VCardText,
+        VCardTitle,
+        VCardActions,
+        VDataTable,
+        VAutocomplete,
+        VTabs,
+        VTab,
+        VTabItem
+    },
+    global: {
+        ripples: false
+    },
+    iconfont: 'mdi'
 };
 
 Vue.use(Vuetify, CONFIG);

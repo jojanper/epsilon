@@ -18,7 +18,7 @@ const requireModule = require.context(
 
 const root = { modules: {} };
 
-requireModule.keys().forEach((fileName) => {
+requireModule.keys().forEach(fileName => {
     // Skip this file, as it's not a module
     if (fileName === './index.js') {
         return;

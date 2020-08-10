@@ -1,17 +1,26 @@
+import Vue from 'vue';
+import Vuetify from 'vuetify/lib';
 import { shallowMount, RouterLinkStub, createLocalVue } from '@vue/test-utils';
 
+import { CONFIG } from '@/plugins/vuetify';
 import DraalHeader from './Header.vue';
 
+Vue.use(Vuetify, CONFIG);
 
 describe('DraalHeader', () => {
     let localVue;
 
-    const props = {
+    const propsData = {
         appName: 'test',
+        homeRoute: 'home',
         routes: [
             {
                 name: 'home',
                 title: 'Testing'
+            },
+            {
+                name: 'route',
+                title: 'Route'
             }
         ]
     };
@@ -23,14 +32,26 @@ describe('DraalHeader', () => {
     it('renders correctly', () => {
         const wrapper = shallowMount(DraalHeader, {
             localVue,
-            propsData: props,
+            propsData,
             stubs: {
                 RouterLink: RouterLinkStub,
-            }
+            },
         });
-        const elements = wrapper.findAll('a');
-        expect(elements.length).toEqual(2);
-        expect(elements.at(0).text()).toMatch(props.appName);
-        expect(elements.at(1).text()).toMatch(props.routes[0].title);
+
+        // 2 * number of routes + desktop header home link
+        expect(wrapper.findAll('a').length).toEqual(5);
+
+        // Desktop header
+        const desktop = wrapper.findAll('.hidden-sm-and-down a');
+        expect(desktop.length).toEqual(3);
+        expect(desktop.at(0).text()).toMatch(propsData.appName);
+        expect(desktop.at(1).text()).toMatch(propsData.routes[0].title);
+        expect(desktop.at(2).text()).toMatch(propsData.routes[1].title);
+
+        // Mobile header
+        const mobile = wrapper.findAll('.hidden-md-and-up a');
+        expect(mobile.length).toEqual(2);
+        expect(mobile.at(0).text()).toMatch(propsData.routes[0].title);
+        expect(mobile.at(1).text()).toMatch(propsData.routes[1].title);
     });
 });

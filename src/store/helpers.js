@@ -3,9 +3,18 @@ import { mapGetters, mapActions } from 'vuex';
 const appModule = 'app';
 const notificationModule = 'notification';
 
+// Mapped high level application getters
+export const appComputed = {
+    ...mapGetters(appModule, [
+        'newAppVersionAvailable',
+        'appVersion'
+    ])
+};
 
 // Mapped high level application actions
 export const appActions = mapActions(appModule, [
+    'checkVersion',
+    'reloadApp',
     'setLang'
 ]);
 

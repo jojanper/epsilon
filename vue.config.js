@@ -6,7 +6,7 @@ function isElectron() {
 }
 
 module.exports = {
-    publicPath: process.env.PUBLIC_PATH || '/', publicPath: process.env.PUBLIC_PATH || '/',
+    publicPath: process.env.PUBLIC_PATH || '/',
     productionSourceMap: process.env.NODE_ENV !== 'production',
 
     pages: {

@@ -11,7 +11,7 @@ const store = new Vuex.Store({
 });
 
 // Execute init action for every module automatically
-Object.keys(modules).forEach((moduleName) => {
+Object.keys(modules).forEach(moduleName => {
     if (modules[moduleName].actions && modules[moduleName].actions.init) {
         store.dispatch(`${moduleName}/init`);
     }

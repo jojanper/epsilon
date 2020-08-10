@@ -1,11 +1,12 @@
 <template>
-    <div>
-        <div v-for="(msg, index) in appNotifications" :key="index"
-            :class="getClass(msg)"
-            v-on:click.prevent="removeNotification(msg)">
-            {{ msg.data }}
-        </div>
-    </div>
+  <div>
+    <div
+      v-for="(msg, index) in appNotifications"
+      :key="index"
+      :class="getClass(msg)"
+      v-on:click.prevent="removeNotification(msg)"
+    >{{ msg.data }}</div>
+  </div>
 </template>
 
 <script>
@@ -43,14 +44,14 @@ export default {
 
 <style lang="scss">
 @mixin alert-image($bgColor, $img, $borderColor) {
-    background: $bgColor url($img) no-repeat 10px 12px;
+    background: $bgColor url($img) no-repeat 7px 15px;
     border: 1px solid $borderColor;
 }
 
 .alert {
     box-shadow: 2px 2px 2px #999;
     text-align: left;
-    padding-left: 30px;
+    padding-left: 30px !important;
     margin: 0.5em;
 }
 

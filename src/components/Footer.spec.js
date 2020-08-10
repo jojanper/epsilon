@@ -1,19 +1,45 @@
-import { shallowMount } from '@vue/test-utils';
+import Vuex from 'vuex';
+import { shallowMount, createLocalVue } from '@vue/test-utils';
 
 import DraalFooter from './Footer.vue';
+import { getters } from '@/store/modules/app';
 
+const localVue = createLocalVue();
+localVue.use(Vuex);
 
 describe('DraalFooter', () => {
-    it('renders correctly', () => {
-        const props = {
-            link: 'https://google.com',
-            title: 'Footer link'
-        };
-        const wrapper = shallowMount(DraalFooter, {
-            propsData: props
+    const state = {
+        appVersion: {
+            localRef: null,
+            reload: false
+        }
+    };
+
+    function validateRender(expected) {
+        const store = new Vuex.Store({
+            modules: {
+                app: {
+                    namespaced: true,
+                    state,
+                    getters
+                }
+            }
         });
-        const elements = wrapper.findAll('a');
-        expect(elements.length).toEqual(1);
-        expect(elements.at(0).text()).toMatch(props.title);
+
+        const wrapper = shallowMount(DraalFooter, {
+            store, localVue
+        });
+
+        const elements = wrapper.findAll('.text-muted');
+        expect(elements.at(0).text()).toEqual(expected);
+    }
+
+    it('application version not visible', () => {
+        validateRender('');
+    });
+
+    it('application version visible', () => {
+        state.appVersion.localRef = '1.2.3';
+        validateRender('Version: 1.2.3');
     });
 });
