@@ -29,7 +29,9 @@ import Vuetify, {
     VAutocomplete,
     VTabs,
     VTab,
-    VTabItem
+    VTabItem,
+    VCarousel,
+    VCarouselItem
 } from 'vuetify/lib';
 
 
@@ -65,7 +67,9 @@ export const CONFIG = {
         VAutocomplete,
         VTabs,
         VTab,
-        VTabItem
+        VTabItem,
+        VCarousel,
+        VCarouselItem
     },
     global: {
         ripples: false

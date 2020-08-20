@@ -3,8 +3,8 @@ import Router from 'vue-router';
 import NProgress from 'nprogress/nprogress';
 
 import AppRefresh from '@/common/utils/refresh';
-import License from '@/views/license/License.vue';
-import LicenseUtils from '@/views/license/LicenseUtils.vue';
+import DogsView from '@/views/demos/Dogs.vue';
+import UtilsView from '@/views/demos/Utils.vue';
 import Configurator from '@/views/configurator/Configurator.vue';
 
 Vue.use(Router);
@@ -16,15 +16,15 @@ const routes = [
         component: Configurator,
     },
     {
-        path: '/license',
-        name: 'license',
-        component: License,
+        path: '/demos',
+        name: 'demos',
+        component: DogsView,
     },
 
     {
         path: '/utils',
         name: 'utils',
-        component: LicenseUtils,
+        component: UtilsView,
     },
 
     // Redirect any unmatched routes to the home page.

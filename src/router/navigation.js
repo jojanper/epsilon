@@ -9,8 +9,8 @@ if (!isElectron()) {
             name: 'home'
         },
         {
-            title: 'License',
-            name: 'license'
+            title: 'Demos',
+            name: 'demos'
         },
         {
             title: 'Utils',
