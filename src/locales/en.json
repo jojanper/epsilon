@@ -24,9 +24,9 @@
     "subBreedPlaceHolder": "Select sub-breed",
     "subBreedLabel": "Dog sub-breed"
   },
-  "licenseUtils": {
-    "uuid": "License UUID",
-    "uuidText": "Extract UUIDs from license file. Drop license file to icon"
+  "fileUtils": {
+    "title": "Media file summary",
+    "text": "Extract media file info. Drop media file to icon"
   },
   "form": {
     "remoteInputDropTitle": "Drop file here"

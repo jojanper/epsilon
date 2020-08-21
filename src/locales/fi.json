@@ -28,12 +28,12 @@
         "subBreedPlaceHolder": "Valitse tarkempi rotu",
         "subBreedLabel": "Tarkempi rotu"
     },
-    "licenseUtils": {
-        "uuid": "License UUID",
-        "uuidText": "Extract UUIDs from license file. Drop license file to icon"
+    "fileUtils": {
+        "title": "Median tiedot",
+        "text": "Näytä tarkemmat tiedot. Pudota mediatiedosto allaolevan ikonin päälle"
     },
     "form": {
-        "remoteInputDropTitle": "Drop file here"
+        "remoteInputDropTitle": "Pudota tiedosto tänne"
     },
     "timeline": {
         "unsaved": "Tallentamaton"

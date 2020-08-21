@@ -3,13 +3,13 @@
     <v-tabs vertical>
       <v-tab>
         <v-icon left>mdi-identifier</v-icon>
-        {{ $t('licenseUtils.uuid') }}
+        {{ $t('fileUtils.title') }}
       </v-tab>
 
       <v-tab-item>
         <v-card flat>
           <v-card-text class="text-left">
-            <draal-upload-terminal :description="$t('licenseUtils.uuidText')" :uploadFn="uploadFn"></draal-upload-terminal>
+            <draal-upload-terminal :description="$t('fileUtils.text')" :uploadFn="uploadFn"></draal-upload-terminal>
           </v-card-text>
         </v-card>
       </v-tab-item>
