@@ -20,28 +20,8 @@ class AudioApi {
         return this.network.get(`${this.rootUrl}${url}`, { responseType: 'blob', params: { ...params, time: Date.now() } }, settings);
     }
 
-    getEncAudioMP4(params = {}) {
-        return this.getFile('enc', params);
-    }
-
     execCommand(params = {}, postFix = 'exec') {
         return this.network.get(`${this.rootUrl}${postFix}`, { responseType: 'json', params: { ...params, time: Date.now() } });
-    }
-
-    remoteBranches(params = {}) {
-        return this.execCommand(params, 'branches');
-    }
-
-    remoteTargets(product, branch, params = {}) {
-        return this.execCommand({ ...params, branch }, `manifest/${product}`);
-    }
-
-    createTarget(product, branch, target, params = {}) {
-        return this.getFile(`create/${product}/${target}`, { ...params, branch }, { fullResponse: true });
-    }
-
-    createRelease(product, branch, target, params = {}) {
-        return this.execCommand({ ...params, branch }, `release/${product}/${target}`);
     }
 
     uploadFile(file, progressCallback) {
