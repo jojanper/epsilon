@@ -6,6 +6,7 @@ import AppRefresh from '@/common/utils/refresh';
 import DogsView from '@/views/demos/Dogs.vue';
 import UtilsView from '@/views/demos/Utils.vue';
 import Configurator from '@/views/configurator/Configurator.vue';
+import AboutView from '@/views/About.vue';
 
 Vue.use(Router);
 
@@ -25,6 +26,12 @@ const routes = [
         path: '/utils',
         name: 'utils',
         component: UtilsView,
+    },
+
+    {
+        path: '/about',
+        name: 'about',
+        component: AboutView,
     },
 
     // Redirect any unmatched routes to the home page.

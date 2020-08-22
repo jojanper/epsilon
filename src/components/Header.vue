@@ -4,7 +4,7 @@
     <v-toolbar class="hidden-sm-and-down bg-light">
       <router-link class="navbar-brand" :to="{ name: homeRoute }">{{ appName }}</router-link>
       <draal-app-reloader classes="mr-3"></draal-app-reloader>
-      <div class="row">
+      <div class="row w-100">
         <div v-for="(route, index) in routes" :key="index" class="nav-item">
           <router-link
             class="nav-link"

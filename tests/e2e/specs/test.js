@@ -3,8 +3,10 @@
 const homeUrl = '#/';
 const aboutUrl = '#/about';
 
-const homeTitle = 'Welcome to Your Vue.js App';
+const firstPageTitle = 'Form creation';
 const aboutTitle = 'This is an about page';
+
+const URL_LINKS = 4;
 
 const IEX_API_CALL = {
     method: 'GET',
@@ -23,7 +25,7 @@ describe('Main view', () => {
 
     it('contains menu links', () => {
         cy.visit(homeUrl);
-        cy.get('a.nav-link').should('have.length', 2);
+        cy.get('a.nav-link').should('have.length', URL_LINKS);
     });
 
     it('language is changed', () => {
@@ -43,11 +45,11 @@ describe('Main view', () => {
     it('first link is clicked', () => {
         cy.visit(aboutUrl);
         cy.get('a.nav-link').eq(0).click();
-        cy.contains('h1', homeTitle);
+        cy.contains('h1', firstPageTitle);
     });
 
-    it('second link is clicked', () => {
-        cy.get('a.nav-link').eq(1).click();
+    it('last link is clicked', () => {
+        cy.get('a.nav-link').eq(URL_LINKS - 1).click();
         cy.contains('h1', aboutTitle);
     });
 
@@ -61,7 +63,7 @@ describe('Home page', () => {
 
     it('exists', () => {
         cy.visit(homeUrl);
-        cy.contains('h1', homeTitle);
+        cy.contains('h1', firstPageTitle);
     });
 });
 

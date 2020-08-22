@@ -15,6 +15,10 @@ if (!isElectron()) {
         {
             title: 'Utils',
             name: 'utils'
+        },
+        {
+            title: 'About',
+            name: 'about'
         }
     );
 } else {
