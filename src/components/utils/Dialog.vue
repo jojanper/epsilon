@@ -7,7 +7,7 @@
       <slot name="body">
         <v-card-text :class="bodyCls">{{ text }}</v-card-text>
       </slot>
-      <v-card-actions>
+      <v-card-actions v-if="hasActions">
         <v-btn
           v-if="!hasOk || !hasCancel"
           class="mx-auto dialog-close"
@@ -105,7 +105,8 @@ export default {
     data() {
         return {
             hasCancel: !!this.cancelText,
-            hasOk: !!this.okText
+            hasOk: !!this.okText,
+            hasActions: this.hasOk || this.hasCancel || this.closeText
         };
     },
     computed: {

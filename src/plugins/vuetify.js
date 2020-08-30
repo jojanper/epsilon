@@ -34,6 +34,7 @@ import Vuetify, {
     VCarouselItem
 } from 'vuetify/lib';
 
+import i18n from '../i18n';
 
 export const CONFIG = {
     customProperties: true,
@@ -79,5 +80,9 @@ export const CONFIG = {
 
 Vue.use(Vuetify, CONFIG);
 
-const OPTS = {};
+const OPTS = {
+    lang: {
+        t: (key, ...params) => i18n.t(key, params)
+    }
+};
 export const vuetify = new Vuetify(OPTS);
