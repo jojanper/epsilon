@@ -5,6 +5,7 @@ export const mutations = {
     SET_LANG(state, obj) {
         const i18 = obj.instance;
         i18.locale = obj.lang;
+        state.lang = obj.lang;
     },
 
     SET_VERSION(state, obj) {
@@ -20,6 +21,10 @@ export const getters = {
 
     appVersion(state) {
         return state.appVersion.localRef;
+    },
+
+    appLang(state) {
+        return state.lang;
     }
 };
 
@@ -80,5 +85,6 @@ export const state = {
     appVersion: {
         localRef: null,
         reload: false
-    }
+    },
+    lang: null
 };

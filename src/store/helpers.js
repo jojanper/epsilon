@@ -7,7 +7,8 @@ const notificationModule = 'notification';
 export const appComputed = {
     ...mapGetters(appModule, [
         'newAppVersionAvailable',
-        'appVersion'
+        'appVersion',
+        'appLang',
     ])
 };
 

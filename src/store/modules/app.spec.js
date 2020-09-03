@@ -89,6 +89,9 @@ describe('App module', () => {
             // AND new locale messages are available
             expect(i18.messages.fi).toBeDefined();
 
+            // AND current locale is set correctly
+            expect(store.getters.appLang).toEqual(obj.lang);
+
             // -----
 
             // WHEN locate is changed again (to same locale in this case)

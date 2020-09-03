@@ -34,8 +34,7 @@
 </template>
 
 <script>
-import { required } from 'vee-validate/dist/rules';
-import { extend, ValidationObserver, ValidationProvider } from 'vee-validate';
+import { ValidationObserver, ValidationProvider } from 'vee-validate';
 
 import TextInput from './inputs/TextInput.vue';
 import SelectInput from './inputs/SelectInput.vue';
@@ -46,11 +45,7 @@ import WheelInput from './inputs/WheelInput.vue';
 import FocusTimeline from './inputs/FocusTimeline.vue';
 import RowInput from './inputs/RowInput.vue';
 import DraalDialog from '../utils/Dialog.vue';
-
-extend('required', {
-    ...required,
-    message: 'Required'
-});
+import { appComputed } from '@/store/helpers';
 
 export default {
     name: 'DraalFormGenerator',
@@ -78,6 +73,15 @@ export default {
             formData: this.value || {},
             componentKey: 0
         };
+    },
+    computed: {
+        appLang: appComputed.appLang
+    },
+    watch: {
+        appLang() {
+            // Re-validate to re-generate localized messages.
+            this.$refs.observer.validate();
+        }
     },
     methods: {
         forceRendeder() {
