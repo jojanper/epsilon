@@ -10,7 +10,7 @@ class IEXApi {
     }
 
     stock(symbolId) {
-        const url = `${this.rootUrl}/stock/${symbolId}/batch?types=quote,news,chart&range=1m&last=10&token=${TOKEN}`;
+        const url = `${this.rootUrl}/stock/${symbolId}/batch?types=quote,news,chart&range=1m&last=50&token=${TOKEN}`;
         return this.network.get(url);
     }
 }
