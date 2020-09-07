@@ -12,7 +12,7 @@ const IEX_API_CALL = {
     method: 'GET',
     url: 'https://api.iextrading.com/1.0/stock/aapl/batch?types=quote,news,chart&range=1m&last=1',
     status: 200,
-    response: { chart: [] }
+    response: { chart: [], quote: {}, news: [] }
 };
 
 function setUp(cypress) {

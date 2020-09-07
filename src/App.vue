@@ -6,58 +6,50 @@
     <div class="container">
       <router-view />
       <v-flex xs12 sm34 text-xs-center>
-        <v-btn color="primary" v-on:click="addAlert('Success')">Add success alert</v-btn>
-        <v-btn color="info" v-on:click="addAlert('Info')">Add info alert</v-btn>
-        <v-btn color="warning" v-on:click="addAlert('Warning')">Add warning alert</v-btn>
+        <v-btn class="mr-2" color="primary" v-on:click="addAlert('Success')">Add success alert</v-btn>
+        <v-btn class="mr-2" color="info" v-on:click="addAlert('Info')">Add info alert</v-btn>
+        <v-btn class="mr-2" color="warning" v-on:click="addAlert('Warning')">Add warning alert</v-btn>
         <v-btn color="error" v-on:click="addAlert('Error')">Add error alert</v-btn>
       </v-flex>
 
-      <div class="row text-left pt-3">
-        <div class="col-sm">Apple Inc (AAPL)</div>
-        <div class="col-sm">Close: 123.2</div>
-        <div class="col-sm">High: 130.2</div>
-        <div class="col-sm">Low: 100.9</div>
+      <div v-if="data.length">
+        <div class="row text-left pt-3">
+          <div class="col-sm">{{ quote.companyName }} ({{ quote.symbol }})</div>
+          <div class="col-sm">Close: {{ chart[chart.length - 1].close }}</div>
+          <div class="col-sm">High: {{ chart[chart.length - 1].high }}</div>
+          <div class="col-sm">Low: {{ chart[chart.length - 1].low }}</div>
+        </div>
+
+        <div class="pb-3">
+          <v-text-field
+            v-model="search"
+            append-icon="mdi-magnify"
+            label="Search"
+            single-line
+            hide-details
+          ></v-text-field>
+        </div>
+
+        <v-data-table
+          class="mt-3 pt-3 elevation-1"
+          :headers="headers"
+          :items="data"
+          item-key="url"
+          :search="search"
+          show-expand
+        >
+          <template v-slot:item.datetime="{ item }">
+            <div v-html="getTime(item.datetime)"></div>
+          </template>
+          <template v-slot:item.headline="{ item }">
+            <a :href="item.url" target="_blank">{{ item.headline }}</a>
+          </template>
+          <template v-slot:expanded-item="{ headers, item }">
+            <img class="p-3" :src="item.image" alt="Girl in a jacket" width="150" height="150" />
+            <td class="p-3" :colspan="headers.length">{{ item.summary }}</td>
+          </template>
+        </v-data-table>
       </div>
-
-      <div class="pb-3 float-righ2t">
-        <v-text-field
-          v-model="search"
-          append-icon="mdi-magnify"
-          label="Search"
-          single-line
-          hide-details
-        ></v-text-field>
-      </div>
-
-      <v-data-table
-        class="mt-3 pt-3 elevation-1"
-        :headers="headers"
-        :items="data"
-        item-key="url"
-        :search="search"
-        show-expand
-        :single-expand="singleExpand"
-        :expanded.sync="expanded"
-      >
-        <template v-slot:item.datetime="{ item }">
-          <div v-html="getTime(item.datetime)"></div>
-        </template>
-        <template v-slot:item.headline="{ item }">
-          <a :href="item.url" target="_blank">{{ item.headline }}</a>
-        </template>
-        <template v-slot:expanded-item="{ headers, item }">
-          <img class="p-3" :src="item.image" alt="Girl in a jacket" width="150" height="150" />
-          <td class="p-3" :colspan="headers.length">{{ item.summary }}</td>
-        </template>
-      </v-data-table>
-
-      <!--ul class="list-group">
-        <li
-          v-for="(item, index) in data"
-          :key="index"
-          class="list-group-item"
-        >{{ item.headline }} - {{ item.summary }}</li>
-      </ul-->
     </div>
     <draal-footer></draal-footer>
   </v-app>
@@ -88,8 +80,8 @@ export default {
 
     created() {
         IEXApi.stock('aapl').subscribe(data => {
-            console.log(data);
-
+            this.quote = Object.assign({}, data.quote);
+            data.chart.forEach(chart => this.chart.push(chart));
             data.news.forEach(news => this.data.push(news));
         }, dummyErrorHandler);
 
@@ -114,11 +106,12 @@ export default {
                 link: 'https://github.com/jojanper/epsilon',
                 name: 'Epsilon powered by Vue'
             },
+
             data: [],
+            chart: [],
+            quote: {},
 
             search: '',
-            singleExpand: true,
-            expanded: [],
             headers: [
                 {
                     text: 'Source',
