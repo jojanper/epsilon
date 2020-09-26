@@ -45,8 +45,10 @@
             <a :href="item.url" target="_blank">{{ item.headline }}</a>
           </template>
           <template v-slot:expanded-item="{ headers, item }">
-            <img class="p-3" :src="item.image" alt="Girl in a jacket" width="150" height="150" />
-            <td class="p-3" :colspan="headers.length">{{ item.summary }}</td>
+            <td :colspan="1">
+              <img class="p-3" :src="item.image" width="150" height="150" />
+            </td>
+            <td class="text-left" :colspan="headers.length - 1">{{ item.summary }}</td>
           </template>
         </v-data-table>
       </div>
@@ -176,6 +178,10 @@ export default {
 // No animations for Vuetify
 label.v-label.theme--light.error--text {
     animation: none !important;
+}
+.v-data-table tbody tr.v-data-table__expanded__content {
+    -webkit-box-shadow: none !important;
+    box-shadow: none !important;
 }
 .remote-input input {
     cursor: pointer;

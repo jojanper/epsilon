@@ -1,7 +1,7 @@
 import Network from './network';
 
 
-const TOKEN = 'pk_dfa9a54a893a45a3be266ef83ebc3c9a';
+const TOKEN = process.env.VUE_APP_IEXAPI_TOKEN;
 
 class IEXApi {
     constructor(network) {

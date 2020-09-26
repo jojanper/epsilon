@@ -48,6 +48,7 @@
     "babel-core": "7.0.0-bridge.0",
     "babel-jest": "^23.6.0",
     "copy-webpack-plugin": "^5.0.3",
+    "cypress": "^5.2.0",
     "http-server": "latest",
     "mkdirp": "^1.0.4",
     "moxios": "0.4.0",

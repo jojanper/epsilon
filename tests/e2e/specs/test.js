@@ -1,3 +1,4 @@
+/* eslint-disable no-param-reassign */
 // https://docs.cypress.io/api/introduction/api.html
 
 const homeUrl = '#/';
@@ -10,7 +11,7 @@ const URL_LINKS = 4;
 
 const IEX_API_CALL = {
     method: 'GET',
-    url: 'https://api.iextrading.com/1.0/stock/aapl/batch?types=quote,news,chart&range=1m&last=1',
+    url: '**/stable/stock/aapl/batch?types=quote,news,chart&range=1m&last=50&token=*',
     status: 200,
     response: { chart: [], quote: {}, news: [] }
 };
@@ -20,8 +21,12 @@ function setUp(cypress) {
     cypress.route(IEX_API_CALL);
 }
 
+Cypress.on('window:before:load', win => {
+    delete win.fetch;
+});
+
 describe('Main view', () => {
-    before(() => setUp(cy));
+    beforeEach(() => setUp(cy));
 
     it('contains menu links', () => {
         cy.visit(homeUrl);
@@ -59,7 +64,7 @@ describe('Main view', () => {
 });
 
 describe('Home page', () => {
-    before(() => setUp(cy));
+    beforeEach(() => setUp(cy));
 
     it('exists', () => {
         cy.visit(homeUrl);
@@ -68,7 +73,7 @@ describe('Home page', () => {
 });
 
 describe('About page', () => {
-    before(() => setUp(cy));
+    beforeEach(() => setUp(cy));
 
     it('exists', () => {
         cy.visit(aboutUrl);
