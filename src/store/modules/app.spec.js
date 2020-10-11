@@ -23,7 +23,8 @@ describe('App module', () => {
     });
 
     it('new application version is checked', async done => {
-        // 2 appplication version queries are performed
+        // 3 appplication version queries are performed
+        store.dispatch('checkVersion');
         store.dispatch('checkVersion');
         store.dispatch('checkVersion');
 
@@ -46,6 +47,19 @@ describe('App module', () => {
 
             // 2nd query results in new available version
             expect(store.getters.newAppVersionAvailable).toBeTruthy();
+            expect(store.getters.appVersion).toEqual('0.0.1');
+
+            const req3 = moxios.requests.at(2);
+            await req3.respondWith({
+                status: 200,
+                response: { data: [{ version: '0.0.2' }] }
+            });
+
+            // 3rd query results in same response
+            // - New version is available
+            // - Version data still points to original version
+            expect(store.getters.newAppVersionAvailable).toBeTruthy();
+            expect(store.getters.appVersion).toEqual('0.0.1');
 
             done();
         });
