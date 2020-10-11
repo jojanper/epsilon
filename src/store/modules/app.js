@@ -33,12 +33,14 @@ export const actions = {
     checkVersion({ commit, state }) {
         AudioApi.getAppMeta().subscribe(data => {
             let reload = false;
-            const localRef = data.version;
 
             // New version available at the server, request reload from user
-            if (state.appVersion.localRef !== null && localRef !== state.appVersion.localRef) {
+            if (state.appVersion.localRef !== null && data.version !== state.appVersion.localRef) {
                 reload = true;
             }
+
+            // Version should be updated only when no reload request is pending
+            const localRef = reload ? state.appVersion.localRef : data.version;
 
             commit('SET_VERSION', { localRef, reload });
         }, () => { });

@@ -17,11 +17,13 @@
         @selected="selected"
       ></draal-multi-stage-select>
 
-      <v-carousel v-if="images.length" height="800">
+      <v-carousel class="w-50 ml-auto mr-auto" v-if="images.length">
         <v-carousel-item
           v-for="(img,i) in images"
           :key="i"
           :src="img"
+          class="ml-auto mr-auto"
+          style="width: 650px; height: auto;"
           reverse-transition="fade-transition"
           transition="fade-transition"
         ></v-carousel-item>
@@ -86,6 +88,12 @@ export default {
         DogApi.getBreeds().subscribe(data => {
             this.breeds = data.message;
             Object.keys(this.breeds).forEach(breed => this.listData[0].push(breed));
+
+            // Select breed to available in query parameters
+            if (this.$route.query.breed) {
+                this.selected(0, this.$route.query.breed);
+                this.$router.replace({ query: {} });
+            }
         });
     },
     methods: {
