@@ -9,13 +9,13 @@ const routes = [
     {
         path: '/home',
         name: 'home',
-        component: Configurator,
+        component: Configurator
     },
 
     // Redirect any unmatched routes to the home page.
     {
         path: '*',
-        redirect: '/home',
+        redirect: '/home'
     }
 ];
 

@@ -17,7 +17,7 @@ describe('DraalFileDrop', () => {
         // GIVEN file drop component
         const wrapper = mount(DraalFileDrop, {
             attachToDocument: true,
-            propsData: { title },
+            propsData: { title }
         });
 
         // WHEN dropping file content to component

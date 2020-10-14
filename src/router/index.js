@@ -14,30 +14,30 @@ const routes = [
     {
         path: '/home',
         name: 'home',
-        component: Configurator,
+        component: Configurator
     },
     {
         path: '/demos',
         name: 'demos',
-        component: DogsView,
+        component: DogsView
     },
 
     {
         path: '/utils',
         name: 'utils',
-        component: UtilsView,
+        component: UtilsView
     },
 
     {
         path: '/about',
         name: 'about',
-        component: AboutView,
+        component: AboutView
     },
 
     // Redirect any unmatched routes to the home page.
     {
         path: '*',
-        redirect: '/home',
+        redirect: '/home'
     }
 ];
 

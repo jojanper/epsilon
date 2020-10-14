@@ -6,12 +6,7 @@
       <draal-app-reloader classes="mr-3"></draal-app-reloader>
       <div class="row w-100">
         <div v-for="(route, index) in routes" :key="index" class="nav-item">
-          <router-link
-            class="nav-link"
-            active-class="active"
-            exact
-            :to="{ name: route.name }"
-          >{{ route.title}}</router-link>
+          <router-link class="nav-link" :to="{ name: route.name }">{{ route.title}}</router-link>
         </div>
         <draal-language-selection class="ml-auto"></draal-language-selection>
       </div>
@@ -29,12 +24,7 @@
         <v-list min-height="224">
           <v-list-item v-for="(route, index) in routes" :key="index" class="nav-item">
             <v-list-item-title>
-              <router-link
-                class="nav-link text-left"
-                active-class="active"
-                exact
-                :to="{ name: route.name }"
-              >{{ route.title}}</router-link>
+              <router-link class="nav-link text-left" :to="{ name: route.name }">{{ route.title}}</router-link>
             </v-list-item-title>
           </v-list-item>
         </v-list>
@@ -91,12 +81,6 @@ export default {
 
     a {
         color: #101010 !important;
-    }
-}
-
-.nav-link {
-    &.router-link-exact-active {
-        font-weight: bold;
     }
 }
 

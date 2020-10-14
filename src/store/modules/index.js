@@ -54,7 +54,7 @@ requireModule.keys().forEach(fileName => {
     modules[modulePath.pop()] = {
         // Modules are namespaced by default
         namespaced: true,
-        ...requireModule(fileName),
+        ...requireModule(fileName)
     };
 });
 

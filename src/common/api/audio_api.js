@@ -1,6 +1,6 @@
 import { map } from 'rxjs/operators';
 
-import Network from './network';
+import Network from '../network';
 
 class AudioApi {
     constructor(network) {

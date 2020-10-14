@@ -8,7 +8,7 @@ export const appComputed = {
     ...mapGetters(appModule, [
         'newAppVersionAvailable',
         'appVersion',
-        'appLang',
+        'appLang'
     ])
 };
 

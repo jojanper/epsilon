@@ -1,5 +1,5 @@
 import Network from '@/common/network';
-import AudioApi from '@/common/audio_api';
+import { AudioApi } from '@/common/api';
 
 export const mutations = {
     SET_LANG(state, obj) {
@@ -11,7 +11,7 @@ export const mutations = {
     SET_VERSION(state, obj) {
         state.appVersion.localRef = obj.localRef;
         state.appVersion.reload = obj.reload;
-    },
+    }
 };
 
 export const getters = {

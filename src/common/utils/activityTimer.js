@@ -12,7 +12,7 @@ const ActivityBasedTimer = () => {
             interval,
             forcedInterval,
             forcedIntervalId,
-            lastExecution,
+            lastExecution
         } = timer;
 
         const intervalToCheckFor = forced === true ? forcedInterval : interval;
@@ -82,7 +82,7 @@ const ActivityBasedTimer = () => {
     return {
         setInterval,
         clearInterval,
-        runTimersCheck,
+        runTimersCheck
     };
 };
 

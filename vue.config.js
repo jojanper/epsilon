@@ -30,7 +30,7 @@ module.exports = {
                         test: /[\\/]node_modules[\\/](vuetify)[\\/]/,
                         name: 'chunk-vendor-vuetify',
                         priority: 0,
-                        chunks: 'all',
+                        chunks: 'all'
                     },
                     // All other node_modules dependencies into vendor chunk
                     // See https://github.com/vuejs/vue-cli/blob/dev/packages/%40vue/cli-service/lib/config/app.js

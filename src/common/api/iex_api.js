@@ -1,4 +1,4 @@
-import Network from './network';
+import Network from '../network';
 
 
 const TOKEN = process.env.VUE_APP_IEXAPI_TOKEN;

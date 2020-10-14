@@ -34,8 +34,8 @@ describe('DraalHeader', () => {
             localVue,
             propsData,
             stubs: {
-                RouterLink: RouterLinkStub,
-            },
+                RouterLink: RouterLinkStub
+            }
         });
 
         // 2 * number of routes + desktop header home link

@@ -62,7 +62,7 @@ import DraalHeader from '@/components/Header.vue';
 import DraalFooter from '@/components/Footer.vue';
 import DraalNotification from '@/components/Notification.vue';
 import DraalGo2Top from '@/components/utils/Gotop.vue';
-import IEXApi from '@/common/iex_api';
+import { IEXApi } from '@/common/api';
 import { NotificationMessage } from '@/common/models';
 import AppRefresh from '@/common/utils/refresh';
 import { isElectron } from '@/common/utils';
@@ -182,6 +182,10 @@ label.v-label.theme--light.error--text {
 .v-data-table tbody tr.v-data-table__expanded__content {
     -webkit-box-shadow: none !important;
     box-shadow: none !important;
+}
+.router-link-exact-active,
+.router-link-active {
+    font-weight: bold;
 }
 .remote-input input {
     cursor: pointer;

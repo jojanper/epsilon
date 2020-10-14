@@ -45,7 +45,7 @@
 </template>
 
 <script>
-import DogApi from '@/common/dog_api';
+import { DogApi } from '@/common/api';
 import DraalSpinner from '../../components/utils/Spinner.vue';
 import DraalDialog from '../../components/utils/Dialog.vue';
 import DraalTooltip from '../../components/utils/Tooltip.vue';

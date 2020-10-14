@@ -1,4 +1,4 @@
-import Network from './network';
+import Network from '../network';
 
 class DogApi {
     constructor(network) {

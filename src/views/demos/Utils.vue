@@ -18,7 +18,7 @@
 </template>
 
 <script>
-import AudioApi from '@/common/audio_api';
+import { AudioApi } from '@/common/api';
 import DraalUploadTerminal from '../../components/terminal/UploadTerminal.vue';
 
 export default {
