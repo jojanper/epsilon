@@ -11,9 +11,10 @@ export const terminalMixin = {
     methods: {
         ...notificationActions,
 
-        terminalExec(observable) {
+        terminalExec(observable, cbSuccess) {
             this.processing = true;
             this.clearTerminalData();
+            this.cbSuccess = cbSuccess;
             observable.subscribe(this.renderTerminalResponse, this.renderTerminalError);
         },
 
@@ -45,6 +46,10 @@ export const terminalMixin = {
                 targetData.flatMap(item => item.split('\n')).forEach(item => this.terminalData.push(item));
             }
 
+            if (this.cbSuccess) {
+                this.cbSuccess(this.terminalData);
+            }
+
             this.processing = false;
         },
 
@@ -54,6 +59,11 @@ export const terminalMixin = {
 
         clearTerminalData() {
             this.terminalData.splice(0, this.terminalData.length);
+        },
+
+        setTerminalData(data) {
+            this.clearTerminalData();
+            data.forEach(item => this.terminalData.push(item));
         }
     }
 };

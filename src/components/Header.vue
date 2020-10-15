@@ -2,7 +2,11 @@
   <div class="pb-2">
     <!-- Desktop header (hide when viewport device is small or even smaller) -->
     <v-toolbar class="hidden-sm-and-down bg-light">
-      <router-link class="navbar-brand" :to="{ name: homeRoute }">{{ appName }}</router-link>
+      <router-link
+        class="navbar-brand"
+        active-class="active"
+        :to="{ name: homeRoute }"
+      >{{ appName }}</router-link>
       <draal-app-reloader classes="mr-3"></draal-app-reloader>
       <div class="row w-100">
         <div v-for="(route, index) in routes" :key="index" class="nav-item">
@@ -18,7 +22,11 @@
         <template v-slot:activator="{ on }">
           <v-app-bar-nav-icon v-on="on"></v-app-bar-nav-icon>
           <draal-app-reloader></draal-app-reloader>
-          <router-link class="navbar-brand" :to="{ name: homeRoute }">{{ appName }}</router-link>
+          <router-link
+            class="navbar-brand"
+            active-class="active"
+            :to="{ name: homeRoute }"
+          >{{ appName }}</router-link>
         </template>
 
         <v-list min-height="224">
@@ -82,6 +90,10 @@ export default {
     a {
         color: #101010 !important;
     }
+}
+
+.active {
+    font-weight: normal !important;
 }
 
 .navbar-brand {
