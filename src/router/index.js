@@ -3,6 +3,7 @@ import Router from 'vue-router';
 import NProgress from 'nprogress/nprogress';
 
 import AppRefresh from '@/common/utils/refresh';
+import DemosHomeView from '@/views/demos/DemosHome.vue';
 import DogsView from '@/views/demos/Dogs.vue';
 import UtilsView from '@/views/demos/Utils.vue';
 import Configurator from '@/views/configurator/Configurator.vue';
@@ -19,7 +20,17 @@ const routes = [
     {
         path: '/demos',
         name: 'demos',
-        component: DogsView
+        meta: {
+            breadcrumb: 'Demos'
+        },
+        component: DemosHomeView,
+        children: [
+            {
+                path: 'dogs-api',
+                name: 'dogs-api',
+                component: DogsView
+            }
+        ]
     },
 
     {
