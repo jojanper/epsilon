@@ -60,6 +60,7 @@
         "parser": "babel-eslint"
     },
     "globals": {
-        "createModuleStore": false
+        "createModuleStore": false,
+        "createLocalNotificationStore"
     }
 }
