@@ -1,14 +1,9 @@
-import Vue from 'vue';
 import Vuex from 'vuex';
 import { of, throwError } from 'rxjs';
-import Vuetify from 'vuetify/lib';
 import { mount, createLocalVue } from '@vue/test-utils';
 
-import { CONFIG } from '@/plugins/vuetify';
 import { terminalMixin } from './terminalMixin';
 import DraalTerminal from './Terminal.vue';
-
-Vue.use(Vuetify, CONFIG);
 
 const localVue = createLocalVue();
 localVue.use(Vuex);
@@ -35,7 +30,11 @@ describe('terminalMixin', () => {
     const wrapper = mount(App, {
         localVue,
         store,
-        vuetify: new Vuetify()
+        vuetify: getVuetify()
+    });
+
+    beforeAll(() => {
+        prepareVuetify();
     });
 
     it('data is provided to mixin', async () => {

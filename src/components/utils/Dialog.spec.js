@@ -1,16 +1,15 @@
-import Vue from 'vue';
-import Vuetify from 'vuetify/lib';
 import { shallowMount } from '@vue/test-utils';
 
-import { CONFIG } from '@/plugins/vuetify';
 import DraalDialog from './Dialog.vue';
-
-Vue.use(Vuetify, CONFIG);
 
 describe('DraalDialog', () => {
     const text = 'dialog text';
     const title = 'dialog title';
     const model = true;
+
+    beforeAll(() => {
+        prepareVuetify();
+    });
 
     it('close event is emitted', () => {
         // GIVEN dialog

@@ -1,11 +1,6 @@
-import Vue from 'vue';
-import Vuetify from 'vuetify/lib';
 import { shallowMount, RouterLinkStub, createLocalVue } from '@vue/test-utils';
 
-import { CONFIG } from '@/plugins/vuetify';
 import DraalHeader from './Header.vue';
-
-Vue.use(Vuetify, CONFIG);
 
 describe('DraalHeader', () => {
     let localVue;
@@ -24,6 +19,10 @@ describe('DraalHeader', () => {
             }
         ]
     };
+
+    beforeAll(() => {
+        prepareVuetify();
+    });
 
     beforeEach(() => {
         localVue = createLocalVue();

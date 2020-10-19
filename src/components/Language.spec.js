@@ -80,7 +80,7 @@ describe('DraalLanguageSelection', () => {
             },
             i18n,
             attachToDocument: true,
-            vuetify: new Vuetify()
+            vuetify: getVuetify()
         });
     });
 

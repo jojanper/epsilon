@@ -1,13 +1,12 @@
-import Vue from 'vue';
-import Vuetify from 'vuetify/lib';
 import { shallowMount } from '@vue/test-utils';
 
-import { CONFIG } from '@/plugins/vuetify';
 import DraalGo2Top from './Gotop.vue';
 
-Vue.use(Vuetify, CONFIG);
-
 describe('DraalGo2Top', () => {
+    beforeAll(() => {
+        prepareVuetify();
+    });
+
     it('renders correctly', done => {
         const wrapper = shallowMount(DraalGo2Top, {
             attachToDocument: true

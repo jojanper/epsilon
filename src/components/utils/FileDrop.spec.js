@@ -5,13 +5,7 @@ import DraalFileDrop from './FileDrop.vue';
 describe('DraalFileDrop', () => {
     const title = 'Drop file to icon';
     const files = ['This is a file', 'This is another file'];
-
-    const dropEvent = new Event('drop');
-    Object.assign(dropEvent, {
-        dataTransfer: {
-            files
-        }
-    });
+    const dropEvent = getDropEvent({ files });
 
     it('file is dropped', async () => {
         // GIVEN file drop component
