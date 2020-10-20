@@ -12,7 +12,7 @@ localVue.use(Vuex);
 const MESSAGE = 'Message';
 
 describe('DraalNotification', () => {
-    it('renders correctly', () => {
+    it('renders correctly', async () => {
         let elements;
 
         const state = {
@@ -51,6 +51,7 @@ describe('DraalNotification', () => {
 
         // New message is added to store
         actions.addNotification();
+        await wrapper.vm.$nextTick();
 
         // Message should be visible and match the expected content
         elements = wrapper.findAll('.alert-success');

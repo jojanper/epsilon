@@ -1,7 +1,7 @@
-import Network from './network';
+import Network from '../network';
 
 
-const TOKEN = 'pk_dfa9a54a893a45a3be266ef83ebc3c9a';
+const TOKEN = process.env.VUE_APP_IEXAPI_TOKEN;
 
 class IEXApi {
     constructor(network) {
@@ -10,7 +10,7 @@ class IEXApi {
     }
 
     stock(symbolId) {
-        const url = `${this.rootUrl}/stock/${symbolId}/batch?types=quote,news,chart&range=1m&last=10&token=${TOKEN}`;
+        const url = `${this.rootUrl}/stock/${symbolId}/batch?types=quote,news,chart&range=1m&last=50&token=${TOKEN}`;
         return this.network.get(url);
     }
 }

@@ -1,67 +1,102 @@
 <template>
-    <div>
-        <nav class="navbar navbar-expand-lg navbar-light bg-light w-75 float-left">
-            <div class="mr-auto">
-                <router-link class="navbar-brand" :to="{ name: 'home' }">{{ appName }}</router-link>
-                <button class="navbar-toggler" type="button" data-toggle="collapse"
-                    data-target="#navbarCollapse" aria-controls="navbarCollapse"
-                    aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-            </div>
-            <div class="collapse navbar-collapse" id="navbarCollapse">
-                <ul class="navbar-nav mr-auto">
-                    <li v-for="(route, index) in routes" :key="index" class="nav-item">
-                        <router-link class="float-left nav-link" data-toggle="collapse"
-                            data-target=".navbar-collapse.show"
-                            active-class="active" exact :to="{ name: route.name }">
-                            {{ route.title}}
-                        </router-link>
-                    </li>
-                </ul>
-            </div>
-        </nav>
-        <draal-language-selection class="position-absolute right-0"></draal-language-selection>
-    </div>
+  <div class="pb-2">
+    <!-- Desktop header (hide when viewport device is small or even smaller) -->
+    <v-toolbar class="hidden-sm-and-down bg-light">
+      <router-link
+        class="navbar-brand"
+        active-class="active"
+        :to="{ name: homeRoute }"
+      >{{ appName }}</router-link>
+      <draal-app-reloader classes="mr-3"></draal-app-reloader>
+      <div class="row w-100">
+        <div v-for="(route, index) in routes" :key="index" class="nav-item">
+          <router-link class="nav-link" :to="{ name: route.name }">{{ route.title}}</router-link>
+        </div>
+        <draal-language-selection class="ml-auto"></draal-language-selection>
+      </div>
+    </v-toolbar>
+
+    <!-- "Mobile" header (hide when viewport device is medium or larger) -->
+    <v-app-bar class="hidden-md-and-up bg-light">
+      <v-menu min-width="128">
+        <template v-slot:activator="{ on }">
+          <v-app-bar-nav-icon v-on="on"></v-app-bar-nav-icon>
+          <draal-app-reloader></draal-app-reloader>
+          <router-link
+            class="navbar-brand"
+            active-class="active"
+            :to="{ name: homeRoute }"
+          >{{ appName }}</router-link>
+        </template>
+
+        <v-list min-height="224">
+          <v-list-item v-for="(route, index) in routes" :key="index" class="nav-item">
+            <v-list-item-title>
+              <router-link class="nav-link text-left" :to="{ name: route.name }">{{ route.title}}</router-link>
+            </v-list-item-title>
+          </v-list-item>
+        </v-list>
+      </v-menu>
+      <draal-language-selection class="ml-auto"></draal-language-selection>
+    </v-app-bar>
+  </div>
 </template>
 
 <script>
-import { appActions } from '@/store/helpers';
-import DraalLanguageSelection from './Language.vue';
+import DraalAppReloader from '@/components/utils/AppReload.vue';
+import DraalLanguageSelection from '@/components/Language.vue';
 
+/**
+ * Application header with site navigation. Supports different display sizes.
+ */
 export default {
     name: 'DraalHeader',
     components: {
+        DraalAppReloader,
         DraalLanguageSelection
     },
     props: {
+        /**
+         * Name of application appearing first at the left hand side of the header.
+         */
         appName: {
             type: String,
             required: true
         },
+        /**
+         * Application routes.
+         */
         routes: {
             type: Array,
             reqired: true
+        },
+        /**
+         * Route when clicking the application name link.
+         */
+        homeRoute: {
+            type: String,
+            required: true
         }
-    },
-
-    methods: {
-        ...appActions
     }
 };
 </script>
 
 <style lang="scss">
-.nav-link {
-    &.router-link-exact-active {
-      font-weight: bold;
+.nav-item {
+    position: relative;
+    top: 1px;
+    padding-left: 0;
+
+    a {
+        color: #101010 !important;
     }
 }
-.navbar-brand {
-    color: #5cb85c!important;
+
+.active {
+    font-weight: normal !important;
 }
 
-.right-0 {
-    right: 0px;
+.navbar-brand {
+    color: #0065ed !important;
 }
 </style>

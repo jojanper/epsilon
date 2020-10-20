@@ -2,22 +2,54 @@ import Vue from 'vue';
 import Router from 'vue-router';
 import NProgress from 'nprogress/nprogress';
 
-import Home from '@/views/Home.vue';
-import About from '@/views/About.vue';
+import AppRefresh from '@/common/utils/refresh';
+import DemosHomeView from '@/views/demos/DemosHome.vue';
+import DogsView from '@/views/demos/Dogs.vue';
+import UtilsView from '@/views/demos/Utils.vue';
+import Configurator from '@/views/configurator/Configurator.vue';
+import AboutView from '@/views/About.vue';
 
 Vue.use(Router);
 
 const routes = [
     {
-        path: '/',
+        path: '/home',
         name: 'home',
-        component: Home,
+        component: Configurator
     },
+    {
+        path: '/demos',
+        name: 'demos',
+        meta: {
+            breadcrumb: 'Demos'
+        },
+        component: DemosHomeView,
+        children: [
+            {
+                path: 'dogs-api',
+                name: 'dogs-api',
+                component: DogsView
+            }
+        ]
+    },
+
+    {
+        path: '/utils',
+        name: 'utils',
+        component: UtilsView
+    },
+
     {
         path: '/about',
         name: 'about',
-        component: About,
+        component: AboutView
     },
+
+    // Redirect any unmatched routes to the home page.
+    {
+        path: '*',
+        redirect: '/home'
+    }
 ];
 
 const router = new Router({
@@ -52,3 +84,8 @@ router.beforeResolve((routeTo, routeFrom, next) => {
 
 // When each route is finished evaluating
 router.afterEach(() => NProgress.done());
+
+router.beforeEach((to, from, next) => {
+    AppRefresh.runCheck();
+    next();
+});

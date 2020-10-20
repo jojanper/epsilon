@@ -23,27 +23,27 @@ describe('Notification module', () => {
         return obj;
     }
 
-    it('success notification', async (done) => {
+    it('success notification', async done => {
         await verifyNotification('Success', 'Success message');
         done();
     });
 
-    it('info notification', async (done) => {
+    it('info notification', async done => {
         await verifyNotification('Info', 'Info message');
         done();
     });
 
-    it('warning notification', async (done) => {
+    it('warning notification', async done => {
         await verifyNotification('Warning', 'Warning message');
         done();
     });
 
-    it('error notification', async (done) => {
+    it('error notification', async done => {
         await verifyNotification('Error', 'Errr message');
         done();
     });
 
-    it('notification is removed', async (done) => {
+    it('notification is removed', async done => {
         const obj = await verifyNotification('Error', 'Errr message');
 
         await store.dispatch('removeNotification', {});
@@ -55,7 +55,7 @@ describe('Notification module', () => {
         done();
     });
 
-    it('notification is removed with timeout', async (done) => {
+    it('notification is removed with timeout', async done => {
         const options = { timeout: 1000 };
         await verifyNotification('Error', 'Errr message', options);
 

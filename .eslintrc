@@ -1,0 +1,69 @@
+{
+    "root": true,
+    "env": {
+        "node": true,
+        "jasmine": true
+    },
+    "extends": [
+        "plugin:vue/essential",
+        "@vue/airbnb"
+    ],
+    "rules": {
+        "arrow-parens": [
+            "error",
+            "as-needed"
+        ],
+        "comma-dangle": [
+            "error",
+            "never"
+        ],
+        "no-plusplus": [
+            2,
+            {
+                "allowForLoopAfterthoughts": true
+            }
+        ],
+        "indent": [
+            "error",
+            4
+        ],
+        "max-len": [
+            "error",
+            {
+                "code": 135
+            }
+        ],
+        "quotes": [
+            "error",
+            "single"
+        ],
+        "vue/valid-v-on": 0,
+        "vue/no-parsing-error": 0,
+        "import/prefer-default-export": 0,
+        "no-underscore-dangle": [
+            "error",
+            {
+                "allowAfterThis": true
+            }
+        ],
+        "no-param-reassign": [
+            "error",
+            {
+                "props": true,
+                "ignorePropertyModificationsFor": [
+                    "state"
+                ]
+            }
+        ]
+    },
+    "parserOptions": {
+        "parser": "babel-eslint"
+    },
+    "globals": {
+        "createModuleStore": false,
+        "createLocalNotificationStore": false,
+        "getDropEvent": false,
+        "prepareVuetify": false,
+        "getVuetify": false
+    }
+}

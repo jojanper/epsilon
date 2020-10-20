@@ -16,7 +16,56 @@ describe('App module', () => {
         moxios.uninstall();
     });
 
-    it('language is changed', async (done) => {
+    it('new application version is reloaded', () => {
+        spyOn(window.location, 'reload');
+        store.dispatch('reloadApp');
+        expect(window.location.reload).toHaveBeenCalled();
+    });
+
+    it('new application version is checked', async done => {
+        // 3 appplication version queries are performed
+        store.dispatch('checkVersion');
+        store.dispatch('checkVersion');
+        store.dispatch('checkVersion');
+
+        moxios.wait(async () => {
+            const req1 = moxios.requests.at(0);
+            await req1.respondWith({
+                status: 200,
+                response: { data: [{ version: '0.0.1' }] }
+            });
+
+            // No new version is available for 1st query
+            expect(store.getters.newAppVersionAvailable).toBeFalsy();
+            expect(store.getters.appVersion).toEqual('0.0.1');
+
+            const req2 = moxios.requests.at(1);
+            await req2.respondWith({
+                status: 200,
+                response: { data: [{ version: '0.0.2' }] }
+            });
+
+            // 2nd query results in new available version
+            expect(store.getters.newAppVersionAvailable).toBeTruthy();
+            expect(store.getters.appVersion).toEqual('0.0.1');
+
+            const req3 = moxios.requests.at(2);
+            await req3.respondWith({
+                status: 200,
+                response: { data: [{ version: '0.0.2' }] }
+            });
+
+            // 3rd query results in same response
+            // - New version is available
+            // - Version data still points to original version
+            expect(store.getters.newAppVersionAvailable).toBeTruthy();
+            expect(store.getters.appVersion).toEqual('0.0.1');
+
+            done();
+        });
+    });
+
+    it('language is changed', async done => {
         let counter = 0;
 
         moxios.stubRequest('locales/fi.json', {
@@ -53,6 +102,9 @@ describe('App module', () => {
 
             // AND new locale messages are available
             expect(i18.messages.fi).toBeDefined();
+
+            // AND current locale is set correctly
+            expect(store.getters.appLang).toEqual(obj.lang);
 
             // -----
 

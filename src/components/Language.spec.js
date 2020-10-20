@@ -80,11 +80,11 @@ describe('DraalLanguageSelection', () => {
             },
             i18n,
             attachToDocument: true,
-            vuetify: new Vuetify()
+            vuetify: getVuetify()
         });
     });
 
-    it('user can change language', (done) => {
+    it('user can change language', done => {
         // User opens the language selection menu
         const elements = wrapper.findAll('button');
         elements.at(0).trigger('click');

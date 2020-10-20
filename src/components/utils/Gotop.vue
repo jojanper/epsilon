@@ -1,7 +1,7 @@
 <template>
-    <div class="go-top" :class="getClass()" @click="backToTop">
-        <i class="icon ion-ios-arrow-dropup-circle text-danger" aria-hidden="true"></i>
-    </div>
+  <div class="go-top" :class="getClass()" @click="backToTop">
+    <v-icon x-large color="red">mdi-arrow-up-circle</v-icon>
+  </div>
 </template>
 
 <script>
@@ -30,7 +30,7 @@ export default {
             return this.isVisible ? 'go-top-visible' : 'go-top-invisible';
         },
         scrollHandler() {
-            this.isVisible = (window.scrollY > this.scrollHeight);
+            this.isVisible = window.scrollY > this.scrollHeight;
         },
         backToTop() {
             window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -59,7 +59,7 @@ export default {
     }
 
     i {
-      font-size: 4em;
+        font-size: 4em !important;
     }
 }
 
