@@ -13,7 +13,7 @@
       </v-flex>
 
       <div v-if="data.length">
-        <div class="row text-left pt-3">
+        <div class="row text-left">
           <div class="col-sm">{{ quote.companyName }} ({{ quote.symbol }})</div>
           <div class="col-sm">Close: {{ chart[chart.length - 1].close }}</div>
           <div class="col-sm">High: {{ chart[chart.length - 1].high }}</div>
@@ -102,7 +102,7 @@ export default {
             home: CONFIG.home,
             header: {
                 appName: 'Epsilon',
-                routes: CONFIG.routes
+                routes: CONFIG.routes.slice(1)
             },
             footer: {
                 link: 'https://github.com/jojanper/epsilon',

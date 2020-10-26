@@ -8,47 +8,45 @@ import DogsView from '@/views/demos/Dogs.vue';
 import UtilsView from '@/views/demos/Utils.vue';
 import Configurator from '@/views/configurator/Configurator.vue';
 import AboutView from '@/views/About.vue';
+import HomeView from '@/views/Home.vue';
+import { CONFIG } from './navigation';
 
 Vue.use(Router);
 
 const routes = [
     {
-        path: '/home',
-        name: 'home',
+        ...CONFIG.routes[0],
+        component: HomeView
+    },
+    {
+        ...CONFIG.routes[1],
         component: Configurator
     },
     {
-        path: '/demos',
-        name: 'demos',
-        meta: {
-            breadcrumb: 'Demos'
-        },
+        ...CONFIG.routes[2],
         component: DemosHomeView,
         children: [
             {
-                path: 'dogs-api',
-                name: 'dogs-api',
+                ...CONFIG.routes[2].children[0],
                 component: DogsView
             }
         ]
     },
 
     {
-        path: '/utils',
-        name: 'utils',
+        ...CONFIG.routes[3],
         component: UtilsView
     },
 
     {
-        path: '/about',
-        name: 'about',
+        ...CONFIG.routes[4],
         component: AboutView
     },
 
     // Redirect any unmatched routes to the home page.
     {
         path: '*',
-        redirect: '/home'
+        redirect: '/'
     }
 ];
 

@@ -82,6 +82,8 @@ export default {
         }
     },
     mounted() {
+        console.log(this.$route);
+
         this.breeds = [];
 
         // Get the dog breeds

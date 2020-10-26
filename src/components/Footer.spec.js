@@ -40,6 +40,6 @@ describe('DraalFooter', () => {
 
     it('application version visible', () => {
         state.appVersion.localRef = '1.2.3';
-        validateRender('Version: 1.2.3');
+        validateRender('Application version: 1.2.3');
     });
 });
