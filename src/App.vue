@@ -46,10 +46,14 @@
             <a :href="item.url" target="_blank">{{ item.headline }}</a>
           </template>
           <template v-slot:expanded-item="{ headers, item }">
-            <td :colspan="1">
-              <img class="p-3" :src="item.image" width="150" height="150" />
+            <td :colspan="headers.length">
+              <div class="row">
+                <div class="hidden-sm-and-down">
+                  <img class="p-3" :src="item.image" width="150" height="150" />
+                </div>
+                <div class="col text-left">{{ item.summary }}</div>
+              </div>
             </td>
-            <td class="text-left" :colspan="headers.length - 1">{{ item.summary }}</td>
           </template>
         </v-data-table>
       </div>
