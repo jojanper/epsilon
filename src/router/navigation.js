@@ -1,18 +1,22 @@
 import { isElectron } from '@/common/utils';
 
-const routes = [];
+const routes = [
+    {
+        title: '',
+        path: '/',
+        name: 'home'
+    }
+];
 
 if (!isElectron()) {
     routes.push(
         {
-            title: '',
-            path: '/',
-            name: 'home'
-        },
-        {
             title: 'Configurator',
             path: '/configurator',
-            name: 'configurator'
+            name: 'configurator',
+            meta: {
+                breadcrumb: 'Configurator'
+            }
         },
         {
             title: 'Demos',
@@ -24,32 +28,34 @@ if (!isElectron()) {
             children: [
                 {
                     path: 'dogs-api',
-                    name: 'dogs-api'
+                    name: 'dogs-api',
+                    meta: {
+                        breadcrumb: 'Dogs API'
+                    }
                 }
             ]
         },
         {
             title: 'Utils',
             path: '/utils',
-            name: 'utils'
+            name: 'utils',
+            meta: {
+                breadcrumb: 'Utils'
+            }
         },
         {
             title: 'About',
             path: '/about',
-            name: 'about'
-        }
-    );
-} else {
-    routes.push(
-        {
-            title: '',
-            path: '/',
-            name: 'home'
+            name: 'about',
+            meta: {
+                breadcrumb: 'About'
+            }
         }
     );
 }
 
 export const CONFIG = {
     routes,
-    home: 'home'
+    home: 'home',
+    homeName: 'Home'
 };

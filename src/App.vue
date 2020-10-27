@@ -2,6 +2,7 @@
   <v-app id="app">
     <draal-go-2-top></draal-go-2-top>
     <draal-header :homeRoute="home" :routes="header.routes" :appName="header.appName"></draal-header>
+    <draal-breadcrumbs :homeRoute="home" :homeName="homeName" class="mt-3 mr-3 ml-3"></draal-breadcrumbs>
     <draal-notification></draal-notification>
     <div class="container">
       <router-view />
@@ -61,6 +62,7 @@
 import DraalHeader from '@/components/Header.vue';
 import DraalFooter from '@/components/Footer.vue';
 import DraalNotification from '@/components/Notification.vue';
+import DraalBreadcrumbs from '@/components/Breadcrumbs.vue';
 import DraalGo2Top from '@/components/utils/Gotop.vue';
 import { IEXApi } from '@/common/api';
 import { NotificationMessage } from '@/common/models';
@@ -77,7 +79,8 @@ export default {
         DraalHeader,
         DraalFooter,
         DraalNotification,
-        DraalGo2Top
+        DraalGo2Top,
+        DraalBreadcrumbs
     },
 
     created() {
@@ -100,6 +103,7 @@ export default {
     data() {
         return {
             home: CONFIG.home,
+            homeName: CONFIG.homeName,
             header: {
                 appName: 'Epsilon',
                 routes: CONFIG.routes.slice(1)
@@ -204,5 +208,21 @@ label.v-label.theme--light.error--text {
 }
 .dropbox-highlight {
     color: red;
+}
+
+.nav-item {
+    position: relative;
+    top: 1px;
+    padding-left: 0;
+
+    a {
+        color: #101010 !important;
+    }
+}
+.active {
+    font-weight: normal !important;
+}
+.navbar-brand {
+    color: #0065ed !important;
 }
 </style>

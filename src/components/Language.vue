@@ -18,6 +18,7 @@
       </template>
       <v-list>
         <v-list-item
+          class="mr-2 ml-2"
           v-for="(item, index) in $t('header.languageSelections')"
           :key="index"
           @click="setLang({lang: item.lang, instance: $i18n})"
