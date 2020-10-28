@@ -8,8 +8,8 @@
         <router-link
           exact-active-class
           active-class
-          :to="{ path: data.path }"
-        >{{ data.meta.breadcrumb }}</router-link>
+          :to="{ name: data.name, params: $route.params }"
+        >{{ getDisplayName(data.meta) }}</router-link>
       </li>
     </ol>
   </div>
@@ -50,6 +50,11 @@ export default {
             }
 
             return crumbs;
+        }
+    },
+    methods: {
+        getDisplayName(meta) {
+            return meta.paramId ? this.$route.params[meta.paramId] : meta.breadcrumb;
         }
     }
 };

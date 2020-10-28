@@ -13,6 +13,18 @@ import { CONFIG } from './navigation';
 
 Vue.use(Router);
 
+const DOGS = {
+    children: [
+        {
+            ...CONFIG.routes[2].children[0],
+            component: DogsView
+        }
+    ]
+};
+
+DOGS.children[0].children[0].component = DogsView;
+DOGS.children[0].children[0].children[0].component = DogsView;
+
 const routes = [
     {
         ...CONFIG.routes[0],
@@ -25,12 +37,7 @@ const routes = [
     {
         ...CONFIG.routes[2],
         component: DemosHomeView,
-        children: [
-            {
-                ...CONFIG.routes[2].children[0],
-                component: DogsView
-            }
-        ]
+        ...DOGS
     },
 
     {
