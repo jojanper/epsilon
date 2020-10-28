@@ -2,13 +2,13 @@
   <div v-if="breadcrumbs.length">
     <ol class="breadcrumb">
       <li class="breadcrumb-item">
-        <router-link exact-active-class active-class :to="{ name: homeRoute }">{{ homeName }}</router-link>
+        <router-link exact-active-class active-class :to="{ name: homeRouteName }">{{ homeName }}</router-link>
       </li>
       <li v-for="(data, i) in breadcrumbs" :key="i" class="breadcrumb-item">
         <router-link
           exact-active-class
           active-class
-          :to="{ name: data.name }"
+          :to="{ path: data.path }"
         >{{ data.meta.breadcrumb }}</router-link>
       </li>
     </ol>
@@ -32,7 +32,7 @@ export default {
         /**
          * Router name to home page.
          */
-        homeRoute: {
+        homeRouteName: {
             type: String,
             required: true
         }
@@ -40,15 +40,14 @@ export default {
     computed: {
         breadcrumbs() {
             const crumbs = [];
-            // console.log(this.$route);
-
             for (let i = 0; i < this.$route.matched.length; i++) {
-                if (this.$route.matched[i].name !== this.homeRoute) {
+                // Breadcrumb navigation excludes home only link as that is
+                // visible when there are at least one additional link
+                // in the breadcrumbs
+                if (this.$route.matched[i].name !== this.homeRouteName) {
                     crumbs.push(this.$route.matched[i]);
                 }
             }
-
-            // console.log(crumbs);
 
             return crumbs;
         }

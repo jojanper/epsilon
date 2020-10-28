@@ -122,6 +122,6 @@
         "regex": "{_field_} tulee olla kelvollinen säännöllinen lauseke",
         "required": "Pakollinen",
         "required_if": "Pakollinen",
-        "size": "{_field_} tulee olla vähemmän kuin {size}KB"
+        "size": "{_field_} tulee olla vähemmän kuin {size}kB"
     }
 }

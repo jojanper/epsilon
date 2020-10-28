@@ -2,7 +2,7 @@
   <v-app id="app">
     <draal-go-2-top></draal-go-2-top>
     <draal-header :homeRoute="home" :routes="header.routes" :appName="header.appName"></draal-header>
-    <draal-breadcrumbs :homeRoute="home" :homeName="homeName" class="mt-3 mr-3 ml-3"></draal-breadcrumbs>
+    <draal-breadcrumbs :home-route-name="home" :home-name="homeName" class="mt-3 mr-3 ml-3"></draal-breadcrumbs>
     <draal-notification></draal-notification>
     <div class="container">
       <router-view />

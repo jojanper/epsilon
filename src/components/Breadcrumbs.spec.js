@@ -15,12 +15,12 @@ const $route = {
 };
 
 describe('DraalBreadcrumbs', () => {
-    it('current site navigation is rendered', () => {
+    it('current site navigation is rendered', async () => {
         const wrapper = shallowMount(DraalBreadcrumbs, {
             localVue,
             propsData: {
                 homeName: 'Home',
-                homeRoute: '/'
+                homeRouteName: 'home'
             },
             stubs: {
                 RouterLink: RouterLinkStub
@@ -30,12 +30,22 @@ describe('DraalBreadcrumbs', () => {
             }
         });
 
-        // console.log(wrapper.vm.breadcrumbs);
-
-        const elements = wrapper.findAll('.breadcrumb-item');
+        // 2 breadcrumb items visible
+        let elements = wrapper.findAll('.breadcrumb-item');
         expect(elements.length).toEqual(2);
 
+        // Item names match the expected names
         expect(elements.at(0).text()).toEqual('Home');
         expect(elements.at(1).text()).toEqual('Some Page');
+
+        // -----
+
+        // Route is changed to home
+        $route.matched[0].name = 'home';
+        await wrapper.vm.$nextTick();
+
+        // No breadcrumbs are visible when in home page
+        elements = wrapper.findAll('.breadcrumb-item');
+        expect(elements.length).toEqual(0);
     });
 });
