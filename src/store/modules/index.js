@@ -58,6 +58,4 @@ requireModule.keys().forEach(fileName => {
     };
 });
 
-console.log(root.modules);
-
 export default root.modules;
