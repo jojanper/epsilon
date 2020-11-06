@@ -117,4 +117,9 @@ describe('App module', () => {
             done();
         });
     });
+
+    it('timeline length is saved', () => {
+        store.dispatch('saveTimelineLength', { id: 'test', length: 234 });
+        expect(store.getters.getTimelineLength('test')).toEqual(234);
+    });
 });

@@ -8,7 +8,8 @@ export const appComputed = {
     ...mapGetters(appModule, [
         'newAppVersionAvailable',
         'appVersion',
-        'appLang'
+        'appLang',
+        'getTimelineLength'
     ])
 };
 
@@ -16,7 +17,8 @@ export const appComputed = {
 export const appActions = mapActions(appModule, [
     'checkVersion',
     'reloadApp',
-    'setLang'
+    'setLang',
+    'saveTimelineLength'
 ]);
 
 
