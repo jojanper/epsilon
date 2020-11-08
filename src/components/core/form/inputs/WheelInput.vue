@@ -5,7 +5,7 @@
 </template>
 
 <script>
-import { encodeAngle, decodeAngle } from '../../../common/transform';
+import { encodeAngle, decodeAngle } from '../../../../common/transform';
 
 // prettier-ignore
 const ARROW_BASE64_IMG_DOWN = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADIAA'

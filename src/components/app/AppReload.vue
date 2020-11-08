@@ -13,7 +13,7 @@
 
 <script>
 import { appActions, appComputed } from '@/store/helpers';
-import DraalTooltip from './Tooltip.vue';
+import DraalTooltip from '@/components/core/utils/Tooltip.vue';
 
 export default {
     name: 'DraalAppReloader',

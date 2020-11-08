@@ -63,11 +63,11 @@
 </template>
 
 <script>
-import DraalHeader from '@/components/Header.vue';
-import DraalFooter from '@/components/Footer.vue';
-import DraalNotification from '@/components/Notification.vue';
-import DraalBreadcrumbs from '@/components/Breadcrumbs.vue';
-import DraalGo2Top from '@/components/utils/Gotop.vue';
+import DraalHeader from '@/components/app/Header.vue';
+import DraalFooter from '@/components/app/Footer.vue';
+import DraalNotification from '@/components/app/Notification.vue';
+import DraalBreadcrumbs from '@/components/app/Breadcrumbs.vue';
+import DraalGo2Top from '@/components/core/utils/Gotop.vue';
 import { IEXApi } from '@/common/api';
 import { NotificationMessage } from '@/common/models';
 import AppRefresh from '@/common/utils/refresh';

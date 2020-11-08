@@ -10,7 +10,7 @@
 </template>
 
 <script>
-import { ansiColors } from '../../common/utils';
+import { ansiColors } from '../../../common/utils';
 
 export default {
     name: 'DraalTerminal',

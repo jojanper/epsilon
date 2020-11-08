@@ -47,7 +47,7 @@
 import { ValidationProvider } from 'vee-validate';
 
 import WheelInput from './WheelInput.vue';
-import DraalTimeline from '../../Timeline.vue';
+import DraalTimeline from '../../timeline/Timeline.vue';
 
 export default {
     name: 'FocusTimeline',

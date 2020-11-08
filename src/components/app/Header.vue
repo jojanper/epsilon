@@ -43,8 +43,8 @@
 </template>
 
 <script>
-import DraalAppReloader from '@/components/utils/AppReload.vue';
-import DraalLanguageSelection from '@/components/Language.vue';
+import DraalAppReloader from './AppReload.vue';
+import DraalLanguageSelection from './Language.vue';
 
 /**
  * Application header with site navigation. Supports different display sizes.

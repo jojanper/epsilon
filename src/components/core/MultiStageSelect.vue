@@ -16,7 +16,7 @@
 </template>
 
 <script>
-import SelectInput from '@/components/form/inputs/SelectInput.vue';
+import SelectInput from '@/components/core/form/inputs/SelectInput.vue';
 
 /**
  * Multistage select where selection at one stage invalidates (hides) all

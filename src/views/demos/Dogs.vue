@@ -45,10 +45,10 @@
 
 <script>
 import { DogApi } from '@/common/api';
-import DraalSpinner from '../../components/utils/Spinner.vue';
-import DraalDialog from '../../components/utils/Dialog.vue';
-import DraalTooltip from '../../components/utils/Tooltip.vue';
-import DraalMultiStageSelect from '../../components/MultiStageSelect.vue';
+import DraalSpinner from '../../components/core/utils/Spinner.vue';
+import DraalDialog from '../../components/core/utils/Dialog.vue';
+import DraalTooltip from '../../components/core/utils/Tooltip.vue';
+import DraalMultiStageSelect from '../../components/core/MultiStageSelect.vue';
 
 export default {
     components: {
