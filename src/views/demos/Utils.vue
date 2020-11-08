@@ -19,7 +19,7 @@
 
 <script>
 import { AudioApi } from '@/common/api';
-import DraalUploadTerminal from '../../components/terminal/UploadTerminal.vue';
+import DraalUploadTerminal from '@/components/core/terminal/UploadTerminal.vue';
 
 export default {
     name: 'DraalUploadUtils',

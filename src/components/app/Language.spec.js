@@ -5,7 +5,7 @@ import Vuetify from 'vuetify/lib';
 import { mount, RouterLinkStub, createLocalVue } from '@vue/test-utils';
 
 import DraalLanguageSelection from './Language.vue';
-import { CONFIG } from '../plugins/vuetify';
+import { CONFIG } from '../../plugins/vuetify';
 
 
 Vue.use(Vuetify, CONFIG);

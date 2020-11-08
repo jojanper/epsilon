@@ -93,9 +93,9 @@
 
 <script>
 import { appActions, appComputed } from '@/store/helpers';
+import DraalDialog from '@/components/core/utils/Dialog.vue';
+import DraalRuler from '@/components/core/utils/Ruler.vue';
 import DraalTimelineItem from './TimelineItem.vue';
-import DraalDialog from './utils/Dialog.vue';
-import DraalRuler from './utils/Ruler.vue';
 
 export default {
     name: 'DraalTimeline',

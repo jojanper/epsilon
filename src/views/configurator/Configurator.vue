@@ -25,8 +25,8 @@
 </template>
 
 <script>
-import DraalSpinner from '../../components/utils/Spinner.vue';
-import DraalFormGenerator from '../../components/form/Form.vue';
+import DraalSpinner from '../../components/core/utils/Spinner.vue';
+import DraalFormGenerator from '../../components/core/form/Form.vue';
 import { SCHEMA } from './schema';
 
 export default {

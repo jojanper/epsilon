@@ -18,8 +18,8 @@
 
 <script>
 import DraalFileDrop from '../utils/FileDrop.vue';
-import DraalTerminal from './Terminal.vue';
 import DraalSpinner from '../utils/Spinner.vue';
+import DraalTerminal from './Terminal.vue';
 import { terminalMixin } from './terminalMixin';
 
 /**
