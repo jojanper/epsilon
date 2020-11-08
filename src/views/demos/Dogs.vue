@@ -17,13 +17,12 @@
         @selected="selected"
       ></draal-multi-stage-select>
 
-      <v-carousel class="w-50 ml-auto mr-auto" v-if="images.length">
+      <v-carousel class="mx-auto" v-if="images.length">
         <v-carousel-item
           v-for="(img,i) in images"
           :key="i"
           :src="img"
-          class="ml-auto mr-auto"
-          style="width: 650px; height: auto;"
+          style="width: 100%; height: auto"
           reverse-transition="fade-transition"
           transition="fade-transition"
         ></v-carousel-item>

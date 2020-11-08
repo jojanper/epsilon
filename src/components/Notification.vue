@@ -36,7 +36,7 @@ export default {
     methods: {
         ...notificationActions,
         getClass(msg) {
-            return `alert ${this.clsMapper[msg.type]}`;
+            return `alert mr-3 ml-3 ${this.clsMapper[msg.type]}`;
         }
     }
 };
@@ -52,7 +52,7 @@ export default {
     box-shadow: 2px 2px 2px #999;
     text-align: left;
     padding-left: 30px !important;
-    margin: 0.5em;
+    //margin: 0.5em;
 }
 
 .alert-success {

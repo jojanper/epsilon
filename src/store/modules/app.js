@@ -11,6 +11,10 @@ export const mutations = {
     SET_VERSION(state, obj) {
         state.appVersion.localRef = obj.localRef;
         state.appVersion.reload = obj.reload;
+    },
+
+    SAVE_TIMELINELENGTH(state, { id, length }) {
+        state.timelineLen[id] = length;
     }
 };
 
@@ -25,7 +29,10 @@ export const getters = {
 
     appLang(state) {
         return state.lang;
-    }
+    },
+
+    // Return timeline length for specified ID
+    getTimelineLength: state => id => state.timelineLen[id]
 };
 
 export const actions = {
@@ -80,6 +87,10 @@ export const actions = {
                 commit('SET_LANG', obj);
             });
         }
+    },
+
+    saveTimelineLength({ commit }, obj) {
+        commit('SAVE_TIMELINELENGTH', obj);
     }
 };
 
@@ -88,5 +99,6 @@ export const state = {
         localRef: null,
         reload: false
     },
-    lang: null
+    lang: null,
+    timelineLen: {}
 };

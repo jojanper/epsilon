@@ -82,21 +82,4 @@ export default {
 </script>
 
 <style lang="scss">
-.nav-item {
-    position: relative;
-    top: 1px;
-    padding-left: 0;
-
-    a {
-        color: #101010 !important;
-    }
-}
-
-.active {
-    font-weight: normal !important;
-}
-
-.navbar-brand {
-    color: #0065ed !important;
-}
 </style>

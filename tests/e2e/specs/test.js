@@ -4,7 +4,8 @@
 const homeUrl = '#/';
 const aboutUrl = '#/about';
 
-const firstPageTitle = 'Form creation';
+const homePageTitle = 'Epsilon';
+const formPageTitle = 'Form creation';
 const aboutTitle = 'This is an about page';
 
 const URL_LINKS = 4;
@@ -50,7 +51,7 @@ describe('Main view', () => {
     it('first link is clicked', () => {
         cy.visit(aboutUrl);
         cy.get('a.nav-link').eq(0).click();
-        cy.contains('h1', firstPageTitle);
+        cy.contains('h1', formPageTitle);
     });
 
     it('last link is clicked', () => {
@@ -68,7 +69,7 @@ describe('Home page', () => {
 
     it('exists', () => {
         cy.visit(homeUrl);
-        cy.contains('h1', firstPageTitle);
+        cy.contains('h1', homePageTitle);
     });
 });
 

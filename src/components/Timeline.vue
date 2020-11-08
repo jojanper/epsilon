@@ -16,23 +16,23 @@
 
           <v-list>
             <v-list-item v-for="(action, i) in actions" :key="i" @click="action.fn">
-              <v-list-item-title>{{ action.title }}</v-list-item-title>
+              <v-list-item-title class="ml-2 mr-2">{{ action.title }}</v-list-item-title>
             </v-list-item>
           </v-list>
         </v-menu>
       </div>
     </div>
 
-    <div class="row">
-      <div class="timeline w-100" ref="timelineparent" :key="componentKey2">
-        <draal-ruler units=" sec" :gridItems="timelineGridItems" :rulerWidth="timeLineWidth"></draal-ruler>
+    <div class="row" v-if="mounted">
+      <div class="timeline w-100" ref="timelineparent" :key="timelineRender">
+        <draal-ruler units=" sec" :gridItems="timelineGridItems" :rulerWidth="timelineWidth"></draal-ruler>
         <draal-timeline-item
-          v-for="(timeline, index) in timelines"
-          :key="index"
+          v-for="(timeline) in timelines"
+          :key="timeline.$id"
           :index="timeline.$id"
           :position="timeline.position"
           :clicked="timeline.$clicked"
-          :timelinelen="timeLineWidth"
+          :timelinelen="timelineWidth"
           @highlightstop="highlightStop"
           @timelinepos="positionUpdate"
           @edit="timelineEdit"
@@ -42,6 +42,7 @@
 
     <div class="row">
       <v-data-table
+        :key="tableRender"
         class="mt-3 pt-3 w-100"
         :headers="tableHeaders"
         :items="timelines"
@@ -81,7 +82,7 @@
         -->
         <slot
           name="editDialog"
-          v-bind:componentKey="componentKey"
+          v-bind:componentKey="dialogKey"
           v-bind:editData="dialogEditData"
           v-bind:editChanges="dialogEditChanges"
         ></slot>
@@ -91,20 +92,28 @@
 </template>
 
 <script>
+import { appActions, appComputed } from '@/store/helpers';
 import DraalTimelineItem from './TimelineItem.vue';
 import DraalDialog from './utils/Dialog.vue';
 import DraalRuler from './utils/Ruler.vue';
-import WheelInput from './form/inputs/WheelInput.vue';
 
 export default {
     name: 'DraalTimeline',
     components: {
         DraalTimelineItem,
         DraalDialog,
-        DraalRuler,
-        WheelInput
+        DraalRuler
     },
     props: {
+        /**
+         * ID for the timeline.
+         */
+        timelineID: {
+            type: String,
+            required: false,
+            default: 'timeline'
+        },
+
         /**
          * Initial time data.
          */
@@ -161,36 +170,38 @@ export default {
         }
     },
     data() {
+        const baseTime = Date.now();
+
         return {
-            componentKey: 0,
-            componentKey2: 0,
+            dialogKey: 0,
+            timelineRender: 0,
+            tableRender: 0,
 
             dialogEditData: {},
             editDialog: false,
-            timelines: [],
+            timelines: this.timeData.map((item, index) => ({
+                ...item,
+                $clicked: false,
+                $id: baseTime + index
+            })),
+            timelineWidth: this.timelineWidths[0].width,
 
-            expanded: [],
-
-            timeLineWidth: this.timelineWidths[0].width,
-
-            hasChanges: false
+            hasChanges: false,
+            mounted: false
         };
     },
-    mounted() {
-        // Include initial timeline data
-        setTimeout(() => {
-            this.timeData.forEach(item => {
-                const timeline = {
-                    ...item,
-                    $clicked: false,
-                    $id: Date.now()
-                };
+    async mounted() {
+        // Child component requires access to parent DOM, so make sure DOM is available
+        // before child is prepared.
+        await this.$nextTick();
+        this.mounted = true;
 
-                this.timelines.push(timeline);
-            });
-        }, 0);
+        // Get saved timeline length from store
+        this.timelineWidth = this.getTimelineLength(this.timelineID) || this.timelineWidth;
     },
     computed: {
+        getTimelineLength: appComputed.getTimelineLength,
+
         customRenderColumns() {
             return this.customRendering.map(column => ({ column: `item.${column}`, name: `table.${column}` }));
         },
@@ -198,11 +209,27 @@ export default {
         actions() {
             return this.timelineWidths.map(item => ({
                 title: item.title,
-                fn: () => this.setTimelineWidth(item.width)
+                fn: () => this.saveLength(item.width)
             }));
         }
     },
     methods: {
+        saveTimelineLength: appActions.saveTimelineLength,
+
+        saveLength(length) {
+            this.saveTimelineLength({ id: this.timelineID, length });
+            this.timelineWidth = length;
+            this.renderTimeline();
+        },
+
+        renderTimeline() {
+            this.timelineRender += 1;
+        },
+
+        renderTable() {
+            this.tableRender += 1;
+        },
+
         setChanges(status) {
             this.hasChanges = status;
             if (this.hasChanges) {
@@ -212,18 +239,19 @@ export default {
                  * @property {Array} timelines Timeline data.
                  */
                 this.$emit('timelineChanged', this.timelines);
+                this.renderTable();
             }
         },
 
-        setTimelineWidth(width) {
-            this.timeLineWidth = width;
-            this.componentKey2 += 1;
-        },
-
         addItem() {
+            // Make sure items are added with reasonable distance with
+            // respect to previous item. Thus, take into account the
+            // length of the currently selected timeline.
+            const incPos = this.timeLineWidth / this.timelineGridItems;
+
             // Add new timeline item next to last item
             const len = this.timelines.length;
-            const position = len ? this.timelines[len - 1].position + 1 : 0;
+            const position = len ? this.timelines[len - 1].position + incPos : 0;
 
             this.timelines.push({
                 ...this.itemCreator(),
@@ -238,7 +266,7 @@ export default {
         editAction(data) {
             this.dialogEditData = data;
             this.editDialog = true;
-            this.componentKey += 1;
+            this.dialogKey += 1;
         },
 
         deleteAction(data) {
@@ -278,7 +306,7 @@ export default {
 
             this.timelines.sort(compare);
             this.setChanges(true);
-            this.componentKey2 += 1;
+            this.renderTable();
         },
 
         handleClick(data) {
@@ -287,7 +315,7 @@ export default {
                 item.$clicked = false;
             });
             data.$clicked = true;
-            this.componentKey2 += 1;
+            this.renderTimeline();
             /* eslint-enable no-param-reassign */
         },
 

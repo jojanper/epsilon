@@ -2,6 +2,7 @@
   <v-app id="app">
     <draal-go-2-top></draal-go-2-top>
     <draal-header :homeRoute="home" :routes="header.routes" :appName="header.appName"></draal-header>
+    <draal-breadcrumbs :home-route-name="home" :home-name="homeName" class="mt-3 mr-3 ml-3"></draal-breadcrumbs>
     <draal-notification></draal-notification>
     <div class="container">
       <router-view />
@@ -13,7 +14,7 @@
       </v-flex>
 
       <div v-if="data.length">
-        <div class="row text-left pt-3">
+        <div class="row text-left">
           <div class="col-sm">{{ quote.companyName }} ({{ quote.symbol }})</div>
           <div class="col-sm">Close: {{ chart[chart.length - 1].close }}</div>
           <div class="col-sm">High: {{ chart[chart.length - 1].high }}</div>
@@ -45,10 +46,14 @@
             <a :href="item.url" target="_blank">{{ item.headline }}</a>
           </template>
           <template v-slot:expanded-item="{ headers, item }">
-            <td :colspan="1">
-              <img class="p-3" :src="item.image" width="150" height="150" />
+            <td :colspan="headers.length">
+              <div class="row">
+                <div class="hidden-sm-and-down">
+                  <img class="p-3" :src="item.image" width="150" height="150" />
+                </div>
+                <div class="col text-left">{{ item.summary }}</div>
+              </div>
             </td>
-            <td class="text-left" :colspan="headers.length - 1">{{ item.summary }}</td>
           </template>
         </v-data-table>
       </div>
@@ -61,6 +66,7 @@
 import DraalHeader from '@/components/Header.vue';
 import DraalFooter from '@/components/Footer.vue';
 import DraalNotification from '@/components/Notification.vue';
+import DraalBreadcrumbs from '@/components/Breadcrumbs.vue';
 import DraalGo2Top from '@/components/utils/Gotop.vue';
 import { IEXApi } from '@/common/api';
 import { NotificationMessage } from '@/common/models';
@@ -77,7 +83,8 @@ export default {
         DraalHeader,
         DraalFooter,
         DraalNotification,
-        DraalGo2Top
+        DraalGo2Top,
+        DraalBreadcrumbs
     },
 
     created() {
@@ -100,9 +107,10 @@ export default {
     data() {
         return {
             home: CONFIG.home,
+            homeName: CONFIG.homeName,
             header: {
                 appName: 'Epsilon',
-                routes: CONFIG.routes
+                routes: CONFIG.routes.slice(1)
             },
             footer: {
                 link: 'https://github.com/jojanper/epsilon',
@@ -204,5 +212,21 @@ label.v-label.theme--light.error--text {
 }
 .dropbox-highlight {
     color: red;
+}
+
+.nav-item {
+    position: relative;
+    top: 1px;
+    padding-left: 0;
+
+    a {
+        color: #101010 !important;
+    }
+}
+.active {
+    font-weight: normal !important;
+}
+.navbar-brand {
+    color: #0065ed !important;
 }
 </style>

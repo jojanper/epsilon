@@ -4,5 +4,6 @@
   "singleQuote": true,
   "stylelintIntegration": true,
   "eslintIntegration": true,
-  "trailingComma": "none"
+  "trailingComma": "none",
+  "arrowParens": "as-needed"
 }

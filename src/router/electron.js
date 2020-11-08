@@ -1,21 +1,21 @@
 import Vue from 'vue';
 import Router from 'vue-router';
 
+import { CONFIG } from './navigation';
 import Configurator from '@/views/configurator/Configurator.vue';
 
 Vue.use(Router);
 
 const routes = [
     {
-        path: '/home',
-        name: 'home',
+        ...CONFIG.routes[0],
         component: Configurator
     },
 
     // Redirect any unmatched routes to the home page.
     {
         path: '*',
-        redirect: '/home'
+        redirect: '/'
     }
 ];
 

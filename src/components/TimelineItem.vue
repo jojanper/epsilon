@@ -3,7 +3,7 @@
     <div
       @contextmenu.prevent="showContextMenu"
       class="timeline-entry"
-      :class="{ 'timeline-highlight': clicked}"
+      :class="{ 'timeline-highlight': isClicked}"
       ref="timeline"
       ondragstart="return false"
     >
@@ -85,22 +85,13 @@ export default {
             menuOpened: false,
             mousedown: false,
             timestamp: this.position,
-            eventPosition: 0
+            eventPosition: 0,
+            isClicked: this.clicked
         };
     },
 
     mounted() {
-        // Timeline item is to be highlighted for specified amount of time
-        if (this.clicked) {
-            this.timeOut = setTimeout(() => {
-                /**
-                 * Timeline item highlight stop event.
-                 *
-                 * @property {number} id Timeline identifier.
-                 */
-                this.$emit('highlightstop', this.index);
-            }, this.clickedTimeout);
-        }
+        this.setTimeout();
 
         // Timeline width
         this.timelineWidth = this.parentOffsetWidth() - this.$refs.timeline.offsetWidth;
@@ -133,10 +124,7 @@ export default {
 
     beforeDestroy() {
         this.destroy = true;
-        if (this.timeOut) {
-            clearTimeout(this.timeOut);
-            this.timeOut = null;
-        }
+        this.clearTimeout();
     },
 
     computed: {
@@ -146,6 +134,31 @@ export default {
     },
 
     methods: {
+        clearTimeout() {
+            if (this.timeOut) {
+                clearTimeout(this.timeOut);
+                this.timeOut = null;
+            }
+        },
+
+        setTimeout() {
+            // Timeline item is to be highlighted for specified amount of time
+            if (this.clicked) {
+                this.clearTimeout();
+
+                this.timeOut = setTimeout(() => {
+                    this.isClicked = false;
+
+                    /**
+                     * Timeline item highlight stop event.
+                     *
+                     * @property {number} id Timeline identifier.
+                     */
+                    this.$emit('highlightstop', this.index);
+                }, this.clickedTimeout);
+            }
+        },
+
         // User requests editing of timeline item
         editEvent(id) {
             /**
@@ -180,6 +193,9 @@ export default {
                 const newMargLeft = event.clientX - this.parentPos();
                 let eventPos = newMargLeft;
 
+                event.stopPropagation();
+                event.preventDefault();
+
                 this.$refs.timeline.style.marginLeft = `${newMargLeft}px`;
 
                 if (newMargLeft < 0) {
@@ -200,8 +216,11 @@ export default {
         },
 
         // Mouse down released
-        mouseUp() {
+        mouseUp(event) {
             if (this.mousedown) {
+                event.stopPropagation();
+                event.preventDefault();
+
                 /**
                  * Send position update for timeline item.
                  *
@@ -221,6 +240,7 @@ export default {
             // User is not already moving timeline item
             if (!this.menuOpened && e.which === 1 && !this.mousedown) {
                 e.stopPropagation();
+                e.preventDefault();
                 this.mousedown = true;
                 this.itemClicked = 0;
 

@@ -1,34 +1,81 @@
 import { isElectron } from '@/common/utils';
 
-const routes = [];
+const routes = [
+    {
+        title: '',
+        path: '/',
+        name: 'home'
+    }
+];
 
 if (!isElectron()) {
     routes.push(
         {
             title: 'Configurator',
-            name: 'home'
+            path: '/configurator',
+            name: 'configurator',
+            meta: {
+                breadcrumb: 'Configurator'
+            }
         },
         {
             title: 'Demos',
-            name: 'demos'
+            path: '/demos',
+            name: 'demos',
+            meta: {
+                breadcrumb: 'Demos'
+            },
+            children: [
+                {
+                    path: 'dogs-api',
+                    name: 'dogs-api',
+                    meta: {
+                        breadcrumb: 'Dogs API'
+                    },
+                    children: [
+                        {
+                            path: ':id',
+                            name: 'dogs-api-d',
+                            meta: {
+                                // breadcrumb: 'Dogs ID1'
+                                paramId: 'id'
+                            },
+                            children: [
+                                {
+                                    path: ':id2',
+                                    name: 'dogs-api-d2',
+                                    meta: {
+                                        // breadcrumb: 'Dogs ID2'
+                                        paramId: 'id2'
+                                    }
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ]
         },
         {
             title: 'Utils',
-            name: 'utils'
+            path: '/utils',
+            name: 'utils',
+            meta: {
+                breadcrumb: 'Utils'
+            }
         },
         {
             title: 'About',
-            name: 'about'
+            path: '/about',
+            name: 'about',
+            meta: {
+                breadcrumb: 'About'
+            }
         }
     );
-} else {
-    routes.push({
-        title: 'Configurator',
-        name: 'home'
-    });
 }
 
 export const CONFIG = {
     routes,
-    home: 'home'
+    home: 'home',
+    homeName: 'Home'
 };

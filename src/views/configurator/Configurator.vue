@@ -2,7 +2,7 @@
   <div>
     <h1>{{ $t('configuratorPage.title') }}</h1>
 
-    <v-expansion-panels class="mt-3 mb-3">
+    <v-expansion-panels class="mt-3 mb-3" v-model="activePanel">
       <v-expansion-panel>
         <v-expansion-panel-header>{{ $t('configuratorPage.confPanelTitle') }}</v-expansion-panel-header>
         <v-expansion-panel-content>
@@ -14,6 +14,11 @@
             :reset="resetField"
           ></draal-form-generator>
         </v-expansion-panel-content>
+      </v-expansion-panel>
+
+      <v-expansion-panel>
+        <v-expansion-panel-header>TESTI</v-expansion-panel-header>
+        <v-expansion-panel-content>HELLO</v-expansion-panel-content>
       </v-expansion-panel>
     </v-expansion-panels>
   </div>
@@ -45,17 +50,19 @@ export default {
                 submit: this.$t('configuratorPage.createRec'),
                 clear: this.$t('configuratorPage.clearForm')
             },
-            schema: SCHEMA
+            schema: SCHEMA,
+            activePanel: 0
         };
     },
     methods: {
         encode(encData) {
             /* eslint-disable-next-line */
             console.log(encData);
+            this.activePanel = 1;
         },
 
         resetField(field) {
-            if (field === 'windscreem') {
+            if (field === 'windscreen') {
                 return false;
             }
 
