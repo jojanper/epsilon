@@ -7,6 +7,7 @@
       :label="label"
       :placeholder="placeholder"
       @click="clicked"
+      :readonly="readOnly"
       @input="$emit('input', fieldValue)"
     >
       <input-help v-if="help" slot="append-outer" @form-input-help="$emit('form-input-help', name)"></input-help>
@@ -21,37 +22,18 @@
 </template>
 
 <script>
-import { ValidationProvider } from 'vee-validate';
-
-import InputHelp from './InputHelp.vue';
-import DraalFileDrop from '../../utils/FileDrop.vue';
+import { remoteInputMixin } from './remoteInputMixin';
 
 export default {
     name: 'RemoteFileOpenInput',
-    components: {
-        ValidationProvider,
-        InputHelp,
-        DraalFileDrop
-    },
-    props: ['placeholder', 'label', 'name', 'value', 'rules', 'help', 'dropTitle'],
-    data() {
-        return {
-            fieldValue: this.value,
-            canDrop: !!window.require
-        };
-    },
+    mixins: [remoteInputMixin],
     methods: {
-        onDrop(files) {
-            // Set the file name from the dropped target
-            this.setInput(files[0].path);
-        },
-
         clicked() {
             if (this.canDrop) {
                 const { ipcRenderer } = window.require('electron');
 
                 // Open remote file selection dialog
-                ipcRenderer.send('openModal', this.name);
+                ipcRenderer.send('open-modal', this.name);
 
                 // Selected file is received via this event
                 ipcRenderer.on('open-file', (event, data) => {
@@ -60,11 +42,6 @@ export default {
                     }
                 });
             }
-        },
-
-        setInput(fileName) {
-            this.fieldValue = fileName;
-            this.$emit('input', this.fieldValue);
         }
     }
 };

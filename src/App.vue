@@ -31,31 +31,30 @@
           ></v-text-field>
         </div>
 
-        <v-data-table
-          class="mt-3 pt-3 elevation-1"
+        <draal-data-table
+          :data="data"
           :headers="headers"
-          :items="data"
-          item-key="url"
-          :search="search"
-          show-expand
+          :customColumns="['datetime','headline']"
+          expand="More..."
+          :tableAttributes="{'item-key': 'url'}"
+          :actions="['edit', 'delete']"
+          :actionsConfig="{name: 'Actions', width: '15%'}"
         >
-          <template v-slot:item.datetime="{ item }">
-            <div v-html="getTime(item.datetime)"></div>
+          <template v-slot:table.datetime="{ data }">
+            <div v-html="getTime(data.datetime)"></div>
           </template>
-          <template v-slot:item.headline="{ item }">
-            <a :href="item.url" target="_blank">{{ item.headline }}</a>
+          <template v-slot:table.headline="{ data }">
+            <a :href="data.url" target="_blank">{{ data.headline }}</a>
           </template>
-          <template v-slot:expanded-item="{ headers, item }">
-            <td :colspan="headers.length">
-              <div class="row">
-                <div class="hidden-sm-and-down">
-                  <img class="p-3" :src="item.image" width="150" height="150" />
-                </div>
-                <div class="col text-left">{{ item.summary }}</div>
+          <template v-slot:table.expand="{ data }">
+            <div class="row">
+              <div class="hidden-sm-and-down">
+                <img class="p-3" :src="data.image" width="150" height="150" />
               </div>
-            </td>
+              <div class="col text-left">{{ data.summary }}</div>
+            </div>
           </template>
-        </v-data-table>
+        </draal-data-table>
       </div>
     </div>
     <draal-footer></draal-footer>
@@ -74,6 +73,7 @@ import AppRefresh from '@/common/utils/refresh';
 import { isElectron } from '@/common/utils';
 import { CONFIG } from '@/router/navigation';
 import { appActions, notificationActions } from '@/store/helpers';
+import DraalDataTable from '@/components/core/DataTable.vue';
 
 function dummyErrorHandler() {}
 
@@ -84,7 +84,8 @@ export default {
         DraalFooter,
         DraalNotification,
         DraalGo2Top,
-        DraalBreadcrumbs
+        DraalBreadcrumbs,
+        DraalDataTable
     },
 
     created() {
@@ -128,25 +129,24 @@ export default {
                     align: 'left',
                     filterable: true,
                     sortable: true,
-                    value: 'source'
+                    value: 'source',
+                    width: '20%'
                 },
                 {
                     text: 'Summary',
                     align: 'left',
                     filterable: true,
                     sortable: true,
-                    value: 'headline'
+                    value: 'headline',
+                    width: '50%'
                 },
                 {
                     text: 'Date',
                     align: 'left',
                     filterable: true,
                     sortable: true,
-                    value: 'datetime'
-                },
-                {
-                    text: 'More...',
-                    value: 'data-table-expand'
+                    value: 'datetime',
+                    width: '15%'
                 }
             ]
         };

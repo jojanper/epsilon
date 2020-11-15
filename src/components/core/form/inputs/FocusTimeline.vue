@@ -16,11 +16,10 @@
           class="container mr-3"
           :timeData="value"
           :timelineWidths="timelineWidths"
-          :tableHeaders="headers"
           :itemCreator="newTimeline"
-          :customRendering="customRendering"
           @input="saveTimeline"
           @timelineChanged="dummyModel=null"
+          :tableConfig="tableConfig"
         >
           <!-- Custom column rendering -->
           <!-- Show direction as arrow pointing to correct direction -->
@@ -49,6 +48,34 @@ import { ValidationProvider } from 'vee-validate';
 import WheelInput from './WheelInput.vue';
 import DraalTimeline from '../../timeline/Timeline.vue';
 
+const HEADERS = [
+    {
+        text: 'Event position',
+        align: 'left',
+        filterable: false,
+        sortable: false,
+        value: 'position'
+    },
+    {
+        text: 'Direction',
+        value: 'angleDir',
+        sortable: false,
+        filterable: false
+    },
+    {
+        text: 'Angle',
+        value: 'angle',
+        sortable: false,
+        filterable: false
+    },
+    {
+        text: 'Zoom %',
+        value: 'zoom',
+        sortable: false,
+        filterable: false
+    }
+];
+
 export default {
     name: 'FocusTimeline',
     components: {
@@ -64,41 +91,16 @@ export default {
             // and user is explicitly required to save the timeline changes before
             // component validation succeeds.
             dummyModel: 0,
-            headers: [
-                {
-                    text: 'Event position',
-                    align: 'left',
-                    filterable: false,
-                    sortable: false,
-                    value: 'position'
-                },
-                {
-                    text: 'Direction',
-                    value: 'angleDir',
-                    sortable: false,
-                    filterable: false
-                },
-                {
-                    text: 'Azimuth',
-                    value: 'angle',
-                    sortable: false,
-                    filterable: false
-                },
-                {
-                    text: 'Zoom %',
-                    value: 'zoom',
-                    sortable: false,
-                    filterable: false
-                },
-                {
-                    text: 'Actions',
-                    value: 'action',
-                    sortable: false,
-                    filterable: false
+
+            tableConfig: {
+                // Custom rendering via template slot is provided for this data item
+                customColumns: ['angleDir'],
+                headers: HEADERS,
+                actions: ['edit', 'delete'],
+                actionsConfig: {
+                    name: 'Actions'
                 }
-            ],
-            // Custom rendering via template slot is provided for this data item
-            customRendering: ['angleDir']
+            }
         };
     },
     methods: {
