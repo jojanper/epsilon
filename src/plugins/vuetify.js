@@ -32,7 +32,9 @@ import Vuetify, {
     VTab,
     VTabItem,
     VCarousel,
-    VCarouselItem
+    VCarouselItem,
+    VProgressLinear,
+    VSlider
 } from 'vuetify/lib';
 
 import i18n from '../i18n';
@@ -72,7 +74,9 @@ export const CONFIG = {
         VTab,
         VTabItem,
         VCarousel,
-        VCarouselItem
+        VCarouselItem,
+        VProgressLinear,
+        VSlider
     },
     global: {
         ripples: false
