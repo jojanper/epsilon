@@ -3,7 +3,7 @@
     <audio :src="url" ref="audioplayer"></audio>
 
     <div class="row">
-      <div class="col">
+      <div class="col pb-0">
         <v-btn
           outlined
           icon
@@ -26,16 +26,17 @@
         </v-btn>
 
         <v-btn outlined icon class="ma-2" :color="color" :disabled="!loaded">
-          <a :href="url" download>
+          <a :href="url" :download="name">
             <v-icon>mdi-download</v-icon>
           </a>
         </v-btn>
       </div>
 
-      <div class="col mt-3">
+      <div class="col mt-1 pb-0">
         <v-slider
           prepend-icon="mdi-volume-high"
           :color="color"
+          :track-color="volumeColor"
           v-model="volume"
           :min="0"
           :max="1"
@@ -75,7 +76,7 @@ export default {
             required: true
         },
         /**
-         * Name of media for download link.
+         * Name of download link.
          */
         name: {
             type: String,
@@ -88,6 +89,14 @@ export default {
             type: String,
             required: false,
             default: 'blue darken-1'
+        },
+        /**
+         * Track color of the volume control.
+         */
+        volumeColor: {
+            type: String,
+            required: false,
+            default: 'light-blue lighten-3'
         }
     },
     data() {
@@ -153,16 +162,25 @@ export default {
         this.timerId = setInterval(this.updateplayPosition, 100);
     },
     methods: {
+        /**
+         * Update current playback position.
+         */
         updateplayPosition() {
             if (this.$refs.audioplayer && this.$refs.audioplayer.currentTime && this.playing) {
                 this.audioPos = (this.$refs.audioplayer.currentTime / this.duration) * 100;
             }
         },
 
+        /**
+         * Set playback position.
+         */
         setPosition() {
             this.$refs.audioplayer.currentTime = this.duration * 0.01 * this.audioPos;
         },
 
+        /**
+         * Start playback.
+         */
         async play() {
             if (!this.playing) {
                 await this.$refs.audioplayer.play();
@@ -171,6 +189,9 @@ export default {
             }
         },
 
+        /**
+         * Pause playback
+         */
         pause() {
             this.paused = !this.paused;
             if (this.paused) {
@@ -180,6 +201,9 @@ export default {
             }
         },
 
+        /**
+         * Stop playback.
+         */
         stop() {
             this.$refs.audioplayer.pause();
             this.paused = true;
@@ -188,11 +212,17 @@ export default {
             this.audioPos = 0;
         },
 
+        /**
+         * Mute / unmute volume.
+         */
         mute() {
             this.muted = !this.muted;
             this.$refs.audioplayer.muted = this.muted;
         },
 
+        /**
+         * Set new volume.
+         */
         setVolume(volume) {
             this.$refs.audioplayer.volume = volume;
             if (volume === 0) {
@@ -203,37 +233,34 @@ export default {
             }
         },
 
+        /**
+         * Convert time measured in seconds into HH:MM:SS format.
+         */
         getDisplayTime(time) {
             let timeSec = time;
+
             let hours = Math.floor(timeSec / 3600);
             timeSec = time - hours * 3600;
-
             let minutes = Math.floor(timeSec / 60);
-            let seconds = parseInt((timeSec % 60).toFixed(0), 10);
 
+            // As we are rounding the seconds, make sure to it stays valid value
+            let seconds = parseInt((timeSec % 60).toFixed(0), 10);
             if (seconds === 60) {
                 seconds = 0;
                 minutes += 1;
             }
 
+            // Minutes was increased to full minute -> increase hours instead
             if (minutes === 60) {
                 minutes = 0;
                 hours += 1;
             }
 
-            let hDisplay = hours;
-            if (hours < 10) {
-                hDisplay = `0${hours}`;
-            }
+            const hh = (hours < 10) ? `0${hours}` : hours;
+            const mm = (minutes < 10) ? `0${minutes}` : minutes;
+            const ss = (seconds < 10) ? `0${seconds}` : `${seconds}`;
 
-            let mDisplay = minutes;
-            if (minutes < 10) {
-                mDisplay = `0${minutes}`;
-            }
-
-            const sDisplay = (seconds < 10) ? `0${seconds}` : `${seconds}`;
-
-            return `${hDisplay}:${mDisplay}:${sDisplay}`;
+            return `${hh}:${mm}:${ss}`;
         }
     }
 };
