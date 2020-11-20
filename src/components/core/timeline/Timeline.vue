@@ -23,7 +23,7 @@
       </div>
     </div>
 
-    <div class="row" v-if="mounted">
+    <div class="row mb-4" v-if="mounted">
       <div class="timeline w-100" ref="timelineparent" :key="timelineRender">
         <draal-ruler units=" sec" :gridItems="timelineGridItems" :rulerWidth="timelineWidth"></draal-ruler>
         <draal-timeline-item
@@ -41,35 +41,21 @@
     </div>
 
     <div class="row">
-      <v-data-table
-        :key="tableRender"
+      <draal-data-table
         class="mt-3 pt-3 w-100"
-        :headers="tableHeaders"
-        :items="timelines"
-        item-key="$id"
-        @click:row="handleClick"
+        :key="tableRender"
+        :data="timelines"
+        :tableAttributes="{'item-key': '$id'}"
+        v-bind="tableConfig"
+        @row-click="handleClick"
+        @data-edit="editAction"
+        @data-delete="deleteAction"
       >
-        <template
-          v-for="(columnDef, index) in customRenderColumns"
-          v-slot:[columnDef.column]="{item}"
-        >
-          <!--
-            @slot Custom table column data rendering.
-            @binding {number} columnKey Column key (Vue key attribute).
-            @binding {object} data Column data.
-          -->
-          <slot :name="columnDef.name" v-bind:colunmKey="index" v-bind:data="item"></slot>
+        <!-- Expose custom render columns for parent rendering -->
+        <template v-for="(columnDef, index) in customRenderColumns" v-slot:[columnDef]="{data}">
+          <slot :name="columnDef" v-bind:colunmKey="index" v-bind:data="data"></slot>
         </template>
-
-        <template v-slot:item.action="{item}">
-          <v-btn class="mx-2" fab dark x-small color="pink" @click="editAction(item)">
-            <v-icon dark>mdi-border-color</v-icon>
-          </v-btn>
-          <v-btn class="mx-2" fab dark x-small color="pink" @click="deleteAction(item)">
-            <v-icon dark>mdi-delete-forever</v-icon>
-          </v-btn>
-        </template>
-      </v-data-table>
+      </draal-data-table>
     </div>
 
     <draal-dialog :model="editDialog" :title="editText" @close-dialog="closeDialog">
@@ -96,13 +82,15 @@ import { appActions, appComputed } from '@/store/helpers';
 import DraalDialog from '@/components/core/utils/Dialog.vue';
 import DraalRuler from '@/components/core/utils/Ruler.vue';
 import DraalTimelineItem from './TimelineItem.vue';
+import DraalDataTable from '@/components/core/DataTable.vue';
 
 export default {
     name: 'DraalTimeline',
     components: {
         DraalTimelineItem,
         DraalDialog,
-        DraalRuler
+        DraalRuler,
+        DraalDataTable
     },
     props: {
         /**
@@ -113,7 +101,6 @@ export default {
             required: false,
             default: 'timeline'
         },
-
         /**
          * Initial time data.
          */
@@ -127,13 +114,6 @@ export default {
          * the `timelineGridItems` value.
          */
         timelineWidths: {
-            type: Array,
-            required: true
-        },
-        /**
-         * Table header column definition
-         */
-        tableHeaders: {
             type: Array,
             required: true
         },
@@ -161,12 +141,12 @@ export default {
             default: 15
         },
         /**
-         * Columns of the timeline data table that are custom rendered by the parent.
+         * Table props for the underlying data table.
          */
-        customRendering: {
-            type: Array,
+        tableConfig: {
+            type: Object,
             required: false,
-            default: () => []
+            default: () => {}
         }
     },
     data() {
@@ -191,19 +171,20 @@ export default {
         };
     },
     async mounted() {
+        // Get saved timeline length from store
+        this.timelineWidth = this.getTimelineLength(this.timelineID) || this.timelineWidth;
+
         // Child component requires access to parent DOM, so make sure DOM is available
         // before child is prepared.
         await this.$nextTick();
         this.mounted = true;
-
-        // Get saved timeline length from store
-        this.timelineWidth = this.getTimelineLength(this.timelineID) || this.timelineWidth;
     },
     computed: {
         getTimelineLength: appComputed.getTimelineLength,
 
         customRenderColumns() {
-            return this.customRendering.map(column => ({ column: `item.${column}`, name: `table.${column}` }));
+            const customRendering = this.tableConfig ? this.tableConfig.customColumns || [] : [];
+            return customRendering.map(column => (`table.${column}`));
         },
 
         actions() {
@@ -247,7 +228,7 @@ export default {
             // Make sure items are added with reasonable distance with
             // respect to previous item. Thus, take into account the
             // length of the currently selected timeline.
-            const incPos = this.timeLineWidth / this.timelineGridItems;
+            const incPos = this.timelineWidth / this.timelineGridItems;
 
             // Add new timeline item next to last item
             const len = this.timelines.length;
@@ -263,14 +244,13 @@ export default {
             this.setChanges(true);
         },
 
-        editAction(data) {
-            this.dialogEditData = data;
+        editAction(index) {
+            this.dialogEditData = this.timelines[index];
             this.editDialog = true;
             this.dialogKey += 1;
         },
 
-        deleteAction(data) {
-            const index = this.getTimelineIndex(data.$id);
+        deleteAction(index) {
             this.timelines.splice(index, 1);
             this.setChanges(true);
         },
@@ -309,12 +289,12 @@ export default {
             this.renderTable();
         },
 
-        handleClick(data) {
+        handleClick(index) {
             /* eslint-disable no-param-reassign */
             this.timelines.forEach(item => {
                 item.$clicked = false;
             });
-            data.$clicked = true;
+            this.timelines[index].$clicked = true;
             this.renderTimeline();
             /* eslint-enable no-param-reassign */
         },
