@@ -1,17 +1,22 @@
 <template>
   <div>
     <div class="row">
-      <div class="mr-auto mt-1">
+      <div class="mr-auto">
         <v-icon @click="sendTimelineEvent">mdi-content-save-outline</v-icon>
         <div v-if="hasChanges" class="float-right pl-1 text-danger">{{ $t('timeline.unsaved') }}</div>
       </div>
+
       <div class="ml-auto">
         <v-menu left>
           <template v-slot:activator="{ on }">
-            <v-icon @click="addItem">mdi-plus</v-icon>
-            <v-btn icon v-on="on">
-              <v-icon>mdi-dots-vertical</v-icon>
-            </v-btn>
+            <div>
+              <v-icon @click="addItem">mdi-plus</v-icon>
+              <v-icon @click="addItem" large>mdi-magnify-plus-outline</v-icon>
+              <v-icon @click="addItem" large>mdi-magnify-minus-outline</v-icon>
+              <v-btn icon v-on="on">
+                <v-icon>mdi-dots-vertical</v-icon>
+              </v-btn>
+            </div>
           </template>
 
           <v-list>
@@ -23,9 +28,22 @@
       </div>
     </div>
 
-    <div class="row" v-if="mounted">
-      <div class="timeline w-100" ref="timelineparent" :key="timelineRender">
-        <draal-ruler units=" sec" :gridItems="timelineGridItems" :rulerWidth="timelineWidth"></draal-ruler>
+    <div class="row scrolling-wrapper pt-3" v-if="mounted">
+      <div class="timeline w-100" :key="timelineRender">
+        <div ref="timelineparent">
+          <div
+            v-for="index in timelineGridItems"
+            :key="index"
+            class="cmm"
+            :style="getRulerStyle(index)"
+          ></div>
+        </div>
+        <draal-ruler
+          units=" sec"
+          :zoom="zoom"
+          :gridItems="zoom * timelineGridItems"
+          :rulerWidth="timelineWidth"
+        ></draal-ruler>
         <draal-timeline-item
           v-for="(timeline) in timelines"
           :key="timeline.$id"
@@ -33,6 +51,7 @@
           :position="timeline.position"
           :clicked="timeline.$clicked"
           :timelinelen="timelineWidth"
+          :zoom="zoom"
           @highlightstop="highlightStop"
           @timelinepos="positionUpdate"
           @edit="timelineEdit"
@@ -187,7 +206,9 @@ export default {
             timelineWidth: this.timelineWidths[0].width,
 
             hasChanges: false,
-            mounted: false
+            mounted: false,
+
+            zoom: 1
         };
     },
     async mounted() {
@@ -338,6 +359,13 @@ export default {
 
             // No changes as parent is expected to handle the timeline data.
             this.setChanges(false);
+        },
+
+        getRulerStyle(index) {
+            const slots = (this.zoom * 100) / this.timelineGridItems;
+            const left = slots * (index - 1);
+
+            return `--left: ${left}%; --width: ${slots}%`;
         }
     }
 };
@@ -347,10 +375,11 @@ export default {
 <style scoped lang="scss">
 .timeline {
     margin-top: 2.1em;
-    margin-bottom: 5em;
-    background-color: rgba(0, 0, 0, 0.12);
-    height: 5px;
+    margin-bottom: 3em;
+    //background-color: rgba(0, 0, 0, 0.12);
+    //height: 5px;
     position: relative;
+    //width: 100%;
 }
 
 .timeline-bar {
@@ -368,4 +397,50 @@ export default {
     top: 25px;
     right: -5px;
 }
+
+
+.scrolling-wrapper {
+  overflow-x: auto;
+  overflow-y: hidden;
+  white-space: nowrap;
+}
+
+.scrolling-wrapper-flexbox {
+  display: flex;
+  flex-wrap: nowrap;
+  overflow-x: auto;
+}
+
+/*
+.card {
+  border: 2px solid red;
+  width: 150px;
+  height: 75px;
+  background: black;
+}
+*/
+
+.scrolling-wrapper, .scrolling-wrapper-flexbox {
+  //height: 80px;
+  height: auto;
+  //margin-bottom: 20px;
+  width: 100%;
+  padding-right: 3%;
+  padding-left: 2%;
+  //-webkit-overflow-scrolling: touch;
+  //&::-webkit-scrollbar {
+  //  display: none;
+  //}
+}
+
+.cmm {
+    position: absolute;
+    //top: -30px;
+    //border-top: 6px solid rgba(0, 0, 0, 0.12);
+    background-color: rgba(0, 0, 0, 0.12);
+    height: 6px;
+    left: var(--left);
+    width: var(--width);
+}
+
 </style>

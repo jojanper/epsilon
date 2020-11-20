@@ -7,18 +7,21 @@
 <script>
 export default {
     name: 'DraalRuler',
-    props: ['gridItems', 'rulerWidth', 'units'],
+    props: ['gridItems', 'rulerWidth', 'units', 'zoom'],
     methods: {
         getRulerStyle(index) {
-            const slots = 100 / this.gridItems;
+            const slots = (this.zoom * 100) / this.gridItems;
             const timePos = this.rulerWidth / this.gridItems;
+
+            let width = `--width: ${slots}%`;
 
             const left = slots * (index - 1);
             let content = timePos * (index - 1);
             if (this.units && index === this.gridItems + 1) {
                 content = `${content}${this.units}`;
+                width = '';
             }
-            return `--left: ${left}%; --content: '${content}'`;
+            return `--left: ${left}%; --content: '${content}'; ${width}`;
         }
     }
 };
@@ -35,8 +38,9 @@ export default {
     .cm {
         position: absolute;
         border-left: 1px solid #555;
+
         height: 14px;
-        width: 10%;
+        width: var(--width);
         left: var(--left);
         &:after {
             position: absolute;

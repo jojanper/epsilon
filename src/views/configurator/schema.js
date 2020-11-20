@@ -61,7 +61,7 @@ export const SCHEMA = [
                 title: 'Timeline 30sec'
             },
             {
-                width: 60,
+                width: 69,
                 title: 'Timeline 60sec'
             },
             {

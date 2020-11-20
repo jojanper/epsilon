@@ -77,6 +77,11 @@ export default {
             type: String,
             required: false,
             default: 'Edit'
+        },
+        zoom: {
+            type: Number,
+            required: false,
+            default: 1
         }
     },
 
@@ -171,7 +176,7 @@ export default {
 
         // Parent element's layout width
         parentOffsetWidth() {
-            return this.$parent.$refs.timelineparent.offsetWidth;
+            return this.zoom * this.$parent.$refs.timelineparent.offsetWidth;
         },
 
         // Return parent element's left position relative to top-left of viewport
@@ -194,7 +199,7 @@ export default {
                 let eventPos = newMargLeft;
 
                 event.stopPropagation();
-                event.preventDefault();
+                //event.preventDefault();
 
                 this.$refs.timeline.style.marginLeft = `${newMargLeft}px`;
 
