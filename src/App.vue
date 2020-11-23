@@ -212,6 +212,7 @@ label.v-label.theme--light.error--text {
 }
 .dropbox-highlight {
     color: red;
+    font-size: 48px;
 }
 
 .nav-item {

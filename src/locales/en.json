@@ -123,6 +123,7 @@
         "regex": "The {_field_} field format is invalid",
         "required_if": "Required",
         "required": "Required",
-        "size": "The {_field_} field size must be less than {size}KB"
+        "size": "The {_field_} field size must be less than {size}KB",
+        "wavaudio": "Not a valid WAV file"
     }
 }

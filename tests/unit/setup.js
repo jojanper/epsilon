@@ -49,8 +49,8 @@ global.createLocalNotificationStore = () => {
     return { store, state };
 };
 
-global.getDropEvent = (data = {}) => {
-    const dropEvent = new Event('drop');
+global.getDropEvent = (name = 'drop', data = {}) => {
+    const dropEvent = new Event(name);
     Object.assign(dropEvent, {
         dataTransfer: {
             ...data

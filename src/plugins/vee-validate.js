@@ -11,3 +11,11 @@ configure({
 
 // Install required rule and message.
 extend('required', required);
+
+// Custom WAV audio file validation. Duration must be available and file ends with .wav
+extend('wavaudio', {
+    params: ['target'],
+    validate(value, { target }) {
+        return target > 0 && value.endsWith('.wav');
+    }
+});
