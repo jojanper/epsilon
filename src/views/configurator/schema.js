@@ -19,12 +19,13 @@ export const SCHEMA = [
         selectlist: [192, 256, 512]
     },
     {
-        fieldType: 'RemoteFileOpenInput',
+        fieldType: 'FileOpenInput',
         placeholder: 'Click to select WAV input file or drop file to icon',
         dropTitle: 'Drop input WAV here',
         label: 'Input WAV file for recording',
         name: 'input',
-        rules: 'required'
+        rules: 'required',
+        duration: true
     },
     {
         fieldType: 'RemoteFileSaveInput',

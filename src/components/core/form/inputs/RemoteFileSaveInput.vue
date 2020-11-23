@@ -12,7 +12,6 @@
     >
       <input-help v-if="help" slot="append-outer" @form-input-help="$emit('form-input-help', name)"></input-help>
       <draal-file-drop
-        v-if="canDrop"
         @fileDrop="onDrop"
         slot="append"
         :title="dropTitle || $t('form.remoteInputDropTitle')"
@@ -22,11 +21,17 @@
 </template>
 
 <script>
-import { remoteInputMixin } from './remoteInputMixin';
+import { fileInputMixin } from './fileInputMixin';
 
+/**
+ * File input for selecting output file from remote.
+ * Use mainly in Electron environment.
+ *
+ * @displayName RemoteFileSaveInput
+ */
 export default {
-    name: 'RemoteFileOpenInput',
-    mixins: [remoteInputMixin],
+    name: 'RemoteFileSaveInput',
+    mixins: [fileInputMixin],
     methods: {
         clicked() {
             if (this.canDrop) {
@@ -39,6 +44,7 @@ export default {
                 ipcRenderer.on('save-file', (event, data) => {
                     if (data.name === this.name) {
                         this.setInput(data.file);
+                        this.sendInputEvent();
                     }
                 });
             }

@@ -13,6 +13,11 @@
             :options="options"
             :reset="resetField"
           ></draal-form-generator>
+
+          <draal-file-dialog color="blue" icon="mdi-folder-open" @file-select="fileSelect"></draal-file-dialog>
+
+          <v-icon @click="openFileDialog">mdi-plus</v-icon>
+          <draal-file-dialog multiple v-model="fileDialog" @file-select="fileSelect"></draal-file-dialog>
         </v-expansion-panel-content>
       </v-expansion-panel>
 
@@ -27,12 +32,14 @@
 <script>
 import DraalSpinner from '../../components/core/utils/Spinner.vue';
 import DraalFormGenerator from '../../components/core/form/Form.vue';
+import DraalFileDialog from '@/components/core/utils/FileDialog.vue';
 import { SCHEMA } from './schema';
 
 export default {
     components: {
         DraalSpinner,
-        DraalFormGenerator
+        DraalFormGenerator,
+        DraalFileDialog
     },
     data() {
         return {
@@ -51,7 +58,9 @@ export default {
                 clear: this.$t('configuratorPage.clearForm')
             },
             schema: SCHEMA,
-            activePanel: 0
+            activePanel: 0,
+
+            fileDialog: false
         };
     },
     methods: {
@@ -61,12 +70,20 @@ export default {
             this.activePanel = 1;
         },
 
+        openFileDialog() {
+            this.fileDialog = true;
+        },
+
         resetField(field) {
             if (field === 'windscreen') {
                 return false;
             }
 
             return undefined;
+        },
+
+        fileSelect(files) {
+            console.log('selected', files);
         }
     }
 };

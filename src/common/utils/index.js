@@ -36,3 +36,5 @@ export function getContentDispositionFilename(disposition) {
 export const timer = timeout => new Promise(resolve => setTimeout(resolve, timeout));
 
 export * from './ansicolors';
+
+export * from './media';

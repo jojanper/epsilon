@@ -39,7 +39,7 @@ import { ValidationObserver, ValidationProvider } from 'vee-validate';
 import TextInput from './inputs/TextInput.vue';
 import SelectInput from './inputs/SelectInput.vue';
 import CheckboxInput from './inputs/CheckboxInput.vue';
-import RemoteFileOpenInput from './inputs/RemoteFileOpenInput.vue';
+import FileOpenInput from './inputs/FileOpenInput.vue';
 import RemoteFileSaveInput from './inputs/RemoteFileSaveInput.vue';
 import WheelInput from './inputs/WheelInput.vue';
 import FocusTimeline from './inputs/FocusTimeline.vue';
@@ -56,7 +56,7 @@ export default {
         WheelInput,
         FocusTimeline,
         RowInput,
-        RemoteFileOpenInput,
+        FileOpenInput,
         RemoteFileSaveInput,
         ValidationProvider,
         ValidationObserver,
