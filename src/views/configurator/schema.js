@@ -35,6 +35,17 @@ export const SCHEMA = [
         rules: 'required'
     },
     {
+        fieldType: 'IDSelectionInput',
+        placeholder: 'Click to select the file or drag file to icon',
+        label: 'ID file',
+        name: 'id',
+        rules: 'required',
+        selectPlaceholder: 'Select ID',
+        selectLabel: 'Select ID',
+        customPlaceholder: 'Manually set the ID',
+        customLabel: 'Enter your ID'
+    },
+    {
         fieldType: 'CheckboxInput',
         placeholder: 'Windscreen',
         label: 'Windscreen',
