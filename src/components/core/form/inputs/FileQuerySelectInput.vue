@@ -33,7 +33,7 @@
             :selectlist="listData"
             name="select-list"
             :label="selectLabel"
-            :selectKey="dataKey"
+            :data-key="dataKey"
             @input="setSelectedData"
             rules="required"
             simple="true"
@@ -103,7 +103,7 @@ export default {
     ],
     data() {
         const rules = this.rules || '';
-        const inputRules = this.queryRule ? `${rules}|${this.queryRule}:@selected,@custom` : rules;
+        const inputRules = `${rules}|${this.queryRule}:@selected,@custom`;
         const fieldValue = this.value ? this.value.file : null;
         const listData = this.value ? this.value.listData : [];
         const selectedData = this.value ? this.value.selected : null;
@@ -125,12 +125,14 @@ export default {
         };
     },
     methods: {
+        // User selected file (either using file dialog and dropped file)
         onDrop(files) {
             this.customId = false;
             this.processing = true;
             this.fieldValue = files[0].path || files[0].name;
             this.listData.splice(0, this.listData.length);
 
+            // Get the list data
             this.dataQuery(files).subscribe(data => {
                 this.processing = false;
                 data.forEach(element => this.listData.push(element));
@@ -140,6 +142,7 @@ export default {
             this.validateInput();
         },
 
+        // Item selected from list
         setSelectedData(data) {
             this.selectedData = data;
             this.validateInput();
@@ -152,12 +155,14 @@ export default {
             }
         },
 
+        // User manually entered the value
         setCustomValue(value) {
             this.customValue = value;
             this.sendInputEvent();
             this.validateInput();
         },
 
+        // Input event is emitted
         sendInputEvent() {
             const value = this.customValue || (this.selectedData ? this.selectedData[this.selectKey] : null);
             const data = {
@@ -171,6 +176,7 @@ export default {
             this.$emit('input', data);
         },
 
+        // Trigger cross-field validation
         validateInput() {
             setTimeout(this.$refs.provider.validate, 0);
         }

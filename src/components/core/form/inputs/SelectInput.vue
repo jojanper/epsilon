@@ -7,7 +7,7 @@
       :label="label"
       :items="selectlist"
       :placeholder="placeholder"
-      :item-text="selectKey"
+      :item-text="dataKey"
       v-bind="attrs"
       @input="$emit('input', fieldValue)"
     >
@@ -20,7 +20,7 @@
       :label="label"
       :items="selectlist"
       :placeholder="placeholder"
-      :item-text="selectKey"
+      :item-text="dataKey"
       v-bind="attrs"
       @input="$emit('input', fieldValue)"
     >
@@ -40,7 +40,7 @@ export default {
         ValidationProvider,
         InputHelp
     },
-    props: ['placeholder', 'label', 'name', 'value', 'rules', 'selectlist', 'help', 'selectKey', 'simple'],
+    props: ['placeholder', 'label', 'name', 'value', 'rules', 'selectlist', 'help', 'dataKey', 'simple'],
     data() {
         const attrs = this.selectKey ? { 'return-object': true } : {};
 
