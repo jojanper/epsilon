@@ -4,7 +4,7 @@
     <draal-header :homeRoute="home" :routes="header.routes" :appName="header.appName"></draal-header>
     <draal-breadcrumbs :home-route-name="home" :home-name="homeName" class="mt-3 mr-3 ml-3"></draal-breadcrumbs>
     <draal-notification></draal-notification>
-    <div class="container">
+    <div class="container-fluid app-container">
       <router-view />
       <v-flex xs12 sm34 text-xs-center>
         <v-btn class="mr-2" color="primary" v-on:click="addAlert('Success')">Add success alert</v-btn>
@@ -177,7 +177,7 @@ export default {
     text-align: center;
 }
 .container {
-    min-height: 400px;
+    //min-height: 400px;
     padding-bottom: 60px;
 }
 </style>

@@ -1,11 +1,12 @@
 <template>
-  <ValidationObserver>
+  <ValidationObserver ref="observer">
     <ValidationProvider ref="provider" v-slot="{ errors }" :name="name" :rules="inputRules">
       <v-text-field
         class="remote-input"
         v-model="fieldValue"
         :error-messages="errors"
         :label="label"
+        color="red"
         :placeholder="placeholder"
         @click="fileDialog=true"
         :readonly="true"
@@ -23,9 +24,15 @@
       </v-text-field>
     </ValidationProvider>
 
-    <div class="row p-0">
+    <div class="row p-0 pb-1" v-if="fieldValue">
       <div class="col">
-        <draal-spinner :state="processing" class="float-left"></draal-spinner>
+        <draal-spinner
+          :state="processing"
+          width="40"
+          height="40"
+          type="spinner-3"
+          class="float-left"
+        ></draal-spinner>
         <ValidationProvider name="selected" v-if="listData.length">
           <select-input
             :placeholder="selectPlaceholder"
@@ -71,10 +78,10 @@ import DraalSpinner from '@/components/core/utils/Spinner.vue';
 /**
  * Data query assisted select input.
  *
- * @displayName RemoteFileSelectInput
+ * @displayName FileQueryInput
  */
 export default {
-    name: 'RemoteFileSelectInput',
+    name: 'FileQueryInput',
     components: {
         ValidationProvider,
         ValidationObserver,
@@ -103,7 +110,8 @@ export default {
     ],
     data() {
         const rules = this.rules || '';
-        const inputRules = `${rules}|${this.queryRule}:@selected,@custom`;
+        const inputRules = !this.queryRule ? rules : `${rules}|${this.queryRule}:@selected,@custom`;
+
         const fieldValue = this.value ? this.value.file : null;
         const listData = this.value ? this.value.listData : [];
         const selectedData = this.value ? this.value.selected : null;
@@ -113,6 +121,7 @@ export default {
         return {
             fieldValue,
             fileDialog: false,
+
             inputRules,
 
             listData,
@@ -125,21 +134,31 @@ export default {
         };
     },
     methods: {
-        // User selected file (either using file dialog and dropped file)
+        // User selected file (either using file dialog or file was dropped)
         onDrop(files) {
+            const file = files[0];
+
             this.customId = false;
             this.processing = true;
-            this.fieldValue = files[0].path || files[0].name;
+            this.fieldValue = file.path || file.name;
             this.listData.splice(0, this.listData.length);
 
+            this.validateInput();
+
             // Get the list data
-            this.dataQuery(files).subscribe(data => {
+            this.dataQuery(file).subscribe(data => {
                 this.processing = false;
                 data.forEach(element => this.listData.push(element));
                 this.validateInput();
-            });
+            }, err => {
+                this.processing = false;
 
-            this.validateInput();
+                const error = {};
+                error[this.name] = err;
+
+                // Show the error after input validation cycle has stabilized
+                setTimeout(() => this.$refs.observer.setErrors(error), 100);
+            });
         },
 
         // Item selected from list
