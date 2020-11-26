@@ -6,7 +6,6 @@
         v-model="fieldValue"
         :error-messages="errors"
         :label="label"
-        color="red"
         :placeholder="placeholder"
         @click="fileDialog=true"
         :readonly="true"
