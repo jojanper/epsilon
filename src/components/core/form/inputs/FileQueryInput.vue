@@ -109,7 +109,7 @@ export default {
     ],
     data() {
         const rules = this.rules || '';
-        const inputRules = !this.queryRule ? rules : `${rules}|${this.queryRule}:@selected,@custom`;
+        const inputRules = `${rules}|${this.queryRule}:@selected,@custom`;
 
         const fieldValue = this.value ? this.value.file : null;
         const listData = this.value ? this.value.listData : [];

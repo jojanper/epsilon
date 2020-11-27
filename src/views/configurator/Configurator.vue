@@ -31,7 +31,7 @@
 
 <script>
 import { of, throwError } from 'rxjs';
-import { delay, map } from 'rxjs/operators';
+import { delay } from 'rxjs/operators';
 
 import { NotificationMessage } from '@/common/models';
 import { notificationActions } from '@/store/helpers';
@@ -69,7 +69,9 @@ export default {
             schema,
             activePanel: 0,
 
-            fileDialog: false
+            fileDialog: false,
+
+            queryFailure: false
         };
     },
     methods: {
@@ -98,15 +100,17 @@ export default {
         },
 
         dataQuery(file) {
-            console.log(file);
+            if (this.queryFailure) {
+                const timeout = 5000;
+                const msg = `Error in parsing file ${file.name}`;
+                this.addNotification(NotificationMessage.createError(msg, { timeout }));
 
-            const timeout = 15000;
-            const msg = `Error in parsing file ${file.name}`;
-            this.addNotification(NotificationMessage.createError(msg, { timeout }));
+                this.queryFailure = false;
+                return throwError([msg]);
+            }
 
-            return throwError([msg]);
+            this.queryFailure = true;
 
-            /*
             return of([
                 { uuid: 'UUID 1' },
                 { uuid: 'UUID 2' },
@@ -115,7 +119,6 @@ export default {
                 { uuid: 'UUID 5' },
                 { uuid: 'Set your own ID', custom: true }
             ]).pipe(delay(2500));
-            */
         }
     }
 };
