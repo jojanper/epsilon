@@ -11,8 +11,8 @@
           <template v-slot:activator="{ on }">
             <div>
               <v-icon @click="addItem">mdi-plus</v-icon>
-              <v-icon @click="addItem" large>mdi-magnify-plus-outline</v-icon>
-              <v-icon @click="addItem" large>mdi-magnify-minus-outline</v-icon>
+              <v-icon @click="zoom += 1; timelineRender += 1;" large>mdi-magnify-plus-outline</v-icon>
+              <v-icon @click="zoom -= 1; timelineRender += 1;" large>mdi-magnify-minus-outline</v-icon>
               <v-btn icon v-on="on">
                 <v-icon>mdi-dots-vertical</v-icon>
               </v-btn>
@@ -28,22 +28,16 @@
       </div>
     </div>
 
-    <div class="row scrolling-wrapper pt-3" v-if="mounted">
-      <div class="timeline w-100" :key="timelineRender">
-        <div ref="timelineparent">
-          <div
-            v-for="index in timelineGridItems"
-            :key="index"
-            class="cmm"
-            :style="getRulerStyle(index)"
-          ></div>
-        </div>
+    <div class="row scrolling-wrapper pt-3 m-0" v-if="mounted">
+      <div class="timeline" :key="timelineRender">
         <draal-ruler
           units=" sec"
           :zoom="zoom"
           :gridItems="zoom * timelineGridItems"
           :rulerWidth="timelineWidth"
-        ></draal-ruler>
+        >
+          <div ref="timelineparent"></div>
+        </draal-ruler>
         <draal-timeline-item
           v-for="(timeline) in timelines"
           :key="timeline.$id"
@@ -55,14 +49,17 @@
           @highlightstop="highlightStop"
           @timelinepos="positionUpdate"
           @edit="timelineEdit"
+          @move="moveTimeEntry"
         ></draal-timeline-item>
       </div>
     </div>
 
     <div class="row">
       <v-data-table
+        :class="{ 'noselect': moving }"
+        ondragstart="return false"
         :key="tableRender"
-        class="mt-3 pt-3 w-100"
+        class="mt-3 pt-3 w-100 noselect"
         :headers="tableHeaders"
         :items="timelines"
         item-key="$id"
@@ -208,7 +205,8 @@ export default {
             hasChanges: false,
             mounted: false,
 
-            zoom: 1
+            zoom: 1,
+            moving: false
         };
     },
     async mounted() {
@@ -268,7 +266,7 @@ export default {
             // Make sure items are added with reasonable distance with
             // respect to previous item. Thus, take into account the
             // length of the currently selected timeline.
-            const incPos = this.timeLineWidth / this.timelineGridItems;
+            const incPos = this.timelineWidth / this.timelineGridItems;
 
             // Add new timeline item next to last item
             const len = this.timelines.length;
@@ -361,11 +359,8 @@ export default {
             this.setChanges(false);
         },
 
-        getRulerStyle(index) {
-            const slots = (this.zoom * 100) / this.timelineGridItems;
-            const left = slots * (index - 1);
-
-            return `--left: ${left}%; --width: ${slots}%`;
+        moveTimeEntry(status) {
+            setTimeout(() => { this.moving = status; }, 10);
         }
     }
 };
@@ -374,30 +369,13 @@ export default {
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped lang="scss">
 .timeline {
-    margin-top: 2.1em;
-    margin-bottom: 3em;
+    margin-top: 3%;
+    margin-bottom: 3%;
     //background-color: rgba(0, 0, 0, 0.12);
     //height: 5px;
     position: relative;
-    //width: 100%;
+    width: 100%;
 }
-
-.timeline-bar {
-    position: relative;
-    background-image: linear-gradient(
-        90deg,
-        transparent 79px,
-        rgba(0, 0, 0, 0.12) 79px,
-        rgba(0, 0, 0, 0.12) 81px,
-        transparent 81px
-    );
-    background-image: 2px solid rgba(0, 0, 0, 0.12);
-    background-repeat: repeat-x;
-    height: 25px;
-    top: 25px;
-    right: -5px;
-}
-
 
 .scrolling-wrapper {
   overflow-x: auto;
@@ -411,36 +389,16 @@ export default {
   overflow-x: auto;
 }
 
-/*
-.card {
-  border: 2px solid red;
-  width: 150px;
-  height: 75px;
-  background: black;
-}
-*/
-
 .scrolling-wrapper, .scrolling-wrapper-flexbox {
   //height: 80px;
   height: auto;
   //margin-bottom: 20px;
   width: 100%;
-  padding-right: 3%;
-  padding-left: 2%;
+  padding-right: 5% !important;
+  padding-left: 1% !important;
   //-webkit-overflow-scrolling: touch;
   //&::-webkit-scrollbar {
   //  display: none;
   //}
 }
-
-.cmm {
-    position: absolute;
-    //top: -30px;
-    //border-top: 6px solid rgba(0, 0, 0, 0.12);
-    background-color: rgba(0, 0, 0, 0.12);
-    height: 6px;
-    left: var(--left);
-    width: var(--width);
-}
-
 </style>

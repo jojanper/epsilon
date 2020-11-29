@@ -3,7 +3,7 @@
     <div
       @contextmenu.prevent="showContextMenu"
       class="timeline-entry"
-      :class="{ 'timeline-highlight': isClicked}"
+      :class="{ 'timeline-highlight': isClicked, 'noselect': isMoving }"
       ref="timeline"
       ondragstart="return false"
     >
@@ -91,7 +91,8 @@ export default {
             mousedown: false,
             timestamp: this.position,
             eventPosition: 0,
-            isClicked: this.clicked
+            isClicked: this.clicked,
+            isMoving: false
         };
     },
 
@@ -186,7 +187,7 @@ export default {
 
         // Convert the time position into pixels and render position
         renderTimePos() {
-            this.eventPosition = this.timestamp / this.timelinelen;
+            this.eventPosition = this.timestamp / (this.timelinelen);
             const pixPos = this.eventPosition * this.timelineWidth;
             this.$refs.timeline.style.marginLeft = `${pixPos}px`;
         },
@@ -195,28 +196,40 @@ export default {
         // Only x-axis movement is tracked
         moveTimeline(event) {
             if (this.mousedown) {
-                const newMargLeft = event.clientX - this.parentPos();
-                let eventPos = newMargLeft;
-
                 event.stopPropagation();
-                //event.preventDefault();
+                // event.preventDefault();
 
-                this.$refs.timeline.style.marginLeft = `${newMargLeft}px`;
+                const target = this.$refs.timeline.getBoundingClientRect();
+                if (event.clientY >= (target.top - 25) && event.clientY <= (target.bottom + 25)) {
+                    const newMargLeft = event.clientX - this.parentPos();
+                    let eventPos = newMargLeft;
 
-                if (newMargLeft < 0) {
-                    eventPos = 0;
+                    // event.stopPropagation();
+                    //event.preventDefault();
+                    //console.log(event);
+
+                    //
+                    // console.log(event.clientY, target.top, target.bottom);
+
+                    this.$refs.timeline.style.marginLeft = `${newMargLeft}px`;
+
+                    if (newMargLeft < 0) {
+                        eventPos = 0;
+                    }
+
+                    if (newMargLeft > this.timelineWidth) {
+                        eventPos = this.timelineWidth;
+                    }
+
+                    // Calculate time position with one decimal
+                    const eventPosition = eventPos / this.timelineWidth;
+                    const pos = this.timelinelen * eventPosition;
+                    this.timestamp = parseFloat(pos.toFixed(1), 10);
+
+                    this.renderTimePos();
+                } else {
+                    this.mousedown = false;
                 }
-
-                if (newMargLeft > this.timelineWidth) {
-                    eventPos = this.timelineWidth;
-                }
-
-                // Calculate time position with one decimal
-                const eventPosition = eventPos / this.timelineWidth;
-                const pos = this.timelinelen * eventPosition;
-                this.timestamp = parseFloat(pos.toFixed(1), 10);
-
-                this.renderTimePos();
             }
         },
 
@@ -225,6 +238,9 @@ export default {
             if (this.mousedown) {
                 event.stopPropagation();
                 event.preventDefault();
+
+                this.isMoving = false;
+                this.$emit('move', this.isMoving);
 
                 /**
                  * Send position update for timeline item.
@@ -249,6 +265,9 @@ export default {
                 this.mousedown = true;
                 this.itemClicked = 0;
 
+                this.isMoving = true;
+                this.$emit('move', this.isMoving);
+
                 fromEvent(window, 'mousemove')
                     .pipe(
                         distinctUntilChanged(),
@@ -269,7 +288,7 @@ export default {
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped lang="scss">
 .timeline-entry {
-    top: -5px;
+    top: 15px;
     position: absolute;
     height: 15px;
     width: 15px;
