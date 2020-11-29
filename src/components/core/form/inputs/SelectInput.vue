@@ -42,7 +42,7 @@ export default {
     },
     props: ['placeholder', 'label', 'name', 'value', 'rules', 'selectlist', 'help', 'dataKey', 'simple'],
     data() {
-        const attrs = this.selectKey ? { 'return-object': true } : {};
+        const attrs = this.dataKey ? { 'return-object': true } : {};
 
         return {
             attrs,

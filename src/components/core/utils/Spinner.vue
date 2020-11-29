@@ -1,7 +1,8 @@
 <template>
   <div>
     <div v-if="state" :class="type">
-      <div class="spinner-loader"></div>
+      <div class="spinner-loader" :style="attrs"></div>
+      <!-- @slot Enhance spinner content -->
       <slot name="spinner"></slot>
     </div>
     <slot v-if="!state"></slot>
@@ -9,18 +10,63 @@
 </template>
 
 <script>
+/**
+ * Spinner component.
+ *
+ * @displayName DraalSpinner
+ */
 export default {
     name: 'DraalSpinner',
     props: {
+        /**
+         * Spinner type. Available types:
+         * - spinner-1
+         * - spinner-2
+         * - spinner-3
+         */
         type: {
             type: String,
             default: 'spinner-1'
         },
+        /**
+         * Spinner state. Value true activates spinner, false disables.
+         */
         state: {
             type: Boolean,
             required: false,
             default: true
+        },
+        /**
+         * Spinner width.
+         */
+        width: {
+            type: String,
+            required: false,
+            default: null
+        },
+        /**
+         * Spinner height.
+         */
+        height: {
+            type: String,
+            required: false,
+            default: null
         }
+    },
+    data() {
+        const attrs = {};
+
+        if (this.width) {
+            attrs.width = this.width;
+        }
+
+        if (this.height) {
+            attrs.height = this.height;
+        }
+
+        return {
+            attrs
+        };
     }
 };
 </script>
@@ -77,5 +123,9 @@ $animation: rotation 0.6s infinite linear;
 
 .spinner-2 {
     @include spinner(6px, 0, 0.75);
+}
+
+.spinner-3 {
+    @include spinner(4px, 0, 0.75);
 }
 </style>

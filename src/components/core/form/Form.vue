@@ -42,7 +42,7 @@ import CheckboxInput from './inputs/CheckboxInput.vue';
 import FileOpenInput from './inputs/FileOpenInput.vue';
 import RemoteFileSaveInput from './inputs/RemoteFileSaveInput.vue';
 import WheelInput from './inputs/WheelInput.vue';
-import IDSelectionInput from './inputs/IDSelection.vue';
+import FileQueryInput from './inputs/FileQueryInput.vue';
 import FocusTimeline from './inputs/FocusTimeline.vue';
 import RowInput from './inputs/RowInput.vue';
 import DraalDialog from '../utils/Dialog.vue';
@@ -59,7 +59,7 @@ export default {
         RowInput,
         FileOpenInput,
         RemoteFileSaveInput,
-        IDSelectionInput,
+        FileQueryInput,
         ValidationProvider,
         ValidationObserver,
         DraalDialog

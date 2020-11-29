@@ -35,7 +35,7 @@ export const SCHEMA = [
         rules: 'required'
     },
     {
-        fieldType: 'IDSelectionInput',
+        fieldType: 'FileQueryInput',
         placeholder: 'Click to select the file or drag file to icon',
         label: 'ID file',
         name: 'id',
@@ -43,7 +43,10 @@ export const SCHEMA = [
         selectPlaceholder: 'Select ID',
         selectLabel: 'Select ID',
         customPlaceholder: 'Manually set the ID',
-        customLabel: 'Enter your ID'
+        customLabel: 'Enter your ID',
+        dataKey: 'uuid',
+        selectKey: 'uuid',
+        queryRule: 'filequery'
     },
     {
         fieldType: 'CheckboxInput',
