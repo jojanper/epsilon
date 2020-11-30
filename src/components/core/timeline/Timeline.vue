@@ -11,8 +11,8 @@
           <template v-slot:activator="{ on }">
             <div>
               <v-icon @click="addItem">mdi-plus</v-icon>
-              <v-icon @click="zoom += 1; timelineRender += 1;" large>mdi-magnify-plus-outline</v-icon>
-              <v-icon @click="zoom -= 1; timelineRender += 1;" large>mdi-magnify-minus-outline</v-icon>
+              <v-icon @click="setZoom(1)" large>mdi-magnify-plus-outline</v-icon>
+              <v-icon @click="setZoom(-1)" large>mdi-magnify-minus-outline</v-icon>
               <v-btn icon v-on="on">
                 <v-icon>mdi-dots-vertical</v-icon>
               </v-btn>
@@ -28,8 +28,9 @@
       </div>
     </div>
 
-    <div class="row scrolling-wrapper pt-3 m-0" v-if="mounted">
-      <div class="timeline" :key="timelineRender">
+    <div class="row scrolling-wrapper m-0" v-if="mounted">
+      <div ref="timeline" class="timeline" :key="timelineRender">
+        <!--div ref="timelineparent" class="timeline-bar" :style="getTimelineBar"></div-->
         <draal-ruler
           units=" sec"
           :zoom="zoom"
@@ -54,38 +55,24 @@
       </div>
     </div>
 
-    <div class="row">
-      <v-data-table
+    <div class="row mt-3">
+      <draal-data-table
         :class="{ 'noselect': moving }"
         ondragstart="return false"
+        class="w-100"
         :key="tableRender"
-        class="mt-3 pt-3 w-100 noselect"
-        :headers="tableHeaders"
-        :items="timelines"
-        item-key="$id"
-        @click:row="handleClick"
+        :data="timelines"
+        :tableAttributes="{'item-key': '$id'}"
+        v-bind="tableConfig"
+        @row-click="handleClick"
+        @data-edit="editAction"
+        @data-delete="deleteAction"
       >
-        <template
-          v-for="(columnDef, index) in customRenderColumns"
-          v-slot:[columnDef.column]="{item}"
-        >
-          <!--
-            @slot Custom table column data rendering.
-            @binding {number} columnKey Column key (Vue key attribute).
-            @binding {object} data Column data.
-          -->
-          <slot :name="columnDef.name" v-bind:colunmKey="index" v-bind:data="item"></slot>
+        <!-- Expose custom render columns for parent rendering -->
+        <template v-for="(columnDef, index) in customRenderColumns" v-slot:[columnDef]="{data}">
+          <slot :name="columnDef" v-bind:colunmKey="index" v-bind:data="data"></slot>
         </template>
-
-        <template v-slot:item.action="{item}">
-          <v-btn class="mx-2" fab dark x-small color="pink" @click="editAction(item)">
-            <v-icon dark>mdi-border-color</v-icon>
-          </v-btn>
-          <v-btn class="mx-2" fab dark x-small color="pink" @click="deleteAction(item)">
-            <v-icon dark>mdi-delete-forever</v-icon>
-          </v-btn>
-        </template>
-      </v-data-table>
+      </draal-data-table>
     </div>
 
     <draal-dialog :model="editDialog" :title="editText" @close-dialog="closeDialog">
@@ -112,13 +99,15 @@ import { appActions, appComputed } from '@/store/helpers';
 import DraalDialog from '@/components/core/utils/Dialog.vue';
 import DraalRuler from '@/components/core/utils/Ruler.vue';
 import DraalTimelineItem from './TimelineItem.vue';
+import DraalDataTable from '@/components/core/DataTable.vue';
 
 export default {
     name: 'DraalTimeline',
     components: {
         DraalTimelineItem,
         DraalDialog,
-        DraalRuler
+        DraalRuler,
+        DraalDataTable
     },
     props: {
         /**
@@ -129,7 +118,6 @@ export default {
             required: false,
             default: 'timeline'
         },
-
         /**
          * Initial time data.
          */
@@ -143,13 +131,6 @@ export default {
          * the `timelineGridItems` value.
          */
         timelineWidths: {
-            type: Array,
-            required: true
-        },
-        /**
-         * Table header column definition
-         */
-        tableHeaders: {
             type: Array,
             required: true
         },
@@ -177,12 +158,20 @@ export default {
             default: 15
         },
         /**
-         * Columns of the timeline data table that are custom rendered by the parent.
+         * Table props for the underlying data table.
          */
-        customRendering: {
-            type: Array,
+        tableConfig: {
+            type: Object,
             required: false,
-            default: () => []
+            default: () => {}
+        },
+        /**
+         * Maximum timeline zoom factor.
+         */
+        maxZoom: {
+            type: Number,
+            required: false,
+            default: 5
         }
     },
     data() {
@@ -206,23 +195,30 @@ export default {
             mounted: false,
 
             zoom: 1,
-            moving: false
+            moving: false,
+            timelineWidthPx: 0
         };
     },
     async mounted() {
+        // Get saved timeline length from store
+        this.timelineWidth = this.getTimelineLength(this.timelineID) || this.timelineWidth;
+
         // Child component requires access to parent DOM, so make sure DOM is available
         // before child is prepared.
         await this.$nextTick();
         this.mounted = true;
 
-        // Get saved timeline length from store
-        this.timelineWidth = this.getTimelineLength(this.timelineID) || this.timelineWidth;
+        setTimeout(() => { this.timelineWidthPx = this.$refs.timeline.scrollWidth - 15; });
+    },
+    updated() {
+        console.log('UPDATED');
     },
     computed: {
         getTimelineLength: appComputed.getTimelineLength,
 
         customRenderColumns() {
-            return this.customRendering.map(column => ({ column: `item.${column}`, name: `table.${column}` }));
+            const customRendering = this.tableConfig ? this.tableConfig.customColumns || [] : [];
+            return customRendering.map(column => (`table.${column}`));
         },
 
         actions() {
@@ -230,10 +226,27 @@ export default {
                 title: item.title,
                 fn: () => this.saveLength(item.width)
             }));
+        },
+
+        getTimelineBar() {
+            // const width = this.$refs.timeline ? this.$refs.timeline.scrollWidth : 0;
+            return `--width: ${this.zoom * this.timelineWidthPx}px;`;
         }
     },
     methods: {
         saveTimelineLength: appActions.saveTimelineLength,
+
+        setZoom(inc) {
+            const zoom = this.zoom + inc;
+            const stepSize = this.timelineWidth / (zoom * this.timelineGridItems);
+
+            // Don't go below original size and exceed maximum zoom.
+            // In addition, stop if time interval falls below 1.
+            if (zoom > 0 && zoom <= this.maxZoom && stepSize >= 1) {
+                this.zoom = zoom;
+                this.timelineRender += 1;
+            }
+        },
 
         saveLength(length) {
             this.saveTimelineLength({ id: this.timelineID, length });
@@ -282,14 +295,13 @@ export default {
             this.setChanges(true);
         },
 
-        editAction(data) {
-            this.dialogEditData = data;
+        editAction(index) {
+            this.dialogEditData = this.timelines[index];
             this.editDialog = true;
             this.dialogKey += 1;
         },
 
-        deleteAction(data) {
-            const index = this.getTimelineIndex(data.$id);
+        deleteAction(index) {
             this.timelines.splice(index, 1);
             this.setChanges(true);
         },
@@ -328,12 +340,12 @@ export default {
             this.renderTable();
         },
 
-        handleClick(data) {
+        handleClick(index) {
             /* eslint-disable no-param-reassign */
             this.timelines.forEach(item => {
                 item.$clicked = false;
             });
-            data.$clicked = true;
+            this.timelines[index].$clicked = true;
             this.renderTimeline();
             /* eslint-enable no-param-reassign */
         },
@@ -369,12 +381,20 @@ export default {
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped lang="scss">
 .timeline {
-    margin-top: 3%;
+    margin-top: 2%;
     margin-bottom: 3%;
     //background-color: rgba(0, 0, 0, 0.12);
     //height: 5px;
     position: relative;
     width: 100%;
+}
+
+.timeline-bar {
+    position: relative;
+    top: 15px;
+    background-color: rgba(0, 0, 0, 0.12);
+    height: 5px;
+    width: var(--width);
 }
 
 .scrolling-wrapper {
@@ -394,7 +414,7 @@ export default {
   height: auto;
   //margin-bottom: 20px;
   width: 100%;
-  padding-right: 5% !important;
+  padding-right: 4% !important;
   padding-left: 1% !important;
   //-webkit-overflow-scrolling: touch;
   //&::-webkit-scrollbar {

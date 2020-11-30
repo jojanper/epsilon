@@ -5,7 +5,7 @@ import DraalUploadTerminal from './UploadTerminal.vue';
 
 describe('DraalUploadTerminal', () => {
     const files = ['This is a file'];
-    const dropEvent = getDropEvent({ files });
+    const dropEvent = getDropEvent('drop', { files });
 
     beforeAll(() => {
         prepareVuetify();

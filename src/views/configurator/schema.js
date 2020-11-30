@@ -19,12 +19,13 @@ export const SCHEMA = [
         selectlist: [192, 256, 512]
     },
     {
-        fieldType: 'RemoteFileOpenInput',
+        fieldType: 'FileOpenInput',
         placeholder: 'Click to select WAV input file or drop file to icon',
         dropTitle: 'Drop input WAV here',
         label: 'Input WAV file for recording',
         name: 'input',
-        rules: 'required'
+        rules: 'required',
+        duration: true
     },
     {
         fieldType: 'RemoteFileSaveInput',
@@ -32,6 +33,20 @@ export const SCHEMA = [
         label: 'Recording output MP4 file',
         name: 'output',
         rules: 'required'
+    },
+    {
+        fieldType: 'FileQueryInput',
+        placeholder: 'Click to select the file or drag file to icon',
+        label: 'ID file',
+        name: 'id',
+        rules: 'required',
+        selectPlaceholder: 'Select ID',
+        selectLabel: 'Select ID',
+        customPlaceholder: 'Manually set the ID',
+        customLabel: 'Enter your ID',
+        dataKey: 'uuid',
+        selectKey: 'uuid',
+        queryRule: 'filequery'
     },
     {
         fieldType: 'CheckboxInput',
@@ -51,9 +66,10 @@ export const SCHEMA = [
         fieldType: 'FocusTimeline',
         name: 'focusTimeline',
         label: 'Focus events timeline',
+        maxZoom: 10,
         timelineWidths: [
             {
-                width: 15,
+                width: 120,
                 title: 'Timeline 15sec'
             },
             {

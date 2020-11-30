@@ -13,6 +13,11 @@
             :options="options"
             :reset="resetField"
           ></draal-form-generator>
+
+          <draal-file-dialog color="blue" icon="mdi-folder-open" @file-select="fileSelect"></draal-file-dialog>
+
+          <v-icon @click="openFileDialog">mdi-plus</v-icon>
+          <draal-file-dialog multiple v-model="fileDialog" @file-select="fileSelect"></draal-file-dialog>
         </v-expansion-panel-content>
       </v-expansion-panel>
 
@@ -25,16 +30,27 @@
 </template>
 
 <script>
+import { of, throwError } from 'rxjs';
+import { delay } from 'rxjs/operators';
+
+import { NotificationMessage } from '@/common/models';
+import { notificationActions } from '@/store/helpers';
 import DraalSpinner from '../../components/core/utils/Spinner.vue';
 import DraalFormGenerator from '../../components/core/form/Form.vue';
+import DraalFileDialog from '@/components/core/utils/FileDialog.vue';
 import { SCHEMA } from './schema';
 
 export default {
     components: {
         DraalSpinner,
-        DraalFormGenerator
+        DraalFormGenerator,
+        DraalFileDialog
     },
     data() {
+        const schema = [...SCHEMA];
+
+        schema[4].dataQuery = this.dataQuery.bind(this);
+
         return {
             data: null,
             processing: false,
@@ -50,15 +66,25 @@ export default {
                 submit: this.$t('configuratorPage.createRec'),
                 clear: this.$t('configuratorPage.clearForm')
             },
-            schema: SCHEMA,
-            activePanel: 0
+            schema,
+            activePanel: 0,
+
+            fileDialog: false,
+
+            queryFailure: false
         };
     },
     methods: {
+        ...notificationActions,
+
         encode(encData) {
             /* eslint-disable-next-line */
             console.log(encData);
             this.activePanel = 1;
+        },
+
+        openFileDialog() {
+            this.fileDialog = true;
         },
 
         resetField(field) {
@@ -67,6 +93,32 @@ export default {
             }
 
             return undefined;
+        },
+
+        fileSelect(files) {
+            console.log('selected', files);
+        },
+
+        dataQuery(file) {
+            if (this.queryFailure) {
+                const timeout = 5000;
+                const msg = `Error in parsing file ${file.name}`;
+                this.addNotification(NotificationMessage.createError(msg, { timeout }));
+
+                this.queryFailure = false;
+                return throwError([msg]);
+            }
+
+            this.queryFailure = true;
+
+            return of([
+                { uuid: 'UUID 1' },
+                { uuid: 'UUID 2' },
+                { uuid: 'UUID 3' },
+                { uuid: 'UUID 4' },
+                { uuid: 'UUID 5' },
+                { uuid: 'Set your own ID', custom: true }
+            ]).pipe(delay(2500));
         }
     }
 };

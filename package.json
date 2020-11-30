@@ -8,6 +8,7 @@
     "build-configurator": "npm run build -- --mode electron && mkdirp ../public && cp -r dist/* ../public/",
     "build-license": "npm run build && mkdirp ../public && cp -r dist/* ../public/",
     "build-modern": "vue-cli-service build --modern",
+    "clear-jest-cache": "jest --clearCache",
     "http-server": "http-server",
     "lint": "vue-cli-service lint",
     "mkdirp": "mkdirp",

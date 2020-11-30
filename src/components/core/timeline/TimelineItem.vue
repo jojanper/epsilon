@@ -102,6 +102,8 @@ export default {
         // Timeline width
         this.timelineWidth = this.parentOffsetWidth() - this.$refs.timeline.offsetWidth;
 
+        console.log(this.timelineWidth);
+
         // Calculate initial timeline position in the UI
         this.renderTimePos();
 
@@ -177,6 +179,7 @@ export default {
 
         // Parent element's layout width
         parentOffsetWidth() {
+            console.log(this.$parent.$refs.timelineparent.offsetWidth);
             return this.zoom * this.$parent.$refs.timelineparent.offsetWidth;
         },
 
@@ -187,7 +190,7 @@ export default {
 
         // Convert the time position into pixels and render position
         renderTimePos() {
-            this.eventPosition = this.timestamp / (this.timelinelen);
+            this.eventPosition = this.timestamp / this.timelinelen;
             const pixPos = this.eventPosition * this.timelineWidth;
             this.$refs.timeline.style.marginLeft = `${pixPos}px`;
         },
@@ -212,6 +215,8 @@ export default {
                     // console.log(event.clientY, target.top, target.bottom);
 
                     this.$refs.timeline.style.marginLeft = `${newMargLeft}px`;
+
+                    // console.log(newMargLeft, this.timelineWidth);
 
                     if (newMargLeft < 0) {
                         eventPos = 0;
@@ -288,7 +293,7 @@ export default {
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped lang="scss">
 .timeline-entry {
-    top: 15px;
+    top: 10px;
     position: absolute;
     height: 15px;
     width: 15px;

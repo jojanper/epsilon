@@ -7,11 +7,11 @@
       :label="label"
       :placeholder="placeholder"
       @click="clicked"
+      :readonly="readOnly"
       @input="$emit('input', fieldValue)"
     >
       <input-help v-if="help" slot="append-outer" @form-input-help="$emit('form-input-help', name)"></input-help>
       <draal-file-drop
-        v-if="canDrop"
         @fileDrop="onDrop"
         slot="append"
         :title="dropTitle || $t('form.remoteInputDropTitle')"
@@ -21,50 +21,33 @@
 </template>
 
 <script>
-import { ValidationProvider } from 'vee-validate';
+import { fileInputMixin } from './fileInputMixin';
 
-import InputHelp from './InputHelp.vue';
-import DraalFileDrop from '../../utils/FileDrop.vue';
-
+/**
+ * File input for selecting output file from remote.
+ * Use mainly in Electron environment.
+ *
+ * @displayName RemoteFileSaveInput
+ */
 export default {
-    name: 'RemoteFileOpenInput',
-    components: {
-        ValidationProvider,
-        InputHelp,
-        DraalFileDrop
-    },
-    props: ['placeholder', 'label', 'name', 'value', 'rules', 'help'],
-    data() {
-        return {
-            fieldValue: this.value,
-            canDrop: !!window.require
-        };
-    },
+    name: 'RemoteFileSaveInput',
+    mixins: [fileInputMixin],
     methods: {
-        onDrop(files) {
-            // Set the file name from the dropped target
-            this.setInput(files[0].path);
-        },
-
         clicked() {
             if (this.canDrop) {
                 const { ipcRenderer } = window.require('electron');
 
                 // Open remote file selection dialog
-                ipcRenderer.send('saveModal', this.name);
+                ipcRenderer.send('save-modal', this.name);
 
                 // Selected file is received via this event
                 ipcRenderer.on('save-file', (event, data) => {
                     if (data.name === this.name) {
                         this.setInput(data.file);
+                        this.sendInputEvent();
                     }
                 });
             }
-        },
-
-        setInput(fileName) {
-            this.fieldValue = fileName;
-            this.$emit('input', this.fieldValue);
         }
     }
 };

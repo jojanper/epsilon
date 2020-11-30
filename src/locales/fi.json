@@ -122,6 +122,8 @@
         "regex": "{_field_} tulee olla kelvollinen säännöllinen lauseke",
         "required": "Pakollinen",
         "required_if": "Pakollinen",
-        "size": "{_field_} tulee olla vähemmän kuin {size}kB"
+        "size": "{_field_} tulee olla vähemmän kuin {size}kB",
+        "wavaudio": "Ei WAV tiedosto",
+        "filequery": "Täytä puuttuvat tiedot alapuolella"
     }
 }

@@ -1,8 +1,8 @@
 <template>
   <div
-    @dragenter="dragging=true"
-    @dragend="dragging=false"
-    @dragleave="dragging=false"
+    @dragenter="setDragging(true)"
+    @dragend="setDragging(false)"
+    @dragleave="setDragging(false)"
     @dragover.prevent
     @drop="onDrop"
     :class="['dropbox mdi mdi-drag', dragging ? 'dropbox-highlight' : '']"
@@ -11,6 +11,7 @@
 </template>
 
 <script>
+// Send dragging event, show placeholder as drop file here
 export default {
     name: 'DraalFileDrop',
     props: {
@@ -39,6 +40,15 @@ export default {
             this.dragging = false;
 
             return false;
+        },
+
+        setDragging(status) {
+            this.dragging = status;
+
+            /**
+             * File dragging event.
+             */
+            this.$emit('dragging', this.dragging);
         }
     }
 };
