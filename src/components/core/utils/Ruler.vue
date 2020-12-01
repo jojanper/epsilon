@@ -1,15 +1,8 @@
 <template>
   <div>
-    <slot>
-      <!--div ref="timelineparent">
-        <div v-for="index in gridItems + 1" :key="index" class="cmm" :style="getRulerStyle(index)"></div>
-      </div-->
-    </slot>
+    <slot></slot>
     <div class="ruler">
       <div class="timeline-bar" :style="getTimelineBar"></div>
-      <!--div>
-        <div v-for="index in gridItems + 1" :key="index" class="cm2" :style="getRulerStyle(index)"></div>
-      </div-->
       <div ref="ruler">
         <div v-for="index in gridItems + 1" :key="index" class="cm" :style="getRulerStyle(index)"></div>
       </div>
@@ -20,81 +13,81 @@
 <script>
 export default {
     name: 'DraalRuler',
-    props: ['gridItems', 'rulerWidth', 'units', 'zoom'],
+    props: {
+        gridItems: {
+            type: Number,
+            required: true
+        },
+
+        rulerWidth: {
+            type: Number,
+            required: true
+        },
+
+        units: {
+            type: String,
+            required: false,
+            default: null
+        },
+
+        zoom: {
+            type: Number,
+            required: false,
+            default: 1
+        }
+    },
     data() {
         return {
             width: 0,
-            ro: null
+            resizeObserver: null
         };
     },
     mounted() {
-        // console.log(this.$refs.ruler.scrollWidth);
-        this.width = this.$refs.ruler.scrollWidth + 0;
+        this.width = this.$refs.ruler.scrollWidth;
 
         // Not supported on every browser, see https://caniuse.com/resizeobserver
-        this.ro = new ResizeObserver(this.onResize.bind(this)).observe(this.$refs.ruler);
-
-/*
-        this.$watch(
-            () => {
-                return this.$refs.ruler.scrollWidth;
-            },
-            val => {
-                console.log('WIDTH', val);
-            }
-        );
-        */
+        this.resizeObserver = new ResizeObserver(this.onResize.bind(this)).observe(this.$refs.ruler);
     },
     destroyed() {
-        console.log('DESTROYED');
-        delete this.ro;
+        delete this.resizeObserver;
     },
-    /*
-    watch: {
-        zoom() {
-            if (this.$refs.ruler) {
-                this.width = this.$refs.ruler.scrollWidth;
-            }
-        }
-    },
-    */
     computed: {
         getTimelineBar() {
-            // const width = this.$refs.ruler ? this.$refs.ruler.scrollWidth : 0;
-            // const width = this.$refs.timeline ? this.$refs.timeline.scrollWidth : 0;
-            const width = this.zoom * this.width;
-            const ret = `--width: ${width}px;`;
-
-            return ret;
+            return `--width: ${this.zoom * this.width}px;`;
         }
     },
     methods: {
         onResize() {
-            // this.$emit('resize', this.$refs.myElement.offsetHeight)
-            console.log('RESIZE');
+            // Resize the timeline bar to match the size of the ruler
             if (this.$refs.ruler) {
                 this.width = this.$refs.ruler.scrollWidth;
             }
         },
 
         getRulerStyle(index) {
+            // Number of timestamps to be drawn
             const slots = (this.zoom * 100) / this.gridItems;
+
+            // Step size between timestamps
             const timePos = this.rulerWidth / this.gridItems;
 
+            // Width of time slot
             let width = `--width: ${slots}%`;
 
+            // Position of the time slot
             const left = slots * (index - 1) + 0.1;
+
+            // Timestamp is rendered with only one decimal
             let content = (timePos * (index - 1)).toFixed(1);
 
-            // console.log(content);
+            // Improve timestamp rendering: 12.0 => 12
             if (content.toString().split('.')[1] === '0') {
-                console.log(content);
                 content = Math.floor(content);
             }
 
-            content = content.toString();
-
+            // Adjust the timestamp positioning such that it appears in the center
             let after = '-6px';
+            content = content.toString();
             if (content.length === 1) {
                 after = '-4px';
             } else if (content.length > 4) {
@@ -105,12 +98,13 @@ export default {
                 after = '-8px';
             }
 
+            // Last timestamp
             if (this.units && index === this.gridItems + 1) {
-                //content = `${content}${this.units}`;
-                //content = '';
                 width = '';
                 after = '-12px';
+                content = this.units ? `${content}${this.units}` : content;
             }
+
             return `--after: ${after}; --left: ${left}%; --content: '${content}'; ${width}`;
         }
     }
@@ -137,7 +131,6 @@ export default {
             position: absolute;
             bottom: -15px;
             font: 11px/1 sans-serif;
-            // left: -7px;
             left: var(--after);
             top: 20px;
             content: var(--content);
