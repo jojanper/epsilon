@@ -29,29 +29,34 @@
     </div>
 
     <div class="row scrolling-wrapper m-0" v-if="mounted">
-      <div ref="timeline" class="timeline" :key="timelineRender">
+      <div ref="timeline" class="timeline">
         <!--div ref="timelineparent" class="timeline-bar" :style="getTimelineBar"></div-->
-        <draal-ruler
-          units=" sec"
-          :zoom="zoom"
-          :gridItems="zoom * timelineGridItems"
-          :rulerWidth="timelineWidth"
-        >
-          <div ref="timelineparent"></div>
-        </draal-ruler>
-        <draal-timeline-item
-          v-for="(timeline) in timelines"
-          :key="timeline.$id"
-          :index="timeline.$id"
-          :position="timeline.position"
-          :clicked="timeline.$clicked"
-          :timelinelen="timelineWidth"
-          :zoom="zoom"
-          @highlightstop="highlightStop"
-          @timelinepos="positionUpdate"
-          @edit="timelineEdit"
-          @move="moveTimeEntry"
-        ></draal-timeline-item>
+        <div>
+          <draal-ruler
+            units=" sec"
+            :zoom="zoom"
+            :key="rulerRender"
+            :gridItems="zoom * timelineGridItems"
+            :rulerWidth="timelineWidth"
+          >
+            <div ref="timelineparent"></div>
+          </draal-ruler>
+        </div>
+        <div :key="timelineRender">
+          <draal-timeline-item
+            v-for="(timeline) in timelines"
+            :key="timeline.$id"
+            :index="timeline.$id"
+            :position="timeline.position"
+            :clicked="timeline.$clicked"
+            :timelinelen="timelineWidth"
+            :zoom="zoom"
+            @highlightstop="highlightStop"
+            @timelinepos="positionUpdate"
+            @edit="timelineEdit"
+            @move="moveTimeEntry"
+          ></draal-timeline-item>
+        </div>
       </div>
     </div>
 
@@ -196,7 +201,8 @@ export default {
 
             zoom: 1,
             moving: false,
-            timelineWidthPx: 0
+            timelineWidthPx: 0,
+            rulerRender: 0
         };
     },
     async mounted() {
@@ -209,9 +215,6 @@ export default {
         this.mounted = true;
 
         setTimeout(() => { this.timelineWidthPx = this.$refs.timeline.scrollWidth - 15; });
-    },
-    updated() {
-        console.log('UPDATED');
     },
     computed: {
         getTimelineLength: appComputed.getTimelineLength,
@@ -244,6 +247,7 @@ export default {
             // In addition, stop if time interval falls below 1.
             if (zoom > 0 && zoom <= this.maxZoom && stepSize >= 1) {
                 this.zoom = zoom;
+                this.rulerRender += 1;
                 this.timelineRender += 1;
             }
         },

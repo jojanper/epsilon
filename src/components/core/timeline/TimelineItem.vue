@@ -78,10 +78,31 @@ export default {
             required: false,
             default: 'Edit'
         },
+        /**
+         * Zoom factor.
+         */
         zoom: {
             type: Number,
             required: false,
             default: 1
+        },
+        /**
+         * Number of pixels the mouse position can deviate from the
+         * timeline item's top coordinates during mouse movement.
+         */
+        moveDiffTop: {
+            type: Number,
+            required: false,
+            default: 50
+        },
+        /**
+         * Number of pixels the mouse position can deviate from the
+         * timeline item's bottom coordinates during mouse movement.
+         */
+        moveDiffBottom: {
+            type: Number,
+            required: false,
+            default: 50
         }
     },
 
@@ -101,8 +122,6 @@ export default {
 
         // Timeline width
         this.timelineWidth = this.parentOffsetWidth() - this.$refs.timeline.offsetWidth;
-
-        console.log(this.timelineWidth);
 
         // Calculate initial timeline position in the UI
         this.renderTimePos();
@@ -179,7 +198,6 @@ export default {
 
         // Parent element's layout width
         parentOffsetWidth() {
-            console.log(this.$parent.$refs.timelineparent.offsetWidth);
             return this.zoom * this.$parent.$refs.timelineparent.offsetWidth;
         },
 
@@ -197,26 +215,20 @@ export default {
 
         // Move event as user drags the element along the timeline
         // Only x-axis movement is tracked
+        // y-axis movement must be within specified limits
         moveTimeline(event) {
             if (this.mousedown) {
                 event.stopPropagation();
-                // event.preventDefault();
 
                 const target = this.$refs.timeline.getBoundingClientRect();
-                if (event.clientY >= (target.top - 25) && event.clientY <= (target.bottom + 25)) {
+                const topThrPos = target.top - this.moveDiffTop;
+                const bottomThrPos = target.bottom + this.moveDiffBottom;
+
+                if (event.clientY >= topThrPos && event.clientY <= bottomThrPos) {
                     const newMargLeft = event.clientX - this.parentPos();
                     let eventPos = newMargLeft;
 
-                    // event.stopPropagation();
-                    //event.preventDefault();
-                    //console.log(event);
-
-                    //
-                    // console.log(event.clientY, target.top, target.bottom);
-
                     this.$refs.timeline.style.marginLeft = `${newMargLeft}px`;
-
-                    // console.log(newMargLeft, this.timelineWidth);
 
                     if (newMargLeft < 0) {
                         eventPos = 0;
@@ -244,8 +256,8 @@ export default {
                 event.stopPropagation();
                 event.preventDefault();
 
-                this.isMoving = false;
-                this.$emit('move', this.isMoving);
+                this.sendTimelineMoveEvent(false);
+                this.clearMouseSelections();
 
                 /**
                  * Send position update for timeline item.
@@ -269,9 +281,7 @@ export default {
                 e.preventDefault();
                 this.mousedown = true;
                 this.itemClicked = 0;
-
-                this.isMoving = true;
-                this.$emit('move', this.isMoving);
+                this.sendTimelineMoveEvent(true);
 
                 fromEvent(window, 'mousemove')
                     .pipe(
@@ -285,6 +295,27 @@ export default {
         // Context menu should be opened
         showContextMenu() {
             this.menuOpened = true;
+        },
+
+        // Timeline item moving state has changed, send corresponding event
+        sendTimelineMoveEvent(status) {
+            this.isMoving = status;
+
+            /**
+             * Send timeline moving state.
+             *
+             * @property {number} state Timeline item moving state (true when item is moving, false otherwise).
+             */
+            this.$emit('move', this.isMoving);
+        },
+
+        // Clear any text selection made during timeline item movement
+        clearMouseSelections() {
+            if (document.selection) {
+                document.selection.empty();
+            } else {
+                window.getSelection().removeAllRanges();
+            }
         }
     }
 };

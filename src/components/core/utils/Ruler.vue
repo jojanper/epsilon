@@ -28,7 +28,7 @@ export default {
         };
     },
     mounted() {
-        console.log(this.$refs.ruler.scrollWidth);
+        // console.log(this.$refs.ruler.scrollWidth);
         this.width = this.$refs.ruler.scrollWidth + 0;
 
         // Not supported on every browser, see https://caniuse.com/resizeobserver
@@ -49,6 +49,7 @@ export default {
         console.log('DESTROYED');
         delete this.ro;
     },
+    /*
     watch: {
         zoom() {
             if (this.$refs.ruler) {
@@ -56,6 +57,7 @@ export default {
             }
         }
     },
+    */
     computed: {
         getTimelineBar() {
             // const width = this.$refs.ruler ? this.$refs.ruler.scrollWidth : 0;
@@ -69,16 +71,14 @@ export default {
     methods: {
         onResize() {
             // this.$emit('resize', this.$refs.myElement.offsetHeight)
-            console.log(this.$refs);
+            console.log('RESIZE');
             if (this.$refs.ruler) {
                 this.width = this.$refs.ruler.scrollWidth;
             }
         },
 
         getRulerStyle(index) {
-            let after = '-6px';
-
-            const slots = (this.zoom * 100) / (this.gridItems * 1);
+            const slots = (this.zoom * 100) / this.gridItems;
             const timePos = this.rulerWidth / this.gridItems;
 
             let width = `--width: ${slots}%`;
@@ -86,7 +86,7 @@ export default {
             const left = slots * (index - 1) + 0.1;
             let content = (timePos * (index - 1)).toFixed(1);
 
-            console.log(content);
+            // console.log(content);
             if (content.toString().split('.')[1] === '0') {
                 console.log(content);
                 content = Math.floor(content);
@@ -94,6 +94,7 @@ export default {
 
             content = content.toString();
 
+            let after = '-6px';
             if (content.length === 1) {
                 after = '-4px';
             } else if (content.length > 4) {
