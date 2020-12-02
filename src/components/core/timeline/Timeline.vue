@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div :style="`--thumb: ${timelineScrollColor}; --thumbHover: ${timelineScrollHoverColor}`">
     <div class="row">
       <div v-if="!saveOnEdit" class="mr-auto">
         <v-icon @click="sendTimelineEvent">mdi-content-save-outline</v-icon>
@@ -184,6 +184,22 @@ export default {
             type: Boolean,
             required: false,
             default: false
+        },
+        /**
+         * Timeline scroll track color.
+         */
+        timelineScrollColor: {
+            type: String,
+            required: false,
+            default: '#03A9F4'
+        },
+        /**
+         * Timeline scroll track color on hover.
+         */
+        timelineScrollHoverColor: {
+            type: String,
+            required: false,
+            default: '#0277BD'
         }
     },
     data() {
@@ -219,17 +235,17 @@ export default {
         // before child is prepared.
         await this.$nextTick();
         this.mounted = true;
-
-        setTimeout(() => { this.timelineWidthPx = this.$refs.timeline.scrollWidth - 15; });
     },
     computed: {
         getTimelineLength: appComputed.getTimelineLength,
 
+        // Custom columns for data table rendering
         customRenderColumns() {
             const customRendering = this.tableConfig ? this.tableConfig.customColumns || [] : [];
             return customRendering.map(column => (`table.${column}`));
         },
 
+        // Actions to change timeline width
         actions() {
             return this.timelineWidths.map(item => ({
                 title: item.title,
@@ -240,6 +256,7 @@ export default {
     methods: {
         saveTimelineLength: appActions.saveTimelineLength,
 
+        // Change zoom level (increase or decrease)
         setZoom(inc) {
             const zoom = this.zoom + inc;
             const stepSize = this.timelineWidth / (zoom * this.timelineGridItems);
@@ -253,20 +270,24 @@ export default {
             }
         },
 
+        // Save selected timeline length
         saveLength(length) {
             this.saveTimelineLength({ id: this.timelineID, length });
             this.timelineWidth = length;
             this.renderTimeline();
         },
 
+        // Force timeline re-rendering
         renderTimeline() {
             this.timelineRender += 1;
         },
 
+        // Force data table re-rendering
         renderTable() {
             this.tableRender += 1;
         },
 
+        // Set changes status for the timeline data
         setChanges(status) {
             this.hasChanges = status;
             if (this.hasChanges) {
@@ -286,6 +307,7 @@ export default {
             }
         },
 
+        // Add new timeline item
         addItem() {
             // Make sure items are added with reasonable distance with
             // respect to previous item. Thus, take into account the
@@ -306,12 +328,14 @@ export default {
             this.setChanges(true);
         },
 
+        // Timeline item is edited
         editAction(index) {
             this.dialogEditData = this.timelines[index];
             this.editDialog = true;
             this.dialogKey += 1;
         },
 
+        // Timeline item is deleted
         deleteAction(index) {
             this.timelines.splice(index, 1);
             this.setChanges(true);
@@ -428,13 +452,13 @@ export default {
 }
 
 ::-webkit-scrollbar-thumb {
-    background: #03A9F4;
+    background: var(--thumb);
     border:1px solid #eee;
     height:100px;
     border-radius:5px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-    background: #0277BD
+    background: var(--thumbHover);
 }
 </style>
