@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="row">
-      <div class="mr-auto">
+      <div v-if="!saveOnEdit" class="mr-auto">
         <v-icon @click="sendTimelineEvent">mdi-content-save-outline</v-icon>
         <div v-if="hasChanges" class="float-right pl-1 text-danger">{{ $t('timeline.unsaved') }}</div>
       </div>
@@ -13,7 +13,7 @@
               <v-icon @click="addItem">mdi-plus</v-icon>
               <v-icon @click="setZoom(1)" large>mdi-magnify-plus-outline</v-icon>
               <v-icon @click="setZoom(-1)" large>mdi-magnify-minus-outline</v-icon>
-              <v-btn icon v-on="on">
+              <v-btn icon v-on="on" v-if="timelineWidths.length > 1">
                 <v-icon>mdi-dots-vertical</v-icon>
               </v-btn>
             </div>
@@ -176,6 +176,14 @@ export default {
             type: Number,
             required: false,
             default: 5
+        },
+        /**
+         * If true, every change in the data is automatically saved.
+         */
+        saveOnEdit: {
+            type: Boolean,
+            required: false,
+            default: false
         }
     },
     data() {
@@ -262,12 +270,18 @@ export default {
         setChanges(status) {
             this.hasChanges = status;
             if (this.hasChanges) {
-                /**
-                 * Timeline contains changes event.
-                 *
-                 * @property {Array} timelines Timeline data.
-                 */
-                this.$emit('timelineChanged', this.timelines);
+                if (!this.saveOnEdit) {
+                    /**
+                     * Timeline contains changes event.
+                     *
+                     * @property {Array} timelines Timeline data.
+                     */
+                    this.$emit('timelineChanged', this.timelines);
+                } else {
+                    // Automatic save
+                    this.sendTimelineEvent();
+                }
+
                 this.renderTable();
             }
         },
