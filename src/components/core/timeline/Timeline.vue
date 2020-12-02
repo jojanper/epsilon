@@ -30,13 +30,12 @@
 
     <div class="row scrolling-wrapper m-0" v-if="mounted">
       <div ref="timeline" class="timeline">
-        <!--div ref="timelineparent" class="timeline-bar" :style="getTimelineBar"></div-->
         <div>
           <draal-ruler
             units=" sec"
             :zoom="zoom"
             :key="rulerRender"
-            :gridItems="zoom * timelineGridItems"
+            :steps="timelineGridItems"
             :rulerWidth="timelineWidth"
           >
             <div ref="timelineparent"></div>
@@ -201,7 +200,6 @@ export default {
 
             zoom: 1,
             moving: false,
-            timelineWidthPx: 0,
             rulerRender: 0
         };
     },
@@ -229,11 +227,6 @@ export default {
                 title: item.title,
                 fn: () => this.saveLength(item.width)
             }));
-        },
-
-        getTimelineBar() {
-            // const width = this.$refs.timeline ? this.$refs.timeline.scrollWidth : 0;
-            return `--width: ${this.zoom * this.timelineWidthPx}px;`;
         }
     },
     methods: {
@@ -387,18 +380,8 @@ export default {
 .timeline {
     margin-top: 2%;
     margin-bottom: 3%;
-    //background-color: rgba(0, 0, 0, 0.12);
-    //height: 5px;
     position: relative;
     width: 100%;
-}
-
-.timeline-bar {
-    position: relative;
-    top: 15px;
-    background-color: rgba(0, 0, 0, 0.12);
-    height: 5px;
-    width: var(--width);
 }
 
 .scrolling-wrapper {
@@ -414,15 +397,30 @@ export default {
 }
 
 .scrolling-wrapper, .scrolling-wrapper-flexbox {
-  //height: 80px;
   height: auto;
-  //margin-bottom: 20px;
   width: 100%;
-  padding-right: 4% !important;
+  padding-right: 3% !important;
   padding-left: 1% !important;
-  //-webkit-overflow-scrolling: touch;
-  //&::-webkit-scrollbar {
-  //  display: none;
-  //}
+}
+
+::-webkit-scrollbar {
+    -webkit-appearance: none;
+    width: 10px;
+}
+
+::-webkit-scrollbar-track {
+    -webkit-border-radius: 10px;
+    border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #03A9F4;
+    border:1px solid #eee;
+    height:100px;
+    border-radius:5px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #0277BD
 }
 </style>

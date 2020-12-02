@@ -11,7 +11,11 @@
 </template>
 
 <script>
-// Send dragging event, show placeholder as drop file here
+/**
+ * File drop component.
+ *
+ * @displayName DraalFileDrop
+ */
 export default {
     name: 'DraalFileDrop',
     props: {
@@ -35,6 +39,8 @@ export default {
 
             /**
              * File drop event.
+             *
+             * @property {array} files Selected files.
              */
             this.$emit('fileDrop', e.dataTransfer.files);
             this.dragging = false;
@@ -47,6 +53,8 @@ export default {
 
             /**
              * File dragging event.
+             *
+             * @property {boolean} status Drag status.
              */
             this.$emit('dragging', this.dragging);
         }

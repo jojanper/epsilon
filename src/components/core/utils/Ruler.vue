@@ -4,32 +4,51 @@
     <div class="ruler">
       <div class="timeline-bar" :style="getTimelineBar"></div>
       <div ref="ruler">
-        <div v-for="index in gridItems + 1" :key="index" class="cm" :style="getRulerStyle(index)"></div>
+        <div
+          v-for="index in zoom * steps + 1"
+          :key="index"
+          class="cm"
+          :style="getRulerStyle(index)"
+        ></div>
       </div>
     </div>
   </div>
 </template>
 
 <script>
+/**
+ * Simple ruler component.
+ *
+ * @displayName DraalRuler
+ */
 export default {
     name: 'DraalRuler',
     props: {
-        gridItems: {
+        /**
+         * Number of steps in the ruler.
+         */
+        steps: {
             type: Number,
             required: true
         },
-
+        /**
+         * Ruler width.
+         */
         rulerWidth: {
             type: Number,
             required: true
         },
-
+        /**
+         * Text appended after last number in the ruler.
+         */
         units: {
             type: String,
             required: false,
             default: null
         },
-
+        /**
+         * Zoom factor.
+         */
         zoom: {
             type: Number,
             required: false,
@@ -65,14 +84,11 @@ export default {
         },
 
         getRulerStyle(index) {
-            // Number of timestamps to be drawn
-            const slots = (this.zoom * 100) / this.gridItems;
+            // Width of each time slot in percentages
+            const slots = 100 / this.steps;
 
             // Step size between timestamps
-            const timePos = this.rulerWidth / this.gridItems;
-
-            // Width of time slot
-            let width = `--width: ${slots}%`;
+            const timePos = this.rulerWidth / (this.zoom * this.steps);
 
             // Position of the time slot
             const left = slots * (index - 1) + 0.1;
@@ -99,13 +115,12 @@ export default {
             }
 
             // Last timestamp
-            if (this.units && index === this.gridItems + 1) {
-                width = '';
+            if (this.units && index === this.zoom * this.steps + 1) {
                 after = '-12px';
                 content = this.units ? `${content}${this.units}` : content;
             }
 
-            return `--after: ${after}; --left: ${left}%; --content: '${content}'; ${width}`;
+            return `--after: ${after}; --left: ${left}%; --content: '${content}'`;
         }
     }
 };
@@ -125,7 +140,6 @@ export default {
         border-left: 1px solid #555;
 
         height: 14px;
-        width: var(--width);
         left: var(--left);
         &:after {
             position: absolute;
