@@ -69,7 +69,7 @@ export const SCHEMA = [
         maxZoom: 10,
         timelineWidths: [
             {
-                width: 120,
+                width: 15,
                 title: 'Timeline 15sec'
             },
             {
