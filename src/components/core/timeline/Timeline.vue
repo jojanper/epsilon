@@ -42,7 +42,7 @@
         </div>
         <div :key="timelineRender">
           <draal-timeline-item
-            v-for="(timeline, index) in timelines"
+            v-for="(timeline) in timelines"
             :key="timeline.$id"
             :index="timeline.$id"
             :position="timeline.position"
