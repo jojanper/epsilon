@@ -1,25 +1,28 @@
 <template>
-  <div v-if="eventPosition <= 1">
-    <div
-      @contextmenu.prevent="showContextMenu"
-      class="timeline-entry"
-      :class="{ 'timeline-highlight': isClicked, 'noselect': isMoving }"
-      ref="timeline"
-      ondragstart="return false"
-    >
-      <div v-if="mousedown" class="noselect timeline-entry-pos-text">{{ timestamp }}</div>
-      <div class="mt-3">
-        <v-menu v-model="menuOpened">
-          <template v-slot:activator="{ on }">
-            <v-btn class="menu" v-on="on"></v-btn>
-          </template>
+  <div>
+    <div ref="timelineparent"></div>
+    <div v-if="eventPosition <= 1">
+      <div
+        @contextmenu.prevent="showContextMenu"
+        class="timeline-entry"
+        :class="{ 'timeline-highlight': isClicked, 'noselect': isMoving }"
+        ref="timeline"
+        ondragstart="return false"
+      >
+        <div v-if="mousedown" class="noselect timeline-entry-pos-text">{{ timestamp }}</div>
+        <div class="mt-3">
+          <v-menu v-model="menuOpened">
+            <template v-slot:activator="{ on }">
+              <v-btn class="menu" v-on="on"></v-btn>
+            </template>
 
-          <v-list>
-            <v-list-item v-for="(item, i) in items" :key="i" @click="item.fn">
-              <v-list-item-title>{{ item.title }}</v-list-item-title>
-            </v-list-item>
-          </v-list>
-        </v-menu>
+            <v-list>
+              <v-list-item v-for="(item, i) in items" :key="i" @click="item.fn">
+                <v-list-item-title>{{ item.title }}</v-list-item-title>
+              </v-list-item>
+            </v-list>
+          </v-menu>
+        </div>
       </div>
     </div>
   </div>
@@ -198,12 +201,12 @@ export default {
 
         // Parent element's layout width
         parentOffsetWidth() {
-            return this.zoom * this.$parent.$refs.timelineparent.offsetWidth;
+            return this.zoom * this.$refs.timelineparent.offsetWidth;
         },
 
         // Return parent element's left position relative to top-left of viewport
         parentPos() {
-            return this.$parent.$refs.timelineparent.getBoundingClientRect().left;
+            return this.$refs.timelineparent.getBoundingClientRect().left;
         },
 
         // Convert the time position into pixels and render position

@@ -37,13 +37,12 @@
             :key="rulerRender"
             :steps="timelineGridItems"
             :rulerWidth="timelineWidth"
-          >
-            <div ref="timelineparent"></div>
-          </draal-ruler>
+            @resize="renderTimeline"
+          ></draal-ruler>
         </div>
         <div :key="timelineRender">
           <draal-timeline-item
-            v-for="(timeline) in timelines"
+            v-for="(timeline, index) in timelines"
             :key="timeline.$id"
             :index="timeline.$id"
             :position="timeline.position"
