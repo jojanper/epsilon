@@ -3,7 +3,7 @@
     <div
       @contextmenu.prevent="showContextMenu"
       class="timeline-entry"
-      :class="{ 'timeline-highlight': isClicked}"
+      :class="{ 'timeline-highlight': isClicked, 'noselect': isMoving }"
       ref="timeline"
       ondragstart="return false"
     >
@@ -77,6 +77,32 @@ export default {
             type: String,
             required: false,
             default: 'Edit'
+        },
+        /**
+         * Zoom factor.
+         */
+        zoom: {
+            type: Number,
+            required: false,
+            default: 1
+        },
+        /**
+         * Number of pixels the mouse position can deviate from the
+         * timeline item's top coordinates during mouse movement.
+         */
+        moveDiffTop: {
+            type: Number,
+            required: false,
+            default: 50
+        },
+        /**
+         * Number of pixels the mouse position can deviate from the
+         * timeline item's bottom coordinates during mouse movement.
+         */
+        moveDiffBottom: {
+            type: Number,
+            required: false,
+            default: 50
         }
     },
 
@@ -86,7 +112,8 @@ export default {
             mousedown: false,
             timestamp: this.position,
             eventPosition: 0,
-            isClicked: this.clicked
+            isClicked: this.clicked,
+            isMoving: false
         };
     },
 
@@ -171,7 +198,7 @@ export default {
 
         // Parent element's layout width
         parentOffsetWidth() {
-            return this.$parent.$refs.timelineparent.offsetWidth;
+            return this.zoom * this.$parent.$refs.timelineparent.offsetWidth;
         },
 
         // Return parent element's left position relative to top-left of viewport
@@ -188,30 +215,38 @@ export default {
 
         // Move event as user drags the element along the timeline
         // Only x-axis movement is tracked
+        // y-axis movement must be within specified limits
         moveTimeline(event) {
             if (this.mousedown) {
-                const newMargLeft = event.clientX - this.parentPos();
-                let eventPos = newMargLeft;
-
                 event.stopPropagation();
-                event.preventDefault();
 
-                this.$refs.timeline.style.marginLeft = `${newMargLeft}px`;
+                const target = this.$refs.timeline.getBoundingClientRect();
+                const topThrPos = target.top - this.moveDiffTop;
+                const bottomThrPos = target.bottom + this.moveDiffBottom;
 
-                if (newMargLeft < 0) {
-                    eventPos = 0;
+                if (event.clientY >= topThrPos && event.clientY <= bottomThrPos) {
+                    const newMargLeft = event.clientX - this.parentPos();
+                    let eventPos = newMargLeft;
+
+                    this.$refs.timeline.style.marginLeft = `${newMargLeft}px`;
+
+                    if (newMargLeft < 0) {
+                        eventPos = 0;
+                    }
+
+                    if (newMargLeft > this.timelineWidth) {
+                        eventPos = this.timelineWidth;
+                    }
+
+                    // Calculate time position with one decimal
+                    const eventPosition = eventPos / this.timelineWidth;
+                    const pos = this.timelinelen * eventPosition;
+                    this.timestamp = parseFloat(pos.toFixed(1), 10);
+
+                    this.renderTimePos();
+                } else {
+                    this.mousedown = false;
                 }
-
-                if (newMargLeft > this.timelineWidth) {
-                    eventPos = this.timelineWidth;
-                }
-
-                // Calculate time position with one decimal
-                const eventPosition = eventPos / this.timelineWidth;
-                const pos = this.timelinelen * eventPosition;
-                this.timestamp = parseFloat(pos.toFixed(1), 10);
-
-                this.renderTimePos();
             }
         },
 
@@ -220,6 +255,9 @@ export default {
             if (this.mousedown) {
                 event.stopPropagation();
                 event.preventDefault();
+
+                this.sendTimelineMoveEvent(false);
+                this.clearMouseSelections();
 
                 /**
                  * Send position update for timeline item.
@@ -243,6 +281,7 @@ export default {
                 e.preventDefault();
                 this.mousedown = true;
                 this.itemClicked = 0;
+                this.sendTimelineMoveEvent(true);
 
                 fromEvent(window, 'mousemove')
                     .pipe(
@@ -256,6 +295,27 @@ export default {
         // Context menu should be opened
         showContextMenu() {
             this.menuOpened = true;
+        },
+
+        // Timeline item moving state has changed, send corresponding event
+        sendTimelineMoveEvent(status) {
+            this.isMoving = status;
+
+            /**
+             * Send timeline moving state.
+             *
+             * @property {number} state Timeline item moving state (true when item is moving, false otherwise).
+             */
+            this.$emit('move', this.isMoving);
+        },
+
+        // Clear any text selection made during timeline item movement
+        clearMouseSelections() {
+            if (document.selection) {
+                document.selection.empty();
+            } else {
+                window.getSelection().removeAllRanges();
+            }
         }
     }
 };
@@ -264,7 +324,7 @@ export default {
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped lang="scss">
 .timeline-entry {
-    top: -5px;
+    top: 10px;
     position: absolute;
     height: 15px;
     width: 15px;

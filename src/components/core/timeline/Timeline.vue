@@ -1,17 +1,22 @@
 <template>
-  <div>
+  <div :style="`--thumb: ${timelineScrollColor}; --thumbHover: ${timelineScrollHoverColor}`">
     <div class="row">
-      <div class="mr-auto mt-1">
+      <div v-if="!saveOnEdit" class="mr-auto">
         <v-icon @click="sendTimelineEvent">mdi-content-save-outline</v-icon>
         <div v-if="hasChanges" class="float-right pl-1 text-danger">{{ $t('timeline.unsaved') }}</div>
       </div>
+
       <div class="ml-auto">
         <v-menu left>
           <template v-slot:activator="{ on }">
-            <v-icon @click="addItem">mdi-plus</v-icon>
-            <v-btn icon v-on="on">
-              <v-icon>mdi-dots-vertical</v-icon>
-            </v-btn>
+            <div>
+              <v-icon @click="addItem">mdi-plus</v-icon>
+              <v-icon @click="setZoom(1)" large>mdi-magnify-plus-outline</v-icon>
+              <v-icon @click="setZoom(-1)" large>mdi-magnify-minus-outline</v-icon>
+              <v-btn icon v-on="on" v-if="timelineWidths.length > 1">
+                <v-icon>mdi-dots-vertical</v-icon>
+              </v-btn>
+            </div>
           </template>
 
           <v-list>
@@ -23,26 +28,42 @@
       </div>
     </div>
 
-    <div class="row mb-4" v-if="mounted">
-      <div class="timeline w-100" ref="timelineparent" :key="timelineRender">
-        <draal-ruler units=" sec" :gridItems="timelineGridItems" :rulerWidth="timelineWidth"></draal-ruler>
-        <draal-timeline-item
-          v-for="(timeline) in timelines"
-          :key="timeline.$id"
-          :index="timeline.$id"
-          :position="timeline.position"
-          :clicked="timeline.$clicked"
-          :timelinelen="timelineWidth"
-          @highlightstop="highlightStop"
-          @timelinepos="positionUpdate"
-          @edit="timelineEdit"
-        ></draal-timeline-item>
+    <div class="row scrolling-wrapper m-0" v-if="mounted">
+      <div ref="timeline" class="timeline">
+        <div>
+          <draal-ruler
+            units=" sec"
+            :zoom="zoom"
+            :key="rulerRender"
+            :steps="timelineGridItems"
+            :rulerWidth="timelineWidth"
+          >
+            <div ref="timelineparent"></div>
+          </draal-ruler>
+        </div>
+        <div :key="timelineRender">
+          <draal-timeline-item
+            v-for="(timeline) in timelines"
+            :key="timeline.$id"
+            :index="timeline.$id"
+            :position="timeline.position"
+            :clicked="timeline.$clicked"
+            :timelinelen="timelineWidth"
+            :zoom="zoom"
+            @highlightstop="highlightStop"
+            @timelinepos="positionUpdate"
+            @edit="timelineEdit"
+            @move="moveTimeEntry"
+          ></draal-timeline-item>
+        </div>
       </div>
     </div>
 
-    <div class="row">
+    <div class="row mt-3">
       <draal-data-table
-        class="mt-3 pt-3 w-100"
+        :class="{ 'noselect': moving }"
+        ondragstart="return false"
+        class="w-100"
         :key="tableRender"
         :data="timelines"
         :tableAttributes="{'item-key': '$id'}"
@@ -147,6 +168,38 @@ export default {
             type: Object,
             required: false,
             default: () => {}
+        },
+        /**
+         * Maximum timeline zoom factor.
+         */
+        maxZoom: {
+            type: Number,
+            required: false,
+            default: 5
+        },
+        /**
+         * If true, every change in the data is automatically saved.
+         */
+        saveOnEdit: {
+            type: Boolean,
+            required: false,
+            default: false
+        },
+        /**
+         * Timeline scroll track color.
+         */
+        timelineScrollColor: {
+            type: String,
+            required: false,
+            default: '#03A9F4'
+        },
+        /**
+         * Timeline scroll track color on hover.
+         */
+        timelineScrollHoverColor: {
+            type: String,
+            required: false,
+            default: '#0277BD'
         }
     },
     data() {
@@ -167,7 +220,11 @@ export default {
             timelineWidth: this.timelineWidths[0].width,
 
             hasChanges: false,
-            mounted: false
+            mounted: false,
+
+            zoom: 1,
+            moving: false,
+            rulerRender: 0
         };
     },
     async mounted() {
@@ -182,11 +239,13 @@ export default {
     computed: {
         getTimelineLength: appComputed.getTimelineLength,
 
+        // Custom columns for data table rendering
         customRenderColumns() {
             const customRendering = this.tableConfig ? this.tableConfig.customColumns || [] : [];
             return customRendering.map(column => (`table.${column}`));
         },
 
+        // Actions to change timeline width
         actions() {
             return this.timelineWidths.map(item => ({
                 title: item.title,
@@ -197,33 +256,58 @@ export default {
     methods: {
         saveTimelineLength: appActions.saveTimelineLength,
 
+        // Change zoom level (increase or decrease)
+        setZoom(inc) {
+            const zoom = this.zoom + inc;
+            const stepSize = this.timelineWidth / (zoom * this.timelineGridItems);
+
+            // Don't go below original size and exceed maximum zoom.
+            // In addition, stop if time interval falls below 1.
+            if (zoom > 0 && zoom <= this.maxZoom && stepSize >= 1) {
+                this.zoom = zoom;
+                this.rulerRender += 1;
+                this.timelineRender += 1;
+            }
+        },
+
+        // Save selected timeline length
         saveLength(length) {
             this.saveTimelineLength({ id: this.timelineID, length });
             this.timelineWidth = length;
             this.renderTimeline();
         },
 
+        // Force timeline re-rendering
         renderTimeline() {
             this.timelineRender += 1;
         },
 
+        // Force data table re-rendering
         renderTable() {
             this.tableRender += 1;
         },
 
+        // Set changes status for the timeline data
         setChanges(status) {
             this.hasChanges = status;
             if (this.hasChanges) {
-                /**
-                 * Timeline contains changes event.
-                 *
-                 * @property {Array} timelines Timeline data.
-                 */
-                this.$emit('timelineChanged', this.timelines);
+                if (!this.saveOnEdit) {
+                    /**
+                     * Timeline contains changes event.
+                     *
+                     * @property {Array} timelines Timeline data.
+                     */
+                    this.$emit('timelineChanged', this.timelines);
+                } else {
+                    // Automatic save
+                    this.sendTimelineEvent();
+                }
+
                 this.renderTable();
             }
         },
 
+        // Add new timeline item
         addItem() {
             // Make sure items are added with reasonable distance with
             // respect to previous item. Thus, take into account the
@@ -244,12 +328,14 @@ export default {
             this.setChanges(true);
         },
 
+        // Timeline item is edited
         editAction(index) {
             this.dialogEditData = this.timelines[index];
             this.editDialog = true;
             this.dialogKey += 1;
         },
 
+        // Timeline item is deleted
         deleteAction(index) {
             this.timelines.splice(index, 1);
             this.setChanges(true);
@@ -318,6 +404,10 @@ export default {
 
             // No changes as parent is expected to handle the timeline data.
             this.setChanges(false);
+        },
+
+        moveTimeEntry(status) {
+            setTimeout(() => { this.moving = status; }, 10);
         }
     }
 };
@@ -326,26 +416,49 @@ export default {
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped lang="scss">
 .timeline {
-    margin-top: 2.1em;
-    margin-bottom: 5em;
-    background-color: rgba(0, 0, 0, 0.12);
-    height: 5px;
+    margin-top: 2%;
+    margin-bottom: 3%;
     position: relative;
+    width: 100%;
 }
 
-.timeline-bar {
-    position: relative;
-    background-image: linear-gradient(
-        90deg,
-        transparent 79px,
-        rgba(0, 0, 0, 0.12) 79px,
-        rgba(0, 0, 0, 0.12) 81px,
-        transparent 81px
-    );
-    background-image: 2px solid rgba(0, 0, 0, 0.12);
-    background-repeat: repeat-x;
-    height: 25px;
-    top: 25px;
-    right: -5px;
+.scrolling-wrapper {
+  overflow-x: auto;
+  overflow-y: hidden;
+  white-space: nowrap;
+}
+
+.scrolling-wrapper-flexbox {
+  display: flex;
+  flex-wrap: nowrap;
+  overflow-x: auto;
+}
+
+.scrolling-wrapper, .scrolling-wrapper-flexbox {
+  height: auto;
+  width: 100%;
+  padding-right: 3% !important;
+  padding-left: 1% !important;
+}
+
+::-webkit-scrollbar {
+    -webkit-appearance: none;
+    width: 10px;
+}
+
+::-webkit-scrollbar-track {
+    -webkit-border-radius: 10px;
+    border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+    background: var(--thumb);
+    border:1px solid #eee;
+    height:100px;
+    border-radius:5px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: var(--thumbHover);
 }
 </style>

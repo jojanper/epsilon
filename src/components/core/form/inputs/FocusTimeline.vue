@@ -5,7 +5,7 @@
     </div>
 
     <div class="pl-3 pr-3 border rounded">
-      <div class="pr-3 mr-3">
+      <div class="p-3">
         <!-- Validation via hidden input -->
         <ValidationProvider rules="required">
           <input class="d-none" type="number" v-model="dummyModel" />
@@ -13,13 +13,14 @@
 
         <!-- Input gets invalid every time timeline changes -->
         <draal-timeline
-          class="container mr-3"
+          class="mr-3"
           :timeData="value"
           :timelineWidths="timelineWidths"
           :itemCreator="newTimeline"
           @input="saveTimeline"
           @timelineChanged="dummyModel=null"
           :tableConfig="tableConfig"
+          :maxZoom="maxZoom"
         >
           <!-- Custom column rendering -->
           <!-- Show direction as arrow pointing to correct direction -->
@@ -83,7 +84,7 @@ export default {
         WheelInput,
         ValidationProvider
     },
-    props: ['label', 'timelineWidths', 'value'],
+    props: ['label', 'timelineWidths', 'value', 'maxZoom'],
     data() {
         return {
             // Changes in timeline are tracked via hidden input validation.

@@ -66,6 +66,7 @@ export const SCHEMA = [
         fieldType: 'FocusTimeline',
         name: 'focusTimeline',
         label: 'Focus events timeline',
+        maxZoom: 10,
         timelineWidths: [
             {
                 width: 15,
