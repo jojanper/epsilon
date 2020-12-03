@@ -84,7 +84,7 @@ export default {
         WheelInput,
         ValidationProvider
     },
-    props: ['label', 'timelineWidths', 'value', 'maxZoom'],
+    props: ['name', 'label', 'timelineWidths', 'value', 'maxZoom'],
     data() {
         return {
             // Changes in timeline are tracked via hidden input validation.
@@ -103,6 +103,11 @@ export default {
                 }
             }
         };
+    },
+    mounted() {
+        this.$emit('input-handle-registration', this.name, data => {
+            console.log(data);
+        });
     },
     methods: {
         saveEditedValues(source, data, editChanges) {

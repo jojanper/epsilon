@@ -10,6 +10,7 @@
           @input="updateForm(field.name, $event)"
           v-bind="field"
           @form-input-help="formInputHelp"
+          @input-handle-registration="registerHandler"
         ></component>
 
         <v-btn
@@ -76,6 +77,9 @@ export default {
             componentKey: 0
         };
     },
+    mounted() {
+        this.handlers = {};
+    },
     computed: {
         appLang: appComputed.appLang
     },
@@ -116,6 +120,12 @@ export default {
             }
 
             this.helpDialog = true;
+        },
+
+        registerHandler(name, data) {
+            console.log(name, data, this.formData);
+
+            data('foo');
         }
     }
 };
