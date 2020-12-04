@@ -1,11 +1,11 @@
 <template>
-  <div class="pb-3">
+  <div>
     <div class="pr-3 mr-3">
       <p class="text-left v-label theme--light">{{ label }}</p>
     </div>
 
-    <div class="pl-3 pr-3 border rounded">
-      <div class="p-3">
+    <div class="border rounded">
+      <div class="p-4">
         <!-- Validation via hidden input -->
         <ValidationProvider rules="required">
           <input class="d-none" type="number" v-model="dummyModel" />
@@ -13,7 +13,6 @@
 
         <!-- Input gets invalid every time timeline changes -->
         <draal-timeline
-          class="mr-3"
           :timeData="value"
           :timelineWidths="timelineWidths"
           :itemCreator="newTimeline"

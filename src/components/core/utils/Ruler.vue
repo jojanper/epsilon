@@ -121,8 +121,7 @@ export default {
             }
 
             // Last timestamp
-            if (this.units && index === this.zoom * this.steps + 1) {
-                after = '-12px';
+            if (index === this.zoom * this.steps + 1) {
                 content = this.units ? `${content}${this.units}` : content;
             }
 

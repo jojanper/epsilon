@@ -28,11 +28,10 @@
       </div>
     </div>
 
-    <div class="row scrolling-wrapper m-0" v-if="mounted">
+    <div class="row scrolling-wrapper" v-if="mounted">
       <div ref="timeline" class="timeline">
         <div>
           <draal-ruler
-            units=" sec"
             :zoom="zoom"
             :key="rulerRender"
             :steps="timelineGridItems"
@@ -426,9 +425,8 @@ export default {
   overflow-y: hidden;
   white-space: nowrap;
   height: auto;
-  width: 100%;
-  padding-right: 3% !important;
-  padding-left: 1% !important;
+  padding-right: 15px;
+  padding-left: 10px;
   padding-bottom: 0.25em;
 }
 
