@@ -311,7 +311,7 @@ export default {
             // Make sure items are added with reasonable distance with
             // respect to previous item. Thus, take into account the
             // length of the currently selected timeline.
-            const incPos = this.timelineWidth / this.timelineGridItems;
+            const incPos = this.timelineWidth / (this.zoom * this.timelineGridItems);
 
             // Add new timeline item next to last item
             const len = this.timelines.length;
@@ -319,7 +319,7 @@ export default {
 
             this.timelines.push({
                 ...this.itemCreator(),
-                position,
+                position: position > this.timelineWidth ? this.timelineWidth : position,
                 $clicked: false,
                 $id: Date.now() // Should be unique ID
             });
@@ -425,19 +425,11 @@ export default {
   overflow-x: auto;
   overflow-y: hidden;
   white-space: nowrap;
-}
-
-.scrolling-wrapper-flexbox {
-  display: flex;
-  flex-wrap: nowrap;
-  overflow-x: auto;
-}
-
-.scrolling-wrapper, .scrolling-wrapper-flexbox {
   height: auto;
   width: 100%;
   padding-right: 3% !important;
   padding-left: 1% !important;
+  padding-bottom: 0.25em;
 }
 
 ::-webkit-scrollbar {

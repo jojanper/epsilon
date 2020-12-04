@@ -343,8 +343,9 @@ export default {
 
 .timeline-entry-pos-text {
     position: relative;
-    top: -35px;
+    top: -30px;
     left: -0px;
+    font-size: 0.75em;
 }
 
 .menu {
