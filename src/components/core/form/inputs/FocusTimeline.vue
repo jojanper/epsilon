@@ -21,6 +21,7 @@
           @timelineChanged="dummyModel=null"
           :tableConfig="tableConfig"
           :maxZoom="maxZoom"
+          :data-provider="dataRelInput"
         >
           <!-- Custom column rendering -->
           <!-- Show direction as arrow pointing to correct direction -->
@@ -84,7 +85,7 @@ export default {
         WheelInput,
         ValidationProvider
     },
-    props: ['label', 'timelineWidths', 'value', 'maxZoom'],
+    props: ['label', 'timelineWidths', 'value', 'maxZoom', 'dataRelInput'],
     data() {
         return {
             // Changes in timeline are tracked via hidden input validation.
