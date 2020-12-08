@@ -20,6 +20,11 @@ import FileQueryInput from './inputs/FileQueryInput.vue';
 import FocusTimeline from './inputs/FocusTimeline.vue';
 import RowInput from './inputs/RowInput.vue';
 
+/**
+ * Form input wrapper.
+ *
+ * @displayName DraalFormInput
+ */
 export default {
     name: 'DraalFormInput',
     components: {
@@ -40,6 +45,13 @@ export default {
     },
     mounted() {
         if (this.$attrs.dataRelTarget) {
+            /**
+             * Request data notifications from related input components
+             *
+             * @param name Input requestor.
+             * @param targets Requested inputs from related input components.
+             * @param cb Callback for data updates.
+             */
             this.$emit('data-rel-update',
                 this.$attrs.name,
                 this.$attrs.dataRelTarget,
@@ -47,11 +59,11 @@ export default {
         }
     },
     destroyed() {
-        this.dataRel.closeSubject();
+        this.dataRel.close();
     },
     methods: {
         dataUpdate(target, data) {
-            this.dataRel.setObject({ target, data });
+            this.dataRel.send({ target, data });
         }
     }
 };

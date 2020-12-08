@@ -11,6 +11,10 @@ export class BaseObservableObject {
 
     #subject = null;
 
+    /**
+     * Underlying observable is based on Subject.
+     * No initial value or replay behavior.
+     */
     static createAsSubject() {
         return new BaseObservableObject(new Subject());
     }
@@ -21,7 +25,7 @@ export class BaseObservableObject {
     }
 
     /**
-     * Return observable that closes when `closeSubject` method is called.
+     * Return observable that closes when `close` method is called.
      */
     asPipe() {
         return this.observable.pipe(
@@ -30,16 +34,18 @@ export class BaseObservableObject {
     }
 
     /**
-     * Close subject from emitting further values.
+     * Close object from emitting further values.
      */
-    closeSubject() {
+    close() {
         this.#destroy = true;
     }
 
     /**
-     * Set next object.
+     * Send next object to subscribed listeners.
+     *
+     * @param {*} subject Data for notifications.
      */
-    setObject(subject) {
+    send(subject) {
         this.#subject.next(subject);
     }
 }

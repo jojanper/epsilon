@@ -9,12 +9,12 @@ describe('BaseObservableObject', () => {
             data = response;
         });
 
-        testObj.setObject('testing');
+        testObj.send('testing');
         expect(data).toEqual('testing');
 
-        testObj.closeSubject();
+        testObj.close();
 
-        testObj.setObject('testing2');
+        testObj.send('testing2');
         expect(data).toEqual('testing');
 
         done();
