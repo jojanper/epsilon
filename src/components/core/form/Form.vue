@@ -12,13 +12,15 @@
           @form-input-help="formInputHelp"
         ></component>
 
-        <v-btn
-          class="mr-2"
-          :disabled="invalid || !valid"
-          v-on:click="$emit('submit', formData)"
-          color="primary"
-        >{{ options.submit }}</v-btn>
-        <v-btn v-if="options.clear" @click="clear">{{ options.clear }}</v-btn>
+        <div class="mt-3">
+          <v-btn
+            class="mr-2"
+            :disabled="invalid || !valid"
+            v-on:click="$emit('submit', formData)"
+            color="primary"
+          >{{ options.submit }}</v-btn>
+          <v-btn v-if="options.clear" @click="clear">{{ options.clear }}</v-btn>
+        </div>
       </form>
     </ValidationObserver>
 
