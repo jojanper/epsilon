@@ -108,16 +108,22 @@ export default {
             }
 
             // Adjust the timestamp positioning such that it appears in the center
-            let after = '-6px';
+            let after;
             content = content.toString();
-            if (content.length === 1) {
-                after = '-4px';
+            if (content.length > 6) {
+                after = '-30px';
+            } else if (content.length > 5) {
+                after = '-26px';
             } else if (content.length > 4) {
-                after = '-12px';
+                after = '-22px';
             } else if (content.length > 3) {
-                after = '-10px';
+                after = '-18px';
             } else if (content.length > 2) {
-                after = '-8px';
+                after = '-14px';
+            } else if (content.length > 1) {
+                after = '-10px';
+            } else {
+                after = '-4px';
             }
 
             // Last timestamp

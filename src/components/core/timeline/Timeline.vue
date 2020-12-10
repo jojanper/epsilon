@@ -13,7 +13,7 @@
               <v-icon @click="addItem">mdi-plus</v-icon>
               <v-icon @click="setZoom(1)" large>mdi-magnify-plus-outline</v-icon>
               <v-icon @click="setZoom(-1)" large>mdi-magnify-minus-outline</v-icon>
-              <v-btn icon v-on="on" v-if="timelineWidths.length > 1">
+              <v-btn icon v-on="on" v-if="timelineMenuWidths.length > 1">
                 <v-icon>mdi-dots-vertical</v-icon>
               </v-btn>
             </div>
@@ -28,7 +28,7 @@
       </div>
     </div>
 
-    <div class="row scrolling-wrapper" v-if="mounted">
+    <div class="row scrolling-wrapper" v-if="mounted" :key="durationUpdated">
       <div ref="timeline" class="timeline">
         <div>
           <draal-ruler
@@ -198,6 +198,16 @@ export default {
             type: String,
             required: false,
             default: '#0277BD'
+        },
+        /**
+         * Observable for monitoring data changes in related components. Data changes
+         * are communicated via the observable. Here the data that is being monitored
+         * is related to the timeline duration.
+         */
+        dataProvider: {
+            type: Object,
+            required: false,
+            default: null
         }
     },
     data() {
@@ -216,16 +226,36 @@ export default {
                 $id: baseTime + index
             })),
             timelineWidth: this.timelineWidths[0].width,
+            timelineMenuWidths: [...this.timelineWidths],
 
             hasChanges: false,
             mounted: false,
 
             zoom: 1,
             moving: false,
-            rulerRender: 0
+            rulerRender: 0,
+
+            durationUpdated: 0
         };
     },
     async mounted() {
+        // Timeline data duration is updated that affects also this component rendering
+        this.dataProvider.subscribe(({ data }) => {
+            const { duration } = data;
+
+            this.timelineMenuWidths.splice(0, this.timelineMenuWidths.length);
+            this.timelineMenuWidths.push({ width: duration });
+            this.timelineWidth = duration;
+            this.timelines.splice(0, this.timelines.length);
+
+            // New timeline is emitted to parent or automatically saved.
+            // The timeline state, however, is now unchanged in the component.
+            this.setChanges(true, true);
+            this.setChanges(false); // Just turn the changes state to off
+
+            this.durationUpdated += 1;
+        });
+
         // Get saved timeline length from store
         this.timelineWidth = this.getTimelineLength(this.timelineID) || this.timelineWidth;
 
@@ -245,7 +275,7 @@ export default {
 
         // Actions to change timeline width
         actions() {
-            return this.timelineWidths.map(item => ({
+            return this.timelineMenuWidths.map(item => ({
                 title: item.title,
                 fn: () => this.saveLength(item.width)
             }));
@@ -264,7 +294,7 @@ export default {
             if (zoom > 0 && zoom <= this.maxZoom && stepSize >= 1) {
                 this.zoom = zoom;
                 this.rulerRender += 1;
-                this.timelineRender += 1;
+                this.renderTimeline();
             }
         },
 
@@ -286,17 +316,19 @@ export default {
         },
 
         // Set changes status for the timeline data
-        setChanges(status) {
+        setChanges(status, force = false) {
             this.hasChanges = status;
             if (this.hasChanges) {
-                if (!this.saveOnEdit) {
+                if (this.saveOnEdit === false || force) {
                     /**
                      * Timeline contains changes event.
                      *
                      * @property {Array} timelines Timeline data.
                      */
                     this.$emit('timelineChanged', this.timelines);
-                } else {
+                }
+
+                if (this.saveOnEdit === true || force) {
                     // Automatic save
                     this.sendTimelineEvent();
                 }
@@ -344,7 +376,7 @@ export default {
         },
 
         dialogEditChanges(status) {
-            this.setChanges(status);
+            this.setChanges(status || true);
         },
 
         highlightStop(id) {

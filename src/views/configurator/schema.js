@@ -84,6 +84,7 @@ export const SCHEMA = [
                 width: 180,
                 title: 'Timeline 180sec'
             }
-        ]
+        ],
+        dataRelTarget: ['input']
     }
 ];
