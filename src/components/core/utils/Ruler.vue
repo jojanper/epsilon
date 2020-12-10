@@ -65,10 +65,11 @@ export default {
         this.width = this.$refs.ruler.scrollWidth;
 
         // Not supported on every browser, see https://caniuse.com/resizeobserver
-        this.resizeObserver = new ResizeObserver(this.onResize.bind(this)).observe(this.$refs.ruler);
+        this.resizeObserver = new ResizeObserver(this.onResize.bind(this));
+        this.resizeObserver.observe(this.$refs.ruler);
     },
     destroyed() {
-        delete this.resizeObserver;
+        this.resizeObserver.disconnect();
     },
     computed: {
         getTimelineBar() {
@@ -80,6 +81,11 @@ export default {
             // Resize the timeline bar to match the size of the ruler
             if (this.$refs.ruler) {
                 this.width = this.$refs.ruler.scrollWidth;
+
+                /**
+                 * Resize event.
+                 */
+                this.$emit('resize');
             }
         },
 
@@ -121,8 +127,7 @@ export default {
             }
 
             // Last timestamp
-            if (this.units && index === this.zoom * this.steps + 1) {
-                after = '-12px';
+            if (index === this.zoom * this.steps + 1) {
                 content = this.units ? `${content}${this.units}` : content;
             }
 
