@@ -34,9 +34,9 @@
           <draal-ruler
             :zoom="zoom"
             :key="rulerRender"
-            :steps="timelineGridItems"
             :rulerWidth="timelineWidth"
             @resize="renderTimeline"
+            @zoom-level="level => zoom = level"
           ></draal-ruler>
         </div>
         <div :key="timelineRender">
@@ -157,7 +157,7 @@ export default {
         timelineGridItems: {
             type: Number,
             required: false,
-            default: 15
+            default: 10
         },
         /**
          * Table props for the underlying data table.
@@ -247,6 +247,7 @@ export default {
             this.timelineMenuWidths.push({ width: duration });
             this.timelineWidth = duration;
             this.timelines.splice(0, this.timelines.length);
+            this.zoom = 1;
 
             // New timeline is emitted to parent or automatically saved.
             // The timeline state, however, is now unchanged in the component.
@@ -457,8 +458,8 @@ export default {
   overflow-y: hidden;
   white-space: nowrap;
   height: auto;
-  padding-right: 15px;
-  padding-left: 10px;
+  padding-right: 23px;
+  padding-left: 18px;
   padding-bottom: 0.25em;
 }
 
