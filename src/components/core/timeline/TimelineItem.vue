@@ -124,7 +124,7 @@ export default {
         this.setTimeout();
 
         // Timeline width
-        this.timelineWidth = this.parentOffsetWidth() - this.$refs.timeline.offsetWidth;
+        this.timelineWidth = this.parentOffsetWidth();
 
         // Calculate initial timeline position in the UI
         this.renderTimePos();
@@ -231,8 +231,6 @@ export default {
                     const newMargLeft = event.clientX - this.parentPos();
                     let eventPos = newMargLeft;
 
-                    this.$refs.timeline.style.marginLeft = `${newMargLeft}px`;
-
                     if (newMargLeft < 0) {
                         eventPos = 0;
                     }
@@ -329,6 +327,7 @@ export default {
 .timeline-entry {
     top: 10px;
     position: absolute;
+    left: -7.5px; // Offset so that marker is at the center of the mouse position
     height: 15px;
     width: 15px;
     background: blue;
