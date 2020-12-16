@@ -22,8 +22,8 @@ export const FILE_DATA_QUERY_INPUT = 'file-data-query';
 // Timeline input
 export const TIMELINE_INPUT = 'timeline';
 
-// Form group wrapper (inputs are rendered in row element)
-export const ROW_INPUT_WRAPPER = 'row-input';
+// Form group wrapper (inputs are grouped into some grid element; row etc)
+export const GROUP_INPUT_WRAPPER = 'group-input';
 
 // Input type mappings into component names
 const INPUT_TYPES = {};
@@ -35,7 +35,7 @@ INPUT_TYPES[FILE_OPEN_INPUT] = 'FileOpenInput';
 INPUT_TYPES[REMOTE_FILE_SAVE_INPUT] = 'RemoteFileSaveInput';
 INPUT_TYPES[FILE_DATA_QUERY_INPUT] = 'FileQueryInput';
 INPUT_TYPES[TIMELINE_INPUT] = 'FocusTimeline';
-INPUT_TYPES[ROW_INPUT_WRAPPER] = 'RowInput';
+INPUT_TYPES[GROUP_INPUT_WRAPPER] = 'GroupInput';
 
 export function getFormInputName(inType) {
     return INPUT_TYPES[inType];

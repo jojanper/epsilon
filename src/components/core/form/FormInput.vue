@@ -19,7 +19,7 @@ import RemoteFileSaveInput from './inputs/RemoteFileSaveInput.vue';
 import WheelInput from './inputs/WheelInput.vue';
 import FileQueryInput from './inputs/FileQueryInput.vue';
 import FocusTimeline from './inputs/FocusTimeline.vue';
-import RowInput from './RowInput.vue';
+import GroupInput from './GroupInput.vue';
 
 /**
  * Form input wrapper.
@@ -37,10 +37,11 @@ export default {
         FileOpenInput,
         RemoteFileSaveInput,
         FileQueryInput,
-        RowInput
+        GroupInput
     },
     data() {
         return {
+            // Data changes from other inputs are communicated via Subject
             dataRel: BaseObservableObject.createAsSubject()
         };
     },
@@ -60,13 +61,16 @@ export default {
         }
     },
     destroyed() {
+        // No more events emitted from object
         this.dataRel.close();
     },
     methods: {
+        // Map form input type into internal component name
         getType(type) {
             return getFormInputName(type);
         },
 
+        // Data was updated in related input component, send the changed value(s) to child
         dataUpdate(target, data) {
             this.dataRel.send({ target, data });
         }

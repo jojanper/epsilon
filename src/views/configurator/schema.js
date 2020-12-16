@@ -11,8 +11,9 @@ export const SCHEMA = [
         }
     },
     {
-        type: 'row-input',
+        type: 'group-input',
         name: 'row',
+        renderMode: 'row',
         schema: [
             {
                 type: 'text',

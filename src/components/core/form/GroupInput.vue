@@ -1,5 +1,5 @@
 <template>
-  <div class="row">
+  <div v-if="isRowMode()" class="row">
     <div class="ml-auto col m-0" v-for="(field, index) in schema" :key="index">
       <draal-form-input
         :key="index"
@@ -19,7 +19,7 @@
  * @displayName RowInput
  */
 export default {
-    name: 'RowInput',
+    name: 'GroupInput',
     components: {
         // Circular reference between form input, use Webpack’s asynchronous import
         DraalFormInput: () => import('./FormInput.vue')
@@ -42,6 +42,14 @@ export default {
          * Name of row input.
          */
         name: {
+            type: String,
+            required: true
+        },
+        /**
+         * Group rendering mode. Currently supported modes:
+         * - row: Form inputs are rendered as row element
+         */
+        renderMode: {
             type: String,
             required: true
         }
@@ -67,6 +75,10 @@ export default {
         };
     },
     methods: {
+        isRowMode() {
+            return this.renderMode === 'row';
+        },
+
         updateForm(fieldName, value) {
             // Update the form data group value
             this.$set(this.value, fieldName, value);
