@@ -22,7 +22,7 @@ export default {
     name: 'RowInput',
     components: {
         // Circular reference between form input, use Webpack’s asynchronous import
-        DraalFormInput: () => import('../FormInput.vue')
+        DraalFormInput: () => import('./FormInput.vue')
     },
     props: {
         /**
@@ -72,7 +72,7 @@ export default {
             this.$set(this.value, fieldName, value);
 
             // Let the listeners also know the detailed input name
-            // for which this update is related to.
+            // to which this update is related to.
             this.$emit('input', this.value, `${this.name}.${fieldName}`);
         }
     }

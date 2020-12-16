@@ -19,7 +19,7 @@ import RemoteFileSaveInput from './inputs/RemoteFileSaveInput.vue';
 import WheelInput from './inputs/WheelInput.vue';
 import FileQueryInput from './inputs/FileQueryInput.vue';
 import FocusTimeline from './inputs/FocusTimeline.vue';
-import RowInput from './inputs/RowInput.vue';
+import RowInput from './RowInput.vue';
 
 /**
  * Form input wrapper.
@@ -34,10 +34,10 @@ export default {
         CheckboxInput,
         WheelInput,
         FocusTimeline,
-        RowInput,
         FileOpenInput,
         RemoteFileSaveInput,
-        FileQueryInput
+        FileQueryInput,
+        RowInput
     },
     data() {
         return {
