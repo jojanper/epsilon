@@ -1,6 +1,6 @@
 export const SCHEMA = [
     {
-        fieldType: 'TextInput',
+        type: 'text',
         placeholder: 'Enter device UUID',
         label: 'Device ID',
         name: 'device',
@@ -11,7 +11,36 @@ export const SCHEMA = [
         }
     },
     {
-        fieldType: 'SelectInput',
+        type: 'row-input',
+        name: 'row',
+        schema: [
+            {
+                type: 'text',
+                placeholder: 'Enter device UUID 1',
+                label: 'Device ID',
+                name: 'device1',
+                rules: 'required',
+                help: {
+                    title: 'Device UUID 1',
+                    body: 'UUID in the form of xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx.'
+                },
+                dataRelTarget: ['row.device2']
+            },
+            {
+                type: 'text',
+                placeholder: 'Enter device UUID 2',
+                label: 'Device ID',
+                name: 'device2',
+                rules: 'required',
+                help: {
+                    title: 'Device UUID 2',
+                    body: 'UUID in the form of xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx.'
+                }
+            }
+        ]
+    },
+    {
+        type: 'select',
         placeholder: 'Select bitrate in kbps',
         label: 'Bitrate (kbps)',
         name: 'bitrate',
@@ -19,7 +48,7 @@ export const SCHEMA = [
         selectlist: [192, 256, 512]
     },
     {
-        fieldType: 'FileOpenInput',
+        type: 'file-open',
         placeholder: 'Click to select WAV input file or drop file to icon',
         dropTitle: 'Drop input WAV here',
         label: 'Input WAV file for recording',
@@ -28,14 +57,14 @@ export const SCHEMA = [
         duration: true
     },
     {
-        fieldType: 'RemoteFileSaveInput',
+        type: 'remote-file-save',
         placeholder: 'Click to select location of the output MP4 file or drag file to icon',
         label: 'Recording output MP4 file',
         name: 'output',
         rules: 'required'
     },
     {
-        fieldType: 'FileQueryInput',
+        type: 'file-data-query',
         placeholder: 'Click to select the file or drag file to icon',
         label: 'ID file',
         name: 'id',
@@ -49,7 +78,7 @@ export const SCHEMA = [
         queryRule: 'filequery'
     },
     {
-        fieldType: 'CheckboxInput',
+        type: 'checkbox',
         placeholder: 'Windscreen',
         label: 'Windscreen',
         name: 'windscreen',
@@ -63,7 +92,7 @@ export const SCHEMA = [
         }
     },
     {
-        fieldType: 'FocusTimeline',
+        type: 'timeline',
         name: 'focusTimeline',
         label: 'Focus events timeline',
         maxZoom: 15,

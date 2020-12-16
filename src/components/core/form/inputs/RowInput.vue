@@ -1,38 +1,79 @@
 <template>
-  <div class="row mt-0">
-    <div class="ml-auto col-sm pt-0" v-for="(field, index) in schema" :key="index">
-      <component
+  <div class="row">
+    <div class="ml-auto col m-0" v-for="(field, index) in schema" :key="index">
+      <draal-form-input
         :key="index"
-        :is="field.fieldType"
         :value="value[field.name]"
-        @input="updateForm(field.name, $event)"
         v-bind="field"
-        @form-input-help="inputHelp"
-      ></component>
+        v-on="listeners"
+        @input="updateForm(field.name, $event)"
+      ></draal-form-input>
     </div>
-    <div class="col-sm">&nbsp;</div>
   </div>
 </template>
 
 <script>
-import CheckboxInput from './CheckboxInput.vue';
-import WheelInput from './WheelInput.vue';
-
+/**
+ * Form inputs are rendered in a row element (side by side).
+ *
+ * @displayName RowInput
+ */
 export default {
     name: 'RowInput',
     components: {
-        CheckboxInput,
-        WheelInput
+        // Circular reference between form input, use Webpack’s asynchronous import
+        DraalFormInput: () => import('../FormInput.vue')
     },
-    props: ['schema', 'value', 'name'],
+    props: {
+        /**
+         * Form input definitions as JSON schema.
+         */
+        schema: {
+            type: Array,
+            required: true
+        },
+        /**
+         * Form data for each input.
+         */
+        value: {
+            required: true
+        },
+        /**
+         * Name of row input.
+         */
+        name: {
+            type: String,
+            required: true
+        }
+    },
+    data() {
+        const listeners = {
+            ...this.$listeners,
+
+            // Input help name must be updated so that parent can locate correct data entry
+            'form-input-help': name => this.$emit('form-input-help', `${this.name}.${name}`),
+
+            // Data relation also needs naming update
+            'data-rel-update': (name, target, fn) => {
+                this.$emit('data-rel-update', `${this.name}.${name}`, target, fn);
+            }
+        };
+
+        // Delete parent input listener, we use our own here
+        delete listeners.input;
+
+        return {
+            listeners
+        };
+    },
     methods: {
         updateForm(fieldName, value) {
+            // Update the form data group value
             this.$set(this.value, fieldName, value);
-            this.$emit('input', this.value);
-        },
 
-        inputHelp(name) {
-            this.$emit('form-input-help', `${this.name}.${name}`);
+            // Let the listeners also know the detailed input name
+            // for which this update is related to.
+            this.$emit('input', this.value, `${this.name}.${fieldName}`);
         }
     }
 };

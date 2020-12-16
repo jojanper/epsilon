@@ -1,6 +1,6 @@
 <template>
   <component
-    :is="$attrs.fieldType"
+    :is="getType($attrs.type)"
     v-bind="$attrs"
     v-on="$listeners"
     :data-rel-input="dataRel.asPipe()"
@@ -10,6 +10,7 @@
 <script>
 import { BaseObservableObject } from '@/common/utils';
 
+import { getFormInputName } from './input';
 import TextInput from './inputs/TextInput.vue';
 import SelectInput from './inputs/SelectInput.vue';
 import CheckboxInput from './inputs/CheckboxInput.vue';
@@ -62,6 +63,10 @@ export default {
         this.dataRel.close();
     },
     methods: {
+        getType(type) {
+            return getFormInputName(type);
+        },
+
         dataUpdate(target, data) {
             this.dataRel.send({ target, data });
         }
