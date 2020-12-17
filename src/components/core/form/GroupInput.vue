@@ -1,6 +1,6 @@
 <template>
   <div v-if="isRowMode()" class="row">
-    <div class="ml-auto col m-0" v-for="(field, index) in schema" :key="index">
+    <div class="ml-auto col-md m-0" v-for="(field, index) in schema" :key="index">
       <draal-form-input
         :key="index"
         :value="value[field.name]"

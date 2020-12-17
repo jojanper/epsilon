@@ -99,14 +99,22 @@ export default {
 
         // Clear form data
         clear() {
-            for (let i = 0; i < this.schema.length; i++) {
-                const fieldName = this.schema[i].name;
-                if (Array.isArray(this.formData[fieldName])) {
-                    this.formData[fieldName].splice(0, this.formData[fieldName].length);
-                } else {
-                    this.$set(this.formData, fieldName, this.reset(fieldName));
+            function resetData(schema, formData, prefix, resetCb) {
+                /* eslint-disable no-param-reassign */
+                for (let i = 0; i < schema.length; i++) {
+                    const fieldName = schema[i].name;
+                    if (schema[i].schema) {
+                        resetData(schema[i].schema, formData[fieldName], `${prefix}${fieldName}.`, resetCb);
+                    } else if (Array.isArray(formData[fieldName])) {
+                        formData[fieldName].splice(0, formData[fieldName].length);
+                    } else {
+                        formData[fieldName] = resetCb(`${prefix}${fieldName}`);
+                    }
                 }
+                /* eslint-enable no-param-reassign */
             }
+
+            resetData(this.schema, this.formData, '', this.reset);
             this.forceRendeder();
         },
 

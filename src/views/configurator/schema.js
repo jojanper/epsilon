@@ -37,6 +37,36 @@ export const SCHEMA = [
                     title: 'Device UUID 2',
                     body: 'UUID in the form of xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx.'
                 }
+            },
+            {
+                type: 'checkbox',
+                placeholder: 'Windscreen',
+                label: 'Windscreen',
+                name: 'windscreen',
+                help: {
+                    title: 'Audio Windscreen',
+                    body: 'Audio Windscreen lets users capture crystal-clear audio quality on '
+                        + 'their smartphone in less than ideal conditions. Sophisticated wind '
+                        + 'detection algorithms identify and automatically adjust suppression '
+                        + 'processing to suit the wind noise conditions. Clearer audio even when '
+                        + 'conditions aren’t.'
+                },
+                rules: 'required'
+            },
+            {
+                type: 'checkbox',
+                placeholder: 'Windscreen 2',
+                label: 'Windscreen',
+                name: 'windscreen2',
+                help: {
+                    title: 'Audio Windscreen',
+                    body: 'Audio Windscreen lets users capture crystal-clear audio quality on '
+                        + 'their smartphone in less than ideal conditions. Sophisticated wind '
+                        + 'detection algorithms identify and automatically adjust suppression '
+                        + 'processing to suit the wind noise conditions. Clearer audio even when '
+                        + 'conditions aren’t.'
+                },
+                rules: 'required'
             }
         ]
     },
@@ -90,7 +120,8 @@ export const SCHEMA = [
                 + 'detection algorithms identify and automatically adjust suppression '
                 + 'processing to suit the wind noise conditions. Clearer audio even when '
                 + 'conditions aren’t.'
-        }
+        },
+        rules: 'required'
     },
     {
         type: 'timeline',
@@ -116,5 +147,19 @@ export const SCHEMA = [
             }
         ],
         dataRelTarget: ['input']
+    },
+    {
+        type: 'radio',
+        name: 'radio',
+        label: 'Radio selection',
+        data: [
+            {
+                label: 'Option 1'
+            },
+            {
+                label: 'Option 2'
+            }
+        ],
+        rules: 'required'
     }
 ];

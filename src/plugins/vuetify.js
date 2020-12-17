@@ -34,7 +34,9 @@ import Vuetify, {
     VCarousel,
     VCarouselItem,
     VProgressLinear,
-    VSlider
+    VSlider,
+    VRadioGroup,
+    VRadio
 } from 'vuetify/lib';
 
 import i18n from '../i18n';
@@ -76,7 +78,9 @@ export const CONFIG = {
         VCarousel,
         VCarouselItem,
         VProgressLinear,
-        VSlider
+        VSlider,
+        VRadioGroup,
+        VRadio
     },
     global: {
         ripples: false

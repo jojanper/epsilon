@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="pr-3 mr-3">
+    <div class="pr-3 mr-3 mt-3">
       <p class="text-left v-label theme--light">{{ label }}</p>
     </div>
 

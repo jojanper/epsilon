@@ -184,7 +184,7 @@ export default {
 
 <style lang="scss">
 // No animations for Vuetify
-label.v-label.theme--light.error--text {
+.v-label.theme--light.error--text {
     animation: none !important;
 }
 .v-data-table tbody tr.v-data-table__expanded__content {
