@@ -49,7 +49,7 @@ export default {
     data() {
         const schema = [...SCHEMA];
 
-        schema[4].dataQuery = this.dataQuery.bind(this);
+        schema[5].dataQuery = this.dataQuery.bind(this);
 
         return {
             data: null,
@@ -60,7 +60,8 @@ export default {
                 input: null,
                 output: null,
                 windscreen: false,
-                focusTimeline: []
+                focusTimeline: [],
+                row: {}
             },
             options: {
                 submit: this.$t('configuratorPage.createRec'),
@@ -97,6 +98,18 @@ export default {
 
         fileSelect(files) {
             console.log('selected', files);
+
+            const reader = new FileReader();
+            reader.onload = event => {
+                try {
+                    console.log(JSON.parse(event.target.result));
+                } catch (e) {
+                    console.log(e);
+                }
+            };
+
+            reader.onerror = error => console.error(error);
+            reader.readAsText(files[0]);
         },
 
         dataQuery(file) {

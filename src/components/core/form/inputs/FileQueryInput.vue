@@ -75,7 +75,17 @@ import DraalFileDialog from '@/components/core/utils/FileDialog.vue';
 import DraalSpinner from '@/components/core/utils/Spinner.vue';
 
 /**
- * Data query assisted select input.
+ * Data query assisted select input. Component data flow is as follows:
+ *
+ * - User opens file dialog by clicking the input or by dragging and dropping
+ *   the file to the icon that is appended to the input
+ * - The file object is passed to the data query function which is given as prop
+ * - The called function will return array data which is populated to the selection input
+ * - Once data is selected from the selection input, a check is made to see if the data
+ *   is actually requesting manual input.
+ * - Manual input becomes visible if 'custom' property of the selected data object is
+ *   set to true
+ * - Once data is selected or manually entered, an event is send to parent
  *
  * @displayName FileQueryInput
  */
@@ -135,29 +145,32 @@ export default {
     methods: {
         // User selected file (either using file dialog or file was dropped)
         onDrop(files) {
-            const file = files[0];
+            if (files.length) {
+                const file = files[0];
 
-            this.customId = false;
-            this.processing = true;
-            this.fieldValue = file.path || file.name;
-            this.listData.splice(0, this.listData.length);
+                this.customId = false;
+                this.processing = true;
+                this.fileDialog = false;
+                this.fieldValue = file.path || file.name;
+                this.listData.splice(0, this.listData.length);
 
-            this.validateInput();
-
-            // Get the list data
-            this.dataQuery(file).subscribe(data => {
-                this.processing = false;
-                data.forEach(element => this.listData.push(element));
                 this.validateInput();
-            }, err => {
-                this.processing = false;
 
-                const error = {};
-                error[this.name] = err;
+                // Get the list data
+                this.dataQuery(file).subscribe(data => {
+                    this.processing = false;
+                    data.forEach(element => this.listData.push(element));
+                    this.validateInput();
+                }, err => {
+                    this.processing = false;
 
-                // Show the error after input validation cycle has stabilized
-                setTimeout(() => this.$refs.observer.setErrors(error), 100);
-            });
+                    const error = {};
+                    error[this.name] = err;
+
+                    // Show the error after input validation cycle has stabilized
+                    setTimeout(() => this.$refs.observer.setErrors(error), 100);
+                });
+            }
         },
 
         // Item selected from list
@@ -191,6 +204,9 @@ export default {
                 value
             };
 
+            /**
+             * Send selected input data.
+             */
             this.$emit('input', data);
         },
 

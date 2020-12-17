@@ -1,6 +1,6 @@
 <template>
   <component
-    :is="$attrs.fieldType"
+    :is="getType($attrs.type)"
     v-bind="$attrs"
     v-on="$listeners"
     :data-rel-input="dataRel.asPipe()"
@@ -10,6 +10,7 @@
 <script>
 import { BaseObservableObject } from '@/common/utils';
 
+import { getFormInputName } from './input';
 import TextInput from './inputs/TextInput.vue';
 import SelectInput from './inputs/SelectInput.vue';
 import CheckboxInput from './inputs/CheckboxInput.vue';
@@ -18,7 +19,7 @@ import RemoteFileSaveInput from './inputs/RemoteFileSaveInput.vue';
 import WheelInput from './inputs/WheelInput.vue';
 import FileQueryInput from './inputs/FileQueryInput.vue';
 import FocusTimeline from './inputs/FocusTimeline.vue';
-import RowInput from './inputs/RowInput.vue';
+import GroupInput from './GroupInput.vue';
 
 /**
  * Form input wrapper.
@@ -33,13 +34,14 @@ export default {
         CheckboxInput,
         WheelInput,
         FocusTimeline,
-        RowInput,
         FileOpenInput,
         RemoteFileSaveInput,
-        FileQueryInput
+        FileQueryInput,
+        GroupInput
     },
     data() {
         return {
+            // Data changes from other inputs are communicated via Subject
             dataRel: BaseObservableObject.createAsSubject()
         };
     },
@@ -59,9 +61,16 @@ export default {
         }
     },
     destroyed() {
+        // No more events emitted from object
         this.dataRel.close();
     },
     methods: {
+        // Map form input type into internal component name
+        getType(type) {
+            return getFormInputName(type);
+        },
+
+        // Data was updated in related input component, send the changed value(s) to child
         dataUpdate(target, data) {
             this.dataRel.send({ target, data });
         }

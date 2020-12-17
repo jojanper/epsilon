@@ -6,7 +6,7 @@
           v-for="(field, index) in schema"
           :key="index"
           :value="formData[field.name]"
-          @input="updateForm(field.name, $event)"
+          @input="(value, ext) => updateForm(field.name, value, ext)"
           v-bind="field"
           @form-input-help="formInputHelp"
           @data-rel-update="registerUpdateHandler"
@@ -79,16 +79,20 @@ export default {
         },
 
         // Update form data
-        updateForm(fieldName, value) {
+        updateForm(fieldName, value, ext) {
             this.$set(this.formData, fieldName, value);
+
+            // Name of actual target. The field name is high level name,
+            // detailed name is given by the ext parameter.
+            const target = ext || fieldName;
 
             // If input data relations are defined, send the changed data
             // to relevant form input components
-            if (this.dataRelHandlers[fieldName]) {
-                const targetInputs = Object.keys(this.dataRelHandlers[fieldName]);
+            if (this.dataRelHandlers[target]) {
+                const targetInputs = Object.keys(this.dataRelHandlers[target]);
                 targetInputs.forEach(key => {
-                    const input = this.dataRelHandlers[fieldName][key];
-                    input.forEach(cb => cb(fieldName, value));
+                    const input = this.dataRelHandlers[target][key];
+                    input.forEach(cb => cb(target, value));
                 });
             }
         },
@@ -108,14 +112,26 @@ export default {
 
         // Show help data for specified input
         formInputHelp(name) {
-            for (let i = 0; i < this.schema.length; i++) {
-                const fieldName = this.schema[i].name;
-                if (fieldName === name) {
-                    this.helpText = this.schema[i].help;
-                    break;
+            function getDataField(schema, target) {
+                for (let i = 0; i < schema.length; i++) {
+                    const fieldName = schema[i].name;
+                    if (fieldName === target) {
+                        return schema[i];
+                    }
                 }
+
+                return null;
             }
 
+            // Locate the help data from schema
+            const split = name.split('.');
+            let data = { schema: this.schema };
+            for (let i = 0; i < split.length; i++) {
+                data = getDataField(data.schema, split[i]);
+            }
+
+            // Show the help data
+            this.helpText = data.help;
             this.helpDialog = true;
         },
 
