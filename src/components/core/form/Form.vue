@@ -10,7 +10,17 @@
           v-bind="field"
           @form-input-help="formInputHelp"
           @data-rel-update="registerUpdateHandler"
-        ></draal-form-input>
+        >
+          <template v-for="(columnDef, index) in customRender" v-slot:[columnDef.column]="{ data }">
+            <!--
+                @slot Custom input data rendering.
+                @binding {number} inputKey Input key (Vue key attribute).
+                @binding {object} data Input data.
+            -->
+            <slot :name="columnDef.name" v-bind:inputKey="index" v-bind:data="data"></slot>
+          </template>
+          <template v-slot:input.focusTimeline.angleDir2>FORM COMPONENT</template>
+        </draal-form-input>
 
         <div class="mt-3">
           <v-btn
@@ -67,7 +77,24 @@ export default {
         this.dataRelHandlers = {};
     },
     computed: {
-        appLang: appComputed.appLang
+        appLang: appComputed.appLang,
+
+        customRender() {
+            // const colDef = this.customSlots || [];
+
+            const t = this.schema.flatMap(entry => {
+                const slots = entry.customSlots || [];
+                console.log(entry.name, slots);
+                // return [];
+                return slots.map(column => ({
+                    column: `input.${entry.name}.${column}`,
+                    name: `form.${entry.name}.${column}`
+                }));
+            });
+
+            console.log(t);
+            return t;
+        }
     },
     watch: {
         appLang() {

@@ -15,18 +15,27 @@
         <draal-timeline
           :timeData="value"
           :timelineWidths="timelineWidths"
-          :itemCreator="newTimeline"
+          :itemCreator="accessMethods.new"
           @input="saveTimeline"
           @timelineChanged="dummyModel=null"
           :tableConfig="tableConfig"
           :maxZoom="maxZoom"
           :data-provider="dataRelInput"
         >
+          <template v-for="(columnDef, index) in customRender" v-slot:[columnDef.column]="{ data }">
+            <!--
+              @slot Custom table column data rendering.
+              @binding {number} columnKey Column key (Vue key attribute).
+              @binding {object} data Column data.
+            -->
+            <slot :name="columnDef.name" v-bind:inputKey="index" v-bind:data="data"></slot>
+          </template>
+
           <!-- Custom column rendering -->
           <!-- Show direction as arrow pointing to correct direction -->
-          <template v-slot:table.angleDir="{ data }">
+          <!--template v-slot:table.angleDir="{ data }">
             <v-icon :style="renderAzimuth(data)">mdi-arrow-up</v-icon>
-          </template>
+          </template-->
 
           <!-- Row data editing occurs here -->
           <template v-slot:editDialog="{ componentKey, editData, editChanges }">
@@ -49,34 +58,6 @@ import { ValidationProvider } from 'vee-validate';
 import WheelInput from './WheelInput.vue';
 import DraalTimeline from '../../timeline/Timeline.vue';
 
-const HEADERS = [
-    {
-        text: 'Event position',
-        align: 'left',
-        filterable: false,
-        sortable: false,
-        value: 'position'
-    },
-    {
-        text: 'Direction',
-        value: 'angleDir',
-        sortable: false,
-        filterable: false
-    },
-    {
-        text: 'Angle',
-        value: 'angle',
-        sortable: false,
-        filterable: false
-    },
-    {
-        text: 'Zoom %',
-        value: 'zoom',
-        sortable: false,
-        filterable: false
-    }
-];
-
 export default {
     name: 'FocusTimeline',
     components: {
@@ -84,40 +65,29 @@ export default {
         WheelInput,
         ValidationProvider
     },
-    props: ['label', 'timelineWidths', 'value', 'maxZoom', 'dataRelInput'],
+    props: ['name', 'label', 'timelineWidths', 'value', 'maxZoom', 'dataRelInput', 'tableConfig', 'accessMethods', 'customSlots'],
     data() {
         return {
             // Changes in timeline are tracked via hidden input validation.
             // Change event from timeline component will make this component invalid
             // and user is explicitly required to save the timeline changes before
             // component validation succeeds.
-            dummyModel: 0,
-
-            tableConfig: {
-                // Custom rendering via template slot is provided for this data item
-                customColumns: ['angleDir'],
-                headers: HEADERS,
-                actions: ['edit', 'delete'],
-                actionsConfig: {
-                    name: 'Actions'
-                }
-            }
+            dummyModel: 0
         };
+    },
+    computed: {
+        customRender() {
+            const colDef = this.customSlots || [];
+            const t = colDef.map(column => ({ column: `table.${column}`, name: `${this.name}.${column}` }));
+
+            console.log(t);
+            return t;
+        }
     },
     methods: {
         saveEditedValues(source, data, editChanges) {
-            /* eslint-disable no-param-reassign */
-            source.angle = data.angle;
-            source.zoom = data.zoom;
+            this.accessMethods.save(source, data);
             editChanges(true);
-            /* eslint-enable no-param-reassign */
-        },
-
-        newTimeline() {
-            return {
-                angle: 0,
-                zoom: 0
-            };
         },
 
         // Timeline changes are saved which validates also the component input

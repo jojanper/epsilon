@@ -4,7 +4,17 @@
     v-bind="$attrs"
     v-on="$listeners"
     :data-rel-input="dataRel.asPipe()"
-  ></component>
+  >
+    <template v-for="(columnDef, index) in customRender" v-slot:[columnDef.column]="{ data }">
+      <!--
+        @slot Custom input data rendering.
+        @binding {number} inputKey Input key (Vue key attribute).
+        @binding {object} data Input data.
+      -->
+      <slot :name="columnDef.name" v-bind:inputKey="index" v-bind:data="data"></slot>
+    </template>
+    <template v-slot:focusTimeline.angleDir2>FORM INPUT COMPONENT</template>
+  </component>
 </template>
 
 <script>
@@ -17,9 +27,8 @@ import CheckboxInput from './inputs/CheckboxInput.vue';
 import RadioInput from './inputs/RadioInput.vue';
 import FileOpenInput from './inputs/FileOpenInput.vue';
 import RemoteFileSaveInput from './inputs/RemoteFileSaveInput.vue';
-import WheelInput from './inputs/WheelInput.vue';
 import FileQueryInput from './inputs/FileQueryInput.vue';
-import FocusTimeline from './inputs/FocusTimeline.vue';
+import TimelineInput from './inputs/TimelineInput.vue';
 import GroupInput from './GroupInput.vue';
 
 /**
@@ -34,8 +43,7 @@ export default {
         SelectInput,
         CheckboxInput,
         RadioInput,
-        WheelInput,
-        FocusTimeline,
+        TimelineInput,
         FileOpenInput,
         RemoteFileSaveInput,
         FileQueryInput,
@@ -60,6 +68,17 @@ export default {
                 this.$attrs.name,
                 this.$attrs.dataRelTarget,
                 this.dataUpdate.bind(this));
+        }
+    },
+    computed: {
+        customRender() {
+            const { name } = this.$attrs;
+            const colDef = this.$attrs.customSlots || [];
+
+            const t = colDef.map(column => ({ column: `${name}.${column}`, name: `input.${name}.${column}` }));
+
+            console.log(t);
+            return t;
         }
     },
     destroyed() {

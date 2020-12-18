@@ -12,7 +12,11 @@
             v-on:submit="encode"
             :options="options"
             :reset="resetField"
-          ></draal-form-generator>
+          >
+            <template v-slot:form.focusTimeline.angleDir="{ data }">
+              <v-icon :style="renderAzimuth(data)">mdi-arrow-up</v-icon>
+            </template>
+          </draal-form-generator>
 
           <draal-file-dialog color="blue" icon="mdi-folder-open" @file-select="fileSelect"></draal-file-dialog>
 
@@ -133,6 +137,10 @@ export default {
                 { uuid: 'UUID 5' },
                 { uuid: 'Set your own ID', custom: true }
             ]).pipe(delay(2500));
+        },
+
+        renderAzimuth(data) {
+            return `transform: rotate(${-data.angle}deg)`;
         }
     }
 };
