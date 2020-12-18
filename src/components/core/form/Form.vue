@@ -38,9 +38,11 @@
 <script>
 import { ValidationObserver } from 'vee-validate';
 
+import { appComputed } from '@/store/helpers';
+import { getDataField, resetDataBySchema } from '@/common/utils';
+
 import DraalFormInput from './FormInput.vue';
 import DraalDialog from '../utils/Dialog.vue';
-import { appComputed } from '@/store/helpers';
 
 export default {
     name: 'DraalFormGenerator',
@@ -91,51 +93,25 @@ export default {
             if (this.dataRelHandlers[target]) {
                 const targetInputs = Object.keys(this.dataRelHandlers[target]);
                 targetInputs.forEach(key => {
-                    const input = this.dataRelHandlers[target][key];
-                    input.forEach(cb => cb(target, value));
+                    const inputs = this.dataRelHandlers[target][key];
+                    inputs.forEach(cb => cb(target, value));
                 });
             }
         },
 
         // Clear form data
         clear() {
-            function resetData(schema, formData, prefix, resetCb) {
-                /* eslint-disable no-param-reassign */
-                for (let i = 0; i < schema.length; i++) {
-                    const fieldName = schema[i].name;
-                    if (schema[i].schema) {
-                        resetData(schema[i].schema, formData[fieldName], `${prefix}${fieldName}.`, resetCb);
-                    } else if (Array.isArray(formData[fieldName])) {
-                        formData[fieldName].splice(0, formData[fieldName].length);
-                    } else {
-                        formData[fieldName] = resetCb(`${prefix}${fieldName}`);
-                    }
-                }
-                /* eslint-enable no-param-reassign */
-            }
-
-            resetData(this.schema, this.formData, '', this.reset);
+            resetDataBySchema(this.schema, this.formData, '', this.reset);
             this.forceRendeder();
         },
 
         // Show help data for specified input
         formInputHelp(name) {
-            function getDataField(schema, target) {
-                for (let i = 0; i < schema.length; i++) {
-                    const fieldName = schema[i].name;
-                    if (fieldName === target) {
-                        return schema[i];
-                    }
-                }
-
-                return null;
-            }
-
             // Locate the help data from schema
             const split = name.split('.');
             let data = { schema: this.schema };
             for (let i = 0; i < split.length; i++) {
-                data = getDataField(data.schema, split[i]);
+                data = getDataField(data.schema, split[i], 'name');
             }
 
             // Show the help data

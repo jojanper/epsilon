@@ -33,6 +33,48 @@ export function getContentDispositionFilename(disposition) {
     return null;
 }
 
+/**
+ * Find data item from object that matches the specified target.
+ *
+ * @param {*} object Data object.
+ * @param {*} target Target data field to find.
+ * @param {*} prop Property field from data object for target matching.
+ * @returns Data item on success, null on failure
+ */
+export function getDataField(object, target, prop) {
+    for (let i = 0; i < object.length; i++) {
+        const fieldName = object[i][prop];
+        if (fieldName === target) {
+            return object[i];
+        }
+    }
+
+    return null;
+}
+
+/**
+ * Reset data using schema definition as guidance.
+ *
+ * @param {*} schema Data schema.
+ * @param {*} data Data to reset.
+ * @param {*} prefix Name prefix for reset function.
+ * @param {*} resetCb Reset function.
+ */
+export function resetDataBySchema(schema, data, prefix, resetCb) {
+    /* eslint-disable no-param-reassign */
+    for (let i = 0; i < schema.length; i++) {
+        const fieldName = schema[i].name;
+        if (schema[i].schema) {
+            resetDataBySchema(schema[i].schema, data[fieldName], `${prefix}${fieldName}.`, resetCb);
+        } else if (Array.isArray(data[fieldName])) {
+            data[fieldName].splice(0, data[fieldName].length);
+        } else {
+            data[fieldName] = resetCb(`${prefix}${fieldName}`);
+        }
+    }
+    /* eslint-enable no-param-reassign */
+}
+
 export const timer = timeout => new Promise(resolve => setTimeout(resolve, timeout));
 
 export * from './ansicolors';
