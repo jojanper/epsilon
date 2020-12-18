@@ -1,10 +1,10 @@
 <template>
   <ValidationProvider v-slot="{ errors, required }" :name="name" :rules="rules">
-    <v-checkbox
+    <v-radio-group
       v-model="fieldValue"
       light
-      :error="isRequired(required)"
       :value="fieldValue"
+      :error="isRequired(required)"
       :label="label"
       :error-messages="errors"
       @change="$emit('input', fieldValue)"
@@ -14,7 +14,8 @@
         v-if="help"
         @click="$emit('form-input-help', name)"
       >mdi-information-outline</v-icon>
-    </v-checkbox>
+      <v-radio v-for="(item, index) in data" :key="index" :label="item.label" :value="index"></v-radio>
+    </v-radio-group>
   </ValidationProvider>
 </template>
 
@@ -22,11 +23,11 @@
 import { ValidationProvider } from 'vee-validate';
 
 export default {
-    name: 'CheckboxInput',
+    name: 'RadioInput',
     components: {
         ValidationProvider
     },
-    props: ['label', 'name', 'value', 'rules', 'help'],
+    props: ['label', 'data', 'name', 'value', 'rules', 'help'],
     data() {
         return {
             fieldValue: this.value
@@ -34,14 +35,8 @@ export default {
     },
     methods: {
         isRequired(required) {
-            return required ? !this.fieldValue : false;
+            return required ? this.fieldValue === null : false;
         }
     }
 };
 </script>
-
-<style lang="scss">
-.v-input--selection-controls.v-input .v-label {
-    top: 3px;
-}
-</style>

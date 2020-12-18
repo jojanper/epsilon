@@ -61,7 +61,8 @@ export default {
                 output: null,
                 windscreen: false,
                 focusTimeline: [],
-                row: {}
+                row: {},
+                radio: 1
             },
             options: {
                 submit: this.$t('configuratorPage.createRec'),

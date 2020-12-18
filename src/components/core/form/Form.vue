@@ -38,9 +38,11 @@
 <script>
 import { ValidationObserver } from 'vee-validate';
 
+import { appComputed } from '@/store/helpers';
+import { getDataField, resetDataBySchema } from '@/common/utils';
+
 import DraalFormInput from './FormInput.vue';
 import DraalDialog from '../utils/Dialog.vue';
-import { appComputed } from '@/store/helpers';
 
 export default {
     name: 'DraalFormGenerator',
@@ -91,43 +93,25 @@ export default {
             if (this.dataRelHandlers[target]) {
                 const targetInputs = Object.keys(this.dataRelHandlers[target]);
                 targetInputs.forEach(key => {
-                    const input = this.dataRelHandlers[target][key];
-                    input.forEach(cb => cb(target, value));
+                    const inputs = this.dataRelHandlers[target][key];
+                    inputs.forEach(cb => cb(target, value));
                 });
             }
         },
 
         // Clear form data
         clear() {
-            for (let i = 0; i < this.schema.length; i++) {
-                const fieldName = this.schema[i].name;
-                if (Array.isArray(this.formData[fieldName])) {
-                    this.formData[fieldName].splice(0, this.formData[fieldName].length);
-                } else {
-                    this.$set(this.formData, fieldName, this.reset(fieldName));
-                }
-            }
+            resetDataBySchema(this.schema, this.formData, '', this.reset);
             this.forceRendeder();
         },
 
         // Show help data for specified input
         formInputHelp(name) {
-            function getDataField(schema, target) {
-                for (let i = 0; i < schema.length; i++) {
-                    const fieldName = schema[i].name;
-                    if (fieldName === target) {
-                        return schema[i];
-                    }
-                }
-
-                return null;
-            }
-
             // Locate the help data from schema
             const split = name.split('.');
             let data = { schema: this.schema };
             for (let i = 0; i < split.length; i++) {
-                data = getDataField(data.schema, split[i]);
+                data = getDataField(data.schema, split[i], 'name');
             }
 
             // Show the help data

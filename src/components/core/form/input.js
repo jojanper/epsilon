@@ -7,6 +7,9 @@ export const SELECT_INPUT = 'select';
 // Checkbox input
 export const CHECKBOX_INPUT = 'checkbox';
 
+// Radio input
+export const RADIO_INPUT = 'radio';
+
 // Wheel input
 export const WHEEL_INPUT = 'wheel';
 
@@ -30,6 +33,7 @@ const INPUT_TYPES = {};
 INPUT_TYPES[TEXT_INPUT] = 'TextInput';
 INPUT_TYPES[SELECT_INPUT] = 'SelectInput';
 INPUT_TYPES[CHECKBOX_INPUT] = 'CheckboxInput';
+INPUT_TYPES[RADIO_INPUT] = 'RadioInput';
 INPUT_TYPES[WHEEL_INPUT] = 'WheelInput';
 INPUT_TYPES[FILE_OPEN_INPUT] = 'FileOpenInput';
 INPUT_TYPES[REMOTE_FILE_SAVE_INPUT] = 'RemoteFileSaveInput';

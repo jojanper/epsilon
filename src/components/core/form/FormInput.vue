@@ -14,6 +14,7 @@ import { getFormInputName } from './input';
 import TextInput from './inputs/TextInput.vue';
 import SelectInput from './inputs/SelectInput.vue';
 import CheckboxInput from './inputs/CheckboxInput.vue';
+import RadioInput from './inputs/RadioInput.vue';
 import FileOpenInput from './inputs/FileOpenInput.vue';
 import RemoteFileSaveInput from './inputs/RemoteFileSaveInput.vue';
 import WheelInput from './inputs/WheelInput.vue';
@@ -32,6 +33,7 @@ export default {
         TextInput,
         SelectInput,
         CheckboxInput,
+        RadioInput,
         WheelInput,
         FocusTimeline,
         FileOpenInput,
