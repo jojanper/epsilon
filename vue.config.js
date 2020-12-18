@@ -9,6 +9,8 @@ module.exports = {
     publicPath: process.env.PUBLIC_PATH || '/',
     productionSourceMap: process.env.NODE_ENV !== 'production',
 
+    runtimeCompiler: true,
+
     pages: {
         index: {
             entry: !isElectron() ? 'src/main.js' : 'src/mainElectron.js',
