@@ -13,7 +13,13 @@
       -->
       <slot :name="columnDef.name" v-bind:inputKey="index" v-bind:data="data"></slot>
     </template>
-    <template v-slot:focusTimeline.angleDir2>FORM INPUT COMPONENT</template>
+
+    <template v-slot:group.row.focusTimeline2.angleDir2>FORM INPUT {{ $attrs.slotPrefix }}</template>
+    <template v-slot:input.row.focusTimeline2.angleDir2>FORM INPUT 2 {{ $attrs.slotPrefix }}</template>
+
+    <!--template v-slot:input.row.focusTimeline2.angleDir>
+      <slot name="input.row.focusTimeline2.angleDir"></slot>
+    </template-->
   </component>
 </template>
 
@@ -56,6 +62,7 @@ export default {
         };
     },
     mounted() {
+        // console.log(this.$attrs);
         if (this.$attrs.dataRelTarget) {
             /**
              * Request data notifications from related input components
@@ -72,13 +79,38 @@ export default {
     },
     computed: {
         customRender() {
+            function slotMapping(inputSlots, schema, prefix) {
+                // console.log(schema);
+                schema.forEach(entry => {
+                    if (entry.schema && entry.schema.length) {
+                        slotMapping(inputSlots, entry.schema, `${prefix}${entry.name}.`/* `group.${prefix}${entry.name}.` */);
+                    } else {
+                        const slots = entry.customSlots || [];
+                        slots.forEach(column => inputSlots.push({
+                            column: `input.${prefix}${entry.name}.${column}`,
+                            name: `input.${prefix}${entry.name}.${column}`
+                        }));
+                    }
+                });
+            }
+
             const { name } = this.$attrs;
+            const prefix = this.$attrs.slotPrefix || '';
             const colDef = this.$attrs.customSlots || [];
+            const t = colDef.map(column => ({
+                column: `${prefix}${name}.${column}`,
+                name: `input.${prefix}${name}.${column}`
+            }));
 
-            const t = colDef.map(column => ({ column: `${name}.${column}`, name: `input.${name}.${column}` }));
+            const tt = [];
+            if (this.$attrs.schema) {
+                slotMapping(tt, this.$attrs.schema, `${name}.`);
+            }
 
-            console.log(t);
-            return t;
+            const r = tt.concat(t);
+
+            console.log('FORM INPUT', this.$attrs.name, prefix, r, this.$attrs);
+            return r;
         }
     },
     destroyed() {

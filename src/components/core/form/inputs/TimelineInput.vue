@@ -25,17 +25,11 @@
           <template v-for="(columnDef, index) in customRender" v-slot:[columnDef.column]="{ data }">
             <!--
               @slot Custom table column data rendering.
-              @binding {number} columnKey Column key (Vue key attribute).
+              @binding {number} inputKey Column index (Vue key attribute).
               @binding {object} data Column data.
             -->
             <slot :name="columnDef.name" v-bind:inputKey="index" v-bind:data="data"></slot>
           </template>
-
-          <!-- Custom column rendering -->
-          <!-- Show direction as arrow pointing to correct direction -->
-          <!--template v-slot:table.angleDir="{ data }">
-            <v-icon :style="renderAzimuth(data)">mdi-arrow-up</v-icon>
-          </template-->
 
           <!-- Row data editing occurs here -->
           <template v-slot:editDialog="{ componentKey, editData, editChanges }">
@@ -59,13 +53,14 @@ import WheelInput from './WheelInput.vue';
 import DraalTimeline from '../../timeline/Timeline.vue';
 
 export default {
-    name: 'FocusTimeline',
+    name: 'TimelineInput',
     components: {
         DraalTimeline,
         WheelInput,
         ValidationProvider
     },
-    props: ['name', 'label', 'timelineWidths', 'value', 'maxZoom', 'dataRelInput', 'tableConfig', 'accessMethods', 'customSlots'],
+    props: ['name', 'label', 'timelineWidths', 'value', 'maxZoom', 'dataRelInput', 'tableConfig',
+        'accessMethods', 'customSlots', 'slotPrefix'],
     data() {
         return {
             // Changes in timeline are tracked via hidden input validation.
@@ -78,10 +73,9 @@ export default {
     computed: {
         customRender() {
             const colDef = this.customSlots || [];
-            const t = colDef.map(column => ({ column: `table.${column}`, name: `${this.name}.${column}` }));
-
-            console.log(t);
-            return t;
+            const prefix = this.slotPrefix || '';
+            console.log('TIMELINE', this.slotPrefix, prefix);
+            return colDef.map(column => ({ column: `table.${column}`, name: `${prefix}${this.name}.${column}` }));
         }
     },
     methods: {
@@ -94,10 +88,6 @@ export default {
         saveTimeline(timeline) {
             this.$emit('input', timeline);
             this.dummyModel = 0;
-        },
-
-        renderAzimuth(data) {
-            return `transform: rotate(${-data.angle}deg)`;
         }
     }
 };

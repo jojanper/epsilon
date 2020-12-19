@@ -45,6 +45,40 @@ export const SCHEMA = [
         renderMode: 'row',
         schema: [
             {
+                type: 'timeline',
+                name: 'focusTimeline2',
+                label: 'Timeline',
+                maxZoom: 15,
+                timelineWidths: [
+                    {
+                        width: 15,
+                        title: 'Timeline 15sec'
+                    }
+                ],
+                dataRelTarget: ['input'],
+                customSlots: ['angleDir'],
+                tableConfig: {
+                    // Custom rendering via template slot is provided for this data item
+                    customColumns: ['angleDir'],
+                    headers: HEADERS
+                },
+                accessMethods: {
+                    new() {
+                        return {
+                            angle: 0,
+                            zoom: 0
+                        };
+                    },
+
+                    save(source, data) {
+                        /* eslint-disable no-param-reassign */
+                        source.angle = data.angle;
+                        source.zoom = data.zoom;
+                        /* eslint-enable no-param-reassign */
+                    }
+                }
+            },
+            {
                 type: 'text',
                 placeholder: 'Enter device UUID 1',
                 label: 'Device ID',

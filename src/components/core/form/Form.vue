@@ -19,7 +19,11 @@
             -->
             <slot :name="columnDef.name" v-bind:inputKey="index" v-bind:data="data"></slot>
           </template>
-          <template v-slot:input.focusTimeline.angleDir2>FORM COMPONENT</template>
+
+          <template v-slot:input.group.row.focusTimeline2.angleDir>FORM</template>
+          <template v-slot:group.row.input.focusTimeline2.angleDir>FORM 2</template>
+          <template v-slot:input.group.row.input.focusTimeline2.angleDir>FORM 2</template>
+          <template v-slot:input.row.focusTimeline2.angleDir2>FORM 3</template>
         </draal-form-input>
 
         <div class="mt-3">
@@ -80,20 +84,34 @@ export default {
         appLang: appComputed.appLang,
 
         customRender() {
-            // const colDef = this.customSlots || [];
+            function slotMapping(inputSlots, schema, prefix) {
+                // console.log(schema);
+                schema.forEach(entry => {
+                    if (entry.schema && entry.schema.length) {
+                        slotMapping(inputSlots, entry.schema, `${prefix}${entry.name}.`/* `group.${prefix}${entry.name}.` */);
+                    } else {
+                        const slots = entry.customSlots || [];
+                        slots.forEach(column => inputSlots.push({
+                            column: `input.${prefix}${entry.name}.${column}`,
+                            name: `form.${prefix}${entry.name}.${column}`
+                        }));
+                    }
+                });
+            }
+            const inputSlots = [];
+            slotMapping(inputSlots, this.schema, '');
+            console.log(inputSlots);
+            return inputSlots;
 
-            const t = this.schema.flatMap(entry => {
+            /*
+            return this.schema.flatMap(entry => {
                 const slots = entry.customSlots || [];
-                console.log(entry.name, slots);
-                // return [];
                 return slots.map(column => ({
                     column: `input.${entry.name}.${column}`,
                     name: `form.${entry.name}.${column}`
                 }));
             });
-
-            console.log(t);
-            return t;
+            */
         }
     },
     watch: {
