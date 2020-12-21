@@ -72,7 +72,7 @@ export default {
                 shapes[0].x = ORIGINX;
                 shapes[0].y = SHAPE_ORIGINY;
 
-                const angle = decodeAngle(this.fieldValue.angle || 0);
+                const angle = decodeAngle(this.fieldValue ? this.fieldValue.angle || 0 : 0);
 
                 if (angle !== 0) {
                     const x = Math.round(MAXRADIUS * Math.cos(angle));
@@ -93,7 +93,7 @@ export default {
         }
     },
     mounted() {
-        const zoom = (this.fieldValue.zoom || 0) / this.zoomGain;
+        const zoom = (this.fieldValue ? this.fieldValue.zoom || 0 : 0) / this.zoomGain;
         this.zoomLevel = parseFloat(zoom, 10);
         this.img1Loaded = false;
         this.imageDown = new Image();

@@ -4,11 +4,20 @@
     v-bind="$attrs"
     v-on="$listeners"
     :data-rel-input="dataRel.asPipe()"
-  ></component>
+  >
+    <template v-for="(def, index) in slotsDef" v-slot:[def.childSlot]="{ data }">
+      <!--
+        @slot Custom input data rendering.
+        @binding {number} inputKey Input key (Vue key attribute).
+        @binding {object} data Input data.
+      -->
+      <slot :name="def.componentSlot" v-bind:inputKey="index" v-bind:data="data"></slot>
+    </template>
+  </component>
 </template>
 
 <script>
-import { BaseObservableObject } from '@/common/utils';
+import { BaseObservableObject, slotMapping } from '@/common/utils';
 
 import { getFormInputName } from './input';
 import TextInput from './inputs/TextInput.vue';
@@ -17,9 +26,8 @@ import CheckboxInput from './inputs/CheckboxInput.vue';
 import RadioInput from './inputs/RadioInput.vue';
 import FileOpenInput from './inputs/FileOpenInput.vue';
 import RemoteFileSaveInput from './inputs/RemoteFileSaveInput.vue';
-import WheelInput from './inputs/WheelInput.vue';
 import FileQueryInput from './inputs/FileQueryInput.vue';
-import FocusTimeline from './inputs/FocusTimeline.vue';
+import TimelineInput from './inputs/TimelineInput.vue';
 import GroupInput from './GroupInput.vue';
 
 /**
@@ -34,8 +42,7 @@ export default {
         SelectInput,
         CheckboxInput,
         RadioInput,
-        WheelInput,
-        FocusTimeline,
+        TimelineInput,
         FileOpenInput,
         RemoteFileSaveInput,
         FileQueryInput,
@@ -44,7 +51,8 @@ export default {
     data() {
         return {
             // Data changes from other inputs are communicated via Subject
-            dataRel: BaseObservableObject.createAsSubject()
+            dataRel: BaseObservableObject.createAsSubject(),
+            slotsDef: this.getSlots()
         };
     },
     mounted() {
@@ -67,6 +75,29 @@ export default {
         this.dataRel.close();
     },
     methods: {
+        getSlots() {
+            const { name } = this.$attrs;
+            const prefix = this.$attrs.slotPrefix || '';
+            const colDef = this.$attrs.customSlots || [];
+            const slots = colDef.map(column => ({
+                childSlot: `${prefix}${name}.${column}`,
+                componentSlot: `input.${prefix}${name}.${column}`
+            }));
+
+            // In case this input is group in, locate all slots under the group schema.
+            // Otherwise the child to parent slot mapping will be incomplete
+            if (this.$attrs.schema) {
+                // The input components expose the slots with 'input' prefix
+                // and the parent component (group input) will also expose
+                // its own slots using the same name. This is because group input
+                // is just a thin rendering wrapper between form input and the
+                // actual input component implementation.
+                slotMapping(slots, this.$attrs.schema, `${name}.`, 'input', 'input');
+            }
+
+            return slots;
+        },
+
         // Map form input type into internal component name
         getType(type) {
             return getFormInputName(type);

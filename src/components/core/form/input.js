@@ -38,7 +38,7 @@ INPUT_TYPES[WHEEL_INPUT] = 'WheelInput';
 INPUT_TYPES[FILE_OPEN_INPUT] = 'FileOpenInput';
 INPUT_TYPES[REMOTE_FILE_SAVE_INPUT] = 'RemoteFileSaveInput';
 INPUT_TYPES[FILE_DATA_QUERY_INPUT] = 'FileQueryInput';
-INPUT_TYPES[TIMELINE_INPUT] = 'FocusTimeline';
+INPUT_TYPES[TIMELINE_INPUT] = 'TimelineInput';
 INPUT_TYPES[GROUP_INPUT_WRAPPER] = 'GroupInput';
 
 export function getFormInputName(inType) {

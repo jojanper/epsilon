@@ -5,14 +5,26 @@
         :key="index"
         :value="value[field.name]"
         v-bind="field"
+        v-bind:slotPrefix="`${name}.`"
         v-on="listeners"
         @input="updateForm(field.name, $event)"
-      ></draal-form-input>
+      >
+        <template v-for="(def, index) in slotsDef" v-slot:[def.childSlot]="{ data }">
+          <!--
+            @slot Custom input data rendering.
+            @binding {number} inputKey Input key (Vue key attribute).
+            @binding {object} data Input data.
+          -->
+          <slot :name="def.componentSlot" v-bind:inputKey="index" v-bind:data="data"></slot>
+        </template>
+      </draal-form-input>
     </div>
   </div>
 </template>
 
 <script>
+import { slotMapping } from '@/common/utils';
+
 /**
  * Form inputs are rendered in a row element (side by side).
  *
@@ -55,6 +67,9 @@ export default {
         }
     },
     data() {
+        const slotsDef = [];
+        slotMapping(slotsDef, this.schema, `${this.name}.`, 'input', 'input');
+
         const listeners = {
             ...this.$listeners,
 
@@ -71,7 +86,8 @@ export default {
         delete listeners.input;
 
         return {
-            listeners
+            listeners,
+            slotsDef
         };
     },
     methods: {

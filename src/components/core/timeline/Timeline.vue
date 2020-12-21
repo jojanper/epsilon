@@ -418,7 +418,7 @@ export default {
 
         timelineEdit(id) {
             const index = this.getTimelineIndex(id);
-            this.editAction(this.timelines[index]);
+            this.editAction(index);
         },
 
         getTimelineIndex(id) {

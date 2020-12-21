@@ -10,7 +10,16 @@
           v-bind="field"
           @form-input-help="formInputHelp"
           @data-rel-update="registerUpdateHandler"
-        ></draal-form-input>
+        >
+          <template v-for="(def, index) in slotsDef" v-slot:[def.childSlot]="{ data }">
+            <!--
+                @slot Custom input data rendering.
+                @binding {number} inputKey Input key (Vue key attribute).
+                @binding {object} data Input data.
+            -->
+            <slot :name="def.componentSlot" v-bind:inputKey="index" v-bind:data="data"></slot>
+          </template>
+        </draal-form-input>
 
         <div class="mt-3">
           <v-btn
@@ -39,7 +48,7 @@
 import { ValidationObserver } from 'vee-validate';
 
 import { appComputed } from '@/store/helpers';
-import { getDataField, resetDataBySchema } from '@/common/utils';
+import { getDataField, resetDataBySchema, slotMapping } from '@/common/utils';
 
 import DraalFormInput from './FormInput.vue';
 import DraalDialog from '../utils/Dialog.vue';
@@ -53,6 +62,9 @@ export default {
     },
     props: ['schema', 'value', 'options', 'reset'],
     data() {
+        const slotsDef = [];
+        slotMapping(slotsDef, this.schema, '', 'input', 'form');
+
         return {
             helpText: {
                 title: null,
@@ -60,7 +72,8 @@ export default {
             },
             helpDialog: false,
             formData: this.value || {},
-            componentKey: 0
+            componentKey: 0,
+            slotsDef
         };
     },
     created() {
