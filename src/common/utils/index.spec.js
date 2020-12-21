@@ -1,7 +1,7 @@
 /* eslint-disable no-restricted-syntax */
 import {
     getTimestamp, ansiColors, getContentDispositionFilename,
-    getDataField, resetDataBySchema
+    getDataField, resetDataBySchema, slotMapping
 } from './index';
 
 describe('utils', () => {
@@ -70,32 +70,34 @@ describe('utils', () => {
         expect(getDataField(data, 'third', 'name')).toBeNull();
     });
 
-    it('resetDataBySchema', () => {
-        const schema = [
-            {
-                type: 'text',
-                name: 'a'
-            },
-            {
-                type: 'text',
-                name: 'b'
-            },
-            {
-                type: 'group',
-                name: 'group',
-                schema: [
-                    {
-                        type: 'radio',
-                        name: 'c'
-                    }
-                ]
-            },
-            {
-                type: 'timeline',
-                name: 't'
-            }
-        ];
+    const SCHEMA = [
+        {
+            type: 'text',
+            name: 'a'
+        },
+        {
+            type: 'text',
+            name: 'b'
+        },
+        {
+            type: 'group',
+            name: 'group',
+            schema: [
+                {
+                    type: 'radio',
+                    name: 'c',
+                    customSlots: ['dataR']
+                }
+            ]
+        },
+        {
+            type: 'timeline',
+            name: 't',
+            customSlots: ['dataT']
+        }
+    ];
 
+    it('resetDataBySchema', () => {
         const data = {
             a: 'a',
             b: 'b',
@@ -107,7 +109,7 @@ describe('utils', () => {
 
         const resetNames = [];
 
-        resetDataBySchema(schema, data, '', name => {
+        resetDataBySchema(SCHEMA, data, '', name => {
             resetNames.push(name);
             return undefined;
         });
@@ -117,5 +119,21 @@ describe('utils', () => {
         expect(data.b).toEqual(undefined);
         expect(data.group.c).toEqual(undefined);
         expect(data.t.length).toEqual(0);
+    });
+
+    it('slotMapping', () => {
+        const slots = [];
+        slotMapping(slots, SCHEMA, '', 'input', 'form');
+
+        expect(slots).toEqual([
+            {
+                childSlot: 'input.group.c.dataR',
+                componentSlot: 'form.group.c.dataR'
+            },
+            {
+                childSlot: 'input.t.dataT',
+                componentSlot: 'form.t.dataT'
+            }
+        ]);
     });
 });
