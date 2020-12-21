@@ -5,11 +5,11 @@
         :key="index"
         :value="value[field.name]"
         v-bind="field"
-        v-bind:slotPrefix="slotPrefix"
+        v-bind:slotPrefix="`${name}.`"
         v-on="listeners"
         @input="updateForm(field.name, $event)"
       >
-        <template v-for="(def, index) in customRender" v-slot:[def.childSlot]="{ data }">
+        <template v-for="(def, index) in slotsDef" v-slot:[def.childSlot]="{ data }">
           <!--
             @slot Custom input data rendering.
             @binding {number} inputKey Input key (Vue key attribute).
@@ -67,6 +67,9 @@ export default {
         }
     },
     data() {
+        const slotsDef = [];
+        slotMapping(slotsDef, this.schema, `${this.name}.`, 'input', 'input');
+
         const listeners = {
             ...this.$listeners,
 
@@ -84,15 +87,8 @@ export default {
 
         return {
             listeners,
-            slotPrefix: `${this.name}.`
+            slotsDef
         };
-    },
-    computed: {
-        customRender() {
-            const slots = [];
-            slotMapping(slots, this.schema, `${this.name}.`, 'input', 'input');
-            return slots;
-        }
     },
     methods: {
         isRowMode() {

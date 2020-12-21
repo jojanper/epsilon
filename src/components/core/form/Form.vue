@@ -11,7 +11,7 @@
           @form-input-help="formInputHelp"
           @data-rel-update="registerUpdateHandler"
         >
-          <template v-for="(def, index) in customRender" v-slot:[def.childSlot]="{ data }">
+          <template v-for="(def, index) in slotsDef" v-slot:[def.childSlot]="{ data }">
             <!--
                 @slot Custom input data rendering.
                 @binding {number} inputKey Input key (Vue key attribute).
@@ -62,6 +62,9 @@ export default {
     },
     props: ['schema', 'value', 'options', 'reset'],
     data() {
+        const slotsDef = [];
+        slotMapping(slotsDef, this.schema, '', 'input', 'form');
+
         return {
             helpText: {
                 title: null,
@@ -69,20 +72,15 @@ export default {
             },
             helpDialog: false,
             formData: this.value || {},
-            componentKey: 0
+            componentKey: 0,
+            slotsDef
         };
     },
     created() {
         this.dataRelHandlers = {};
     },
     computed: {
-        appLang: appComputed.appLang,
-
-        customRender() {
-            const inputSlots = [];
-            slotMapping(inputSlots, this.schema, '', 'input', 'form');
-            return inputSlots;
-        }
+        appLang: appComputed.appLang
     },
     watch: {
         appLang() {

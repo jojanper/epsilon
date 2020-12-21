@@ -5,7 +5,7 @@
     v-on="$listeners"
     :data-rel-input="dataRel.asPipe()"
   >
-    <template v-for="(def, index) in customRender" v-slot:[def.childSlot]="{ data }">
+    <template v-for="(def, index) in slotsDef" v-slot:[def.childSlot]="{ data }">
       <!--
         @slot Custom input data rendering.
         @binding {number} inputKey Input key (Vue key attribute).
@@ -51,7 +51,8 @@ export default {
     data() {
         return {
             // Data changes from other inputs are communicated via Subject
-            dataRel: BaseObservableObject.createAsSubject()
+            dataRel: BaseObservableObject.createAsSubject(),
+            slotsDef: this.getSlots()
         };
     },
     mounted() {
@@ -69,8 +70,12 @@ export default {
                 this.dataUpdate.bind(this));
         }
     },
-    computed: {
-        customRender() {
+    destroyed() {
+        // No more events emitted from object
+        this.dataRel.close();
+    },
+    methods: {
+        getSlots() {
             const { name } = this.$attrs;
             const prefix = this.$attrs.slotPrefix || '';
             const colDef = this.$attrs.customSlots || [];
@@ -91,13 +96,8 @@ export default {
             }
 
             return slots;
-        }
-    },
-    destroyed() {
-        // No more events emitted from object
-        this.dataRel.close();
-    },
-    methods: {
+        },
+
         // Map form input type into internal component name
         getType(type) {
             return getFormInputName(type);
