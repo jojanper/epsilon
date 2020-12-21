@@ -9,23 +9,22 @@
         v-on="listeners"
         @input="updateForm(field.name, $event)"
       >
-        <template v-for="(columnDef, index) in customRender" v-slot:[columnDef.column]="{ data }">
+        <template v-for="(def, index) in customRender" v-slot:[def.childSlot]="{ data }">
           <!--
-        @slot Custom input data rendering.
-        @binding {number} inputKey Input key (Vue key attribute).
-        @binding {object} data Input data.
+            @slot Custom input data rendering.
+            @binding {number} inputKey Input key (Vue key attribute).
+            @binding {object} data Input data.
           -->
-          <slot :name="columnDef.name" v-bind:inputKey="index" v-bind:data="data"></slot>
+          <slot :name="def.componentSlot" v-bind:inputKey="index" v-bind:data="data"></slot>
         </template>
-
-        <template v-slot:input.row.focusTimeline2.angleDir2>GROUP {{ slotPrefix }}</template>
-        <template v-slot:row.focusTimeline2.angleDir2>GROUP 2</template>
       </draal-form-input>
     </div>
   </div>
 </template>
 
 <script>
+import { slotMapping } from '@/common/utils';
+
 /**
  * Form inputs are rendered in a row element (side by side).
  *
@@ -90,35 +89,9 @@ export default {
     },
     computed: {
         customRender() {
-            function slotMapping(inputSlots, schema, prefix) {
-                // console.log(schema);
-                schema.forEach(entry => {
-                    if (entry.schema && entry.schema.length) {
-                        slotMapping(inputSlots, entry.schema, `${prefix}${entry.name}.`/* `group.${prefix}${entry.name}.` */);
-                    } else {
-                        const slots = entry.customSlots || [];
-                        slots.forEach(column => inputSlots.push({
-                            column: `input.${prefix}${entry.name}.${column}`,
-                            name: `input.${prefix}${entry.name}.${column}`
-                        }));
-                    }
-                });
-            }
-
-            /*
-            const t = this.schema.flatMap(entry => {
-                const colDef = entry.customSlots || [];
-                return colDef.map(column => ({
-                    column: `input.${this.name}.${entry.name}.${column}`,
-                    name: `input.${this.name}.${entry.name}.${column}`
-                }));
-            });
-            */
-            const t = [];
-            slotMapping(t, this.schema, `${this.name}.`);
-
-            console.log('GROUP INPUT', this.name, this.slotPrefix, t);
-            return t;
+            const slots = [];
+            slotMapping(slots, this.schema, `${this.name}.`, 'input', 'input');
+            return slots;
         }
     },
     methods: {

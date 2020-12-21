@@ -14,8 +14,7 @@
             :reset="resetField"
           >
             <template v-slot:form.row.focusTimeline2.angleDir="{ data }">
-              PARENT2
-              <!--v-icon :style="renderAzimuth(data)">mdi-arrow-up</v-icon-->
+              <v-icon :style="renderAzimuth(data)">mdi-arrow-up</v-icon>
             </template>
 
             <template v-slot:form.focusTimeline.angleDir="{ data }">

@@ -5,26 +5,19 @@
     v-on="$listeners"
     :data-rel-input="dataRel.asPipe()"
   >
-    <template v-for="(columnDef, index) in customRender" v-slot:[columnDef.column]="{ data }">
+    <template v-for="(def, index) in customRender" v-slot:[def.childSlot]="{ data }">
       <!--
         @slot Custom input data rendering.
         @binding {number} inputKey Input key (Vue key attribute).
         @binding {object} data Input data.
       -->
-      <slot :name="columnDef.name" v-bind:inputKey="index" v-bind:data="data"></slot>
+      <slot :name="def.componentSlot" v-bind:inputKey="index" v-bind:data="data"></slot>
     </template>
-
-    <template v-slot:group.row.focusTimeline2.angleDir2>FORM INPUT {{ $attrs.slotPrefix }}</template>
-    <template v-slot:input.row.focusTimeline2.angleDir2>FORM INPUT 2 {{ $attrs.slotPrefix }}</template>
-
-    <!--template v-slot:input.row.focusTimeline2.angleDir>
-      <slot name="input.row.focusTimeline2.angleDir"></slot>
-    </template-->
   </component>
 </template>
 
 <script>
-import { BaseObservableObject } from '@/common/utils';
+import { BaseObservableObject, slotMapping } from '@/common/utils';
 
 import { getFormInputName } from './input';
 import TextInput from './inputs/TextInput.vue';
@@ -62,7 +55,6 @@ export default {
         };
     },
     mounted() {
-        // console.log(this.$attrs);
         if (this.$attrs.dataRelTarget) {
             /**
              * Request data notifications from related input components
@@ -79,38 +71,26 @@ export default {
     },
     computed: {
         customRender() {
-            function slotMapping(inputSlots, schema, prefix) {
-                // console.log(schema);
-                schema.forEach(entry => {
-                    if (entry.schema && entry.schema.length) {
-                        slotMapping(inputSlots, entry.schema, `${prefix}${entry.name}.`/* `group.${prefix}${entry.name}.` */);
-                    } else {
-                        const slots = entry.customSlots || [];
-                        slots.forEach(column => inputSlots.push({
-                            column: `input.${prefix}${entry.name}.${column}`,
-                            name: `input.${prefix}${entry.name}.${column}`
-                        }));
-                    }
-                });
-            }
-
             const { name } = this.$attrs;
             const prefix = this.$attrs.slotPrefix || '';
             const colDef = this.$attrs.customSlots || [];
-            const t = colDef.map(column => ({
-                column: `${prefix}${name}.${column}`,
-                name: `input.${prefix}${name}.${column}`
+            const slots = colDef.map(column => ({
+                childSlot: `${prefix}${name}.${column}`,
+                componentSlot: `input.${prefix}${name}.${column}`
             }));
 
-            const tt = [];
+            // In case this input is group in, locate all slots under the group schema.
+            // Otherwise the child to parent slot mapping will be incomplete
             if (this.$attrs.schema) {
-                slotMapping(tt, this.$attrs.schema, `${name}.`);
+                // The input components expose the slots with 'input' prefix
+                // and the parent component (group input) will also expose
+                // its own slots using the same name. This is because group input
+                // is just a thin rendering wrapper between form input and the
+                // actual input component implementation.
+                slotMapping(slots, this.$attrs.schema, `${name}.`, 'input', 'input');
             }
 
-            const r = tt.concat(t);
-
-            console.log('FORM INPUT', this.$attrs.name, prefix, r, this.$attrs);
-            return r;
+            return slots;
         }
     },
     destroyed() {

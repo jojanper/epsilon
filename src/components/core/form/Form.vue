@@ -11,19 +11,14 @@
           @form-input-help="formInputHelp"
           @data-rel-update="registerUpdateHandler"
         >
-          <template v-for="(columnDef, index) in customRender" v-slot:[columnDef.column]="{ data }">
+          <template v-for="(def, index) in customRender" v-slot:[def.childSlot]="{ data }">
             <!--
                 @slot Custom input data rendering.
                 @binding {number} inputKey Input key (Vue key attribute).
                 @binding {object} data Input data.
             -->
-            <slot :name="columnDef.name" v-bind:inputKey="index" v-bind:data="data"></slot>
+            <slot :name="def.componentSlot" v-bind:inputKey="index" v-bind:data="data"></slot>
           </template>
-
-          <template v-slot:input.group.row.focusTimeline2.angleDir>FORM</template>
-          <template v-slot:group.row.input.focusTimeline2.angleDir>FORM 2</template>
-          <template v-slot:input.group.row.input.focusTimeline2.angleDir>FORM 2</template>
-          <template v-slot:input.row.focusTimeline2.angleDir2>FORM 3</template>
         </draal-form-input>
 
         <div class="mt-3">
@@ -53,7 +48,7 @@
 import { ValidationObserver } from 'vee-validate';
 
 import { appComputed } from '@/store/helpers';
-import { getDataField, resetDataBySchema } from '@/common/utils';
+import { getDataField, resetDataBySchema, slotMapping } from '@/common/utils';
 
 import DraalFormInput from './FormInput.vue';
 import DraalDialog from '../utils/Dialog.vue';
@@ -84,34 +79,9 @@ export default {
         appLang: appComputed.appLang,
 
         customRender() {
-            function slotMapping(inputSlots, schema, prefix) {
-                // console.log(schema);
-                schema.forEach(entry => {
-                    if (entry.schema && entry.schema.length) {
-                        slotMapping(inputSlots, entry.schema, `${prefix}${entry.name}.`/* `group.${prefix}${entry.name}.` */);
-                    } else {
-                        const slots = entry.customSlots || [];
-                        slots.forEach(column => inputSlots.push({
-                            column: `input.${prefix}${entry.name}.${column}`,
-                            name: `form.${prefix}${entry.name}.${column}`
-                        }));
-                    }
-                });
-            }
             const inputSlots = [];
-            slotMapping(inputSlots, this.schema, '');
-            console.log(inputSlots);
+            slotMapping(inputSlots, this.schema, '', 'input', 'form');
             return inputSlots;
-
-            /*
-            return this.schema.flatMap(entry => {
-                const slots = entry.customSlots || [];
-                return slots.map(column => ({
-                    column: `input.${entry.name}.${column}`,
-                    name: `form.${entry.name}.${column}`
-                }));
-            });
-            */
         }
     },
     watch: {

@@ -22,13 +22,13 @@
           :maxZoom="maxZoom"
           :data-provider="dataRelInput"
         >
-          <template v-for="(columnDef, index) in customRender" v-slot:[columnDef.column]="{ data }">
+          <template v-for="(def, index) in customRender" v-slot:[def.childSlot]="{ data }">
             <!--
               @slot Custom table column data rendering.
               @binding {number} inputKey Column index (Vue key attribute).
               @binding {object} data Column data.
             -->
-            <slot :name="columnDef.name" v-bind:inputKey="index" v-bind:data="data"></slot>
+            <slot :name="def.componentSlot" v-bind:inputKey="index" v-bind:data="data"></slot>
           </template>
 
           <!-- Row data editing occurs here -->
@@ -74,8 +74,7 @@ export default {
         customRender() {
             const colDef = this.customSlots || [];
             const prefix = this.slotPrefix || '';
-            console.log('TIMELINE', this.slotPrefix, prefix);
-            return colDef.map(column => ({ column: `table.${column}`, name: `${prefix}${this.name}.${column}` }));
+            return colDef.map(column => ({ childSlot: `table.${column}`, componentSlot: `${prefix}${this.name}.${column}` }));
         }
     },
     methods: {
