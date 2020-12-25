@@ -43,6 +43,14 @@ export const SCHEMA = [
         type: 'group-input',
         name: 'row',
         renderMode: 'row',
+        dividerStart: {
+            label: 'Group input',
+            class: 'w-75 mb-10'
+        },
+        dividerEnd: {
+            label: 'Group input end',
+            class: 'w-75 mb-10'
+        },
         schema: [
             {
                 type: 'timeline',
@@ -158,6 +166,13 @@ export const SCHEMA = [
         rules: 'required'
     },
     {
+        type: 'remote-file-save',
+        placeholder: 'Click to select location of the output MP4 file or drag file to icon',
+        label: 'Recording output MP4 file',
+        name: 'output2',
+        rules: 'required'
+    },
+    {
         type: 'file-data-query',
         placeholder: 'Click to select the file or drag file to icon',
         label: 'ID file',
@@ -169,7 +184,18 @@ export const SCHEMA = [
         customLabel: 'Enter your ID',
         dataKey: 'uuid',
         selectKey: 'uuid',
-        queryRule: 'filequery'
+        queryRule: 'filequery',
+        dividerEnd: {
+            label: 'ID file end',
+            class: 'w-50 mb-10'
+        }
+    },
+    {
+        type: 'text',
+        placeholder: 'Enter notes',
+        label: 'Comments',
+        name: 'comments',
+        rules: 'required'
     },
     {
         type: 'checkbox',
@@ -184,6 +210,34 @@ export const SCHEMA = [
                 + 'processing to suit the wind noise conditions. Clearer audio even when '
                 + 'conditions aren’t.'
         },
+        rules: 'required'
+    },
+    {
+        type: 'text',
+        placeholder: 'Enter notes',
+        label: 'Comments',
+        name: 'comments2',
+        rules: 'required'
+    },
+    {
+        type: 'radio',
+        name: 'radio',
+        label: 'Radio selection',
+        data: [
+            {
+                label: 'Option 1'
+            },
+            {
+                label: 'Option 2'
+            }
+        ],
+        rules: 'required'
+    },
+    {
+        type: 'text',
+        placeholder: 'Enter notes',
+        label: 'Comments',
+        name: 'comments2',
         rules: 'required'
     },
     {
@@ -235,19 +289,5 @@ export const SCHEMA = [
                 /* eslint-enable no-param-reassign */
             }
         }
-    },
-    {
-        type: 'radio',
-        name: 'radio',
-        label: 'Radio selection',
-        data: [
-            {
-                label: 'Option 1'
-            },
-            {
-                label: 'Option 2'
-            }
-        ],
-        rules: 'required'
     }
 ];

@@ -1,72 +1,84 @@
 <template>
-  <ValidationObserver ref="observer">
-    <ValidationProvider ref="provider" v-slot="{ errors }" :name="name" :rules="inputRules">
-      <v-text-field
-        class="remote-input"
-        v-model="fieldValue"
-        :error-messages="errors"
-        :label="label"
-        :placeholder="placeholder"
-        @click="fileDialog=true"
-        :readonly="true"
-      >
-        <input-help
-          v-if="help"
-          slot="append-outer"
-          @form-input-help="$emit('form-input-help', name)"
-        ></input-help>
-        <draal-file-drop
-          @fileDrop="onDrop"
-          slot="append"
-          :title="dropTitle || $t('form.remoteInputDropTitle')"
-        ></draal-file-drop>
-      </v-text-field>
-    </ValidationProvider>
+  <div class="form-input file-query-input-wrapper">
+    <div class="w-100 file-query-input">
+      <ValidationObserver ref="observer">
+        <div class="row m-0 p-0">
+          <div class="col-sm m-0 p-0">
+            <ValidationProvider ref="provider" v-slot="{ errors }" :name="name" :rules="inputRules">
+              <v-text-field
+                v-model="fieldValue"
+                :error-messages="errors"
+                :label="label"
+                :placeholder="placeholder"
+                @click="fileDialog=true"
+                :readonly="true"
+              >
+                <input-help
+                  v-if="help"
+                  slot="append-outer"
+                  @form-input-help="$emit('form-input-help', name)"
+                ></input-help>
+                <draal-file-drop
+                  @fileDrop="onDrop"
+                  slot="append"
+                  :title="dropTitle || $t('form.remoteInputDropTitle')"
+                ></draal-file-drop>
+              </v-text-field>
+            </ValidationProvider>
+          </div>
+        </div>
 
-    <div class="row p-0 pb-1" v-if="fieldValue">
-      <div class="col">
-        <draal-spinner
-          :state="processing"
-          width="40"
-          height="40"
-          type="spinner-3"
-          class="float-left"
-        ></draal-spinner>
-        <ValidationProvider name="selected" v-if="listData.length">
-          <select-input
-            :placeholder="selectPlaceholder"
-            :value="selectedData"
-            :selectlist="listData"
-            name="select-list"
-            :label="selectLabel"
-            :data-key="dataKey"
-            @input="setSelectedData"
-            rules="required"
-            simple="true"
-          ></select-input>
-        </ValidationProvider>
-      </div>
+        <div class="row mt-0 mb-0 p-0" :class="fieldValue ? '' : 'd-none'" v-if="fieldValue">
+          <div class="col-sm mt-0 pt-0 pb-0">
+            <ValidationProvider name="selected" v-if="listData.length">
+              <select-input
+                classes=" "
+                :placeholder="selectPlaceholder"
+                :value="selectedData"
+                :selectlist="listData"
+                name="select-list"
+                :label="selectLabel"
+                :data-key="dataKey"
+                @input="setSelectedData"
+                rules="required"
+                simple="true"
+              ></select-input>
+            </ValidationProvider>
+          </div>
 
-      <div class="col">
-        <ValidationProvider name="custom" v-if="customId" v-slot="{ errors }" rules="required">
-          <v-text-field
-            v-model="customValue"
-            :label="customLabel"
-            :error-messages="errors"
-            :placeholder="customPlaceholder"
-            @input="setCustomValue"
-          ></v-text-field>
-        </ValidationProvider>
-      </div>
+          <div class="col-sm mt-0 pt-0 pb-0">
+            <ValidationProvider name="custom" v-if="customId" v-slot="{ errors }" rules="required">
+              <v-text-field
+                v-model="customValue"
+                :label="customLabel"
+                :error-messages="errors"
+                :placeholder="customPlaceholder"
+                @input="setCustomValue"
+              ></v-text-field>
+            </ValidationProvider>
+          </div>
+        </div>
+
+        <div class="row mt-0 mb-0 p-0" :class="processing ? '' : 'd-none'">
+          <draal-spinner
+            :state="processing"
+            width="40"
+            height="40"
+            type="spinner-3"
+            class="float-left mb-3 ml-1"
+          ></draal-spinner>
+        </div>
+
+        <!-- File dialog is also hidden -->
+        <draal-file-dialog v-model="fileDialog" @file-select="onDrop"></draal-file-dialog>
+      </ValidationObserver>
     </div>
-
-    <!-- File dialog is also hidden -->
-    <draal-file-dialog v-model="fileDialog" @file-select="onDrop"></draal-file-dialog>
-  </ValidationObserver>
+  </div>
 </template>
 
 <script>
 import { ValidationProvider, ValidationObserver } from 'vee-validate';
+import { VInput } from 'vuetify/lib';
 
 import InputHelp from './InputHelp.vue';
 import SelectInput from './SelectInput.vue';
@@ -91,6 +103,7 @@ import DraalSpinner from '@/components/core/utils/Spinner.vue';
  */
 export default {
     name: 'FileQueryInput',
+    extends: VInput,
     components: {
         ValidationProvider,
         ValidationObserver,

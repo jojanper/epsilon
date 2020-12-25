@@ -2,6 +2,7 @@
   <div v-if="isRowMode()" class="row">
     <div class="ml-auto col-md m-0" v-for="(field, index) in schema" :key="index">
       <draal-form-input
+        class="mt-0 pt-0 pb-2"
         :key="index"
         :value="value[field.name]"
         v-bind="field"

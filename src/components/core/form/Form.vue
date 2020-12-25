@@ -77,6 +77,7 @@ export default {
         };
     },
     created() {
+        this.timerId = null;
         this.dataRelHandlers = {};
     },
     computed: {
@@ -95,6 +96,11 @@ export default {
 
         // Update form data
         updateForm(fieldName, value, ext) {
+            clearTimeout(this.timerId);
+            this.timerId = setTimeout(() => {
+                console.log('DEBOUNCED');
+            }, 100);
+
             this.$set(this.formData, fieldName, value);
 
             // Name of actual target. The field name is high level name,

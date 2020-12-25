@@ -57,7 +57,7 @@ export default {
     data() {
         const schema = [...SCHEMA];
 
-        schema[5].dataQuery = this.dataQuery.bind(this);
+        schema[6].dataQuery = this.dataQuery.bind(this);
 
         return {
             data: null,
@@ -67,6 +67,7 @@ export default {
                 bitrate: null,
                 input: null,
                 output: null,
+                comment: null,
                 windscreen: false,
                 focusTimeline: [],
                 row: {},

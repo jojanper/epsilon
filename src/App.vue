@@ -177,7 +177,6 @@ export default {
     text-align: center;
 }
 .container {
-    //min-height: 400px;
     padding-bottom: 60px;
 }
 </style>
@@ -191,6 +190,16 @@ export default {
     -webkit-box-shadow: none !important;
     box-shadow: none !important;
 }
+.v-messages {
+    padding-bottom: 15px !important;
+}
+.file-query-input-wrapper {
+    .file-query-input {
+        top: -15px;
+        position: relative;
+    }
+}
+
 .router-link-exact-active,
 .router-link-active {
     font-weight: bold;

@@ -1,19 +1,35 @@
 <template>
-  <component
-    :is="getType($attrs.type)"
-    v-bind="$attrs"
-    v-on="$listeners"
-    :data-rel-input="dataRel.asPipe()"
-  >
-    <template v-for="(def, index) in slotsDef" v-slot:[def.childSlot]="{ data }">
-      <!--
+  <div>
+    <hr
+      v-if="$attrs.dividerStart"
+      :data-content="$attrs.dividerStart.label"
+      class="form-input-divider mx-auto"
+      :class="$attrs.dividerStart.label ? `f-div-input ${$attrs.dividerStart.class}` : `hr-simple-text ${$attrs.dividerStart.class}`"
+    />
+
+    <component
+      :is="getType($attrs.type)"
+      v-bind="$attrs"
+      v-on="$listeners"
+      :data-rel-input="dataRel.asPipe()"
+    >
+      <template v-for="(def, index) in slotsDef" v-slot:[def.childSlot]="{ data }">
+        <!--
         @slot Custom input data rendering.
         @binding {number} inputKey Input key (Vue key attribute).
         @binding {object} data Input data.
-      -->
-      <slot :name="def.componentSlot" v-bind:inputKey="index" v-bind:data="data"></slot>
-    </template>
-  </component>
+        -->
+        <slot :name="def.componentSlot" v-bind:inputKey="index" v-bind:data="data"></slot>
+      </template>
+    </component>
+
+    <hr
+      v-if="$attrs.dividerEnd"
+      :data-content="$attrs.dividerEnd.label"
+      class="form-input-divider mx-auto"
+      :class="$attrs.dividerEnd.label ? `f-div-input ${$attrs.dividerEnd.class}` : `hr-simple-text ${$attrs.dividerEnd.class}`"
+    />
+  </div>
 </template>
 
 <script>
@@ -110,3 +126,32 @@ export default {
     }
 };
 </script>
+
+<style lang="scss" scoped>
+hr {
+    position: relative;
+    top: 5px;
+
+    .f-div-input, .hr-simple-text {
+        position: relative;
+        border: none;
+        height: 1px;
+        background: #999;
+    }
+}
+
+hr.f-div-input::before {
+    content: attr(data-content);
+    display: inline-block;
+    background: #fff;
+    font-weight: bold;
+    font-size: 0.85rem;
+    color: #999;
+    border-radius: 30rem;
+    padding: 0.2rem 2rem;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+</style>
