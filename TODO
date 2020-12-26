@@ -26,3 +26,9 @@ Some thoughts for further development:
 
   https://github.com/PanJiaChen/vue-element-admin
   Store modules
+
+- Audio waveform rendering
+- Form input debounce
+- Document form input props
+- Form related unit tests
+- Load JSON from file input

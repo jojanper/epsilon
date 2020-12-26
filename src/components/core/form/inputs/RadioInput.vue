@@ -1,6 +1,7 @@
 <template>
   <ValidationProvider v-slot="{ errors, required }" :name="name" :rules="rules">
     <v-radio-group
+      class="form-input mt-0 pt-0 pb-2"
       v-model="fieldValue"
       light
       :value="fieldValue"

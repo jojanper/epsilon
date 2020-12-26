@@ -1,6 +1,7 @@
 <template>
   <ValidationProvider v-slot="{ errors }" :name="name" :rules="rules">
     <v-select
+      :class="cls"
       v-if="simple"
       v-model="fieldValue"
       :error-messages="errors"
@@ -15,6 +16,7 @@
     </v-select>
     <v-autocomplete
       v-else
+      :class="cls"
       v-model="fieldValue"
       :error-messages="errors"
       :label="label"
@@ -40,13 +42,14 @@ export default {
         ValidationProvider,
         InputHelp
     },
-    props: ['placeholder', 'label', 'name', 'value', 'rules', 'selectlist', 'help', 'dataKey', 'simple'],
+    props: ['placeholder', 'label', 'name', 'value', 'rules', 'selectlist', 'help', 'dataKey', 'simple', 'classes'],
     data() {
         const attrs = this.dataKey ? { 'return-object': true } : {};
 
         return {
             attrs,
-            fieldValue: this.value
+            fieldValue: this.value,
+            cls: this.classes || 'form-input mt-0 pt-0 pb-2'
         };
     }
 };
