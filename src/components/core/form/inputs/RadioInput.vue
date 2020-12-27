@@ -1,11 +1,11 @@
 <template>
   <ValidationProvider v-slot="{ errors, required }" :name="name" :rules="rules">
     <v-radio-group
-      class="form-input mt-0 pt-0 pb-2"
+      :class="classes"
       v-model="fieldValue"
       light
       :value="fieldValue"
-      :error="isRequired(required)"
+      :error="isRequiredRadio(required)"
       :label="label"
       :error-messages="errors"
       @change="$emit('input', fieldValue)"
@@ -23,21 +23,15 @@
 <script>
 import { ValidationProvider } from 'vee-validate';
 
+import BaseInput from './BaseInput.vue';
+import { data } from './options';
+
 export default {
     name: 'RadioInput',
+    extends: BaseInput,
     components: {
         ValidationProvider
     },
-    props: ['label', 'data', 'name', 'value', 'rules', 'help'],
-    data() {
-        return {
-            fieldValue: this.value
-        };
-    },
-    methods: {
-        isRequired(required) {
-            return required ? this.fieldValue === null : false;
-        }
-    }
+    props: { data }
 };
 </script>

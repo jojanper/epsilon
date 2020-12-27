@@ -1,7 +1,7 @@
 <template>
   <ValidationProvider v-slot="{ errors }" :name="name" :rules="rules">
     <v-text-field
-      class="form-input mt-0 pt-0 pb-2"
+      :class="classes"
       v-model="fieldValue"
       :error-messages="errors"
       :label="label"
@@ -16,19 +16,15 @@
 <script>
 import { ValidationProvider } from 'vee-validate';
 
+import BaseInput from './BaseInput.vue';
 import InputHelp from './InputHelp.vue';
 
 export default {
     name: 'TextInput',
+    extends: BaseInput,
     components: {
         InputHelp,
         ValidationProvider
-    },
-    props: ['placeholder', 'label', 'name', 'value', 'rules', 'help'],
-    data() {
-        return {
-            fieldValue: this.value
-        };
     }
 };
 </script>

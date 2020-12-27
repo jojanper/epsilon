@@ -223,6 +223,7 @@ export const SCHEMA = [
         type: 'radio',
         name: 'radio',
         label: 'Radio selection',
+        placeholder: '',
         data: [
             {
                 label: 'Option 1'

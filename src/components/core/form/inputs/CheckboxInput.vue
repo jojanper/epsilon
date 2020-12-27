@@ -1,7 +1,7 @@
 <template>
   <ValidationProvider v-slot="{ errors, required }" :name="name" :rules="rules">
     <v-checkbox
-      class="form-input mt-0 pt-0 pb-2"
+      :class="classes"
       v-model="fieldValue"
       light
       :error="isRequired(required)"
@@ -22,21 +22,13 @@
 <script>
 import { ValidationProvider } from 'vee-validate';
 
+import BaseInput from './BaseInput.vue';
+
 export default {
     name: 'CheckboxInput',
+    extends: BaseInput,
     components: {
         ValidationProvider
-    },
-    props: ['label', 'name', 'value', 'rules', 'help'],
-    data() {
-        return {
-            fieldValue: this.value
-        };
-    },
-    methods: {
-        isRequired(required) {
-            return required ? !this.fieldValue : false;
-        }
     }
 };
 </script>
