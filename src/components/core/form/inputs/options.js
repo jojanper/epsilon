@@ -59,3 +59,10 @@ export const dataKey = {
     required: false,
     default: ''
 };
+
+// Data drop icon tooltip text.
+export const dropTitle = {
+    type: String,
+    required: false,
+    default: ''
+};
