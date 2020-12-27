@@ -147,7 +147,7 @@ export const SCHEMA = [
         label: 'Bitrate (kbps)',
         name: 'bitrate',
         rules: 'required',
-        selectlist: [192, 256, 512]
+        data: [192, 256, 512]
     },
     {
         type: 'file-open',
@@ -232,6 +232,10 @@ export const SCHEMA = [
                 label: 'Option 2'
             }
         ],
+        help: {
+            title: 'Radio options',
+            body: 'Option 1 does this and Option 2 does that'
+        },
         rules: 'required'
     },
     {

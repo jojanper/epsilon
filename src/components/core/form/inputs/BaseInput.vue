@@ -1,10 +1,18 @@
 <script>
+import { ValidationProvider } from 'vee-validate';
+
+import InputHelp from './InputHelp.vue';
+
 import {
     placeholder, label, name, value, rules, help, classes
 } from './options';
 
 export default {
     name: 'BaseInput',
+    components: {
+        ValidationProvider,
+        InputHelp
+    },
     props: {
         placeholder, label, name, value, rules, help, classes
     },
@@ -14,6 +22,15 @@ export default {
         };
     },
     methods: {
+        inputHelpEvent() {
+            /**
+             * Request help for input data.
+             *
+             * @param name Input field name.
+             */
+            this.$emit('form-input-help', this.name);
+        },
+
         // Value is required if input value is not available
         isRequired(required) {
             return required ? !this.fieldValue : false;

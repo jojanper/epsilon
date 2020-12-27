@@ -52,3 +52,10 @@ export const data = {
     type: Array,
     required: true
 };
+
+// Data selection field from data object.
+export const dataKey = {
+    type: String,
+    required: false,
+    default: ''
+};

@@ -10,26 +10,17 @@
       :error-messages="errors"
       @change="$emit('input', fieldValue)"
     >
-      <v-icon
-        slot="append"
-        v-if="help"
-        @click="$emit('form-input-help', name)"
-      >mdi-information-outline</v-icon>
+      <input-help v-if="help" slot="append" @form-input-help="inputHelpEvent"></input-help>
     </v-checkbox>
   </ValidationProvider>
 </template>
 
 <script>
-import { ValidationProvider } from 'vee-validate';
-
 import BaseInput from './BaseInput.vue';
 
 export default {
     name: 'CheckboxInput',
-    extends: BaseInput,
-    components: {
-        ValidationProvider
-    }
+    extends: BaseInput
 };
 </script>
 

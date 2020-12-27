@@ -8,23 +8,16 @@
       :placeholder="placeholder"
       @input="$emit('input', fieldValue)"
     >
-      <input-help v-if="help" slot="append-outer" @form-input-help="$emit('form-input-help', name)"></input-help>
+      <input-help v-if="help" slot="append-outer" @form-input-help="inputHelpEvent"></input-help>
     </v-text-field>
   </ValidationProvider>
 </template>
 
 <script>
-import { ValidationProvider } from 'vee-validate';
-
 import BaseInput from './BaseInput.vue';
-import InputHelp from './InputHelp.vue';
 
 export default {
     name: 'TextInput',
-    extends: BaseInput,
-    components: {
-        InputHelp,
-        ValidationProvider
-    }
+    extends: BaseInput
 };
 </script>

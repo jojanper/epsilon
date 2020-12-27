@@ -35,13 +35,13 @@
                 classes=" "
                 :placeholder="selectPlaceholder"
                 :value="selectedData"
-                :selectlist="listData"
+                :data="listData"
                 name="select-list"
                 :label="selectLabel"
                 :data-key="dataKey"
                 @input="setSelectedData"
                 rules="required"
-                simple="true"
+                :autocomplete="true"
               ></select-input>
             </ValidationProvider>
           </div>
