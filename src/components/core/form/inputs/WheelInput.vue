@@ -5,6 +5,8 @@
 </template>
 
 <script>
+import BaseInput from './BaseInput.vue';
+
 import { encodeAngle, decodeAngle } from '../../../../common/transform';
 
 // prettier-ignore
@@ -51,10 +53,19 @@ const circles = [
 
 export default {
     name: 'WheelInput',
-    props: ['label', 'name', 'value', 'zoomtransform'],
+    extends: BaseInput,
+    props: {
+        /**
+         * Zoom gain.
+         */
+        zoomtransform: {
+            type: Number,
+            required: false,
+            default: 5
+        }
+    },
     data() {
         return {
-            fieldValue: this.value,
             dragOk: false,
             startX: 0,
             startY: 0,
@@ -89,7 +100,7 @@ export default {
         },
 
         zoomGain() {
-            return this.zoomtransform || 5;
+            return this.zoomtransform;
         }
     },
     mounted() {

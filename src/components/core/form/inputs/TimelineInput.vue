@@ -35,8 +35,11 @@
           <template v-slot:editDialog="{ componentKey, editData, editChanges }">
             <wheel-input
               :key="componentKey"
+              name
+              label
+              placeholder
               :value="editData"
-              zoomtransform="1"
+              :zoomtransform="1"
               @input="(data) => saveEditedValues(editData, data, editChanges)"
             ></wheel-input>
           </template>
@@ -72,7 +75,7 @@ export default {
             default: () => []
         },
         /**
-         * Maximum numer of vezoom levels.
+         * Maximum numer of zoom levels.
          */
         maxZoom: {
             type: Number,
