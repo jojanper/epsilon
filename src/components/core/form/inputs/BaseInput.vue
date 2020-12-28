@@ -1,6 +1,8 @@
 <script>
 import { ValidationProvider } from 'vee-validate';
 
+import { debounce } from '@/common/utils';
+
 import InputHelp from './InputHelp.vue';
 
 import {
@@ -27,7 +29,7 @@ export default {
         debounce: {
             type: Number,
             required: false,
-            default: 150
+            default: 250
         }
     },
     data() {
@@ -36,7 +38,7 @@ export default {
         };
     },
     created() {
-        this.timerId = null;
+        this.inputChangeEvent = debounce(this._inputChangeEvent, this.debounce);
     },
     methods: {
         inputHelpEvent() {
@@ -48,16 +50,13 @@ export default {
             this.$emit('form-input-help', this.name);
         },
 
-        inputChangeEvent(data) {
-            clearTimeout(this.timerId);
-            this.timerId = setTimeout(() => {
-                /**
-                 * Input data change event.
-                 *
-                 * @param data Changed input data.
-                 */
-                this.$emit('input', data || this.fieldValue);
-            }, this.debounce);
+        _inputChangeEvent(data) {
+            /**
+             * Input data change event.
+             *
+             * @param data Changed input data.
+             */
+            this.$emit('input', data || this.fieldValue);
         },
 
         // Value is required if input value is not available

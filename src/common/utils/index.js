@@ -110,3 +110,4 @@ export const timer = timeout => new Promise(resolve => setTimeout(resolve, timeo
 export * from './ansicolors';
 export * from './media';
 export * from './rxjs';
+export * from './debounce';
