@@ -241,7 +241,9 @@ export default {
     async mounted() {
         // Timeline data duration is updated that affects also this component rendering
         this.dataProvider.subscribe(({ data }) => {
-            const { duration } = data;
+            let { duration } = data;
+
+            duration = duration || 0;
 
             this.timelineMenuWidths.splice(0, this.timelineMenuWidths.length);
             this.timelineMenuWidths.push({ width: duration });

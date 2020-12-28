@@ -66,3 +66,10 @@ export const dropTitle = {
     required: false,
     default: ''
 };
+
+// Input is read only
+export const readonly = {
+    type: Boolean,
+    required: false,
+    default: false
+};

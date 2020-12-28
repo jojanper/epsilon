@@ -156,7 +156,7 @@ export const SCHEMA = [
         label: 'Input WAV file for recording',
         name: 'input',
         rules: 'required',
-        duration: true
+        wavAudioRule: true
     },
     {
         type: 'remote-file-save',

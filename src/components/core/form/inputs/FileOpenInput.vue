@@ -2,7 +2,7 @@
   <ValidationObserver>
     <ValidationProvider ref="provider" v-slot="{ errors }" :name="name" :rules="inputRules">
       <v-text-field
-        class="form-input remote-input mt-0 pt-0 pb-2"
+        :class="`remote-input ${classes}`"
         v-model="fieldValue"
         :error-messages="errors"
         :label="label"
@@ -11,11 +11,7 @@
         :readonly="true"
         @input="$emit('input', fieldValue)"
       >
-        <input-help
-          v-if="help"
-          slot="append-outer"
-          @form-input-help="$emit('form-input-help', name)"
-        ></input-help>
+        <input-help v-if="help" slot="append-outer" @form-input-help="inputHelpEvent"></input-help>
         <draal-file-drop
           @fileDrop="onDrop"
           slot="append"
@@ -26,7 +22,7 @@
 
     <!-- Media file duration is available in hidden input -->
     <ValidationProvider name="duration" class="d-none">
-      <v-text-field v-model="mediaDuration" :readonly="readOnly"></v-text-field>
+      <v-text-field v-model="mediaDuration"></v-text-field>
     </ValidationProvider>
 
     <!-- File dialog is also hidden -->

@@ -1,5 +1,5 @@
 <template>
-  <div role="presentation form-input mt-0 pt-0 pb-2" class="canvas-parent mx-auto">
+  <div role="presentation" class="canvas-parent mx-auto form-input mt-0 pt-0 pb-2">
     <canvas width="200" height="200" class="wheel" ref="canvas" :data-dummyvalue="redraw"></canvas>
   </div>
 </template>
