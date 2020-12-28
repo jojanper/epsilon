@@ -1,5 +1,5 @@
 <template>
-  <div class="form-input mt-0 pt-0 pb-2">
+  <div :class="classes">
     <div class="pr-3 mr-3">
       <p class="text-left v-label theme--light">{{ label }}</p>
     </div>
@@ -35,8 +35,11 @@
           <template v-slot:editDialog="{ componentKey, editData, editChanges }">
             <wheel-input
               :key="componentKey"
+              name
+              label
+              placeholder
               :value="editData"
-              zoomtransform="1"
+              :zoomtransform="1"
               @input="(data) => saveEditedValues(editData, data, editChanges)"
             ></wheel-input>
           </template>
@@ -47,20 +50,76 @@
 </template>
 
 <script>
-import { ValidationProvider } from 'vee-validate';
-
+import BaseInput from './BaseInput.vue';
 import WheelInput from './WheelInput.vue';
 import DraalTimeline from '../../timeline/Timeline.vue';
 
 export default {
     name: 'TimelineInput',
+    extends: BaseInput,
     components: {
         DraalTimeline,
-        WheelInput,
-        ValidationProvider
+        WheelInput
     },
-    props: ['name', 'label', 'timelineWidths', 'value', 'maxZoom', 'dataRelInput', 'tableConfig',
-        'accessMethods', 'customSlots', 'slotPrefix'],
+    props: {
+        /**
+         * Timeline widths for manually selecting the timelline length. Each item
+         * must contain 'width' and 'title' fields.
+         */
+        timelineWidths: {
+            type: Array,
+            required: false,
+            default: () => []
+        },
+        /**
+         * Maximum numer of zoom levels.
+         */
+        maxZoom: {
+            type: Number,
+            required: false,
+            default: 10
+        },
+        /**
+         * Data relation observable for providing updates from other form inputs.
+         */
+        dataRelInput: {
+            type: Object,
+            required: false,
+            default: null
+        },
+        /**
+         * Timeline data table configuration.
+         */
+        tableConfig: {
+            type: Object,
+            required: false,
+            default: () => {}
+        },
+        /**
+         * Access methods for creating and modifying timeline items. Must
+         * include 'new' and 'save' functions.
+         */
+        accessMethods: {
+            type: Object,
+            required: true
+        },
+        /**
+         * Custom slots that the component should offer for parent.
+         */
+        customSlots: {
+            type: Array,
+            required: false,
+            default: () => []
+        },
+        /**
+         * Slot prefix used for custom slots.
+         */
+        slotPrefix: {
+            type: String,
+            required: false,
+            default: ''
+        }
+    },
     data() {
         return {
             // Changes in timeline are tracked via hidden input validation.
@@ -85,7 +144,7 @@ export default {
 
         // Timeline changes are saved which validates also the component input
         saveTimeline(timeline) {
-            this.$emit('input', timeline);
+            this.inputChangeEvent(timeline);
             this.dummyModel = 0;
         }
     }

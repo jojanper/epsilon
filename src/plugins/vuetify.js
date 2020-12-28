@@ -36,8 +36,7 @@ import Vuetify, {
     VProgressLinear,
     VSlider,
     VRadioGroup,
-    VRadio,
-    VInput
+    VRadio
 } from 'vuetify/lib';
 
 import i18n from '../i18n';
@@ -81,8 +80,7 @@ export const CONFIG = {
         VProgressLinear,
         VSlider,
         VRadioGroup,
-        VRadio,
-        VInput
+        VRadio
     },
     global: {
         ripples: false

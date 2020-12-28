@@ -56,6 +56,7 @@ export const SCHEMA = [
                 type: 'timeline',
                 name: 'focusTimeline2',
                 label: 'Timeline',
+                placeholder: '',
                 maxZoom: 15,
                 timelineWidths: [
                     {
@@ -147,7 +148,7 @@ export const SCHEMA = [
         label: 'Bitrate (kbps)',
         name: 'bitrate',
         rules: 'required',
-        selectlist: [192, 256, 512]
+        data: [192, 256, 512]
     },
     {
         type: 'file-open',
@@ -156,7 +157,7 @@ export const SCHEMA = [
         label: 'Input WAV file for recording',
         name: 'input',
         rules: 'required',
-        duration: true
+        wavAudioRule: true
     },
     {
         type: 'remote-file-save',
@@ -223,6 +224,7 @@ export const SCHEMA = [
         type: 'radio',
         name: 'radio',
         label: 'Radio selection',
+        placeholder: '',
         data: [
             {
                 label: 'Option 1'
@@ -231,6 +233,10 @@ export const SCHEMA = [
                 label: 'Option 2'
             }
         ],
+        help: {
+            title: 'Radio options',
+            body: 'Option 1 does this and Option 2 does that'
+        },
         rules: 'required'
     },
     {
@@ -244,6 +250,7 @@ export const SCHEMA = [
         type: 'timeline',
         name: 'focusTimeline',
         label: 'Focus events timeline',
+        placeholder: '',
         maxZoom: 15,
         timelineWidths: [
             {

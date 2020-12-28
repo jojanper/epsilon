@@ -1,43 +1,28 @@
 <template>
   <ValidationProvider v-slot="{ errors, required }" :name="name" :rules="rules">
     <v-radio-group
-      class="form-input mt-0 pt-0 pb-2"
+      :class="classes"
       v-model="fieldValue"
       light
       :value="fieldValue"
-      :error="isRequired(required)"
+      :error="isRequiredRadio(required)"
       :label="label"
       :error-messages="errors"
-      @change="$emit('input', fieldValue)"
+      @change="inputChangeEvent"
     >
-      <v-icon
-        slot="append"
-        v-if="help"
-        @click="$emit('form-input-help', name)"
-      >mdi-information-outline</v-icon>
+      <input-help v-if="help" slot="append" @form-input-help="inputHelpEvent"></input-help>
       <v-radio v-for="(item, index) in data" :key="index" :label="item.label" :value="index"></v-radio>
     </v-radio-group>
   </ValidationProvider>
 </template>
 
 <script>
-import { ValidationProvider } from 'vee-validate';
+import BaseInput from './BaseInput.vue';
+import { data } from './options';
 
 export default {
     name: 'RadioInput',
-    components: {
-        ValidationProvider
-    },
-    props: ['label', 'data', 'name', 'value', 'rules', 'help'],
-    data() {
-        return {
-            fieldValue: this.value
-        };
-    },
-    methods: {
-        isRequired(required) {
-            return required ? this.fieldValue === null : false;
-        }
-    }
+    extends: BaseInput,
+    props: { data }
 };
 </script>

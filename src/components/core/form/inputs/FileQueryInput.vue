@@ -13,11 +13,7 @@
                 @click="fileDialog=true"
                 :readonly="true"
               >
-                <input-help
-                  v-if="help"
-                  slot="append-outer"
-                  @form-input-help="$emit('form-input-help', name)"
-                ></input-help>
+                <input-help v-if="help" slot="append-outer" @form-input-help="inputHelpEvent"></input-help>
                 <draal-file-drop
                   @fileDrop="onDrop"
                   slot="append"
@@ -35,13 +31,13 @@
                 classes=" "
                 :placeholder="selectPlaceholder"
                 :value="selectedData"
-                :selectlist="listData"
+                :data="listData"
                 name="select-list"
                 :label="selectLabel"
                 :data-key="dataKey"
                 @input="setSelectedData"
                 rules="required"
-                simple="true"
+                :autocomplete="true"
               ></select-input>
             </ValidationProvider>
           </div>
@@ -77,10 +73,11 @@
 </template>
 
 <script>
-import { ValidationProvider, ValidationObserver } from 'vee-validate';
-import { VInput } from 'vuetify/lib';
+import { ValidationObserver } from 'vee-validate';
 
-import InputHelp from './InputHelp.vue';
+import { dataKey, dropTitle } from './options';
+
+import BaseInput from './BaseInput.vue';
 import SelectInput from './SelectInput.vue';
 import DraalFileDrop from '@/components/core/utils/FileDrop.vue';
 import DraalFileDialog from '@/components/core/utils/FileDialog.vue';
@@ -103,33 +100,69 @@ import DraalSpinner from '@/components/core/utils/Spinner.vue';
  */
 export default {
     name: 'FileQueryInput',
-    extends: VInput,
+    extends: BaseInput,
     components: {
-        ValidationProvider,
         ValidationObserver,
-        InputHelp,
         SelectInput,
         DraalFileDrop,
         DraalFileDialog,
         DraalSpinner
     },
-    // TODO: Document props and place to some common module to general usage!
-    props: [
-        'placeholder',
-        'label',
-        'name',
-        'value',
-        'rules',
-        'help',
-        'dropTitle',
-        'selectPlaceholder',
-        'selectLabel',
-        'customPlaceholder',
-        'customLabel',
-        'dataQuery',
-        'queryRule',
-        'dataKey'
-    ],
+    props: {
+        dataKey,
+        dropTitle,
+        /**
+         * Data field from selected object used to indicate data changes.
+         */
+        selectKey: {
+            type: String,
+            required: false,
+            default: null
+        },
+        /**
+         * Placeholder text for select list.
+         */
+        selectPlaceholder: {
+            type: String,
+            required: true
+        },
+        /**
+         * Label for select list.
+         */
+        selectLabel: {
+            type: String,
+            required: true
+        },
+        /**
+         * Placeholder text for custom text input.
+         */
+        customPlaceholder: {
+            type: String,
+            required: true
+        },
+        /**
+         * Label for custom text input.
+         */
+        customLabel: {
+            type: String,
+            required: true
+        },
+        /**
+         * Data query function. Must return observable.
+         */
+        dataQuery: {
+            type: Function,
+            required: true
+        },
+        /**
+         * Validation rule for the query input.
+         */
+        queryRule: {
+            type: String,
+            required: false,
+            default: null
+        }
+    },
     data() {
         const rules = this.rules || '';
         const inputRules = `${rules}|${this.queryRule}:@selected,@custom`;
@@ -220,7 +253,7 @@ export default {
             /**
              * Send selected input data.
              */
-            this.$emit('input', data);
+            this.inputChangeEvent(data);
         },
 
         // Trigger cross-field validation
