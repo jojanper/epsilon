@@ -56,6 +56,7 @@ export const SCHEMA = [
                 type: 'timeline',
                 name: 'focusTimeline2',
                 label: 'Timeline',
+                placeholder: '',
                 maxZoom: 15,
                 timelineWidths: [
                     {
@@ -249,6 +250,7 @@ export const SCHEMA = [
         type: 'timeline',
         name: 'focusTimeline',
         label: 'Focus events timeline',
+        placeholder: '',
         maxZoom: 15,
         timelineWidths: [
             {
