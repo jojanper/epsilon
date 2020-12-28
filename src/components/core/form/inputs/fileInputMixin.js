@@ -70,7 +70,7 @@ export const fileInputMixin = {
         sendInputEvent() {
             this.fieldValue = this.fieldValueInt;
             const value = this.wavAudioRule ? { fileName: this.fieldValue, duration: this.mediaDuration } : this.fieldValue;
-            this.$emit('input', value);
+            this.inputChangeEvent(value);
         },
 
         async setMediaDuration({ duration }) {

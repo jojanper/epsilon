@@ -112,6 +112,14 @@ export default {
         dataKey,
         dropTitle,
         /**
+         * Data field from selected object used to indicate data changes.
+         */
+        selectKey: {
+            type: String,
+            required: false,
+            default: null
+        },
+        /**
          * Placeholder text for select list.
          */
         selectPlaceholder: {
@@ -245,7 +253,7 @@ export default {
             /**
              * Send selected input data.
              */
-            this.$emit('input', data);
+            this.inputChangeEvent(data);
         },
 
         // Trigger cross-field validation

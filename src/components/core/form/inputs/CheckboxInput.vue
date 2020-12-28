@@ -8,7 +8,7 @@
       :value="fieldValue"
       :label="label"
       :error-messages="errors"
-      @change="$emit('input', fieldValue)"
+      @change="inputChangeEvent"
     >
       <input-help v-if="help" slot="append" @form-input-help="inputHelpEvent"></input-help>
     </v-checkbox>

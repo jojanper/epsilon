@@ -8,7 +8,7 @@
       :error="isRequiredRadio(required)"
       :label="label"
       :error-messages="errors"
-      @change="$emit('input', fieldValue)"
+      @change="inputChangeEvent"
     >
       <input-help v-if="help" slot="append" @form-input-help="inputHelpEvent"></input-help>
       <v-radio v-for="(item, index) in data" :key="index" :label="item.label" :value="index"></v-radio>

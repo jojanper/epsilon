@@ -1,5 +1,5 @@
 <template>
-  <div :key="componentKey">
+  <div :key="componentKey" :class="cls">
     <ValidationObserver ref="observer" v-slot="{ invalid, valid }">
       <form class="pb-2">
         <draal-form-input
@@ -60,7 +60,7 @@ export default {
         DraalFormInput,
         DraalDialog
     },
-    props: ['schema', 'value', 'options', 'reset'],
+    props: ['schema', 'value', 'options', 'reset', 'cls'],
     data() {
         const slotsDef = [];
         slotMapping(slotsDef, this.schema, '', 'input', 'form');
@@ -77,7 +77,6 @@ export default {
         };
     },
     created() {
-        this.timerId = null;
         this.dataRelHandlers = {};
     },
     computed: {
@@ -96,11 +95,6 @@ export default {
 
         // Update form data
         updateForm(fieldName, value, ext) {
-            clearTimeout(this.timerId);
-            this.timerId = setTimeout(() => {
-                console.log('DEBOUNCED');
-            }, 100);
-
             this.$set(this.formData, fieldName, value);
 
             // Name of actual target. The field name is high level name,

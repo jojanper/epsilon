@@ -6,7 +6,7 @@
       :error-messages="errors"
       :label="label"
       :placeholder="placeholder"
-      @input="$emit('input', fieldValue)"
+      @input="inputChangeEvent"
     >
       <input-help v-if="help" slot="append-outer" @form-input-help="inputHelpEvent"></input-help>
     </v-text-field>

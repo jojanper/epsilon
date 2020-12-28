@@ -50,8 +50,6 @@
 </template>
 
 <script>
-import { ValidationProvider } from 'vee-validate';
-
 import BaseInput from './BaseInput.vue';
 import WheelInput from './WheelInput.vue';
 import DraalTimeline from '../../timeline/Timeline.vue';
@@ -61,8 +59,7 @@ export default {
     extends: BaseInput,
     components: {
         DraalTimeline,
-        WheelInput,
-        ValidationProvider
+        WheelInput
     },
     props: {
         /**
@@ -147,7 +144,7 @@ export default {
 
         // Timeline changes are saved which validates also the component input
         saveTimeline(timeline) {
-            this.$emit('input', timeline);
+            this.inputChangeEvent(timeline);
             this.dummyModel = 0;
         }
     }

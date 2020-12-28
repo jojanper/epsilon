@@ -1,5 +1,5 @@
 <template>
-  <div role="presentation" class="canvas-parent mx-auto form-input mt-0 pt-0 pb-2">
+  <div role="presentation" :class="`canvas-parent mx-auto ${classes}`">
     <canvas width="200" height="200" class="wheel" ref="canvas" :data-dummyvalue="redraw"></canvas>
   </div>
 </template>
@@ -293,7 +293,7 @@ export default {
             };
 
             // Emit the values to parent
-            this.$emit('input', this.fieldValue);
+            this.inputChangeEvent();
         },
 
         updateZoom(delta) {

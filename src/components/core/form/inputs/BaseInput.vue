@@ -14,12 +14,29 @@ export default {
         InputHelp
     },
     props: {
-        placeholder, label, name, value, rules, help, classes
+        placeholder,
+        label,
+        name,
+        value,
+        rules,
+        help,
+        classes,
+        /**
+         * Delay input data change updates.
+         */
+        debounce: {
+            type: Number,
+            required: false,
+            default: 150
+        }
     },
     data() {
         return {
             fieldValue: this.value
         };
+    },
+    created() {
+        this.timerId = null;
     },
     methods: {
         inputHelpEvent() {
@@ -29,6 +46,18 @@ export default {
              * @param name Input field name.
              */
             this.$emit('form-input-help', this.name);
+        },
+
+        inputChangeEvent(data) {
+            clearTimeout(this.timerId);
+            this.timerId = setTimeout(() => {
+                /**
+                 * Input data change event.
+                 *
+                 * @param data Changed input data.
+                 */
+                this.$emit('input', data || this.fieldValue);
+            }, this.debounce);
         },
 
         // Value is required if input value is not available

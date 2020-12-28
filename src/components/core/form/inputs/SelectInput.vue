@@ -10,7 +10,7 @@
       :placeholder="placeholder"
       :item-text="dataKey"
       v-bind="attrs"
-      @input="$emit('input', fieldValue)"
+      @input="inputChangeEvent"
     >
       <input-help v-if="help" slot="append-outer" @form-input-help="$emit('form-input-help', name)"></input-help>
     </v-select>
@@ -24,7 +24,7 @@
       :placeholder="placeholder"
       :item-text="dataKey"
       v-bind="attrs"
-      @input="$emit('input', fieldValue)"
+      @input="inputChangeEvent"
     >
       <input-help v-if="help" slot="append-outer" @form-input-help="inputHelpEvent"></input-help>
     </v-autocomplete>
