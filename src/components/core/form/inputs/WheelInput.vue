@@ -190,6 +190,8 @@ export default {
 
             // Draw the actual shape position
             this.circle(shapes[0]);
+
+            this.ctx.restore();
         },
 
         myDown(e) {
