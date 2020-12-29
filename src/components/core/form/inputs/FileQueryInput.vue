@@ -6,6 +6,7 @@
           <div class="col-sm m-0 p-0">
             <ValidationProvider ref="provider" v-slot="{ errors }" :name="name" :rules="inputRules">
               <v-text-field
+                class="file-input"
                 v-model="fieldValue"
                 :error-messages="errors"
                 :label="label"

@@ -2,7 +2,7 @@
   <ValidationObserver>
     <ValidationProvider ref="provider" v-slot="{ errors }" :name="name" :rules="inputRules">
       <v-text-field
-        :class="`remote-input ${classes}`"
+        :class="`file-input ${classes}`"
         v-model="fieldValue"
         :error-messages="errors"
         :label="label"

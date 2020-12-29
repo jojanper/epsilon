@@ -77,7 +77,11 @@
       </draal-data-table>
     </div>
 
-    <draal-dialog :model="editDialog" :title="editText" @close-dialog="closeDialog">
+    <draal-dialog :maxWidth="dialogWidth" :model="editDialog" @close-dialog="closeDialog">
+      <template v-slot:header>
+        <div class="headline pt-3">{{ editText }}</div>
+      </template>
+
       <template v-slot:body>
         <!--
           @slot Dialog body slot
@@ -208,6 +212,14 @@ export default {
             type: Object,
             required: false,
             default: null
+        },
+        /**
+         * Maximum editing dialog width.
+         */
+        dialogWidth: {
+            type: String,
+            required: false,
+            default: '400'
         }
     },
     data() {

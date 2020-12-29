@@ -1,7 +1,7 @@
 <template>
   <ValidationProvider v-slot="{ errors }" :name="name" :rules="rules">
     <v-text-field
-      :class="`remote-input ${classes}`"
+      :class="`file-input ${classes}`"
       v-model="fieldValue"
       :error-messages="errors"
       :label="label"

@@ -1,18 +1,19 @@
 <template>
   <v-data-table
     class="mt-3 pt-3 elevation-1"
+    :search="search"
     :headers="tableHeaders"
     :items="tableData"
     v-bind="attrs"
     @click:row="clickAction"
   >
-    <template v-for="(columnDef, index) in customRender" v-slot:[columnDef.column]="{item}">
+    <template v-for="(def, index) in customRender" v-slot:[def.child]="{item}">
       <!--
         @slot Custom table column data rendering.
         @binding {number} columnKey Column key (Vue key attribute).
         @binding {object} data Column data.
       -->
-      <slot :name="columnDef.name" v-bind:colunmKey="index" v-bind:data="item"></slot>
+      <slot :name="def.parent" v-bind:colunmKey="index" v-bind:data="item"></slot>
     </template>
 
     <template v-if="hasExpand" v-slot:expanded-item="{ headers, item }">
@@ -97,8 +98,8 @@ export default {
         },
         /**
          * Actions to be included for the table. Currently supported actions:
-         * - edit: Edit data item, data-edit event is send when clicked
-         * - delete: Delete data item, data-delete event is send when clicked
+         * - edit: Edit data item, 'data-edit' event is send when clicked
+         * - delete: Delete data item, 'data-delete' event is send when clicked
          */
         actions: {
             type: Array,
@@ -121,6 +122,14 @@ export default {
             type: Object,
             required: false,
             default: () => {}
+        },
+        /**
+         * Table search value.
+         */
+        search: {
+            type: String,
+            required: false,
+            default: null
         }
     },
     data() {
@@ -170,7 +179,7 @@ export default {
     },
     computed: {
         customRender() {
-            return this.customColumns.map(column => ({ column: `item.${column}`, name: `table.${column}` }));
+            return this.customColumns.map(column => ({ child: `item.${column}`, parent: `table.${column}` }));
         },
 
         hasExpand() {

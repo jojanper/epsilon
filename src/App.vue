@@ -32,11 +32,12 @@
         </div>
 
         <draal-data-table
+          :search="search"
           :data="data"
           :headers="headers"
           :customColumns="['datetime','headline']"
           expand="More..."
-          :tableAttributes="{'item-key': 'url'}"
+          :tableAttributes="{'item-key': 'url', ':search': search}"
           :actions="['edit', 'delete']"
           :actionsConfig="{name: 'Actions', width: '15%'}"
         >
@@ -176,7 +177,7 @@ export default {
     font-family: 'Avenir', Helvetica, Arial, sans-serif;
     text-align: center;
 }
-.container {
+.app-container {
     padding-bottom: 60px;
 }
 </style>
@@ -204,7 +205,7 @@ export default {
 .router-link-active {
     font-weight: bold;
 }
-.remote-input input {
+.file-input input {
     cursor: pointer;
 }
 .noselect {
