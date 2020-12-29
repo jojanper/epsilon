@@ -1,5 +1,8 @@
 /* eslint-disable no-restricted-syntax */
-import { getTimestamp, ansiColors, getContentDispositionFilename } from './index';
+import {
+    getTimestamp, ansiColors, getContentDispositionFilename,
+    getDataField, resetDataBySchema, slotMapping
+} from './index';
 
 describe('utils', () => {
     it('getTimestamp', () => {
@@ -47,5 +50,90 @@ describe('utils', () => {
     it('getContentDispositionFilename', () => {
         expect(getContentDispositionFilename('attachment')).toBeNull();
         expect(getContentDispositionFilename('attachment; filename="name.jpg')).toEqual('name.jpg');
+    });
+
+    it('getDataField', () => {
+        const data = [
+            {
+                name: 'first',
+                data: 'b'
+            },
+            {
+                name: 'second',
+                data: 'c'
+            }
+        ];
+
+        const ret = getDataField(data, 'first', 'name');
+        expect(ret.name).toEqual('first');
+        expect(ret.data).toEqual('b');
+        expect(getDataField(data, 'third', 'name')).toBeNull();
+    });
+
+    const SCHEMA = [
+        {
+            type: 'text',
+            name: 'a'
+        },
+        {
+            type: 'text',
+            name: 'b'
+        },
+        {
+            type: 'group',
+            name: 'group',
+            schema: [
+                {
+                    type: 'radio',
+                    name: 'c',
+                    customSlots: ['dataR']
+                }
+            ]
+        },
+        {
+            type: 'timeline',
+            name: 't',
+            customSlots: ['dataT']
+        }
+    ];
+
+    it('resetDataBySchema', () => {
+        const data = {
+            a: 'a',
+            b: 'b',
+            group: {
+                c: 'c'
+            },
+            t: [1, 2, 3]
+        };
+
+        const resetNames = [];
+
+        resetDataBySchema(SCHEMA, data, '', name => {
+            resetNames.push(name);
+            return undefined;
+        });
+
+        expect(resetNames).toEqual(['a', 'b', 'group.c']);
+        expect(data.a).toEqual(undefined);
+        expect(data.b).toEqual(undefined);
+        expect(data.group.c).toEqual(undefined);
+        expect(data.t.length).toEqual(0);
+    });
+
+    it('slotMapping', () => {
+        const slots = [];
+        slotMapping(slots, SCHEMA, '', 'input', 'form');
+
+        expect(slots).toEqual([
+            {
+                childSlot: 'input.group.c.dataR',
+                componentSlot: 'form.group.c.dataR'
+            },
+            {
+                childSlot: 'input.t.dataT',
+                componentSlot: 'form.t.dataT'
+            }
+        ]);
     });
 });

@@ -12,7 +12,15 @@
             v-on:submit="encode"
             :options="options"
             :reset="resetField"
-          ></draal-form-generator>
+          >
+            <template v-slot:form.row.focusTimeline2.angleDir="{ data }">
+              <v-icon :style="renderAzimuth(data)">mdi-arrow-up</v-icon>
+            </template>
+
+            <template v-slot:form.focusTimeline.angleDir="{ data }">
+              <v-icon :style="renderAzimuth(data)">mdi-arrow-up</v-icon>
+            </template>
+          </draal-form-generator>
 
           <draal-file-dialog color="blue" icon="mdi-folder-open" @file-select="fileSelect"></draal-file-dialog>
 
@@ -49,7 +57,7 @@ export default {
     data() {
         const schema = [...SCHEMA];
 
-        schema[4].dataQuery = this.dataQuery.bind(this);
+        schema[6].dataQuery = this.dataQuery.bind(this);
 
         return {
             data: null,
@@ -59,8 +67,11 @@ export default {
                 bitrate: null,
                 input: null,
                 output: null,
+                comment: null,
                 windscreen: false,
-                focusTimeline: []
+                focusTimeline: [],
+                row: {},
+                radio: -1
             },
             options: {
                 submit: this.$t('configuratorPage.createRec'),
@@ -97,6 +108,18 @@ export default {
 
         fileSelect(files) {
             console.log('selected', files);
+
+            const reader = new FileReader();
+            reader.onload = event => {
+                try {
+                    console.log(JSON.parse(event.target.result));
+                } catch (e) {
+                    console.log(e);
+                }
+            };
+
+            reader.onerror = error => console.error(error);
+            reader.readAsText(files[0]);
         },
 
         dataQuery(file) {
@@ -119,6 +142,10 @@ export default {
                 { uuid: 'UUID 5' },
                 { uuid: 'Set your own ID', custom: true }
             ]).pipe(delay(2500));
+        },
+
+        renderAzimuth(data) {
+            return `transform: rotate(${-data.angle}deg)`;
         }
     }
 };

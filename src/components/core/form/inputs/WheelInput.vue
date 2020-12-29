@@ -1,10 +1,12 @@
 <template>
-  <div role="presentation" class="canvas-parent mx-auto">
+  <div role="presentation" :class="`canvas-parent mx-auto ${classes}`">
     <canvas width="200" height="200" class="wheel" ref="canvas" :data-dummyvalue="redraw"></canvas>
   </div>
 </template>
 
 <script>
+import BaseInput from './BaseInput.vue';
+
 import { encodeAngle, decodeAngle } from '../../../../common/transform';
 
 // prettier-ignore
@@ -51,10 +53,19 @@ const circles = [
 
 export default {
     name: 'WheelInput',
-    props: ['label', 'name', 'value', 'zoomtransform'],
+    extends: BaseInput,
+    props: {
+        /**
+         * Zoom gain.
+         */
+        zoomtransform: {
+            type: Number,
+            required: false,
+            default: 5
+        }
+    },
     data() {
         return {
-            fieldValue: this.value,
             dragOk: false,
             startX: 0,
             startY: 0,
@@ -72,7 +83,7 @@ export default {
                 shapes[0].x = ORIGINX;
                 shapes[0].y = SHAPE_ORIGINY;
 
-                const angle = decodeAngle(this.fieldValue.angle || 0);
+                const angle = decodeAngle(this.fieldValue ? this.fieldValue.angle || 0 : 0);
 
                 if (angle !== 0) {
                     const x = Math.round(MAXRADIUS * Math.cos(angle));
@@ -89,11 +100,11 @@ export default {
         },
 
         zoomGain() {
-            return this.zoomtransform || 5;
+            return this.zoomtransform;
         }
     },
     mounted() {
-        const zoom = (this.fieldValue.zoom || 0) / this.zoomGain;
+        const zoom = (this.fieldValue ? this.fieldValue.zoom || 0 : 0) / this.zoomGain;
         this.zoomLevel = parseFloat(zoom, 10);
         this.img1Loaded = false;
         this.imageDown = new Image();
@@ -280,7 +291,7 @@ export default {
             };
 
             // Emit the values to parent
-            this.$emit('input', this.fieldValue);
+            this.inputChangeEvent();
         },
 
         updateZoom(delta) {

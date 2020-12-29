@@ -13,7 +13,7 @@
               <v-icon @click="addItem">mdi-plus</v-icon>
               <v-icon @click="setZoom(1)" large>mdi-magnify-plus-outline</v-icon>
               <v-icon @click="setZoom(-1)" large>mdi-magnify-minus-outline</v-icon>
-              <v-btn icon v-on="on" v-if="timelineWidths.length > 1">
+              <v-btn icon v-on="on" v-if="timelineMenuWidths.length > 1">
                 <v-icon>mdi-dots-vertical</v-icon>
               </v-btn>
             </div>
@@ -28,18 +28,16 @@
       </div>
     </div>
 
-    <div class="row scrolling-wrapper m-0" v-if="mounted">
+    <div class="row scrolling-wrapper" v-if="mounted" :key="durationUpdated">
       <div ref="timeline" class="timeline">
         <div>
           <draal-ruler
-            units=" sec"
             :zoom="zoom"
             :key="rulerRender"
-            :steps="timelineGridItems"
             :rulerWidth="timelineWidth"
-          >
-            <div ref="timelineparent"></div>
-          </draal-ruler>
+            @resize="renderTimeline"
+            @zoom-level="level => zoom = level"
+          ></draal-ruler>
         </div>
         <div :key="timelineRender">
           <draal-timeline-item
@@ -159,7 +157,7 @@ export default {
         timelineGridItems: {
             type: Number,
             required: false,
-            default: 15
+            default: 10
         },
         /**
          * Table props for the underlying data table.
@@ -200,6 +198,16 @@ export default {
             type: String,
             required: false,
             default: '#0277BD'
+        },
+        /**
+         * Observable for monitoring data changes in related components. Data changes
+         * are communicated via the observable. Here the data that is being monitored
+         * is related to the timeline duration.
+         */
+        dataProvider: {
+            type: Object,
+            required: false,
+            default: null
         }
     },
     data() {
@@ -218,16 +226,39 @@ export default {
                 $id: baseTime + index
             })),
             timelineWidth: this.timelineWidths[0].width,
+            timelineMenuWidths: [...this.timelineWidths],
 
             hasChanges: false,
             mounted: false,
 
             zoom: 1,
             moving: false,
-            rulerRender: 0
+            rulerRender: 0,
+
+            durationUpdated: 0
         };
     },
     async mounted() {
+        // Timeline data duration is updated that affects also this component rendering
+        this.dataProvider.subscribe(({ data }) => {
+            let { duration } = data;
+
+            duration = duration || 0;
+
+            this.timelineMenuWidths.splice(0, this.timelineMenuWidths.length);
+            this.timelineMenuWidths.push({ width: duration });
+            this.timelineWidth = duration;
+            this.timelines.splice(0, this.timelines.length);
+            this.zoom = 1;
+
+            // New timeline is emitted to parent or automatically saved.
+            // The timeline state, however, is now unchanged in the component.
+            this.setChanges(true, true);
+            this.setChanges(false); // Just turn the changes state to off
+
+            this.durationUpdated += 1;
+        });
+
         // Get saved timeline length from store
         this.timelineWidth = this.getTimelineLength(this.timelineID) || this.timelineWidth;
 
@@ -247,7 +278,7 @@ export default {
 
         // Actions to change timeline width
         actions() {
-            return this.timelineWidths.map(item => ({
+            return this.timelineMenuWidths.map(item => ({
                 title: item.title,
                 fn: () => this.saveLength(item.width)
             }));
@@ -266,7 +297,7 @@ export default {
             if (zoom > 0 && zoom <= this.maxZoom && stepSize >= 1) {
                 this.zoom = zoom;
                 this.rulerRender += 1;
-                this.timelineRender += 1;
+                this.renderTimeline();
             }
         },
 
@@ -288,17 +319,19 @@ export default {
         },
 
         // Set changes status for the timeline data
-        setChanges(status) {
+        setChanges(status, force = false) {
             this.hasChanges = status;
             if (this.hasChanges) {
-                if (!this.saveOnEdit) {
+                if (this.saveOnEdit === false || force) {
                     /**
                      * Timeline contains changes event.
                      *
                      * @property {Array} timelines Timeline data.
                      */
                     this.$emit('timelineChanged', this.timelines);
-                } else {
+                }
+
+                if (this.saveOnEdit === true || force) {
                     // Automatic save
                     this.sendTimelineEvent();
                 }
@@ -312,7 +345,7 @@ export default {
             // Make sure items are added with reasonable distance with
             // respect to previous item. Thus, take into account the
             // length of the currently selected timeline.
-            const incPos = this.timelineWidth / this.timelineGridItems;
+            const incPos = this.timelineWidth / (this.zoom * this.timelineGridItems);
 
             // Add new timeline item next to last item
             const len = this.timelines.length;
@@ -320,7 +353,7 @@ export default {
 
             this.timelines.push({
                 ...this.itemCreator(),
-                position,
+                position: position > this.timelineWidth ? this.timelineWidth : position,
                 $clicked: false,
                 $id: Date.now() // Should be unique ID
             });
@@ -346,7 +379,7 @@ export default {
         },
 
         dialogEditChanges(status) {
-            this.setChanges(status);
+            this.setChanges(status || true);
         },
 
         highlightStop(id) {
@@ -387,7 +420,7 @@ export default {
 
         timelineEdit(id) {
             const index = this.getTimelineIndex(id);
-            this.editAction(this.timelines[index]);
+            this.editAction(index);
         },
 
         getTimelineIndex(id) {
@@ -426,19 +459,10 @@ export default {
   overflow-x: auto;
   overflow-y: hidden;
   white-space: nowrap;
-}
-
-.scrolling-wrapper-flexbox {
-  display: flex;
-  flex-wrap: nowrap;
-  overflow-x: auto;
-}
-
-.scrolling-wrapper, .scrolling-wrapper-flexbox {
   height: auto;
-  width: 100%;
-  padding-right: 3% !important;
-  padding-left: 1% !important;
+  padding-right: 23px;
+  padding-left: 18px;
+  padding-bottom: 0.25em;
 }
 
 ::-webkit-scrollbar {

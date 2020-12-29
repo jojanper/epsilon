@@ -99,11 +99,8 @@ export default {
         },
 
         canceled() {
-            // No files selected, user canceled the dialog
-            if (!this.$refs.fileDialog.value.length) {
-                this.updateState(false);
-            }
-
+            // User canceled file selection
+            this.updateState(false);
             document.body.onfocus = this.onfocus;
         },
 

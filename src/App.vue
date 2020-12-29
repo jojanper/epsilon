@@ -177,20 +177,29 @@ export default {
     text-align: center;
 }
 .container {
-    //min-height: 400px;
     padding-bottom: 60px;
 }
 </style>
 
 <style lang="scss">
 // No animations for Vuetify
-label.v-label.theme--light.error--text {
+.v-label.theme--light.error--text {
     animation: none !important;
 }
 .v-data-table tbody tr.v-data-table__expanded__content {
     -webkit-box-shadow: none !important;
     box-shadow: none !important;
 }
+.v-messages {
+    padding-bottom: 15px !important;
+}
+.file-query-input-wrapper {
+    .file-query-input {
+        top: -15px;
+        position: relative;
+    }
+}
+
 .router-link-exact-active,
 .router-link-active {
     font-weight: bold;

@@ -1,16 +1,15 @@
 <template>
   <ValidationProvider v-slot="{ errors }" :name="name" :rules="rules">
     <v-text-field
-      class="remote-input"
+      :class="`remote-input ${classes}`"
       v-model="fieldValue"
       :error-messages="errors"
       :label="label"
       :placeholder="placeholder"
       @click="clicked"
-      :readonly="readOnly"
-      @input="$emit('input', fieldValue)"
+      @input="inputChangeEvent"
     >
-      <input-help v-if="help" slot="append-outer" @form-input-help="$emit('form-input-help', name)"></input-help>
+      <input-help v-if="help" slot="append-outer" @form-input-help="inputHelpEvent"></input-help>
       <draal-file-drop
         @fileDrop="onDrop"
         slot="append"

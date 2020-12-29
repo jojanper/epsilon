@@ -1,25 +1,28 @@
 <template>
-  <div v-if="eventPosition <= 1">
-    <div
-      @contextmenu.prevent="showContextMenu"
-      class="timeline-entry"
-      :class="{ 'timeline-highlight': isClicked, 'noselect': isMoving }"
-      ref="timeline"
-      ondragstart="return false"
-    >
-      <div v-if="mousedown" class="noselect timeline-entry-pos-text">{{ timestamp }}</div>
-      <div class="mt-3">
-        <v-menu v-model="menuOpened">
-          <template v-slot:activator="{ on }">
-            <v-btn class="menu" v-on="on"></v-btn>
-          </template>
+  <div>
+    <div ref="timelineparent"></div>
+    <div v-if="eventPosition <= 1">
+      <div
+        @contextmenu.prevent="showContextMenu"
+        class="timeline-entry"
+        :class="{ 'timeline-highlight': isClicked, 'noselect': isMoving }"
+        ref="timeline"
+        ondragstart="return false"
+      >
+        <div v-if="mousedown" class="noselect timeline-entry-pos-text">{{ timestamp }}</div>
+        <div class="mt-3">
+          <v-menu v-model="menuOpened">
+            <template v-slot:activator="{ on }">
+              <v-btn class="menu" v-on="on"></v-btn>
+            </template>
 
-          <v-list>
-            <v-list-item v-for="(item, i) in items" :key="i" @click="item.fn">
-              <v-list-item-title>{{ item.title }}</v-list-item-title>
-            </v-list-item>
-          </v-list>
-        </v-menu>
+            <v-list>
+              <v-list-item v-for="(item, i) in items" :key="i" @click="item.fn">
+                <v-list-item-title>{{ item.title }}</v-list-item-title>
+              </v-list-item>
+            </v-list>
+          </v-menu>
+        </div>
       </div>
     </div>
   </div>
@@ -121,7 +124,7 @@ export default {
         this.setTimeout();
 
         // Timeline width
-        this.timelineWidth = this.parentOffsetWidth() - this.$refs.timeline.offsetWidth;
+        this.timelineWidth = this.parentOffsetWidth();
 
         // Calculate initial timeline position in the UI
         this.renderTimePos();
@@ -198,12 +201,12 @@ export default {
 
         // Parent element's layout width
         parentOffsetWidth() {
-            return this.zoom * this.$parent.$refs.timelineparent.offsetWidth;
+            return this.zoom * this.$refs.timelineparent.offsetWidth;
         },
 
         // Return parent element's left position relative to top-left of viewport
         parentPos() {
-            return this.$parent.$refs.timelineparent.getBoundingClientRect().left;
+            return this.$refs.timelineparent.getBoundingClientRect().left;
         },
 
         // Convert the time position into pixels and render position
@@ -227,8 +230,6 @@ export default {
                 if (event.clientY >= topThrPos && event.clientY <= bottomThrPos) {
                     const newMargLeft = event.clientX - this.parentPos();
                     let eventPos = newMargLeft;
-
-                    this.$refs.timeline.style.marginLeft = `${newMargLeft}px`;
 
                     if (newMargLeft < 0) {
                         eventPos = 0;
@@ -326,6 +327,7 @@ export default {
 .timeline-entry {
     top: 10px;
     position: absolute;
+    left: -7.5px; // Offset so that marker is at the center of the mouse position
     height: 15px;
     width: 15px;
     background: blue;
@@ -340,8 +342,9 @@ export default {
 
 .timeline-entry-pos-text {
     position: relative;
-    top: -35px;
+    top: -30px;
     left: -0px;
+    font-size: 0.75em;
 }
 
 .menu {

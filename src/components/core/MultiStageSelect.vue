@@ -6,7 +6,7 @@
         v-if="index <= currentSelect"
         :placeholder="item.placeholder"
         :value="selectedData[index]"
-        :selectlist="listData[index]"
+        :data="listData[index]"
         :name="getName(index)"
         :label="item.label"
         @input="(data) => setInputValue(data, index)"

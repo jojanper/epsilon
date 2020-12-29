@@ -1,33 +1,23 @@
 <template>
   <ValidationProvider v-slot="{ errors }" :name="name" :rules="rules">
     <v-text-field
+      :class="classes"
       v-model="fieldValue"
       :error-messages="errors"
       :label="label"
       :placeholder="placeholder"
-      @input="$emit('input', fieldValue)"
+      @input="inputChangeEvent"
     >
-      <input-help v-if="help" slot="append-outer" @form-input-help="$emit('form-input-help', name)"></input-help>
+      <input-help v-if="help" slot="append-outer" @form-input-help="inputHelpEvent"></input-help>
     </v-text-field>
   </ValidationProvider>
 </template>
 
 <script>
-import { ValidationProvider } from 'vee-validate';
-
-import InputHelp from './InputHelp.vue';
+import BaseInput from './BaseInput.vue';
 
 export default {
     name: 'TextInput',
-    components: {
-        InputHelp,
-        ValidationProvider
-    },
-    props: ['placeholder', 'label', 'name', 'value', 'rules', 'help'],
-    data() {
-        return {
-            fieldValue: this.value
-        };
-    }
+    extends: BaseInput
 };
 </script>

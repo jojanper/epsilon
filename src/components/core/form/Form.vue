@@ -1,25 +1,35 @@
 <template>
-  <div :key="componentKey">
+  <div :key="componentKey" :class="cls">
     <ValidationObserver ref="observer" v-slot="{ invalid, valid }">
       <form class="pb-2">
-        <component
+        <draal-form-input
           v-for="(field, index) in schema"
           :key="index"
-          :is="field.fieldType"
           :value="formData[field.name]"
-          @input="updateForm(field.name, $event)"
+          @input="(value, ext) => updateForm(field.name, value, ext)"
           v-bind="field"
           @form-input-help="formInputHelp"
-          @input-handle-registration="registerHandler"
-        ></component>
+          @data-rel-update="registerUpdateHandler"
+        >
+          <template v-for="(def, index) in slotsDef" v-slot:[def.childSlot]="{ data }">
+            <!--
+                @slot Custom input data rendering.
+                @binding {number} inputKey Input key (Vue key attribute).
+                @binding {object} data Input data.
+            -->
+            <slot :name="def.componentSlot" v-bind:inputKey="index" v-bind:data="data"></slot>
+          </template>
+        </draal-form-input>
 
-        <v-btn
-          class="mr-2"
-          :disabled="invalid || !valid"
-          v-on:click="$emit('submit', formData)"
-          color="primary"
-        >{{ options.submit }}</v-btn>
-        <v-btn v-if="options.clear" @click="clear">{{ options.clear }}</v-btn>
+        <div class="mt-3">
+          <v-btn
+            class="mr-2"
+            :disabled="invalid || !valid"
+            v-on:click="$emit('submit', formData)"
+            color="primary"
+          >{{ options.submit }}</v-btn>
+          <v-btn v-if="options.clear" @click="clear">{{ options.clear }}</v-btn>
+        </div>
       </form>
     </ValidationObserver>
 
@@ -35,38 +45,26 @@
 </template>
 
 <script>
-import { ValidationObserver, ValidationProvider } from 'vee-validate';
+import { ValidationObserver } from 'vee-validate';
 
-import TextInput from './inputs/TextInput.vue';
-import SelectInput from './inputs/SelectInput.vue';
-import CheckboxInput from './inputs/CheckboxInput.vue';
-import FileOpenInput from './inputs/FileOpenInput.vue';
-import RemoteFileSaveInput from './inputs/RemoteFileSaveInput.vue';
-import WheelInput from './inputs/WheelInput.vue';
-import FileQueryInput from './inputs/FileQueryInput.vue';
-import FocusTimeline from './inputs/FocusTimeline.vue';
-import RowInput from './inputs/RowInput.vue';
-import DraalDialog from '../utils/Dialog.vue';
 import { appComputed } from '@/store/helpers';
+import { getDataField, resetDataBySchema, slotMapping } from '@/common/utils';
+
+import DraalFormInput from './FormInput.vue';
+import DraalDialog from '../utils/Dialog.vue';
 
 export default {
     name: 'DraalFormGenerator',
     components: {
-        TextInput,
-        SelectInput,
-        CheckboxInput,
-        WheelInput,
-        FocusTimeline,
-        RowInput,
-        FileOpenInput,
-        RemoteFileSaveInput,
-        FileQueryInput,
-        ValidationProvider,
         ValidationObserver,
+        DraalFormInput,
         DraalDialog
     },
-    props: ['schema', 'value', 'options', 'reset'],
+    props: ['schema', 'value', 'options', 'reset', 'cls'],
     data() {
+        const slotsDef = [];
+        slotMapping(slotsDef, this.schema, '', 'input', 'form');
+
         return {
             helpText: {
                 title: null,
@@ -74,11 +72,12 @@ export default {
             },
             helpDialog: false,
             formData: this.value || {},
-            componentKey: 0
+            componentKey: 0,
+            slotsDef
         };
     },
-    mounted() {
-        this.handlers = {};
+    created() {
+        this.dataRelHandlers = {};
     },
     computed: {
         appLang: appComputed.appLang
@@ -94,38 +93,65 @@ export default {
             this.componentKey += 1;
         },
 
-        updateForm(fieldName, value) {
+        // Update form data
+        updateForm(fieldName, value, ext) {
             this.$set(this.formData, fieldName, value);
+
+            // Name of actual target. The field name is high level name,
+            // detailed name is given by the ext parameter.
+            const target = ext || fieldName;
+
+            // If input data relations are defined, send the changed data
+            // to relevant form input components
+            if (this.dataRelHandlers[target]) {
+                const targetInputs = Object.keys(this.dataRelHandlers[target]);
+                targetInputs.forEach(key => {
+                    const inputs = this.dataRelHandlers[target][key];
+                    inputs.forEach(cb => cb(target, value));
+                });
+            }
         },
 
+        // Clear form data
         clear() {
-            for (let i = 0; i < this.schema.length; i++) {
-                const fieldName = this.schema[i].name;
-                if (Array.isArray(this.formData[fieldName])) {
-                    this.formData[fieldName].splice(0, this.formData[fieldName].length);
-                } else {
-                    this.$set(this.formData, fieldName, this.reset(fieldName));
-                }
-            }
+            resetDataBySchema(this.schema, this.formData, '', this.reset);
             this.forceRendeder();
         },
 
+        // Show help data for specified input
         formInputHelp(name) {
-            for (let i = 0; i < this.schema.length; i++) {
-                const fieldName = this.schema[i].name;
-                if (fieldName === name) {
-                    this.helpText = this.schema[i].help;
-                    break;
-                }
+            // Locate the help data from schema
+            const split = name.split('.');
+            let data = { schema: this.schema };
+            for (let i = 0; i < split.length; i++) {
+                data = getDataField(data.schema, split[i], 'name');
             }
 
+            // Show the help data
+            this.helpText = data.help;
             this.helpDialog = true;
         },
 
-        registerHandler(name, data) {
-            console.log(name, data, this.formData);
+        /**
+         * Register form input data observers. Input may request to be notified
+         * when form data changes in other form input components.
+         *
+         * @param {string } name Input name requesting data notifications.
+         * @param {array<string>} target Requested data input names.
+         * @param {function} cb Callback for data notifications.
+         */
+        registerUpdateHandler(name, targets, cb) {
+            targets.forEach(target => {
+                if (!this.dataRelHandlers[target]) {
+                    this.dataRelHandlers[target] = {};
+                }
 
-            data('foo');
+                if (!this.dataRelHandlers[target][name]) {
+                    this.dataRelHandlers[target][name] = [];
+                }
+
+                this.dataRelHandlers[target][name].push(cb);
+            });
         }
     }
 };

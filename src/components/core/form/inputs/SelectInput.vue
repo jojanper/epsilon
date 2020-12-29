@@ -1,52 +1,60 @@
 <template>
   <ValidationProvider v-slot="{ errors }" :name="name" :rules="rules">
     <v-select
-      v-if="simple"
+      :class="classes"
+      v-if="!autocomplete"
       v-model="fieldValue"
       :error-messages="errors"
       :label="label"
-      :items="selectlist"
+      :items="data"
       :placeholder="placeholder"
       :item-text="dataKey"
       v-bind="attrs"
-      @input="$emit('input', fieldValue)"
+      @input="inputChangeEvent"
     >
       <input-help v-if="help" slot="append-outer" @form-input-help="$emit('form-input-help', name)"></input-help>
     </v-select>
     <v-autocomplete
       v-else
+      :class="classes"
       v-model="fieldValue"
       :error-messages="errors"
       :label="label"
-      :items="selectlist"
+      :items="data"
       :placeholder="placeholder"
       :item-text="dataKey"
       v-bind="attrs"
-      @input="$emit('input', fieldValue)"
+      @input="inputChangeEvent"
     >
-      <input-help v-if="help" slot="append-outer" @form-input-help="$emit('form-input-help', name)"></input-help>
+      <input-help v-if="help" slot="append-outer" @form-input-help="inputHelpEvent"></input-help>
     </v-autocomplete>
   </ValidationProvider>
 </template>
 
 <script>
-import { ValidationProvider } from 'vee-validate';
-
-import InputHelp from './InputHelp.vue';
+import BaseInput from './BaseInput.vue';
+import { data, dataKey } from './options';
 
 export default {
     name: 'SelectInput',
-    components: {
-        ValidationProvider,
-        InputHelp
+    extends: BaseInput,
+    props: {
+        data,
+        dataKey,
+        /**
+         * Use plain select or autocomplete component as selection component.
+         */
+        autocomplete: {
+            type: Boolean,
+            required: false,
+            default: false
+        }
     },
-    props: ['placeholder', 'label', 'name', 'value', 'rules', 'selectlist', 'help', 'dataKey', 'simple'],
     data() {
         const attrs = this.dataKey ? { 'return-object': true } : {};
 
         return {
-            attrs,
-            fieldValue: this.value
+            attrs
         };
     }
 };
