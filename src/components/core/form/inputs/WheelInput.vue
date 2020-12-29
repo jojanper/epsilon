@@ -1,13 +1,11 @@
 <template>
   <div role="presentation" class="canvas-parent mx-auto">
-    <canvas width="1000" height="200" class="wheel" ref="canvas" :data-dummyvalue="redraw"></canvas>
+    <canvas width="200" height="200" class="wheel" ref="canvas" :data-dummyvalue="redraw"></canvas>
   </div>
 </template>
 
 <script>
 import { encodeAngle, decodeAngle } from '../../../../common/transform';
-
-import { peaks } from './peaks';
 
 // prettier-ignore
 const ARROW_BASE64_IMG_DOWN = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADIAA'
@@ -157,7 +155,6 @@ export default {
 
             this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
 
-/*
             circles.forEach(item => {
                 this.ctx.beginPath();
                 this.ctx.arc(item.x, item.y, item.r, 0, 2 * Math.PI);
@@ -165,9 +162,7 @@ export default {
                 this.ctx.strokeStyle = item.fill;
                 this.ctx.stroke();
             });
-            */
 
-/*
             // Up arrow
             if (this.img2Loaded) {
                 this.ctx.drawImage(this.imageUp, 70, 40);
@@ -184,42 +179,6 @@ export default {
 
             // Draw the actual shape position
             this.circle(shapes[0]);
-            */
-
-            const first = 0;
-            const absmaxHalf = 0.015625;
-            const canvasStart = 0;
-            const canvasEnd = 1742;
-            const scale = 0.5;
-            const halfOffset = 64;
-
-            this.halfPixel = 0.5;
-
-            this.ctx.beginPath();
-            this.ctx.fillStyle = 'violet';
-            this.ctx.moveTo((canvasStart - first) * scale, halfOffset);
-
-            let i;
-            for (i = canvasStart; i < canvasEnd; i++) {
-                const peak = peaks[2 * i] || 0;
-                const h = Math.round(peak / absmaxHalf);
-                console.log((i - first) * scale + this.halfPixel, halfOffset - h);
-                this.ctx.lineTo((i - first) * scale /*+ this.halfPixel*/, halfOffset - h);
-            }
-
-            // draw the bottom edge going backwards, to make a single
-            // closed hull to fill
-            let j = canvasEnd - 1;
-            for (j; j >= canvasStart; j--) {
-                const peak = peaks[2 * j + 1] || 0;
-                const h = Math.round(peak / absmaxHalf);
-                //console.log((j - first) * scale + this.halfPixel, halfOffset - h);
-                this.ctx.lineTo((j - first) * scale + 1 * this.halfPixel, halfOffset - h);
-            }
-
-            //this.ctx.restore();
-            this.ctx.closePath();
-            this.ctx.fill();
         },
 
         myDown(e) {
