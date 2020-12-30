@@ -64,6 +64,14 @@ if (!isElectron()) {
             }
         },
         {
+            title: 'Audio',
+            path: '/audio',
+            name: 'audio',
+            meta: {
+                breadcrumb: 'Audio'
+            }
+        },
+        {
             title: 'About',
             path: '/about',
             name: 'about',

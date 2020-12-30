@@ -9,6 +9,7 @@ import UtilsView from '@/views/demos/Utils.vue';
 import Configurator from '@/views/configurator/Configurator.vue';
 import AboutView from '@/views/About.vue';
 import HomeView from '@/views/Home.vue';
+import AudioView from '@/views/audio/Home.vue';
 import { CONFIG } from './navigation';
 
 Vue.use(Router);
@@ -47,6 +48,11 @@ const routes = [
 
     {
         ...CONFIG.routes[4],
+        component: AudioView
+    },
+
+    {
+        ...CONFIG.routes[5],
         component: AboutView
     },
 
