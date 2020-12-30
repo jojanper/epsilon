@@ -8,7 +8,7 @@ const homePageTitle = 'Epsilon';
 const formPageTitle = 'Form creation';
 const aboutTitle = 'This is an about page';
 
-const URL_LINKS = 4;
+const URL_LINKS = 5;
 
 const IEX_API_CALL = {
     method: 'GET',

@@ -24,7 +24,7 @@
 
           <draal-file-dialog color="blue" icon="mdi-folder-open" @file-select="fileSelect"></draal-file-dialog>
 
-          <v-icon @click="openFileDialog">mdi-plus</v-icon>
+          <v-icon @click="fileDialog=true">mdi-plus</v-icon>
           <draal-file-dialog multiple v-model="fileDialog" @file-select="fileSelect"></draal-file-dialog>
         </v-expansion-panel-content>
       </v-expansion-panel>
@@ -94,10 +94,6 @@ export default {
             this.activePanel = 1;
         },
 
-        openFileDialog() {
-            this.fileDialog = true;
-        },
-
         resetField(field) {
             if (field === 'windscreen') {
                 return false;
@@ -107,19 +103,8 @@ export default {
         },
 
         fileSelect(files) {
+            /* eslint-disable-next-line */
             console.log('selected', files);
-
-            const reader = new FileReader();
-            reader.onload = event => {
-                try {
-                    console.log(JSON.parse(event.target.result));
-                } catch (e) {
-                    console.log(e);
-                }
-            };
-
-            reader.onerror = error => console.error(error);
-            reader.readAsText(files[0]);
         },
 
         dataQuery(file) {

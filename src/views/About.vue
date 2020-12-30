@@ -9,7 +9,9 @@
 import DraalNestedView from './Nested.vue';
 
 export default {
-    components: { DraalNestedView },
+    components: {
+        DraalNestedView
+    },
     data() {
         return {
             list: [
