@@ -57,10 +57,41 @@
       :disabled="!loaded"
     ></v-progress-linear>
 
-    <!--
-      @slot Default slot.
-    -->
-    <slot name="default"></slot>
+    <div class="position-relative mt-3 mb-3 pb-3">
+      <div v-for="(item, i) in events" :key="i">
+        <v-hover v-slot="{ hover }" open-delay="400">
+          <div class="audio-event-wrapper" :style="getEventPosStyle(item)">
+            <!--
+                @slot Event marker slot.
+            -->
+            <slot name="marker">
+              <v-icon :color="color" class="audio-event-marker">mdi-map-marker</v-icon>
+            </slot>
+            <div v-if="hover" class="position-absolute" style="top: 20px;">
+              <!--
+                @slot Event slot.
+                @binding {number} eventIndex Event index.
+                @binding {object} event Event data.
+              -->
+              <slot name="event" v-bind:eventIndex="i" v-bind:event="item">
+                <v-card class="p-1 z-index-10" color="grey lighten-4">
+                  <v-card-text class="p-2">
+                    <div class="p-0 font-weight-light title">
+                      <!--
+                      @slot Event item render slot.
+                      @binding {number} eventIndex Event index.
+                      @binding {object} event Event data.
+                      -->
+                      <slot name="item" v-bind:eventIndex="i" v-bind:event="item">{{ item }}</slot>
+                    </div>
+                  </v-card-text>
+                </v-card>
+              </slot>
+            </div>
+          </div>
+        </v-hover>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -102,6 +133,15 @@ export default {
             type: String,
             required: false,
             default: 'light-blue lighten-3'
+        },
+        /**
+         * Audio event positions. Event markers are specified below audio timeline
+         * and the parent can customize the event rendering to specific needs.
+         */
+        events: {
+            type: Array,
+            required: false,
+            defalut: () => []
         }
     },
     data() {
@@ -266,6 +306,14 @@ export default {
             const ss = (seconds < 10) ? `0${seconds}` : `${seconds}`;
 
             return `${hh}:${mm}:${ss}`;
+        },
+
+        /**
+         * Set event marker position.
+         */
+        getEventPosStyle(pos) {
+            const duration = (pos / this.duration) * 100;
+            return `--left: ${duration}%`;
         }
     }
 };
@@ -279,6 +327,24 @@ export default {
 
 .v-application a {
   color: inherit !important;
+}
+
+.audio-event-wrapper {
+    top: -8px;
+    position: absolute;
+    width: 100%;
+    left: var(--left);
+}
+
+.audio-event-marker {
+    position: absolute;
+    font-size: 24px;
+    left: -12px;
+    transform: rotate(180deg);
+}
+
+.z-index-10 {
+    z-index: 10
 }
 
 </style>
