@@ -56,6 +56,11 @@
       @click.native="setPosition()"
       :disabled="!loaded"
     ></v-progress-linear>
+
+    <!--
+      @slot Default slot.
+    -->
+    <slot name="default"></slot>
   </div>
 </template>
 
