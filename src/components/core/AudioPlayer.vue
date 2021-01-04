@@ -62,7 +62,7 @@
         <v-hover v-slot="{ hover }" open-delay="400">
           <div class="audio-event-wrapper" :style="getEventPosStyle(item)">
             <!--
-                @slot Event marker slot.
+              @slot Event marker slot.
             -->
             <slot name="marker">
               <v-icon :color="color" class="audio-event-marker">mdi-map-marker</v-icon>
@@ -71,16 +71,16 @@
               <!--
                 @slot Event slot.
                 @binding {number} eventIndex Event index.
-                @binding {object} event Event data.
+                @binding {number} event Event position.
               -->
               <slot name="event" v-bind:eventIndex="i" v-bind:event="item">
                 <v-card class="p-1 z-index-10" color="grey lighten-4">
                   <v-card-text class="p-2">
                     <div class="p-0 font-weight-light title">
                       <!--
-                      @slot Event item render slot.
-                      @binding {number} eventIndex Event index.
-                      @binding {object} event Event data.
+                        @slot Event item render slot.
+                        @binding {number} eventIndex Event index.
+                        @binding {number} event Event position.
                       -->
                       <slot name="item" v-bind:eventIndex="i" v-bind:event="item">{{ item }}</slot>
                     </div>
