@@ -141,7 +141,7 @@ export default {
         events: {
             type: Array,
             required: false,
-            defalut: () => []
+            default: () => []
         }
     },
     data() {
