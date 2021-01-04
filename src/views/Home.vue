@@ -1,12 +1,17 @@
 <template>
-  <div>
+  <div class="pr-4">
     <h1>Epsilon</h1>
     <div class="home">
       <img src="../assets/logo.png" />
     </div>
 
-    <draal-audio-player class="mb-3" :name="url" :url="url" :events="eventPos">
-      <template v-slot:item="{ event }">{{ event }}s</template>
+    <draal-audio-player
+      class="p-3 mb-4 w-75 mx-auto elevation-2"
+      :name="url"
+      :url="url"
+      :events="eventPos"
+    >
+      <template v-slot:item="{ event }">Position: {{ event }}s</template>
     </draal-audio-player>
   </div>
 </template>
@@ -28,7 +33,8 @@ export default {
                 0.5,
                 2,
                 10,
-                70
+                70,
+                45
             ]
         };
     }
