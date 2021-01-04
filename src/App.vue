@@ -13,7 +13,7 @@
         <v-btn color="error" v-on:click="addAlert('Error')">Add error alert</v-btn>
       </v-flex>
 
-      <div v-if="data.length">
+      <div class="p-3 elevation-3" v-if="data.length">
         <div class="row text-left">
           <div class="col-sm">{{ quote.companyName }} ({{ quote.symbol }})</div>
           <div class="col-sm">Close: {{ chart[chart.length - 1].close }}</div>
