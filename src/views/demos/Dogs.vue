@@ -44,11 +44,11 @@
 </template>
 
 <script>
-import { DogApi } from '@/common/api';
 import DraalSpinner from '../../components/core/utils/Spinner.vue';
 import DraalDialog from '../../components/core/utils/Dialog.vue';
 import DraalTooltip from '../../components/core/utils/Tooltip.vue';
 import DraalMultiStageSelect from '../../components/core/MultiStageSelect.vue';
+import { DogApi } from '@/common/api';
 
 export default {
     components: {

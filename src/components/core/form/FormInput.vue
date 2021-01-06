@@ -33,8 +33,6 @@
 </template>
 
 <script>
-import { BaseObservableObject, slotMapping } from '@/common/utils';
-
 import { getFormInputName } from './input';
 import TextInput from './inputs/TextInput.vue';
 import SelectInput from './inputs/SelectInput.vue';
@@ -45,6 +43,7 @@ import RemoteFileSaveInput from './inputs/RemoteFileSaveInput.vue';
 import FileQueryInput from './inputs/FileQueryInput.vue';
 import TimelineInput from './inputs/TimelineInput.vue';
 import GroupInput from './GroupInput.vue';
+import { BaseObservableObject, slotMapping } from '@/common/utils';
 
 /**
  * Form input wrapper.

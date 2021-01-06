@@ -41,12 +41,12 @@
 import { of, throwError } from 'rxjs';
 import { delay } from 'rxjs/operators';
 
-import { NotificationMessage } from '@/common/models';
-import { notificationActions } from '@/store/helpers';
+import { SCHEMA } from './schema';
 import DraalSpinner from '../../components/core/utils/Spinner.vue';
 import DraalFormGenerator from '../../components/core/form/Form.vue';
+import { notificationActions } from '@/store/helpers';
+import { NotificationMessage } from '@/common/models';
 import DraalFileDialog from '@/components/core/utils/FileDialog.vue';
-import { SCHEMA } from './schema';
 
 export default {
     components: {

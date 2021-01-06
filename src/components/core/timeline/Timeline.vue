@@ -101,10 +101,10 @@
 </template>
 
 <script>
+import DraalTimelineItem from './TimelineItem.vue';
 import { appActions, appComputed } from '@/store/helpers';
 import DraalDialog from '@/components/core/utils/Dialog.vue';
 import DraalRuler from '@/components/core/utils/Ruler.vue';
-import DraalTimelineItem from './TimelineItem.vue';
 import DraalDataTable from '@/components/core/DataTable.vue';
 
 export default {

@@ -1,13 +1,13 @@
 <script>
 import { ValidationProvider } from 'vee-validate';
 
-import { debounce } from '@/common/utils';
 
 import InputHelp from './InputHelp.vue';
 
 import {
     placeholder, label, name, value, rules, help, classes
 } from './options';
+import { debounce } from '@/common/utils';
 
 export default {
     name: 'BaseInput',

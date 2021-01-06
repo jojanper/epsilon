@@ -1,5 +1,5 @@
-import { NotificationMessage, NotificationMessageTypes } from '../../common/models';
 import * as notificationModule from './notification';
+import { NotificationMessage, NotificationMessageTypes } from '../../common/models';
 
 
 describe('Notification module', () => {

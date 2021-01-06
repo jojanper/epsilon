@@ -2,6 +2,7 @@ import Vue from 'vue';
 import Router from 'vue-router';
 import NProgress from 'nprogress/nprogress';
 
+import { CONFIG } from './navigation';
 import AppRefresh from '@/common/utils/refresh';
 import DemosHomeView from '@/views/demos/DemosHome.vue';
 import DogsView from '@/views/demos/Dogs.vue';
@@ -10,7 +11,6 @@ import Configurator from '@/views/configurator/Configurator.vue';
 import AboutView from '@/views/About.vue';
 import HomeView from '@/views/Home.vue';
 import AudioView from '@/views/audio/Home.vue';
-import { CONFIG } from './navigation';
 
 Vue.use(Router);
 
