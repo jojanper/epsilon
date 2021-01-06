@@ -17,10 +17,10 @@
 </template>
 
 <script>
-import DraalFileDrop from '../utils/FileDrop.vue';
-import DraalSpinner from '../utils/Spinner.vue';
 import DraalTerminal from './Terminal.vue';
 import { terminalMixin } from './terminalMixin';
+import DraalFileDrop from '../utils/FileDrop.vue';
+import DraalSpinner from '../utils/Spinner.vue';
 
 /**
  * Upload file to remote and show response in terminal window.

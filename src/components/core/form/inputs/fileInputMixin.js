@@ -1,10 +1,10 @@
 import { ValidationObserver } from 'vee-validate';
 
 import BaseInput from './BaseInput.vue';
+import { dropTitle } from './options';
 import DraalFileDrop from '../../utils/FileDrop.vue';
 import DraalFileDialog from '@/components/core/utils/FileDialog.vue';
 
-import { dropTitle } from './options';
 import { getMediaDuration } from '@/common/utils';
 
 export const fileInputMixin = {

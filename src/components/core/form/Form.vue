@@ -47,11 +47,11 @@
 <script>
 import { ValidationObserver } from 'vee-validate';
 
+import DraalFormInput from './FormInput.vue';
+import DraalDialog from '../utils/Dialog.vue';
 import { appComputed } from '@/store/helpers';
 import { getDataField, resetDataBySchema, slotMapping } from '@/common/utils';
 
-import DraalFormInput from './FormInput.vue';
-import DraalDialog from '../utils/Dialog.vue';
 
 export default {
     name: 'DraalFormGenerator',

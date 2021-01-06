@@ -31,7 +31,14 @@
 
       <v-expansion-panel>
         <v-expansion-panel-header>TESTI</v-expansion-panel-header>
-        <v-expansion-panel-content>HELLO</v-expansion-panel-content>
+        <v-expansion-panel-content>
+          <draal-icon-dialog
+            :tooltip-config="{ 'icon-size': 'large' }"
+            tooltip-name="Icon tooltip"
+            dialog-title="This is title"
+            dialog-content="This is content"
+          ></draal-icon-dialog>
+        </v-expansion-panel-content>
       </v-expansion-panel>
     </v-expansion-panels>
   </div>
@@ -41,18 +48,20 @@
 import { of, throwError } from 'rxjs';
 import { delay } from 'rxjs/operators';
 
-import { NotificationMessage } from '@/common/models';
-import { notificationActions } from '@/store/helpers';
+import { SCHEMA } from './schema';
 import DraalSpinner from '../../components/core/utils/Spinner.vue';
 import DraalFormGenerator from '../../components/core/form/Form.vue';
+import { notificationActions } from '@/store/helpers';
+import { NotificationMessage } from '@/common/models';
 import DraalFileDialog from '@/components/core/utils/FileDialog.vue';
-import { SCHEMA } from './schema';
+import DraalIconDialog from '@/components/core/utils/IconDialog.vue';
 
 export default {
     components: {
         DraalSpinner,
         DraalFormGenerator,
-        DraalFileDialog
+        DraalFileDialog,
+        DraalIconDialog
     },
     data() {
         const schema = [...SCHEMA];

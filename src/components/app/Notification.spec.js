@@ -1,9 +1,9 @@
 import Vuex from 'vuex';
 import { shallowMount, createLocalVue } from '@vue/test-utils';
 
+import DraalNotification from './Notification.vue';
 import { getters } from '@/store/modules/notification';
 import { NotificationMessage } from '@/common/models';
-import DraalNotification from './Notification.vue';
 
 
 const localVue = createLocalVue();

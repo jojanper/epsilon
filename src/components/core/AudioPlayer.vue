@@ -67,7 +67,7 @@
             <slot name="marker">
               <v-icon :color="color" class="audio-event-marker">mdi-map-marker</v-icon>
             </slot>
-            <div v-if="hover" class="position-absolute" style="top: 20px;">
+            <div v-if="hover" class="audio-event-hover position-absolute">
               <!--
                 @slot Event slot.
                 @binding {number} eventIndex Event index.
@@ -75,8 +75,8 @@
               -->
               <slot name="event" v-bind:eventIndex="i" v-bind:event="item">
                 <v-card class="p-1 z-index-10" color="grey lighten-4">
-                  <v-card-text class="p-2">
-                    <div class="p-0 font-weight-light title">
+                  <v-card-text class="p-1">
+                    <div class="font-weight-light audio-event-text">
                       <!--
                         @slot Event item render slot.
                         @binding {number} eventIndex Event index.
@@ -334,6 +334,13 @@ export default {
     position: absolute;
     width: 100%;
     left: var(--left);
+
+    .audio-event-hover {
+        top: 20px;
+        .audio-event-text {
+            font-size: 16px;
+        }
+    }
 }
 
 .audio-event-marker {

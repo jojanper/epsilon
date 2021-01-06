@@ -1,7 +1,7 @@
 import moxios from 'moxios';
 
-import Network from '@/common/network';
 import * as appModule from './app';
+import Network from '@/common/network';
 
 
 describe('App module', () => {

@@ -6,9 +6,9 @@
 </template>
 
 <script>
-import DraalFileDialog from '@/components/core/utils/FileDialog.vue';
-
 import { peaks } from './peaks';
+
+import DraalFileDialog from '@/components/core/utils/FileDialog.vue';
 import { getMediaDuration } from '@/common/utils';
 
 export default {
