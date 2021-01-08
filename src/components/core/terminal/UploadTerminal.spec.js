@@ -41,6 +41,8 @@ describe('DraalUploadTerminal', () => {
         // THEN completion is correct
         expect(wrapper.vm.completed).toEqual(10);
 
+        await wrapper.vm.$nextTick();
+
         // AND response data is available
         el = wrapper.find('div.data-screen-text');
         expect(el.text()).toEqual('success');

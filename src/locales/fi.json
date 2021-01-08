@@ -124,6 +124,7 @@
         "required_if": "Pakollinen",
         "size": "{_field_} tulee olla vähemmän kuin {size}kB",
         "wavaudio": "Ei WAV tiedosto",
+        "jsonfile": "Ei JSON tiedosto",
         "filequery": "Täytä puuttuvat tiedot alapuolella"
     }
 }

@@ -6,26 +6,51 @@
       <v-expansion-panel>
         <v-expansion-panel-header>{{ $t('configuratorPage.confPanelTitle') }}</v-expansion-panel-header>
         <v-expansion-panel-content>
-          <draal-form-generator
-            :schema="schema"
-            v-model="formData"
-            v-on:submit="encode"
-            :options="options"
-            :reset="resetField"
+          <span
+            class="float-left2 row2 p-0 m-0 position-absolute2 position-relative2 d-block2 clearfix"
           >
-            <template v-slot:form.row.focusTimeline2.angleDir="{ data }">
-              <v-icon :style="renderAzimuth(data)">mdi-arrow-up</v-icon>
-            </template>
+            <draal-tooltip name="HELLO" icon2="mdi-import" position="right">
+              <template v-slot:default="{ on }">
+                <div
+                  v-on="on"
+                  class="float-left clearfix2 float2-left row2 m-0 mb-4 position-relative2 position-absolute2"
+                  @click="fileSelect"
+                >
+                  <draal-file-drop
+                    icon-color="pink"
+                    icon="mdi-import"
+                    cls="export-json"
+                    @fileDrop="fileSelect"
+                  ></draal-file-drop>
+                </div>
+              </template>
+            </draal-tooltip>
+          </span>
 
-            <template v-slot:form.focusTimeline.angleDir="{ data }">
-              <v-icon :style="renderAzimuth(data)">mdi-arrow-up</v-icon>
-            </template>
-          </draal-form-generator>
+          <div class2="row p-0 m-0">
+            <draal-form-generator
+              :schema="schema"
+              v-model="formData"
+              v-on:submit="encode"
+              :options="options"
+              :reset="resetField"
+            >
+              <template v-slot:form.row.focusTimeline2.angleDir="{ data }">
+                <v-icon :style="renderAzimuth(data)">mdi-arrow-up</v-icon>
+              </template>
+
+              <template v-slot:form.focusTimeline.angleDir="{ data }">
+                <v-icon :style="renderAzimuth(data)">mdi-arrow-up</v-icon>
+              </template>
+            </draal-form-generator>
+          </div>
 
           <draal-file-dialog color="blue" icon="mdi-folder-open" @file-select="fileSelect"></draal-file-dialog>
 
           <v-icon @click="fileDialog=true">mdi-plus</v-icon>
           <draal-file-dialog multiple v-model="fileDialog" @file-select="fileSelect"></draal-file-dialog>
+
+          <a :href="linkUrl" :download="linkDownload">THIS IS LINK</a>
         </v-expansion-panel-content>
       </v-expansion-panel>
 
@@ -54,21 +79,34 @@ import DraalFormGenerator from '../../components/core/form/Form.vue';
 import { notificationActions } from '@/store/helpers';
 import { NotificationMessage } from '@/common/models';
 import DraalFileDialog from '@/components/core/utils/FileDialog.vue';
+import DraalFileDrop from '@/components/core/utils/FileDrop.vue';
 import DraalIconDialog from '@/components/core/utils/IconDialog.vue';
+import DraalTooltip from '@/components/core/utils/Tooltip.vue';
 
 export default {
     components: {
         DraalSpinner,
         DraalFormGenerator,
         DraalFileDialog,
-        DraalIconDialog
+        DraalIconDialog,
+        DraalFileDrop,
+        DraalTooltip
     },
     data() {
         const schema = [...SCHEMA];
 
         schema[6].dataQuery = this.dataQuery.bind(this);
 
+        const json = { a: 'foo', b: [1, 2, 3] };
+        const blob = new Blob([JSON.stringify(json, null, 4)], { type: 'application/json' });
+        const linkUrl = URL.createObjectURL(blob);
+        const linkDownload = 'test.json';
+
         return {
+            linkUrl,
+            linkDownload,
+
+
             data: null,
             processing: false,
             formData: {
@@ -149,5 +187,11 @@ export default {
 <style scoped lang="scss">
 a {
     color: #42b983;
+}
+
+.export-json {
+    margin-top2: 48px;
+    margin-bott2om: 48px;
+    font-siz2e: 128px;
 }
 </style>

@@ -25,7 +25,7 @@ export const placeholder = {
 export const rules = {
     type: String,
     required: false,
-    default: null
+    default: ''
 };
 
 // Form input value

@@ -160,11 +160,11 @@ export const SCHEMA = [
         wavAudioRule: true
     },
     {
-        type: 'remote-file-save',
-        placeholder: 'Click to select location of the output MP4 file or drag file to icon',
-        label: 'Recording output MP4 file',
+        type: 'file-open',
+        placeholder: 'Click to select location of the JSON file or drag file to icon',
+        label: 'JSON file',
         name: 'output',
-        rules: 'required'
+        rules: 'required|jsonfile'
     },
     {
         type: 'remote-file-save',

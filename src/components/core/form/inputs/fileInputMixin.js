@@ -76,14 +76,14 @@ export const fileInputMixin = {
         async setMediaDuration({ duration }) {
             this.mediaDuration = parseFloat(duration.toFixed(1), 10);
             this.sendInputEvent();
-            setTimeout(this.$refs.provider.validate, 0);
+            this.validateInput();
         },
 
         // Error in media file parsing, most likely not media file at all
         async setMediaError() {
             this.mediaDuration = null;
             this.sendInputEvent();
-            setTimeout(this.$refs.provider.validate, 0);
+            this.validateInput();
         }
     }
 };

@@ -1,12 +1,12 @@
 <script>
 import { ValidationProvider } from 'vee-validate';
 
-
 import InputHelp from './InputHelp.vue';
-
 import {
     placeholder, label, name, value, rules, help, classes
 } from './options';
+
+import * as validation from '@/components/core/form/rules';
 import { debounce } from '@/common/utils';
 
 export default {
@@ -38,6 +38,10 @@ export default {
         };
     },
     created() {
+        // Check if custom data validation is triggered on each input change
+        const data = Object.keys(validation.rules).filter(key => this.rules.indexOf(key) > -1);
+        this.customValidation = data.length;
+
         this.inputChangeEvent = debounce(this._inputChangeEvent, this.debounce);
     },
     methods: {
@@ -51,6 +55,11 @@ export default {
         },
 
         _inputChangeEvent(data) {
+            // Custom validation rule requires that data is explicitly validated
+            if (this.customValidation) {
+                this.validateInput();
+            }
+
             /**
              * Input data change event.
              *
@@ -68,6 +77,11 @@ export default {
         isRequiredRadio(required) {
             const valid = this.fieldValue < 0 || this.fieldValue === null || this.fieldValue === undefined;
             return required ? valid : false;
+        },
+
+        // Trigger cross-field validation
+        validateInput() {
+            setTimeout(this.$refs.provider.validate, 0);
         }
     }
 };
