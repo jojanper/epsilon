@@ -164,7 +164,8 @@ export const SCHEMA = [
         placeholder: 'Click to select location of the JSON file or drag file to icon',
         label: 'JSON file',
         name: 'output',
-        rules: 'required|jsonfile'
+        rules: 'required|jsonfile',
+        fileObject: true
     },
     {
         type: 'remote-file-save',

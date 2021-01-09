@@ -23,6 +23,14 @@ export const fileInputMixin = {
             type: Boolean,
             required: false,
             default: false
+        },
+        /**
+         * Include selected file object if enabled.
+         */
+        fileObject: {
+            type: Boolean,
+            required: false,
+            default: false
         }
     },
     data() {
@@ -48,7 +56,7 @@ export const fileInputMixin = {
         onDrop(files) {
             if (files.length) {
                 // Set the file name from the dropped target
-                this.setInput(files[0].path || files[0].name);
+                this.setInput(files[0].path || files[0].name, files[0]);
 
                 // Determine duration if needed
                 if (this.wavAudioRule) {
@@ -59,8 +67,9 @@ export const fileInputMixin = {
             }
         },
 
-        setInput(fileName) {
+        setInput(fileName, file) {
             this.fieldValueInt = fileName;
+            this.file = file;
         },
 
         clicked() {
@@ -69,7 +78,19 @@ export const fileInputMixin = {
 
         sendInputEvent() {
             this.fieldValue = this.fieldValueInt;
-            const value = this.wavAudioRule ? { fileName: this.fieldValue, duration: this.mediaDuration } : this.fieldValue;
+
+            const value = this.wavAudioRule || this.fileObject ? { fileName: this.fieldValue } : this.fieldValue;
+
+            // If WAV validation was requested, send object with duration field
+            if (this.wavAudioRule) {
+                value.duration = this.mediaDuration;
+            }
+
+            // If selected file object was requested, send that one also
+            if (this.fileObject) {
+                value.file = this.file;
+            }
+
             this.inputChangeEvent(value);
         },
 
