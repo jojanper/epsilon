@@ -25,7 +25,8 @@ import DraalTooltip from '@/components/core/utils/Tooltip.vue';
 
 /**
  * Import file either dropping file or selecting from file dialog.
- * All DraalFileDrop props can be also used.
+ * Component supports tooltip, no tooltip and file dragging support
+ * can be enabled or disabled. All DraalFileDrop props can be also used.
  *
  * @displayName DraalFileImport
  */
