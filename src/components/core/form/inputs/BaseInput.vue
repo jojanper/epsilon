@@ -38,9 +38,9 @@ export default {
         };
     },
     created() {
-        // Check if custom data validation is triggered on each input change
+        // Check if custom data validation is to be triggered on each input change
         const data = Object.keys(validation.rules).filter(key => this.rules.indexOf(key) > -1);
-        this.customValidation = data.length;
+        this.customValidation = data.length > 0;
 
         this.inputChangeEvent = debounce(this._inputChangeEvent, this.debounce);
     },

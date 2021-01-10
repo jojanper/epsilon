@@ -3,7 +3,7 @@
     <draal-tooltip
       v-bind="tooltipConfig"
       position="top"
-      :name="tooltipName"
+      :name="tooltipText"
       :icon="icon"
       @clicked="helpDialog=true"
     ></draal-tooltip>
@@ -48,7 +48,7 @@ export default {
         /**
          * Icon tooltip text.
          */
-        tooltipName: {
+        tooltipText: {
             type: String,
             required: true
         },

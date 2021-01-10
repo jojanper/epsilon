@@ -6,51 +6,53 @@
       <v-expansion-panel>
         <v-expansion-panel-header>{{ $t('configuratorPage.confPanelTitle') }}</v-expansion-panel-header>
         <v-expansion-panel-content>
-          <span
-            class="float-left2 row2 p-0 m-0 position-absolute2 position-relative2 d-block2 clearfix"
+          <draal-file-import
+            class="mb-6"
+            tooltip-text="Import JSON"
+            tooltip-position="right"
+            icon-color="red darken-2"
+            icon="mdi-import"
+            @file-select="fileSelect"
+            :multiple="true"
+          ></draal-file-import>
+
+          <draal-form-generator
+            :schema="schema"
+            v-model="formData"
+            v-on:submit="encode"
+            :options="options"
+            :reset="resetField"
           >
-            <draal-tooltip name="HELLO" icon2="mdi-import" position="right">
-              <template v-slot:default="{ on }">
-                <div
-                  v-on="on"
-                  class="float-left clearfix2 float2-left row2 m-0 mb-4 position-relative2 position-absolute2"
-                  @click="fileSelect"
-                >
-                  <draal-file-drop
-                    icon-color="pink"
-                    icon="mdi-import"
-                    cls="export-json"
-                    @fileDrop="fileSelect"
-                  ></draal-file-drop>
-                </div>
-              </template>
-            </draal-tooltip>
-          </span>
+            <template v-slot:form.row.focusTimeline2.angleDir="{ data }">
+              <v-icon :style="renderAzimuth(data)">mdi-arrow-up</v-icon>
+            </template>
 
-          <div class2="row p-0 m-0">
-            <draal-form-generator
-              :schema="schema"
-              v-model="formData"
-              v-on:submit="encode"
-              :options="options"
-              :reset="resetField"
-            >
-              <template v-slot:form.row.focusTimeline2.angleDir="{ data }">
-                <v-icon :style="renderAzimuth(data)">mdi-arrow-up</v-icon>
-              </template>
+            <template v-slot:form.focusTimeline.angleDir="{ data }">
+              <v-icon :style="renderAzimuth(data)">mdi-arrow-up</v-icon>
+            </template>
+          </draal-form-generator>
 
-              <template v-slot:form.focusTimeline.angleDir="{ data }">
-                <v-icon :style="renderAzimuth(data)">mdi-arrow-up</v-icon>
-              </template>
-            </draal-form-generator>
+          <div class="row">
+            <draal-file-import
+              tooltip-text="Open"
+              class="col-sm"
+              icon-color="blue"
+              icon="mdi-folder-open"
+              @file-select="fileSelect"
+            ></draal-file-import>
+
+            <draal-file-import
+              tooltip-text="Open multiple files"
+              class="col-sm"
+              icon-color="blue"
+              icon="mdi-plus"
+              :drag="false"
+              :multiple="true"
+              @file-select="fileSelect"
+            ></draal-file-import>
+
+            <a class="col-sm" :href="linkUrl" :download="linkDownload">THIS IS LINK</a>
           </div>
-
-          <draal-file-dialog color="blue" icon="mdi-folder-open" @file-select="fileSelect"></draal-file-dialog>
-
-          <v-icon @click="fileDialog=true">mdi-plus</v-icon>
-          <draal-file-dialog multiple v-model="fileDialog" @file-select="fileSelect"></draal-file-dialog>
-
-          <a :href="linkUrl" :download="linkDownload">THIS IS LINK</a>
         </v-expansion-panel-content>
       </v-expansion-panel>
 
@@ -59,7 +61,7 @@
         <v-expansion-panel-content>
           <draal-icon-dialog
             :tooltip-config="{ 'icon-size': 'large' }"
-            tooltip-name="Icon tooltip"
+            tooltip-text="Icon tooltip"
             dialog-title="This is title"
             dialog-content="This is content"
           ></draal-icon-dialog>
@@ -78,19 +80,15 @@ import DraalSpinner from '../../components/core/utils/Spinner.vue';
 import DraalFormGenerator from '../../components/core/form/Form.vue';
 import { notificationActions } from '@/store/helpers';
 import { NotificationMessage } from '@/common/models';
-import DraalFileDialog from '@/components/core/utils/FileDialog.vue';
-import DraalFileDrop from '@/components/core/utils/FileDrop.vue';
 import DraalIconDialog from '@/components/core/utils/IconDialog.vue';
-import DraalTooltip from '@/components/core/utils/Tooltip.vue';
+import DraalFileImport from '@/components/core/utils/FileImport.vue';
 
 export default {
     components: {
         DraalSpinner,
         DraalFormGenerator,
-        DraalFileDialog,
         DraalIconDialog,
-        DraalFileDrop,
-        DraalTooltip
+        DraalFileImport
     },
     data() {
         const schema = [...SCHEMA];
@@ -187,11 +185,5 @@ export default {
 <style scoped lang="scss">
 a {
     color: #42b983;
-}
-
-.export-json {
-    margin-top2: 48px;
-    margin-bott2om: 48px;
-    font-siz2e: 128px;
 }
 </style>

@@ -108,3 +108,9 @@ export default {
     }
 };
 </script>
+
+<style scoped lang="scss">
+.dropbox {
+    cursor: pointer;
+}
+</style>
