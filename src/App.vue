@@ -221,8 +221,8 @@ export default {
     font-size: 32px;
 }
 .dropbox-highlight {
-    color: red;
-    font-size: 48px;
+    color: red !important;
+    font-size: 48px !important;
 }
 
 .nav-item {

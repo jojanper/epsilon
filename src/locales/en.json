@@ -125,6 +125,7 @@
         "required": "Required",
         "size": "The {_field_} field size must be less than {size}KB",
         "wavaudio": "Not a valid WAV file",
+        "jsonfile": "Not a JSON file",
         "filequery": "Fill all required information below"
     }
 }

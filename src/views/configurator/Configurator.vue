@@ -6,6 +6,16 @@
       <v-expansion-panel>
         <v-expansion-panel-header>{{ $t('configuratorPage.confPanelTitle') }}</v-expansion-panel-header>
         <v-expansion-panel-content>
+          <draal-file-import
+            class="mb-6"
+            tooltip-text="Import JSON"
+            tooltip-position="right"
+            icon-color="red darken-2"
+            icon="mdi-import"
+            @file-select="fileSelect"
+            :multiple="true"
+          ></draal-file-import>
+
           <draal-form-generator
             :schema="schema"
             v-model="formData"
@@ -22,10 +32,27 @@
             </template>
           </draal-form-generator>
 
-          <draal-file-dialog color="blue" icon="mdi-folder-open" @file-select="fileSelect"></draal-file-dialog>
+          <div class="row">
+            <draal-file-import
+              tooltip-text="Open"
+              class="col-sm"
+              icon-color="blue"
+              icon="mdi-folder-open"
+              @file-select="fileSelect"
+            ></draal-file-import>
 
-          <v-icon @click="fileDialog=true">mdi-plus</v-icon>
-          <draal-file-dialog multiple v-model="fileDialog" @file-select="fileSelect"></draal-file-dialog>
+            <draal-file-import
+              tooltip-text="Open multiple files"
+              class="col-sm"
+              icon-color="blue"
+              icon="mdi-plus"
+              :drag="false"
+              :multiple="true"
+              @file-select="fileSelect"
+            ></draal-file-import>
+
+            <a class="col-sm" :href="linkUrl" :download="linkDownload">THIS IS LINK</a>
+          </div>
         </v-expansion-panel-content>
       </v-expansion-panel>
 
@@ -34,7 +61,7 @@
         <v-expansion-panel-content>
           <draal-icon-dialog
             :tooltip-config="{ 'icon-size': 'large' }"
-            tooltip-name="Icon tooltip"
+            tooltip-text="Icon tooltip"
             dialog-title="This is title"
             dialog-content="This is content"
           ></draal-icon-dialog>
@@ -53,22 +80,31 @@ import DraalSpinner from '../../components/core/utils/Spinner.vue';
 import DraalFormGenerator from '../../components/core/form/Form.vue';
 import { notificationActions } from '@/store/helpers';
 import { NotificationMessage } from '@/common/models';
-import DraalFileDialog from '@/components/core/utils/FileDialog.vue';
 import DraalIconDialog from '@/components/core/utils/IconDialog.vue';
+import DraalFileImport from '@/components/core/utils/FileImport.vue';
 
 export default {
     components: {
         DraalSpinner,
         DraalFormGenerator,
-        DraalFileDialog,
-        DraalIconDialog
+        DraalIconDialog,
+        DraalFileImport
     },
     data() {
         const schema = [...SCHEMA];
 
         schema[6].dataQuery = this.dataQuery.bind(this);
 
+        const json = { a: 'foo', b: [1, 2, 3] };
+        const blob = new Blob([JSON.stringify(json, null, 4)], { type: 'application/json' });
+        const linkUrl = URL.createObjectURL(blob);
+        const linkDownload = 'test.json';
+
         return {
+            linkUrl,
+            linkDownload,
+
+
             data: null,
             processing: false,
             formData: {

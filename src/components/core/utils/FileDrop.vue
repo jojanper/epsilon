@@ -1,13 +1,14 @@
 <template>
-  <div
+  <v-icon
     @dragenter="setDragging(true)"
     @dragend="setDragging(false)"
     @dragleave="setDragging(false)"
     @dragover.prevent
     @drop="onDrop"
-    :class="['dropbox mdi mdi-drag', dragging ? 'dropbox-highlight' : '']"
+    :class="[`dropbox ${cls}`, dragging ? 'dropbox-highlight' : '']"
+    v-bind="attrs"
     :title="title"
-  ></div>
+  >{{ icon }}</v-icon>
 </template>
 
 <script>
@@ -26,12 +27,58 @@ export default {
             type: String,
             required: false,
             default: ''
+        },
+        /**
+         * Additional CSS class(es).
+         */
+        cls: {
+            type: String,
+            required: false,
+            default: ''
+        },
+        /**
+         * Icon name.
+         */
+        icon: {
+            type: String,
+            required: false,
+            default: 'mdi-drag'
+        },
+        /**
+         * Icon size. On dragging event the size is changed to x-large.
+         */
+        iconSize: {
+            type: String,
+            required: false,
+            default: 'medium'
+        },
+        /**
+         * Icon color.
+         */
+        iconColor: {
+            type: String,
+            required: false,
+            default: ''
         }
     },
     data() {
         return {
             dragging: false
         };
+    },
+    computed: {
+        attrs() {
+            const iconSize = this.dragging ? 'x-large' : this.iconSize;
+            const attrs = {
+                [`${iconSize}`]: true
+            };
+
+            if (this.iconColor) {
+                attrs.color = this.iconColor;
+            }
+
+            return attrs;
+        }
     },
     methods: {
         onDrop(e) {
@@ -61,3 +108,9 @@ export default {
     }
 };
 </script>
+
+<style scoped lang="scss">
+.dropbox {
+    cursor: pointer;
+}
+</style>

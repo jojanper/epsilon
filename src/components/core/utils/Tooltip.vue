@@ -26,9 +26,7 @@ export default {
     props: ['position', 'name', 'classes', 'icon', 'iconSize', 'iconColor', 'link', 'linkDownload', 'linkUrl'],
     computed: {
         tooltipAttrs() {
-            return {
-                [`${this.position}`]: true
-            };
+            return this.position ? { [`${this.position}`]: true } : {};
         },
 
         iconAttrs() {
@@ -48,7 +46,3 @@ export default {
     }
 };
 </script>
-
-<!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped lang="scss">
-</style>

@@ -255,11 +255,6 @@ export default {
              * Send selected input data.
              */
             this.inputChangeEvent(data);
-        },
-
-        // Trigger cross-field validation
-        validateInput() {
-            setTimeout(this.$refs.provider.validate, 0);
         }
     }
 };
