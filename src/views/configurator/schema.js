@@ -253,6 +253,7 @@ export const SCHEMA = [
         label: 'Focus events timeline',
         placeholder: '',
         maxZoom: 15,
+        outlined: true,
         timelineWidths: [
             {
                 width: 15,

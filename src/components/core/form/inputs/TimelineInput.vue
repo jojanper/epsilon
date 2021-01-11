@@ -1,7 +1,12 @@
 <template>
   <div class="form-wrapper-outer" :class="classes">
-    <div class="field-wrapper">
-      <div class="field-content p-4">
+    <div :class="[outlined ? 'field-wrapper' : '']">
+      <div class="clearfix" v-if="!outlined">
+        <div class="float-left pl-0">
+          <v-label>{{ label }}</v-label>
+        </div>
+      </div>
+      <div :class="[`p-4`, outlined ? 'field-content' : '']">
         <!-- Validation via hidden input -->
         <ValidationProvider rules="required">
           <input class="d-none" type="number" v-model="dummyModel" />
@@ -41,7 +46,7 @@
           </template>
         </draal-timeline>
       </div>
-      <div class="field-placeholder">
+      <div v-if="outlined" class="field-placeholder">
         <span>
           <v-label>{{ label }}</v-label>
         </span>
@@ -119,6 +124,14 @@ export default {
             type: String,
             required: false,
             default: ''
+        },
+        /**
+         * Apply the outlined style to the input.
+         */
+        outlined: {
+            type: Boolean,
+            required: false,
+            default: false
         }
     },
     data() {
@@ -163,13 +176,16 @@ export default {
         border: 1px solid #DADCE0;
         border-radius: 4px;
 
-        &:hover {
+        &:hover
+        {
             border: 1px solid #1A73E8;
         }
     }
 
-    &:hover {
-        label {
+    &:hover
+    {
+        label
+        {
             color:#1A73E8;
         }
     }
