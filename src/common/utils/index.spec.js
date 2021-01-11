@@ -1,7 +1,7 @@
 /* eslint-disable no-restricted-syntax */
 import {
     getTimestamp, ansiColors, getContentDispositionFilename,
-    getDataField, resetDataBySchema, slotMapping
+    getDataField, resetDataBySchema, slotMapping, readJson
 } from './index';
 
 describe('utils', () => {
@@ -135,5 +135,22 @@ describe('utils', () => {
                 componentSlot: 'form.t.dataT'
             }
         ]);
+    });
+
+    it('readJson', async done => {
+        const json = { a: 'foo', b: [1, 2, 3] };
+        const blob = new Blob([JSON.stringify(json, null, 4)], { type: 'application/json' });
+
+        // Reading JSON from file/blob succeeds
+        const data = await readJson(blob);
+        expect(data).toEqual(json);
+
+        const blob2 = new Blob(['Text here'], { type: 'plain/text' });
+
+        // Reading non-JSON file/blob fails
+        const data2 = await readJson(blob2).catch(err => err);
+        expect(data2.message).toEqual('Unexpected token T in JSON at position 0');
+
+        done();
     });
 });

@@ -105,6 +105,28 @@ export function slotMapping(inputSlots, schema, prefix, childPrefix, componentPr
     });
 }
 
+/**
+ * Read file or blob and return parsed JSON object on success.
+ *
+ * @param {*} file File or Blob.
+ * @returns Promise that resolves to parsed JSON object.
+ */
+export function readJson(file) {
+    return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onload = event => {
+            try {
+                resolve(JSON.parse(event.target.result));
+            } catch (e) {
+                reject(e);
+            }
+        };
+
+        reader.onerror = reject;
+        reader.readAsText(file);
+    });
+}
+
 export const timer = timeout => new Promise(resolve => setTimeout(resolve, timeout));
 
 export * from './ansicolors';

@@ -58,24 +58,6 @@ export default {
     },
     methods: {
         fileSelect(files) {
-            /*
-            console.log('selected', files);
-
-            const reader = new FileReader();
-            reader.onload = event => {
-                try {
-                    console.log(JSON.parse(event.target.result));
-                } catch (e) {
-                    console.log(e);
-                }
-            };
-
-            reader.onerror = error => console.error(error);
-            reader.readAsText(files[0]);
-            */
-
-            console.log('selected', files);
-
             getMediaDuration(
                 files[0],
                 data => {
