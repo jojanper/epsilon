@@ -97,7 +97,9 @@
 
 <script>
 /**
- * Audio player.
+ * Audio player. Playback can be started and stopped with space key. Right arrow
+ * seeks playback towards the end of the track and left arrow towards the start
+ * of the track.
  *
  * @displayName DraalAudioPlayer
  */
@@ -142,6 +144,14 @@ export default {
             type: Array,
             required: false,
             default: () => []
+        },
+        /**
+         * Seek increment value when left and right keyboard arrows are pressed.
+         */
+        fastSeekInc: {
+            type: Number,
+            required: false,
+            default: 5
         }
     },
     data() {
@@ -157,7 +167,31 @@ export default {
         };
     },
     created() {
+        // Keyboard event handle mapping
+        this.cbMap = {
+            // Space pressed -> start or stop the playback
+            Space: () => {
+                if (this.loaded) {
+                    if (this.playing) {
+                        this.stop();
+                    } else {
+                        this.play();
+                    }
+                }
+            },
+            // Right arrow pressed -> seek forward
+            ArrowRight: () => { this.$refs.audioplayer.currentTime += this.fastSeekInc; },
+            // Left arrow pressed -> seek backward
+            ArrowLeft: () => { this.$refs.audioplayer.currentTime -= this.fastSeekInc; }
+        };
+
+        // Handle keyboard events when key is pressed down
+        window.addEventListener('keydown', this.keyDown);
+
         this.timerId = null;
+    },
+    destroyed() {
+        window.removeEventListener('keydown', this.keyDown);
     },
     beforeDestroy() {
         clearInterval(this.timerId);
@@ -314,6 +348,15 @@ export default {
         getEventPosStyle(pos) {
             const duration = (pos / this.duration) * 100;
             return `--left: ${duration}%`;
+        },
+
+        /**
+         * Handle keyboard events.
+         */
+        keyDown(event) {
+            if (this.cbMap[event.code]) {
+                this.cbMap[event.code](event);
+            }
         }
     }
 };
