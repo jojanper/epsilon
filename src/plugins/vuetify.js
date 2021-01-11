@@ -37,7 +37,8 @@ import Vuetify, {
     VSlider,
     VRadioGroup,
     VRadio,
-    VHover
+    VHover,
+    VLabel
 } from 'vuetify/lib';
 
 import i18n from '../i18n';
@@ -82,7 +83,8 @@ export const CONFIG = {
         VSlider,
         VRadioGroup,
         VRadio,
-        VHover
+        VHover,
+        VLabel
     },
     global: {
         ripples: false
