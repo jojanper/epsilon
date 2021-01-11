@@ -1,11 +1,12 @@
 <template>
-  <div :class="classes">
-    <div class="pr-3 mr-3">
-      <p class="text-left v-label theme--light">{{ label }}</p>
-    </div>
-
-    <div class="border rounded">
-      <div class="p-4">
+  <div class="form-wrapper-outer" :class="classes">
+    <div :class="[outlined ? 'field-wrapper' : '']">
+      <div class="clearfix" v-if="!outlined">
+        <div class="float-left pl-0">
+          <v-label>{{ label }}</v-label>
+        </div>
+      </div>
+      <div :class="[`p-4`, outlined ? 'field-content' : '']">
         <!-- Validation via hidden input -->
         <ValidationProvider rules="required">
           <input class="d-none" type="number" v-model="dummyModel" />
@@ -44,6 +45,11 @@
             ></wheel-input>
           </template>
         </draal-timeline>
+      </div>
+      <div v-if="outlined" class="field-placeholder">
+        <span>
+          <v-label>{{ label }}</v-label>
+        </span>
       </div>
     </div>
   </div>
@@ -118,6 +124,14 @@ export default {
             type: String,
             required: false,
             default: ''
+        },
+        /**
+         * Apply the outlined style to the input.
+         */
+        outlined: {
+            type: Boolean,
+            required: false,
+            default: false
         }
     },
     data() {
@@ -150,3 +164,46 @@ export default {
     }
 };
 </script>
+
+<!-- Add "scoped" attribute to limit CSS to this component only -->
+<style scoped lang="scss">
+.field-wrapper
+{
+    position: relative;
+
+    .field-content
+    {
+        border: 1px solid #DADCE0;
+        border-radius: 4px;
+
+        &:hover
+        {
+            border: 1px solid #1A73E8;
+        }
+    }
+
+    &:hover
+    {
+        label
+        {
+            color:#1A73E8;
+        }
+    }
+
+    .field-placeholder
+    {
+        position: absolute;
+        top: -10px;
+        box-sizing: border-box;
+        padding: 0 8px;
+        z-index: 1;
+        text-align: left;
+
+        span
+        {
+            background: #ffffff;
+            padding: 0px 8px;
+        }
+    }
+}
+</style>
