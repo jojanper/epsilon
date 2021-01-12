@@ -66,4 +66,13 @@ global.prepareVuetify = () => {
 
 global.getVuetify = () => new Vuetify();
 
+global.attachToDocument = () => {
+    const elem = document.createElement('div');
+    if (document.body) {
+        document.body.appendChild(elem);
+    }
+
+    return elem;
+};
+
 window.URL.createObjectURL = function createObjectURL() { };

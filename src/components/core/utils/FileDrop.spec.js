@@ -8,10 +8,14 @@ describe('DraalFileDrop', () => {
     const dropEvent = getDropEvent('drop', { files });
     const dragEvent = getDropEvent('dragenter', { files });
 
+    beforeAll(() => {
+        prepareVuetify();
+    });
+
     it('file is dropped', async () => {
         // GIVEN file drop component
         const wrapper = mount(DraalFileDrop, {
-            attachToDocument: true,
+            attachTo: attachToDocument(),
             propsData: { title }
         });
 
@@ -29,5 +33,7 @@ describe('DraalFileDrop', () => {
 
         // THEN dragging event is emitted
         expect(wrapper.emitted().dragging[0][0]).toBeTruthy();
+
+        wrapper.destroy();
     });
 });

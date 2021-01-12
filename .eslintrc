@@ -78,6 +78,7 @@
         "createLocalNotificationStore": false,
         "getDropEvent": false,
         "prepareVuetify": false,
-        "getVuetify": false
+        "getVuetify": false,
+        "attachToDocument": false
     }
 }

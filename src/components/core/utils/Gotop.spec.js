@@ -9,7 +9,7 @@ describe('DraalGo2Top', () => {
 
     it('renders correctly', done => {
         const wrapper = shallowMount(DraalGo2Top, {
-            attachToDocument: true
+            attachTo: attachToDocument()
         });
 
         // On initial render, component is not visible
