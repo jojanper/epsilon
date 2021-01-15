@@ -253,7 +253,10 @@ export default {
     async mounted() {
         // Timeline data duration is updated that affects also this component rendering
         this.dataProvider.subscribe(({ data }) => {
-            let { duration } = data;
+            let duration;
+            if (data) {
+                ({ duration } = data);
+            }
 
             duration = duration || 0;
 

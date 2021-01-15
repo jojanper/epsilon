@@ -31,6 +31,14 @@ export const fileInputMixin = {
             type: Boolean,
             required: false,
             default: false
+        },
+        /**
+         * Loading color. Currently used when wave audio rule is enabled.
+         */
+        loadingColor: {
+            type: String,
+            required: false,
+            default: 'primary'
         }
     },
     data() {
@@ -46,7 +54,8 @@ export const fileInputMixin = {
             canDrop,
             mediaDuration,
             fileDialog: false,
-            inputRules
+            inputRules,
+            loading: false
         };
     },
     created() {
@@ -60,6 +69,7 @@ export const fileInputMixin = {
 
                 // Determine duration if needed
                 if (this.wavAudioRule) {
+                    this.loading = this.loadingColor;
                     getMediaDuration(files[0], this.setMediaDuration, this.setMediaError);
                 } else {
                     this.sendInputEvent();
@@ -95,6 +105,7 @@ export const fileInputMixin = {
         },
 
         async setMediaDuration({ duration }) {
+            this.loading = false;
             this.mediaDuration = parseFloat(duration.toFixed(1), 10);
             this.sendInputEvent();
             this.validateInput();
@@ -102,6 +113,7 @@ export const fileInputMixin = {
 
         // Error in media file parsing, most likely not media file at all
         async setMediaError() {
+            this.loading = false;
             this.mediaDuration = null;
             this.sendInputEvent();
             this.validateInput();

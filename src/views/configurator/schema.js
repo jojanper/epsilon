@@ -34,6 +34,8 @@ export const SCHEMA = [
         label: 'Device ID',
         name: 'device',
         rules: 'required',
+        clearable: true,
+        outlined: true,
         help: {
             title: 'Device UUID',
             body: 'UUID in the form of xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx.'
@@ -148,6 +150,8 @@ export const SCHEMA = [
         label: 'Bitrate (kbps)',
         name: 'bitrate',
         rules: 'required',
+        clearable: true,
+        outlined: true,
         data: [192, 256, 512]
     },
     {
@@ -157,7 +161,10 @@ export const SCHEMA = [
         label: 'Input WAV file for recording',
         name: 'input',
         rules: 'required',
-        wavAudioRule: true
+        wavAudioRule: true,
+        clearable: true,
+        outlined: true,
+        loadingColor: 'pink'
     },
     {
         type: 'file-open',
@@ -165,14 +172,18 @@ export const SCHEMA = [
         label: 'JSON file',
         name: 'output',
         rules: 'required|jsonfile',
-        fileObject: true
+        fileObject: true,
+        clearable: true,
+        outlined: true
     },
     {
         type: 'remote-file-save',
         placeholder: 'Click to select location of the output MP4 file or drag file to icon',
         label: 'Recording output MP4 file',
         name: 'output2',
-        rules: 'required'
+        rules: 'required',
+        clearable: true,
+        outlined: true
     },
     {
         type: 'file-data-query',
@@ -187,17 +198,21 @@ export const SCHEMA = [
         dataKey: 'uuid',
         selectKey: 'uuid',
         queryRule: 'filequery',
-        dividerEnd: {
+        dividerEnd2: {
             label: 'ID file end',
             class: 'w-50 mb-10'
-        }
+        },
+        clearable: true,
+        outlined: true
     },
     {
         type: 'text',
         placeholder: 'Enter notes',
         label: 'Comments',
         name: 'comments',
-        rules: 'required'
+        rules: 'required',
+        clearable: true,
+        outlined: true
     },
     {
         type: 'checkbox',
@@ -212,7 +227,17 @@ export const SCHEMA = [
                 + 'processing to suit the wind noise conditions. Clearer audio even when '
                 + 'conditions aren’t.'
         },
-        rules: 'required'
+        rules: 'required',
+        dividerStart: {
+            label: 'Windscreen',
+            class: 'w-50 mb-8'
+        },
+        dividerEnd2: {
+            label: 'Windscreen',
+            class: '',
+            style: 'top: -25px'
+        },
+        outlined: true
     },
     {
         type: 'text',

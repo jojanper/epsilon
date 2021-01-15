@@ -124,14 +124,6 @@ export default {
             type: String,
             required: false,
             default: ''
-        },
-        /**
-         * Apply the outlined style to the input.
-         */
-        outlined: {
-            type: Boolean,
-            required: false,
-            default: false
         }
     },
     data() {

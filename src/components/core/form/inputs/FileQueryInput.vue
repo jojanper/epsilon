@@ -1,6 +1,6 @@
 <template>
-  <div class="form-input file-query-input-wrapper">
-    <div class="w-100 file-query-input">
+  <div class="form-input file-query-input-wrapper mt-3">
+    <div class="file-query-input">
       <ValidationObserver ref="observer">
         <div class="row m-0 p-0">
           <div class="col-sm m-0 p-0">
@@ -13,6 +13,7 @@
                 :placeholder="placeholder"
                 @click="fileDialog=true"
                 :readonly="true"
+                v-bind="inputAttrs"
               >
                 <input-help v-if="help" slot="append-outer" @form-input-help="inputHelpEvent"></input-help>
                 <draal-file-drop
@@ -25,8 +26,8 @@
           </div>
         </div>
 
-        <div class="row mt-0 mb-0 p-0" :class="fieldValue ? '' : 'd-none'" v-if="fieldValue">
-          <div class="col-sm mt-0 pt-0 pb-0">
+        <div class="row p-0 second-row" :class="fieldValue ? '' : 'd-none'" v-if="fieldValue">
+          <div class="col-sm pb-0">
             <ValidationProvider name="selected" v-if="listData.length">
               <select-input
                 classes=" "
@@ -39,11 +40,12 @@
                 @input="setSelectedData"
                 rules="required"
                 :autocomplete="true"
+                v-bind="inputAttrs"
               ></select-input>
             </ValidationProvider>
           </div>
 
-          <div class="col-sm mt-0 pt-0 pb-0">
+          <div class="col-sm pb-0">
             <ValidationProvider name="custom" v-if="customId" v-slot="{ errors }" rules="required">
               <v-text-field
                 v-model="customValue"
@@ -51,18 +53,19 @@
                 :error-messages="errors"
                 :placeholder="customPlaceholder"
                 @input="setCustomValue"
+                v-bind="inputAttrs"
               ></v-text-field>
             </ValidationProvider>
           </div>
         </div>
 
-        <div class="row mt-0 mb-0 p-0" :class="processing ? '' : 'd-none'">
+        <div class="row position-relative" :class="processing ? '' : 'd-none'" style="top: -25px;">
           <draal-spinner
             :state="processing"
             width="40"
             height="40"
             type="spinner-3"
-            class="float-left mb-3 ml-1"
+            class="float-left ml-1"
           ></draal-spinner>
         </div>
 
@@ -225,7 +228,7 @@ export default {
             this.selectedData = data;
             this.validateInput();
 
-            if (data.custom === true) {
+            if (data && data.custom === true) {
                 this.customId = true;
             } else {
                 this.customId = false;
@@ -259,3 +262,12 @@ export default {
     }
 };
 </script>
+
+<!-- Add "scoped" attribute to limit CSS to this component only -->
+<style scoped lang="scss">
+.second-row
+{
+    top: -15px;
+    position: relative;
+}
+</style>

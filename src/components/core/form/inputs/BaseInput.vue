@@ -3,7 +3,7 @@ import { ValidationProvider } from 'vee-validate';
 
 import InputHelp from './InputHelp.vue';
 import {
-    placeholder, label, name, value, rules, help, classes
+    placeholder, label, name, value, rules, help, classes, clearable, outlined
 } from './options';
 
 import * as validation from '@/components/core/form/rules';
@@ -23,6 +23,8 @@ export default {
         rules,
         help,
         classes,
+        clearable,
+        outlined,
         /**
          * Delay input data change updates.
          */
@@ -34,7 +36,8 @@ export default {
     },
     data() {
         return {
-            fieldValue: this.value
+            fieldValue: this.value,
+            inputAttrs: this.getInputAttrs()
         };
     },
     created() {
@@ -43,6 +46,9 @@ export default {
         this.customValidation = data.length > 0;
 
         this.inputChangeEvent = debounce(this._inputChangeEvent, this.debounce);
+    },
+    destroyed() {
+        this.inputChangeEvent.cancel();
     },
     methods: {
         inputHelpEvent() {
@@ -82,6 +88,21 @@ export default {
         // Trigger cross-field validation
         validateInput() {
             setTimeout(this.$refs.provider.validate, 0);
+        },
+
+        // Return input attributes related to styling of the input
+        getInputAttrs() {
+            const attrs = {};
+
+            if (this.clearable) {
+                attrs.clearable = true;
+            }
+
+            if (this.outlined) {
+                attrs.outlined = true;
+            }
+
+            return attrs;
         }
     }
 };

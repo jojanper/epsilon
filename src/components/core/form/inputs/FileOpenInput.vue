@@ -10,6 +10,8 @@
         @click="clicked"
         :readonly="true"
         @input="inputChangeEvent"
+        v-bind="inputAttrs"
+        :loading="loading"
       >
         <input-help v-if="help" slot="append-outer" @form-input-help="inputHelpEvent"></input-help>
         <draal-file-drop

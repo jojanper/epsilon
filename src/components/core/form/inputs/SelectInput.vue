@@ -9,7 +9,7 @@
       :items="data"
       :placeholder="placeholder"
       :item-text="dataKey"
-      v-bind="attrs"
+      v-bind="{ ...attrs, ...inputAttrs }"
       @input="inputChangeEvent"
     >
       <input-help v-if="help" slot="append-outer" @form-input-help="$emit('form-input-help', name)"></input-help>
@@ -23,7 +23,7 @@
       :items="data"
       :placeholder="placeholder"
       :item-text="dataKey"
-      v-bind="attrs"
+      v-bind="{ ...attrs, ...inputAttrs }"
       @input="inputChangeEvent"
     >
       <input-help v-if="help" slot="append-outer" @form-input-help="inputHelpEvent"></input-help>

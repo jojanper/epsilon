@@ -73,3 +73,17 @@ export const readonly = {
     required: false,
     default: false
 };
+
+// Add input clear functionality
+export const clearable = {
+    type: Boolean,
+    required: false,
+    default: false
+};
+
+// Apply the outlined style to the input.
+export const outlined = {
+    type: Boolean,
+    required: false,
+    default: false
+};

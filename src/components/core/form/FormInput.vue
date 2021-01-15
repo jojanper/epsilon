@@ -1,11 +1,13 @@
 <template>
   <div>
-    <hr
-      v-if="$attrs.dividerStart"
-      :data-content="$attrs.dividerStart.label"
-      class="form-input-divider mx-auto"
-      :class="$attrs.dividerStart.label ? `f-div-input ${$attrs.dividerStart.class}` : `hr-simple-text ${$attrs.dividerStart.class}`"
-    />
+    <div v-if="$attrs.dividerStart" class="clearfix">
+      <hr
+        :data-content="$attrs.dividerStart.label"
+        class="form-input-divider mx-auto"
+        :class="$attrs.dividerStart.label ? `f-div-input ${$attrs.dividerStart.class}` : `hr-simple-text ${$attrs.dividerStart.class}`"
+        :style="$attrs.dividerStart.style"
+      />
+    </div>
 
     <component
       :is="getType($attrs.type)"
@@ -23,12 +25,14 @@
       </template>
     </component>
 
-    <hr
-      v-if="$attrs.dividerEnd"
-      :data-content="$attrs.dividerEnd.label"
-      class="form-input-divider mx-auto"
-      :class="$attrs.dividerEnd.label ? `f-div-input ${$attrs.dividerEnd.class}` : `hr-simple-text ${$attrs.dividerEnd.class}`"
-    />
+    <div v-if="$attrs.dividerEnd" class="clearfix">
+      <hr
+        :data-content="$attrs.dividerEnd.label"
+        class="form-input-divider mx-auto"
+        :class="$attrs.dividerEnd.label ? `f-div-input ${$attrs.dividerEnd.class}` : `hr-simple-text ${$attrs.dividerEnd.class}`"
+        :style="$attrs.dividerEnd.style"
+      />
+    </div>
   </div>
 </template>
 
@@ -139,7 +143,7 @@ hr {
     }
 }
 
-hr.f-div-input::before {
+hr.f-div-input::after {
     content: attr(data-content);
     display: inline-block;
     background: #fff;
