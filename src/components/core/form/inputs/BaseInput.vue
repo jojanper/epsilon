@@ -103,6 +103,22 @@ export default {
             }
 
             return attrs;
+        },
+
+        getOutlinedStyle() {
+            return '--position: 5px';
+        },
+
+        getOutlinedClasses(base, errors, required, input = 'radio') {
+            const method = input === 'radio' ? this.isRequiredRadio : this.isRequired;
+            const cls = this.outlined ? [base] : [];
+            if (errors.length || method(required)) {
+                cls.push('error--text');
+            } else {
+                cls.push('primary--text');
+            }
+
+            return cls;
         }
     }
 };
