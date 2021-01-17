@@ -198,6 +198,15 @@ export default {
     .file-query-input {
         top: -15px;
         position: relative;
+
+        .second-row {
+            .v-text-field__details {
+                margin-bottom: 0px;
+            }
+            .v-messages {
+                padding-bottom: 0px !important;
+            }
+        }
     }
 }
 
@@ -223,6 +232,7 @@ export default {
 .dropbox-highlight {
     color: red !important;
     font-size: 48px !important;
+    padding-bottom: 10px;
 }
 
 .nav-item {

@@ -8,6 +8,7 @@
       :placeholder="placeholder"
       @click="clicked"
       @input="inputChangeEvent"
+      v-bind="inputAttrs"
     >
       <input-help v-if="help" slot="append-outer" @form-input-help="inputHelpEvent"></input-help>
       <draal-file-drop

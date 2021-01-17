@@ -7,6 +7,7 @@
       :label="label"
       :placeholder="placeholder"
       @input="inputChangeEvent"
+      v-bind="inputAttrs"
     >
       <input-help v-if="help" slot="append-outer" @form-input-help="inputHelpEvent"></input-help>
     </v-text-field>

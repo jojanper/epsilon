@@ -24,7 +24,8 @@
         <div class="mt-3">
           <v-btn
             class="mr-2"
-            :disabled="invalid || !valid"
+            :data-dummyvalue="setDisabled(invalid, valid)"
+            :disabled="disabled"
             v-on:click="$emit('submit', formData)"
             color="primary"
           >{{ options.submit }}</v-btn>
@@ -50,8 +51,9 @@ import { ValidationObserver } from 'vee-validate';
 import DraalFormInput from './FormInput.vue';
 import DraalDialog from '../utils/Dialog.vue';
 import { appComputed } from '@/store/helpers';
-import { getDataField, resetDataBySchema, slotMapping } from '@/common/utils';
-
+import {
+    getDataField, resetDataBySchema, slotMapping, debounce
+} from '@/common/utils';
 
 export default {
     name: 'DraalFormGenerator',
@@ -73,11 +75,16 @@ export default {
             helpDialog: false,
             formData: this.value || {},
             componentKey: 0,
-            slotsDef
+            slotsDef,
+            disabled: false
         };
     },
     created() {
         this.dataRelHandlers = {};
+        this.setDisabled = debounce(this._setDisabled, 100);
+    },
+    destroyed() {
+        this.setDisabled.cancel();
     },
     computed: {
         appLang: appComputed.appLang
@@ -89,6 +96,10 @@ export default {
         }
     },
     methods: {
+        _setDisabled(invalid, valid) {
+            this.disabled = invalid || !valid;
+        },
+
         forceRendeder() {
             this.componentKey += 1;
         },
