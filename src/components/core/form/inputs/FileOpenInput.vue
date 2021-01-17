@@ -27,6 +27,9 @@
       <v-text-field v-model="mediaDuration"></v-text-field>
     </ValidationProvider>
 
+    <!-- Media file duration is checked using this element -->
+    <audio v-if="wavAudioRule" :src="fileSrc" ref="audio"></audio>
+
     <!-- File dialog is also hidden -->
     <draal-file-dialog v-model="fileDialog" @file-select="onDrop"></draal-file-dialog>
   </ValidationObserver>

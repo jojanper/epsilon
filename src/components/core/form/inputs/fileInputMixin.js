@@ -5,8 +5,6 @@ import { dropTitle } from './options';
 import DraalFileDrop from '../../utils/FileDrop.vue';
 import DraalFileDialog from '@/components/core/utils/FileDialog.vue';
 
-import { getMediaDuration } from '@/common/utils';
-
 export const fileInputMixin = {
     extends: BaseInput,
     components: {
@@ -55,11 +53,32 @@ export const fileInputMixin = {
             mediaDuration,
             fileDialog: false,
             inputRules,
-            loading: false
+            loading: false,
+            fileSrc: null
         };
     },
     created() {
         this.fieldValueInt = this.fieldValue;
+    },
+    mounted() {
+        // Set audio events when WAV audio rule enabled
+        if (this.$refs.audio && this.wavAudioRule) {
+            // Audio loaded
+            this.$refs.audio.onloadeddata = () => {
+                if (this.$refs.audio.readyState >= 2) {
+                    this.setMediaDuration(this.$refs.audio);
+                    URL.revokeObjectURL(this.fileSrc);
+                    this.fileSrc = null;
+                }
+            };
+
+            // Audio loading error
+            this.$refs.audio.onerror = () => {
+                this.setMediaError();
+                URL.revokeObjectURL(this.fileSrc);
+                this.fileSrc = null;
+            };
+        }
     },
     methods: {
         onDrop(files) {
@@ -70,7 +89,7 @@ export const fileInputMixin = {
                 // Determine duration if needed
                 if (this.wavAudioRule) {
                     this.loading = this.loadingColor;
-                    getMediaDuration(files[0], this.setMediaDuration, this.setMediaError);
+                    this.fileSrc = URL.createObjectURL(files[0]);
                 } else {
                     this.sendInputEvent();
                 }
