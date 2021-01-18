@@ -26,7 +26,7 @@
                 v-bind="toolIconAttrs"
                 :name="$t('timeline.new')"
                 icon="mdi-plus"
-                @clicked="addItem"
+                @clicked="addItem()"
               ></draal-tooltip>
               <draal-tooltip
                 v-bind="toolIconAttrs"
@@ -390,7 +390,7 @@ export default {
         },
 
         // Add new timeline item
-        addItem() {
+        addItem(count, cb) {
             // Make sure items are added with reasonable distance with
             // respect to previous item. Thus, take into account the
             // length of the currently selected timeline.
@@ -400,12 +400,40 @@ export default {
             const len = this.timelines.length;
             const position = len ? this.timelines[len - 1].position + incPos : 0;
 
-            this.timelines.push({
-                ...this.itemCreator(),
-                position: position > this.timelineWidth ? this.timelineWidth : position,
-                $clicked: false,
-                $id: Date.now() // Should be unique ID
-            });
+            const baseId = Date.now();
+
+            if (!cb) {
+                // No callback defined, just add new item to timeline
+                this.timelines.push({
+                    ...this.itemCreator(),
+                    position: position > this.timelineWidth ? this.timelineWidth : position,
+                    $clicked: false,
+                    $id: baseId
+                });
+            } else {
+                // Implementing template slot provides the new timeline item(s)
+                const newItems = count || 0;
+                const basePosition = position;
+                for (let i = 0; i < newItems; i++) {
+                    // Provide the starting position and timeline length.
+                    // Template slot will call the provided callback that provides
+                    // the new timeline item.
+                    cb(basePosition, this.timelineWidth, i, data => {
+                        // Must fit into timeline, otherwise addition is rejected
+                        if (data && data.position < this.timelineWidth) {
+                            this.timelines.push({
+                                ...data,
+                                $clicked: false,
+                                $id: baseId + i
+                            });
+
+                            return true;
+                        }
+
+                        return false;
+                    });
+                }
+            }
 
             this.setChanges(true);
         },

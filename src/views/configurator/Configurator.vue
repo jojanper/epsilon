@@ -214,8 +214,10 @@ export default {
             return `transform: rotate(${-data.angle}deg)`;
         },
 
-        iconClick(data) {
-            data.add();
+        iconClick({ add }) {
+            add(5, (position, maxPos, index, cb) => {
+                cb({ angle: 100, zoom: 90, position: position + index * 0.5 });
+            });
         }
     }
 };
