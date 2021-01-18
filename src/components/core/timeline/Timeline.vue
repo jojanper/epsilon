@@ -1,18 +1,45 @@
 <template>
   <div :style="`--thumb: ${timelineScrollColor}; --thumbHover: ${timelineScrollHoverColor}`">
     <div class="row">
-      <div v-if="!saveOnEdit" class="mr-auto">
-        <v-icon @click="sendTimelineEvent">mdi-content-save-outline</v-icon>
-        <div v-if="hasChanges" class="float-right pl-1 text-danger">{{ $t('timeline.unsaved') }}</div>
+      <div v-if="!saveOnEdit" class="mr-auto timeline-toolbar-save">
+        <draal-tooltip
+          classes="float-left"
+          v-bind="toolIconAttrs"
+          :name="$t('timeline.save')"
+          icon="mdi-content-save-outline"
+          @clicked="sendTimelineEvent"
+        ></draal-tooltip>
+        <div v-if="hasChanges" class="float-left pl-1 mt-1 text-danger">{{ $t('timeline.unsaved') }}</div>
       </div>
+
+      <!--
+        @slot Toolbar center slot
+        @binding {object} data Timeline manipulation functions.
+      -->
+      <slot name="table.toolbar-center" v-bind:data="{ add: addItem }"></slot>
 
       <div class="ml-auto">
         <v-menu left>
           <template v-slot:activator="{ on }">
             <div>
-              <v-icon @click="addItem">mdi-plus</v-icon>
-              <v-icon @click="setZoom(1)" large>mdi-magnify-plus-outline</v-icon>
-              <v-icon @click="setZoom(-1)" large>mdi-magnify-minus-outline</v-icon>
+              <draal-tooltip
+                v-bind="toolIconAttrs"
+                :name="$t('timeline.new')"
+                icon="mdi-plus"
+                @clicked="addItem"
+              ></draal-tooltip>
+              <draal-tooltip
+                v-bind="toolIconAttrs"
+                :name="$t('timeline.zoomin')"
+                icon="mdi-magnify-plus-outline"
+                @clicked="setZoom(1)"
+              ></draal-tooltip>
+              <draal-tooltip
+                v-bind="toolIconAttrs"
+                :name="$t('timeline.zoomout')"
+                icon="mdi-magnify-minus-outline"
+                @clicked="setZoom(-1)"
+              ></draal-tooltip>
               <v-btn icon v-on="on" v-if="timelineMenuWidths.length > 1">
                 <v-icon>mdi-dots-vertical</v-icon>
               </v-btn>
@@ -105,6 +132,7 @@ import DraalTimelineItem from './TimelineItem.vue';
 import { appActions, appComputed } from '@/store/helpers';
 import DraalDialog from '@/components/core/utils/Dialog.vue';
 import DraalRuler from '@/components/core/utils/Ruler.vue';
+import DraalTooltip from '@/components/core/utils/Tooltip.vue';
 import DraalDataTable from '@/components/core/DataTable.vue';
 
 export default {
@@ -113,7 +141,8 @@ export default {
         DraalTimelineItem,
         DraalDialog,
         DraalRuler,
-        DraalDataTable
+        DraalDataTable,
+        DraalTooltip
     },
     props: {
         /**
@@ -247,7 +276,12 @@ export default {
             moving: false,
             rulerRender: 0,
 
-            durationUpdated: 0
+            durationUpdated: 0,
+
+            toolIconAttrs: {
+                position: 'top',
+                iconSize: 'large'
+            }
         };
     },
     async mounted() {
@@ -463,6 +497,10 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped lang="scss">
+.timeline-toolbar-save {
+    min-width: 150px;
+}
+
 .timeline {
     margin-top: 2%;
     margin-bottom: 3%;

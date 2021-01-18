@@ -36,7 +36,11 @@
         "remoteInputDropTitle": "Pudota tiedosto tänne"
     },
     "timeline": {
-        "unsaved": "Tallentamaton"
+        "unsaved": "Tallentamaton",
+        "save": "Tallenna muutokset",
+        "new": "Uusi tapahtuma",
+        "zoomin": "Lähennä",
+        "zoomout": "Loitonna"
     },
     "$vuetify": {
         "badge": "Badge",

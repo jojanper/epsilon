@@ -30,6 +30,35 @@
             <template v-slot:form.focusTimeline.angleDir="{ data }">
               <v-icon :style="renderAzimuth(data)">mdi-arrow-up</v-icon>
             </template>
+
+            <template v-slot:form.focusTimeline.toolbar-center="{ data }">
+              <div class="rounded border elevation-1 p-1">
+                <draal-tooltip
+                  v-bind="toolIconAttrs"
+                  name="Left focus"
+                  icon="mdi-pan-left"
+                  @clicked="iconClick(data)"
+                ></draal-tooltip>
+                <draal-tooltip
+                  v-bind="toolIconAttrs"
+                  name="Front focus"
+                  icon="mdi-pan-up"
+                  @clicked="iconClick(data)"
+                ></draal-tooltip>
+                <draal-tooltip
+                  v-bind="toolIconAttrs"
+                  name="Back focus"
+                  icon="mdi-pan-down"
+                  @clicked="iconClick(data)"
+                ></draal-tooltip>
+                <draal-tooltip
+                  v-bind="toolIconAttrs"
+                  name="Right focus"
+                  icon="mdi-pan-right"
+                  @clicked="iconClick(data)"
+                ></draal-tooltip>
+              </div>
+            </template>
           </draal-form-generator>
 
           <div class="row">
@@ -82,13 +111,15 @@ import { notificationActions } from '@/store/helpers';
 import { NotificationMessage } from '@/common/models';
 import DraalIconDialog from '@/components/core/utils/IconDialog.vue';
 import DraalFileImport from '@/components/core/utils/FileImport.vue';
+import DraalTooltip from '@/components/core/utils/Tooltip.vue';
 
 export default {
     components: {
         DraalSpinner,
         DraalFormGenerator,
         DraalIconDialog,
-        DraalFileImport
+        DraalFileImport,
+        DraalTooltip
     },
     data() {
         const schema = [...SCHEMA];
@@ -127,7 +158,12 @@ export default {
 
             fileDialog: false,
 
-            queryFailure: false
+            queryFailure: false,
+
+            toolIconAttrs: {
+                position: 'top',
+                iconSize: 'large'
+            }
         };
     },
     methods: {
@@ -176,6 +212,10 @@ export default {
 
         renderAzimuth(data) {
             return `transform: rotate(${-data.angle}deg)`;
+        },
+
+        iconClick(data) {
+            data.add();
         }
     }
 };

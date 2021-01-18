@@ -13,9 +13,9 @@
         >
           <template v-for="(def, index) in slotsDef" v-slot:[def.childSlot]="{ data }">
             <!--
-                @slot Custom input data rendering.
-                @binding {number} inputKey Input key (Vue key attribute).
-                @binding {object} data Input data.
+              @slot Custom input data rendering.
+              @binding {number} inputKey Input key (Vue key attribute).
+              @binding {object} data Input data.
             -->
             <slot :name="def.componentSlot" v-bind:inputKey="index" v-bind:data="data"></slot>
           </template>

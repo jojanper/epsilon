@@ -299,7 +299,7 @@ export const SCHEMA = [
             }
         ],
         dataRelTarget: ['input'],
-        customSlots: ['angleDir'],
+        customSlots: ['angleDir', 'toolbar-center'],
         tableConfig: {
             // Custom rendering via template slot is provided for this data item
             customColumns: ['angleDir'],
