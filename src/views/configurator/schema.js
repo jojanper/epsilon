@@ -263,7 +263,8 @@ export const SCHEMA = [
             title: 'Radio options',
             body: 'Option 1 does this and Option 2 does that'
         },
-        rules: 'required'
+        rules: 'required',
+        outlined: true
     },
     {
         type: 'text',

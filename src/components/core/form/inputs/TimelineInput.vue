@@ -1,55 +1,57 @@
 <template>
   <div class="form-wrapper-outer" :class="classes">
-    <div :class="[outlined ? 'field-wrapper' : '']">
+    <div :class="getOutlinedClasses('field-wrapper')">
       <div class="clearfix" v-if="!outlined">
         <div class="float-left pl-0">
           <v-label>{{ label }}</v-label>
         </div>
       </div>
-      <div :class="[`p-4`, outlined ? 'field-content' : '']">
-        <!-- Validation via hidden input -->
-        <ValidationProvider rules="required">
-          <input class="d-none" type="number" v-model="dummyModel" />
-        </ValidationProvider>
-
-        <!-- Input gets invalid every time timeline changes -->
-        <draal-timeline
-          :timeData="value"
-          :timelineWidths="timelineWidths"
-          :itemCreator="accessMethods.new"
-          @input="saveTimeline"
-          @timelineChanged="dummyModel=null"
-          :tableConfig="tableConfig"
-          :maxZoom="maxZoom"
-          :data-provider="dataRelInput"
-        >
-          <template v-for="(def, index) in customRender" v-slot:[def.childSlot]="{ data }">
-            <!--
-              @slot Custom table column data rendering.
-              @binding {number} inputKey Column index (Vue key attribute).
-              @binding {object} data Column data.
-            -->
-            <slot :name="def.componentSlot" v-bind:inputKey="index" v-bind:data="data"></slot>
-          </template>
-
-          <!-- Row data editing occurs here -->
-          <template v-slot:editDialog="{ componentKey, editData, editChanges }">
-            <wheel-input
-              :key="componentKey"
-              name
-              label
-              placeholder
-              :value="editData"
-              :zoomtransform="1"
-              @input="(data) => saveEditedValues(editData, data, editChanges)"
-            ></wheel-input>
-          </template>
-        </draal-timeline>
-      </div>
-      <div v-if="outlined" class="field-placeholder">
+      <div v-else :style="getOutlinedStyle()" :class="getOutlinedClasses('field-placeholder')">
         <span>
           <v-label>{{ label }}</v-label>
         </span>
+      </div>
+      <div :class="getOutlinedClasses('field-content')">
+        <div class="timeline-content">
+          <!-- Validation via hidden input -->
+          <ValidationProvider rules="required">
+            <input class="d-none" type="number" v-model="dummyModel" />
+          </ValidationProvider>
+
+          <!-- Input gets invalid every time timeline changes -->
+          <draal-timeline
+            :timeData="value"
+            :timelineWidths="timelineWidths"
+            :itemCreator="accessMethods.new"
+            @input="saveTimeline"
+            @timelineChanged="dummyModel=null"
+            :tableConfig="tableConfig"
+            :maxZoom="maxZoom"
+            :data-provider="dataRelInput"
+          >
+            <template v-for="(def, index) in customRender" v-slot:[def.childSlot]="{ data }">
+              <!--
+                @slot Custom table column data rendering.
+                @binding {number} inputKey Column index (Vue key attribute).
+                @binding {object} data Column data.
+              -->
+              <slot :name="def.componentSlot" v-bind:inputKey="index" v-bind:data="data"></slot>
+            </template>
+
+            <!-- Row data editing occurs here -->
+            <template v-slot:editDialog="{ componentKey, editData, editChanges }">
+              <wheel-input
+                :key="componentKey"
+                name
+                label
+                placeholder
+                :value="editData"
+                :zoomtransform="1"
+                @input="(data) => saveEditedValues(editData, data, editChanges)"
+              ></wheel-input>
+            </template>
+          </draal-timeline>
+        </div>
       </div>
     </div>
   </div>
@@ -152,6 +154,10 @@ export default {
         saveTimeline(timeline) {
             this.inputChangeEvent(timeline);
             this.dummyModel = 0;
+        },
+
+        getOutlinedClasses(base) {
+            return this.outlined ? [base, 'primary--text'] : ['primary--text'];
         }
     }
 };
@@ -159,43 +165,10 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped lang="scss">
-.field-wrapper
+.timeline-content
 {
-    position: relative;
-
-    .field-content
-    {
-        border: 1px solid #DADCE0;
-        border-radius: 4px;
-
-        &:hover
-        {
-            border: 1px solid #1A73E8;
-        }
-    }
-
-    &:hover
-    {
-        label
-        {
-            color:#1A73E8;
-        }
-    }
-
-    .field-placeholder
-    {
-        position: absolute;
-        top: -10px;
-        box-sizing: border-box;
-        padding: 0 8px;
-        z-index: 1;
-        text-align: left;
-
-        span
-        {
-            background: #ffffff;
-            padding: 0px 8px;
-        }
-    }
+    padding: 10px;
+    padding-right: 25px;
+    padding-bottom: 25px;
 }
 </style>

@@ -167,3 +167,54 @@ export default {
     }
 };
 </script>
+
+<style lang="scss">
+.form-wrapper-outer {
+    margin-bottom: 20px;
+}
+
+.field-wrapper
+{
+    position: relative;
+    width: 100%;
+
+    .field-content
+    {
+        border-style: solid;
+        border-width: 1px;
+        border-radius: 8px;
+        border-color: currentColor;
+        padding: 2px;
+        padding-left: 15px;
+
+        &:hover
+        {
+            border-width: 2px;
+            padding: 1px;
+            padding-left: 14px;
+        }
+    }
+
+    .field-placeholder
+    {
+        position: absolute;
+        top: -12px;
+        left: var(--position);
+        box-sizing: border-box;
+        padding: 0 6px;
+        z-index: 1;
+        text-align: left;
+
+        span
+        {
+            background: #ffffff;
+            padding: 0px 6px;
+        }
+
+        label {
+            font-size: 13px !important;
+            color: currentColor;
+        }
+    }
+}
+</style>

@@ -170,7 +170,9 @@ export default {
         // Keyboard event handle mapping
         this.cbMap = {
             // Space pressed -> start or stop the playback
-            Space: () => {
+            Space: event => {
+                event.preventDefault();
+
                 if (this.loaded) {
                     if (this.playing) {
                         this.stop();
