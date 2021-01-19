@@ -32,7 +32,7 @@
         "remoteInputDropTitle": "Drop file here"
     },
     "timeline": {
-        "unsaved": "Unsaved",
+        "unsaved": "Unsaved changes",
         "save": "Save changes",
         "new": "New event",
         "zoomin": "Zoom in",

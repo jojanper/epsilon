@@ -35,7 +35,7 @@ export const SCHEMA = [
         name: 'device',
         rules: 'required',
         clearable: true,
-        outlined: true,
+        outlined2: true,
         help: {
             title: 'Device UUID',
             body: 'UUID in the form of xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx.'
@@ -299,7 +299,7 @@ export const SCHEMA = [
             }
         ],
         dataRelTarget: ['input'],
-        customSlots: ['angleDir', 'toolbar-center'],
+        customSlots: ['angleDir', 'toolbar-left'],
         tableConfig: {
             // Custom rendering via template slot is provided for this data item
             customColumns: ['angleDir'],

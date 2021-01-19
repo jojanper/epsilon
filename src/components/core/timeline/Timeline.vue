@@ -1,57 +1,62 @@
 <template>
   <div :style="`--thumb: ${timelineScrollColor}; --thumbHover: ${timelineScrollHoverColor}`">
-    <div class="row">
-      <div v-if="!saveOnEdit" class="mr-auto timeline-toolbar-save">
-        <draal-tooltip
-          classes="float-left"
-          v-bind="toolIconAttrs"
-          :name="$t('timeline.save')"
-          icon="mdi-content-save-outline"
-          @clicked="sendTimelineEvent"
-        ></draal-tooltip>
-        <div v-if="hasChanges" class="float-left pl-1 mt-1 text-danger">{{ $t('timeline.unsaved') }}</div>
+    <div class="row timeline-toolbar">
+      <div class="col-sm-9">
+        <div v-if="leftToolbar" :class="toolbarClasses">
+          <!--
+            @slot Toolbar left slot
+            @binding {object} data Timeline manipulation functions.
+          -->
+          <slot name="table.toolbar-left" v-bind:data="{ add: addItem }"></slot>
+        </div>
       </div>
 
-      <!--
-        @slot Toolbar center slot
-        @binding {object} data Timeline manipulation functions.
-      -->
-      <slot name="table.toolbar-center" v-bind:data="{ add: addItem }"></slot>
+      <div class="col-sm">
+        <div class="ml-auto timeline-toolbar-right" :class="toolbarClasses">
+          <v-menu left offset-y absolute>
+            <template v-slot:activator="{ on }">
+              <div class="clearfix">
+                <div class="float-right">
+                  <draal-tooltip
+                    v-if="!saveOnEdit"
+                    v-bind="toolIconAttrs"
+                    :name="!hasChanges ? $t('timeline.save') : $t('timeline.unsaved')"
+                    :icon-color="hasChanges ? 'red' : ''"
+                    icon="mdi-content-save-outline"
+                    @clicked="sendTimelineEvent"
+                  ></draal-tooltip>
+                  <draal-tooltip
+                    v-bind="toolIconAttrs"
+                    :name="$t('timeline.new')"
+                    icon="mdi-plus"
+                    @clicked="addItem()"
+                  ></draal-tooltip>
+                  <draal-tooltip
+                    v-bind="toolIconAttrs"
+                    :name="$t('timeline.zoomin')"
+                    icon="mdi-magnify-plus-outline"
+                    @clicked="setZoom(1)"
+                  ></draal-tooltip>
+                  <draal-tooltip
+                    v-bind="toolIconAttrs"
+                    :name="$t('timeline.zoomout')"
+                    icon="mdi-magnify-minus-outline"
+                    @clicked="setZoom(-1)"
+                  ></draal-tooltip>
+                  <v-btn icon v-on="on" v-if="timelineMenuWidths.length > 1">
+                    <v-icon>mdi-dots-vertical</v-icon>
+                  </v-btn>
+                </div>
+              </div>
+            </template>
 
-      <div class="ml-auto">
-        <v-menu left>
-          <template v-slot:activator="{ on }">
-            <div>
-              <draal-tooltip
-                v-bind="toolIconAttrs"
-                :name="$t('timeline.new')"
-                icon="mdi-plus"
-                @clicked="addItem()"
-              ></draal-tooltip>
-              <draal-tooltip
-                v-bind="toolIconAttrs"
-                :name="$t('timeline.zoomin')"
-                icon="mdi-magnify-plus-outline"
-                @clicked="setZoom(1)"
-              ></draal-tooltip>
-              <draal-tooltip
-                v-bind="toolIconAttrs"
-                :name="$t('timeline.zoomout')"
-                icon="mdi-magnify-minus-outline"
-                @clicked="setZoom(-1)"
-              ></draal-tooltip>
-              <v-btn icon v-on="on" v-if="timelineMenuWidths.length > 1">
-                <v-icon>mdi-dots-vertical</v-icon>
-              </v-btn>
-            </div>
-          </template>
-
-          <v-list>
-            <v-list-item v-for="(action, i) in actions" :key="i" @click="action.fn">
-              <v-list-item-title class="ml-2 mr-2">{{ action.title }}</v-list-item-title>
-            </v-list-item>
-          </v-list>
-        </v-menu>
+            <v-list>
+              <v-list-item v-for="(action, i) in actions" :key="i" @click="action.fn">
+                <v-list-item-title class="ml-2 mr-2">{{ action.title }}</v-list-item-title>
+              </v-list-item>
+            </v-list>
+          </v-menu>
+        </div>
       </div>
     </div>
 
@@ -249,6 +254,22 @@ export default {
             type: String,
             required: false,
             default: '400'
+        },
+        /**
+         * Toolbar styling classes.
+         */
+        toolbarClasses: {
+            type: String,
+            required: false,
+            default: 'rounded border elevation-3 p-1 pl-4 pr-4'
+        },
+        /**
+         * Custom slots that the component should offer for parent.
+         */
+        customSlots: {
+            type: Array,
+            required: false,
+            default: () => []
         }
     },
     data() {
@@ -281,7 +302,9 @@ export default {
             toolIconAttrs: {
                 position: 'top',
                 iconSize: 'large'
-            }
+            },
+
+            leftToolbar: this.leftToolBarRequested()
         };
     },
     async mounted() {
@@ -335,6 +358,10 @@ export default {
     },
     methods: {
         saveTimelineLength: appActions.saveTimelineLength,
+
+        leftToolBarRequested() {
+            return this.customSlots.indexOf('toolbar-left') > -1;
+        },
 
         // Change zoom level (increase or decrease)
         setZoom(inc) {
@@ -525,8 +552,9 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped lang="scss">
-.timeline-toolbar-save {
-    min-width: 150px;
+.timeline-toolbar {
+    padding-top: 10px;
+    padding-bottom: 10px;
 }
 
 .timeline {

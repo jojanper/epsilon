@@ -15,6 +15,7 @@ describe('DraalFileDrop', () => {
     it('file is dropped', async () => {
         // GIVEN file drop component
         const wrapper = mount(DraalFileDrop, {
+            vuetify: getVuetify(),
             attachTo: attachToDocument(),
             propsData: { title }
         });

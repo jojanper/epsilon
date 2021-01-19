@@ -28,6 +28,7 @@
             :tableConfig="tableConfig"
             :maxZoom="maxZoom"
             :data-provider="dataRelInput"
+            :customSlots="customSlots"
           >
             <template v-for="(def, index) in customRender" v-slot:[def.childSlot]="{ data }">
               <!--

@@ -186,12 +186,14 @@ export default {
         border-color: currentColor;
         padding: 2px;
         padding-left: 15px;
+        padding-right: 15px;
 
         &:hover
         {
             border-width: 2px;
             padding: 1px;
             padding-left: 14px;
+            padding-right: 14px;
         }
     }
 

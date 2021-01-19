@@ -31,31 +31,31 @@
               <v-icon :style="renderAzimuth(data)">mdi-arrow-up</v-icon>
             </template>
 
-            <template v-slot:form.focusTimeline.toolbar-center="{ data }">
-              <div class="rounded border elevation-1 p-1">
+            <template v-slot:form.focusTimeline.toolbar-left="{ data }">
+              <div>
                 <draal-tooltip
                   v-bind="toolIconAttrs"
                   name="Left focus"
                   icon="mdi-pan-left"
-                  @clicked="iconClick(data)"
+                  @clicked="iconClick(data, 90)"
                 ></draal-tooltip>
                 <draal-tooltip
                   v-bind="toolIconAttrs"
                   name="Front focus"
                   icon="mdi-pan-up"
-                  @clicked="iconClick(data)"
+                  @clicked="iconClick(data, 0)"
                 ></draal-tooltip>
                 <draal-tooltip
                   v-bind="toolIconAttrs"
                   name="Back focus"
                   icon="mdi-pan-down"
-                  @clicked="iconClick(data)"
+                  @clicked="iconClick(data, 180)"
                 ></draal-tooltip>
                 <draal-tooltip
                   v-bind="toolIconAttrs"
                   name="Right focus"
                   icon="mdi-pan-right"
-                  @clicked="iconClick(data)"
+                  @clicked="iconClick(data, -90)"
                 ></draal-tooltip>
               </div>
             </template>
@@ -214,9 +214,9 @@ export default {
             return `transform: rotate(${-data.angle}deg)`;
         },
 
-        iconClick({ add }) {
+        iconClick({ add }, angle) {
             add(5, (position, maxPos, index, cb) => {
-                cb({ angle: 100, zoom: 90, position: position + index * 0.5 });
+                cb({ angle, zoom: 90, position: position + index * 0.5 });
             });
         }
     }
