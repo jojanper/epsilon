@@ -1,7 +1,7 @@
 <template>
   <div :style="`--thumb: ${timelineScrollColor}; --thumbHover: ${timelineScrollHoverColor}`">
-    <div class="row timeline-toolbar">
-      <div class="col-sm-9">
+    <div class="row m-0 pl-0 pt-0 pr-0 timeline-toolbar">
+      <div class="col-sm-9 pl-0">
         <div v-if="leftToolbar" :class="toolbarClasses">
           <!--
             @slot Toolbar left slot
@@ -11,7 +11,7 @@
         </div>
       </div>
 
-      <div class="col-sm">
+      <div class="col-sm pr-0">
         <div class="ml-auto timeline-toolbar-right" :class="toolbarClasses">
           <v-menu left offset-y absolute>
             <template v-slot:activator="{ on }">
@@ -560,6 +560,7 @@ export default {
 .timeline {
     margin-top: 2%;
     margin-bottom: 3%;
+    padding-bottom: 15px;
     position: relative;
     width: 100%;
 }

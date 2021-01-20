@@ -81,7 +81,7 @@ export default {
     },
     created() {
         this.dataRelHandlers = {};
-        this.setDisabled = debounce(this._setDisabled, 100);
+        this.setDisabled = debounce(this._setDisabled, 200);
     },
     destroyed() {
         this.setDisabled.cancel();

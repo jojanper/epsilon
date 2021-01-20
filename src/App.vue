@@ -195,13 +195,27 @@ export default {
     padding-bottom: 15px !important;
 }
 .file-query-input-wrapper {
+    margin-top: 15px;
+
     .file-query-input {
         top: -15px;
         position: relative;
 
+        .v-messages {
+            padding-bottom: 0px !important;
+        }
+
+        .spinner-wrapper {
+            top: -5px;
+            position: relative;
+        }
+
         .second-row {
+            padding-top: 10px;
+            margin-bottom: 0px;
+
             .v-text-field__details {
-                margin-bottom: 0px;
+                margin-bottom: 10px;
             }
             .v-messages {
                 padding-bottom: 0px !important;
