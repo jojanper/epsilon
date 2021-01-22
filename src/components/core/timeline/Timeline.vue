@@ -13,51 +13,59 @@
 
       <div class="col-sm pr-0">
         <div class="ml-auto timeline-toolbar-right" :class="toolbarClasses">
-          <v-menu left offset-y absolute>
-            <template v-slot:activator="{ on }">
-              <div class="clearfix">
-                <div class="float-right">
-                  <draal-tooltip
-                    v-if="!saveOnEdit"
-                    v-bind="toolIconAttrs"
-                    :name="!hasChanges ? $t('timeline.save') : $t('timeline.unsaved')"
-                    :icon-color="hasChanges ? 'red' : ''"
-                    icon="mdi-content-save-outline"
-                    @clicked="sendTimelineEvent"
-                  ></draal-tooltip>
-                  <draal-tooltip
-                    v-bind="toolIconAttrs"
-                    :name="$t('timeline.new')"
-                    icon="mdi-plus"
-                    @clicked="addItem()"
-                  ></draal-tooltip>
-                  <draal-tooltip
-                    v-bind="toolIconAttrs"
-                    :name="$t('timeline.zoomin')"
-                    icon="mdi-magnify-plus-outline"
-                    @clicked="setZoom(1)"
-                  ></draal-tooltip>
-                  <draal-tooltip
-                    v-bind="toolIconAttrs"
-                    :name="$t('timeline.zoomout')"
-                    icon="mdi-magnify-minus-outline"
-                    @clicked="setZoom(-1)"
-                  ></draal-tooltip>
-                  <v-icon
-                    v-bind="timelineMenuWidthAttrs"
-                    v-if="timelineMenuWidths.length > 1"
-                    v-on="on"
-                  >mdi-dots-vertical</v-icon>
-                </div>
-              </div>
-            </template>
+          <div class="clearfix">
+            <div class="float-right">
+              <draal-tooltip
+                v-if="!saveOnEdit"
+                v-bind="toolIconAttrs"
+                :name="!hasChanges ? $t('timeline.save') : $t('timeline.unsaved')"
+                :icon-color="hasChanges ? 'red' : ''"
+                icon="mdi-content-save-outline"
+                @clicked="sendTimelineEvent"
+              ></draal-tooltip>
+              <draal-tooltip
+                v-bind="toolIconAttrs"
+                :name="$t('timeline.new')"
+                icon="mdi-plus"
+                @clicked="addItem()"
+              ></draal-tooltip>
+              <draal-tooltip
+                v-bind="toolIconAttrs"
+                :name="$t('timeline.zoomin')"
+                icon="mdi-magnify-plus-outline"
+                @clicked="setZoom(1)"
+              ></draal-tooltip>
+              <draal-tooltip
+                v-bind="toolIconAttrs"
+                :name="$t('timeline.zoomout')"
+                icon="mdi-magnify-minus-outline"
+                @clicked="setZoom(-1)"
+              ></draal-tooltip>
 
-            <v-list>
-              <v-list-item v-for="(action, i) in actions" :key="i" @click="action.fn">
-                <v-list-item-title class="ml-2 mr-2">{{ action.title }}</v-list-item-title>
-              </v-list-item>
-            </v-list>
-          </v-menu>
+              <draal-tooltip
+                v-if="timelineMenuWidths.length > 1"
+                name="Set timeline length"
+                :position="toolbarTooltipPosition"
+              >
+                <template v-slot:default="{ on: tooltip }">
+                  <v-menu left offset-y absolute>
+                    <template v-slot:activator="{ on }">
+                      <v-icon
+                        v-bind="timelineMenuWidthAttrs"
+                        v-on="{ ...on, ...tooltip}"
+                      >mdi-dots-vertical</v-icon>
+                    </template>
+
+                    <v-list>
+                      <v-list-item v-for="(action, i) in actions" :key="i" @click="action.fn">
+                        <v-list-item-title class="ml-2 mr-2">{{ action.title }}</v-list-item-title>
+                      </v-list-item>
+                    </v-list>
+                  </v-menu>
+                </template>
+              </draal-tooltip>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -276,7 +284,7 @@ export default {
         /**
          * Tooltip position of toolbar icons.
          */
-        toolbarIconPosition: {
+        toolbarTooltipPosition: {
             type: String,
             required: false,
             default: 'top'
@@ -322,7 +330,7 @@ export default {
             durationUpdated: 0,
 
             toolIconAttrs: {
-                position: this.toolbarIconPosition,
+                position: this.toolbarTooltipPosition,
                 iconSize: this.toolbarIconSize
             },
 
