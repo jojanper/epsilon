@@ -32,31 +32,16 @@
             </template>
 
             <template v-slot:form.focusTimeline.toolbar-left="{ data }">
-              <!--div-->
-              <draal-tooltip
-                v-bind="toolIconAttrs"
-                name="Left focus"
-                icon="mdi-pan-left"
-                @clicked="iconClick(data, 90)"
-              ></draal-tooltip>
-              <draal-tooltip
-                v-bind="toolIconAttrs"
-                name="Front focus"
-                icon="mdi-pan-up"
-                @clicked="iconClick(data, 0)"
-              ></draal-tooltip>
-              <draal-tooltip
-                v-bind="toolIconAttrs"
-                name="Back focus"
-                icon="mdi-pan-down"
-                @clicked="iconClick(data, 180)"
-              ></draal-tooltip>
-              <draal-tooltip
-                v-bind="toolIconAttrs"
-                name="Right focus"
-                icon="mdi-pan-right"
-                @clicked="iconClick(data, -90)"
-              ></draal-tooltip>
+              <div>
+                <draal-tooltip
+                  v-for="(event, index) in timelineToolbarIcons"
+                  :key="index"
+                  v-bind="toolIconAttrs"
+                  :name="event.name"
+                  :icon="event.icon"
+                  @clicked="iconClick(data, event.value)"
+                ></draal-tooltip>
+              </div>
             </template>
           </draal-form-generator>
 
@@ -111,6 +96,8 @@ import { NotificationMessage } from '@/common/models';
 import DraalIconDialog from '@/components/core/utils/IconDialog.vue';
 import DraalFileImport from '@/components/core/utils/FileImport.vue';
 import DraalTooltip from '@/components/core/utils/Tooltip.vue';
+
+// TODO: Split to tabs
 
 export default {
     components: {
@@ -172,7 +159,30 @@ export default {
             toolIconAttrs: {
                 position: 'top',
                 iconSize
-            }
+            },
+
+            timelineToolbarIcons: [
+                {
+                    name: 'Left',
+                    icon: 'mdi-pan-left',
+                    value: 90
+                },
+                {
+                    name: 'Front',
+                    icon: 'mdi-pan-up',
+                    value: 0
+                },
+                {
+                    name: 'Back',
+                    icon: 'mdi-pan-down',
+                    value: 180
+                },
+                {
+                    name: 'Right',
+                    icon: 'mdi-pan-left',
+                    value: -90
+                }
+            ]
         };
     },
     methods: {
