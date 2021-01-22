@@ -6,7 +6,7 @@
           <div class="col-sm p-0">
             <ValidationProvider ref="provider" v-slot="{ errors }" :name="name" :rules="inputRules">
               <v-text-field
-                class="file-input"
+                :class="outlined ? 'file-input outlined' : ' file-input no-outlined'"
                 v-model="fieldValue"
                 :error-messages="errors"
                 :label="label"
@@ -26,7 +26,7 @@
           </div>
         </div>
 
-        <div class="row second-row" :class="fieldValue ? '' : 'd-none'" v-if="fieldValue">
+        <div :class="secondRowCls" v-if="fieldValue">
           <div class="col-sm pb-0">
             <ValidationProvider name="selected" v-if="listData.length">
               <select-input
@@ -59,13 +59,13 @@
           </div>
         </div>
 
-        <div class="row spinner-wrapper" :class="processing ? '' : 'd-none'">
+        <div :class="spinnerRowCls">
           <draal-spinner
             :state="processing"
             width="40"
             height="40"
             type="spinner-3"
-            class="float-left ml-1"
+            :class="['float-left ml-1', outlined ? 'outlined' : 'no-outlined']"
           ></draal-spinner>
         </div>
 
@@ -191,6 +191,33 @@ export default {
 
             processing: false
         };
+    },
+    computed: {
+        secondRowCls() {
+            const cls = ['row second-row'];
+
+            if (!this.fieldValue) {
+                cls.push('d-none');
+            }
+
+            if (this.outlined) {
+                cls.push('outlined');
+            } else {
+                cls.push('no-outlined');
+            }
+
+            return cls.join(' ');
+        },
+
+        spinnerRowCls() {
+            const cls = ['row spinner-wrapper'];
+
+            if (!this.processing) {
+                cls.push('d-none');
+            }
+
+            return cls.join(' ');
+        }
     },
     methods: {
         // User selected file (either using file dialog or file was dropped)

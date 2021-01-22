@@ -43,9 +43,11 @@
                     icon="mdi-magnify-minus-outline"
                     @clicked="setZoom(-1)"
                   ></draal-tooltip>
-                  <v-btn icon v-on="on" v-if="timelineMenuWidths.length > 1">
-                    <v-icon>mdi-dots-vertical</v-icon>
-                  </v-btn>
+                  <v-icon
+                    v-bind="timelineMenuWidthAttrs"
+                    v-if="timelineMenuWidths.length > 1"
+                    v-on="on"
+                  >mdi-dots-vertical</v-icon>
                 </div>
               </div>
             </template>
@@ -270,10 +272,30 @@ export default {
             type: Array,
             required: false,
             default: () => []
+        },
+        /**
+         * Tooltip position of toolbar icons.
+         */
+        toolbarIconPosition: {
+            type: String,
+            required: false,
+            default: 'top'
+        },
+        /**
+         * Toolbar icon sizes.
+         */
+        toolbarIconSize: {
+            type: String,
+            required: false,
+            default: 'medium'
         }
     },
     data() {
         const baseTime = Date.now();
+
+        const timelineMenuWidthAttrs = {
+            [`${this.toolbarIconSize}`]: true
+        };
 
         return {
             dialogKey: 0,
@@ -300,11 +322,13 @@ export default {
             durationUpdated: 0,
 
             toolIconAttrs: {
-                position: 'top',
-                iconSize: 'large'
+                position: this.toolbarIconPosition,
+                iconSize: this.toolbarIconSize
             },
 
-            leftToolbar: this.leftToolBarRequested()
+            leftToolbar: this.leftToolBarRequested(),
+
+            timelineMenuWidthAttrs
         };
     },
     async mounted() {

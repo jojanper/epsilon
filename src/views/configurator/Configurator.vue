@@ -32,32 +32,31 @@
             </template>
 
             <template v-slot:form.focusTimeline.toolbar-left="{ data }">
-              <div>
-                <draal-tooltip
-                  v-bind="toolIconAttrs"
-                  name="Left focus"
-                  icon="mdi-pan-left"
-                  @clicked="iconClick(data, 90)"
-                ></draal-tooltip>
-                <draal-tooltip
-                  v-bind="toolIconAttrs"
-                  name="Front focus"
-                  icon="mdi-pan-up"
-                  @clicked="iconClick(data, 0)"
-                ></draal-tooltip>
-                <draal-tooltip
-                  v-bind="toolIconAttrs"
-                  name="Back focus"
-                  icon="mdi-pan-down"
-                  @clicked="iconClick(data, 180)"
-                ></draal-tooltip>
-                <draal-tooltip
-                  v-bind="toolIconAttrs"
-                  name="Right focus"
-                  icon="mdi-pan-right"
-                  @clicked="iconClick(data, -90)"
-                ></draal-tooltip>
-              </div>
+              <!--div-->
+              <draal-tooltip
+                v-bind="toolIconAttrs"
+                name="Left focus"
+                icon="mdi-pan-left"
+                @clicked="iconClick(data, 90)"
+              ></draal-tooltip>
+              <draal-tooltip
+                v-bind="toolIconAttrs"
+                name="Front focus"
+                icon="mdi-pan-up"
+                @clicked="iconClick(data, 0)"
+              ></draal-tooltip>
+              <draal-tooltip
+                v-bind="toolIconAttrs"
+                name="Back focus"
+                icon="mdi-pan-down"
+                @clicked="iconClick(data, 180)"
+              ></draal-tooltip>
+              <draal-tooltip
+                v-bind="toolIconAttrs"
+                name="Right focus"
+                icon="mdi-pan-right"
+                @clicked="iconClick(data, -90)"
+              ></draal-tooltip>
             </template>
           </draal-form-generator>
 
@@ -124,7 +123,17 @@ export default {
     data() {
         const schema = [...SCHEMA];
 
-        schema[6].dataQuery = this.dataQuery.bind(this);
+        const iconSize = 'large';
+
+        schema.forEach(item => {
+            if (item.type === 'file-data-query') {
+                /* eslint-disable-next-line */
+                item.dataQuery = this.dataQuery.bind(this);
+            } else if (item.type === 'timeline') {
+                /* eslint-disable-next-line */
+                item.toolbarIconSize = iconSize;
+            }
+        });
 
         const json = { a: 'foo', b: [1, 2, 3] };
         const blob = new Blob([JSON.stringify(json, null, 4)], { type: 'application/json' });
@@ -162,7 +171,7 @@ export default {
 
             toolIconAttrs: {
                 position: 'top',
-                iconSize: 'large'
+                iconSize
             }
         };
     },

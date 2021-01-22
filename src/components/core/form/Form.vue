@@ -37,11 +37,14 @@
     <draal-dialog
       :model="helpDialog"
       :title="helpText.title"
-      :text="helpText.body"
       @close-dialog="helpDialog=false"
       bodyCls="text-left"
       maxWidth="500"
-    ></draal-dialog>
+    >
+      <template v-slot:body>
+        <v-card-text class="text-left" v-html="helpText.body"></v-card-text>
+      </template>
+    </draal-dialog>
   </div>
 </template>
 

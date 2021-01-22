@@ -29,6 +29,7 @@
             :maxZoom="maxZoom"
             :data-provider="dataRelInput"
             :customSlots="customSlots"
+            :toolbarIconSize="toolbarIconSize"
           >
             <template v-for="(def, index) in customRender" v-slot:[def.childSlot]="{ data }">
               <!--
@@ -127,6 +128,14 @@ export default {
             type: String,
             required: false,
             default: ''
+        },
+        /**
+         * Toolbar icon sizes.
+         */
+        toolbarIconSize: {
+            type: String,
+            required: false,
+            default: 'medium'
         }
     },
     data() {
