@@ -195,14 +195,41 @@ export default {
     padding-bottom: 15px !important;
 }
 .file-query-input-wrapper {
+    margin-top: 15px;
+
     .file-query-input {
         top: -15px;
         position: relative;
 
+        .no-outlined {
+            margin-bottom: -15px;
+            padding-bottom: 5px;
+        }
+
+        .spinner-wrapper {
+            top: -5px;
+            position: relative;
+
+            .no-outlined {
+                top: 10px;
+                position: relative;
+                padding-bottom: 15px;
+            }
+        }
+
         .second-row {
+            position: relative;
+            padding-top: 0px;
+            margin-bottom: 0px;
+
+            .no-outlined {
+                padding-top: 5px;
+            }
+
             .v-text-field__details {
                 margin-bottom: 0px;
             }
+
             .v-messages {
                 padding-bottom: 0px !important;
             }

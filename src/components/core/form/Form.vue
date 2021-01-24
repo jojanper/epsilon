@@ -13,9 +13,9 @@
         >
           <template v-for="(def, index) in slotsDef" v-slot:[def.childSlot]="{ data }">
             <!--
-                @slot Custom input data rendering.
-                @binding {number} inputKey Input key (Vue key attribute).
-                @binding {object} data Input data.
+              @slot Custom input data rendering.
+              @binding {number} inputKey Input key (Vue key attribute).
+              @binding {object} data Input data.
             -->
             <slot :name="def.componentSlot" v-bind:inputKey="index" v-bind:data="data"></slot>
           </template>
@@ -37,11 +37,14 @@
     <draal-dialog
       :model="helpDialog"
       :title="helpText.title"
-      :text="helpText.body"
       @close-dialog="helpDialog=false"
       bodyCls="text-left"
       maxWidth="500"
-    ></draal-dialog>
+    >
+      <template v-slot:body>
+        <v-card-text class="text-left" v-html="helpText.body"></v-card-text>
+      </template>
+    </draal-dialog>
   </div>
 </template>
 
@@ -81,7 +84,7 @@ export default {
     },
     created() {
         this.dataRelHandlers = {};
-        this.setDisabled = debounce(this._setDisabled, 100);
+        this.setDisabled = debounce(this._setDisabled, 200);
     },
     destroyed() {
         this.setDisabled.cancel();
@@ -186,12 +189,14 @@ export default {
         border-color: currentColor;
         padding: 2px;
         padding-left: 15px;
+        padding-right: 15px;
 
         &:hover
         {
             border-width: 2px;
             padding: 1px;
             padding-left: 14px;
+            padding-right: 14px;
         }
     }
 

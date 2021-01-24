@@ -345,6 +345,7 @@ export default {
     top: -30px;
     left: -0px;
     font-size: 0.75em;
+    color: initial;
 }
 
 .menu {

@@ -1,12 +1,12 @@
 <template>
-  <div class="form-input file-query-input-wrapper mt-3">
+  <div class="form-input file-query-input-wrapper">
     <div class="file-query-input">
       <ValidationObserver ref="observer">
-        <div class="row m-0 p-0">
-          <div class="col-sm m-0 p-0">
+        <div class="row m-0 first-row">
+          <div class="col-sm p-0">
             <ValidationProvider ref="provider" v-slot="{ errors }" :name="name" :rules="inputRules">
               <v-text-field
-                class="file-input"
+                :class="outlined ? 'file-input outlined' : ' file-input no-outlined'"
                 v-model="fieldValue"
                 :error-messages="errors"
                 :label="label"
@@ -26,7 +26,7 @@
           </div>
         </div>
 
-        <div class="row p-0 second-row" :class="fieldValue ? '' : 'd-none'" v-if="fieldValue">
+        <div :class="secondRowCls" v-if="fieldValue">
           <div class="col-sm pb-0">
             <ValidationProvider name="selected" v-if="listData.length">
               <select-input
@@ -59,13 +59,13 @@
           </div>
         </div>
 
-        <div class="row position-relative" :class="processing ? '' : 'd-none'" style="top: -25px;">
+        <div :class="spinnerRowCls">
           <draal-spinner
             :state="processing"
             width="40"
             height="40"
             type="spinner-3"
-            class="float-left ml-1"
+            :class="['float-left ml-1', outlined ? 'outlined' : 'no-outlined']"
           ></draal-spinner>
         </div>
 
@@ -192,6 +192,33 @@ export default {
             processing: false
         };
     },
+    computed: {
+        secondRowCls() {
+            const cls = ['row second-row'];
+
+            if (!this.fieldValue) {
+                cls.push('d-none');
+            }
+
+            if (this.outlined) {
+                cls.push('outlined');
+            } else {
+                cls.push('no-outlined');
+            }
+
+            return cls.join(' ');
+        },
+
+        spinnerRowCls() {
+            const cls = ['row spinner-wrapper'];
+
+            if (!this.processing) {
+                cls.push('d-none');
+            }
+
+            return cls.join(' ');
+        }
+    },
     methods: {
         // User selected file (either using file dialog or file was dropped)
         onDrop(files) {
@@ -262,12 +289,3 @@ export default {
     }
 };
 </script>
-
-<!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped lang="scss">
-.second-row
-{
-    top: -15px;
-    position: relative;
-}
-</style>

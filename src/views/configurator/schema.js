@@ -35,7 +35,7 @@ export const SCHEMA = [
         name: 'device',
         rules: 'required',
         clearable: true,
-        outlined: true,
+        outlined2: true,
         help: {
             title: 'Device UUID',
             body: 'UUID in the form of xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx.'
@@ -167,16 +167,6 @@ export const SCHEMA = [
         loadingColor: 'pink'
     },
     {
-        type: 'file-open',
-        placeholder: 'Click to select location of the JSON file or drag file to icon',
-        label: 'JSON file',
-        name: 'output',
-        rules: 'required|jsonfile',
-        fileObject: true,
-        clearable: true,
-        outlined: true
-    },
-    {
         type: 'remote-file-save',
         placeholder: 'Click to select location of the output MP4 file or drag file to icon',
         label: 'Recording output MP4 file',
@@ -202,8 +192,8 @@ export const SCHEMA = [
             label: 'ID file end',
             class: 'w-50 mb-10'
         },
-        clearable: true,
-        outlined: true
+        clearable2: true,
+        outlined2: true
     },
     {
         type: 'text',
@@ -211,8 +201,18 @@ export const SCHEMA = [
         label: 'Comments',
         name: 'comments',
         rules: 'required',
-        clearable: true,
-        outlined: true
+        clearable2: true,
+        outlined2: true
+    },
+    {
+        type: 'file-open',
+        placeholder: 'Click to select location of the JSON file or drag file to icon',
+        label: 'JSON file',
+        name: 'output',
+        rules: 'required|jsonfile',
+        fileObject: true,
+        clearable2: true,
+        outlined2: true
     },
     {
         type: 'checkbox',
@@ -299,7 +299,7 @@ export const SCHEMA = [
             }
         ],
         dataRelTarget: ['input'],
-        customSlots: ['angleDir'],
+        customSlots: ['angleDir', 'toolbar-left'],
         tableConfig: {
             // Custom rendering via template slot is provided for this data item
             customColumns: ['angleDir'],

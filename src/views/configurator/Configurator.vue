@@ -30,6 +30,19 @@
             <template v-slot:form.focusTimeline.angleDir="{ data }">
               <v-icon :style="renderAzimuth(data)">mdi-arrow-up</v-icon>
             </template>
+
+            <template v-slot:form.focusTimeline.toolbar-left="{ data }">
+              <div>
+                <draal-tooltip
+                  v-for="(event, index) in timelineToolbarIcons"
+                  :key="index"
+                  v-bind="toolIconAttrs"
+                  :name="event.name"
+                  :icon="event.icon"
+                  @clicked="iconClick(data, event.value)"
+                ></draal-tooltip>
+              </div>
+            </template>
           </draal-form-generator>
 
           <div class="row">
@@ -82,18 +95,32 @@ import { notificationActions } from '@/store/helpers';
 import { NotificationMessage } from '@/common/models';
 import DraalIconDialog from '@/components/core/utils/IconDialog.vue';
 import DraalFileImport from '@/components/core/utils/FileImport.vue';
+import DraalTooltip from '@/components/core/utils/Tooltip.vue';
+
+// TODO: Split to tabs
 
 export default {
     components: {
         DraalSpinner,
         DraalFormGenerator,
         DraalIconDialog,
-        DraalFileImport
+        DraalFileImport,
+        DraalTooltip
     },
     data() {
         const schema = [...SCHEMA];
 
-        schema[6].dataQuery = this.dataQuery.bind(this);
+        const iconSize = 'large';
+
+        schema.forEach(item => {
+            if (item.type === 'file-data-query') {
+                /* eslint-disable-next-line */
+                item.dataQuery = this.dataQuery.bind(this);
+            } else if (item.type === 'timeline') {
+                /* eslint-disable-next-line */
+                item.toolbarIconSize = iconSize;
+            }
+        });
 
         const json = { a: 'foo', b: [1, 2, 3] };
         const blob = new Blob([JSON.stringify(json, null, 4)], { type: 'application/json' });
@@ -127,7 +154,35 @@ export default {
 
             fileDialog: false,
 
-            queryFailure: false
+            queryFailure: false,
+
+            toolIconAttrs: {
+                position: 'top',
+                iconSize
+            },
+
+            timelineToolbarIcons: [
+                {
+                    name: 'Left',
+                    icon: 'mdi-pan-left',
+                    value: 90
+                },
+                {
+                    name: 'Front',
+                    icon: 'mdi-pan-up',
+                    value: 0
+                },
+                {
+                    name: 'Back',
+                    icon: 'mdi-pan-down',
+                    value: 180
+                },
+                {
+                    name: 'Right',
+                    icon: 'mdi-pan-left',
+                    value: -90
+                }
+            ]
         };
     },
     methods: {
@@ -176,6 +231,12 @@ export default {
 
         renderAzimuth(data) {
             return `transform: rotate(${-data.angle}deg)`;
+        },
+
+        iconClick({ add }, angle) {
+            add(5, (position, maxPos, index, cb) => {
+                cb({ angle, zoom: 90, position: position + index * 0.5 });
+            });
         }
     }
 };

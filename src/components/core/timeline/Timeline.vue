@@ -1,30 +1,72 @@
 <template>
   <div :style="`--thumb: ${timelineScrollColor}; --thumbHover: ${timelineScrollHoverColor}`">
-    <div class="row">
-      <div v-if="!saveOnEdit" class="mr-auto">
-        <v-icon @click="sendTimelineEvent">mdi-content-save-outline</v-icon>
-        <div v-if="hasChanges" class="float-right pl-1 text-danger">{{ $t('timeline.unsaved') }}</div>
+    <div class="row m-0 pl-0 pt-0 pr-0 timeline-toolbar">
+      <div class="col-sm-9 pl-0">
+        <div v-if="leftToolbar" :class="toolbarClasses">
+          <!--
+            @slot Toolbar left slot
+            @binding {object} data Timeline manipulation functions.
+          -->
+          <slot name="table.toolbar-left" v-bind:data="{ add: addItem }"></slot>
+        </div>
       </div>
 
-      <div class="ml-auto">
-        <v-menu left>
-          <template v-slot:activator="{ on }">
-            <div>
-              <v-icon @click="addItem">mdi-plus</v-icon>
-              <v-icon @click="setZoom(1)" large>mdi-magnify-plus-outline</v-icon>
-              <v-icon @click="setZoom(-1)" large>mdi-magnify-minus-outline</v-icon>
-              <v-btn icon v-on="on" v-if="timelineMenuWidths.length > 1">
-                <v-icon>mdi-dots-vertical</v-icon>
-              </v-btn>
-            </div>
-          </template>
+      <div class="col-sm pr-0">
+        <div class="ml-auto timeline-toolbar-right" :class="toolbarClasses">
+          <div class="clearfix">
+            <div class="float-right">
+              <draal-tooltip
+                v-if="!saveOnEdit"
+                v-bind="toolIconAttrs"
+                :name="!hasChanges ? $t('timeline.save') : $t('timeline.unsaved')"
+                :icon-color="hasChanges ? 'red' : ''"
+                icon="mdi-content-save-outline"
+                @clicked="sendTimelineEvent"
+              ></draal-tooltip>
+              <draal-tooltip
+                v-bind="toolIconAttrs"
+                :name="$t('timeline.new')"
+                icon="mdi-plus"
+                @clicked="addItem()"
+              ></draal-tooltip>
+              <draal-tooltip
+                v-bind="toolIconAttrs"
+                :name="$t('timeline.zoomin')"
+                icon="mdi-magnify-plus-outline"
+                @clicked="setZoom(1)"
+              ></draal-tooltip>
+              <draal-tooltip
+                v-bind="toolIconAttrs"
+                :name="$t('timeline.zoomout')"
+                icon="mdi-magnify-minus-outline"
+                @clicked="setZoom(-1)"
+              ></draal-tooltip>
 
-          <v-list>
-            <v-list-item v-for="(action, i) in actions" :key="i" @click="action.fn">
-              <v-list-item-title class="ml-2 mr-2">{{ action.title }}</v-list-item-title>
-            </v-list-item>
-          </v-list>
-        </v-menu>
+              <draal-tooltip
+                v-if="timelineMenuWidths.length > 1"
+                name="Set timeline length"
+                :position="toolbarTooltipPosition"
+              >
+                <template v-slot:default="{ on: tooltip }">
+                  <v-menu left offset-y absolute>
+                    <template v-slot:activator="{ on }">
+                      <v-icon
+                        v-bind="timelineMenuWidthAttrs"
+                        v-on="{ ...on, ...tooltip}"
+                      >mdi-dots-vertical</v-icon>
+                    </template>
+
+                    <v-list>
+                      <v-list-item v-for="(action, i) in actions" :key="i" @click="action.fn">
+                        <v-list-item-title class="ml-2 mr-2">{{ action.title }}</v-list-item-title>
+                      </v-list-item>
+                    </v-list>
+                  </v-menu>
+                </template>
+              </draal-tooltip>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
 
@@ -105,6 +147,7 @@ import DraalTimelineItem from './TimelineItem.vue';
 import { appActions, appComputed } from '@/store/helpers';
 import DraalDialog from '@/components/core/utils/Dialog.vue';
 import DraalRuler from '@/components/core/utils/Ruler.vue';
+import DraalTooltip from '@/components/core/utils/Tooltip.vue';
 import DraalDataTable from '@/components/core/DataTable.vue';
 
 export default {
@@ -113,7 +156,8 @@ export default {
         DraalTimelineItem,
         DraalDialog,
         DraalRuler,
-        DraalDataTable
+        DraalDataTable,
+        DraalTooltip
     },
     props: {
         /**
@@ -220,10 +264,46 @@ export default {
             type: String,
             required: false,
             default: '400'
+        },
+        /**
+         * Toolbar styling classes.
+         */
+        toolbarClasses: {
+            type: String,
+            required: false,
+            default: 'rounded border elevation-3 p-1 pl-4 pr-4'
+        },
+        /**
+         * Custom slots that the component should offer for parent.
+         */
+        customSlots: {
+            type: Array,
+            required: false,
+            default: () => []
+        },
+        /**
+         * Tooltip position of toolbar icons.
+         */
+        toolbarTooltipPosition: {
+            type: String,
+            required: false,
+            default: 'top'
+        },
+        /**
+         * Toolbar icon sizes.
+         */
+        toolbarIconSize: {
+            type: String,
+            required: false,
+            default: 'medium'
         }
     },
     data() {
         const baseTime = Date.now();
+
+        const timelineMenuWidthAttrs = {
+            [`${this.toolbarIconSize}`]: true
+        };
 
         return {
             dialogKey: 0,
@@ -247,7 +327,16 @@ export default {
             moving: false,
             rulerRender: 0,
 
-            durationUpdated: 0
+            durationUpdated: 0,
+
+            toolIconAttrs: {
+                position: this.toolbarTooltipPosition,
+                iconSize: this.toolbarIconSize
+            },
+
+            leftToolbar: this.leftToolBarRequested(),
+
+            timelineMenuWidthAttrs
         };
     },
     async mounted() {
@@ -301,6 +390,10 @@ export default {
     },
     methods: {
         saveTimelineLength: appActions.saveTimelineLength,
+
+        leftToolBarRequested() {
+            return this.customSlots.indexOf('toolbar-left') > -1;
+        },
 
         // Change zoom level (increase or decrease)
         setZoom(inc) {
@@ -356,7 +449,7 @@ export default {
         },
 
         // Add new timeline item
-        addItem() {
+        addItem(count, cb) {
             // Make sure items are added with reasonable distance with
             // respect to previous item. Thus, take into account the
             // length of the currently selected timeline.
@@ -366,12 +459,40 @@ export default {
             const len = this.timelines.length;
             const position = len ? this.timelines[len - 1].position + incPos : 0;
 
-            this.timelines.push({
-                ...this.itemCreator(),
-                position: position > this.timelineWidth ? this.timelineWidth : position,
-                $clicked: false,
-                $id: Date.now() // Should be unique ID
-            });
+            const baseId = Date.now();
+
+            if (!cb) {
+                // No callback defined, just add new item to timeline
+                this.timelines.push({
+                    ...this.itemCreator(),
+                    position: position > this.timelineWidth ? this.timelineWidth : position,
+                    $clicked: false,
+                    $id: baseId
+                });
+            } else {
+                // Implementing template slot provides the new timeline item(s)
+                const newItems = count || 0;
+                const basePosition = position;
+                for (let i = 0; i < newItems; i++) {
+                    // Provide the starting position and timeline length.
+                    // Template slot will call the provided callback that provides
+                    // the new timeline item.
+                    cb(basePosition, this.timelineWidth, i, data => {
+                        // Must fit into timeline, otherwise addition is rejected
+                        if (data && data.position < this.timelineWidth) {
+                            this.timelines.push({
+                                ...data,
+                                $clicked: false,
+                                $id: baseId + i
+                            });
+
+                            return true;
+                        }
+
+                        return false;
+                    });
+                }
+            }
 
             this.setChanges(true);
         },
@@ -463,9 +584,15 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped lang="scss">
+.timeline-toolbar {
+    padding-top: 10px;
+    padding-bottom: 10px;
+}
+
 .timeline {
     margin-top: 2%;
     margin-bottom: 3%;
+    padding-bottom: 15px;
     position: relative;
     width: 100%;
 }

@@ -1,6 +1,6 @@
 <template>
   <v-data-table
-    class="mt-3 pt-3 elevation-1"
+    class="mt-3 pt-3 elevation-3"
     :search="search"
     :headers="tableHeaders"
     :items="tableData"

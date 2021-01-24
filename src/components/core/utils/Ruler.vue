@@ -247,6 +247,7 @@ export default {
     margin: 20px auto;
     height: 14px;
     top: 30px;
+    color: initial;
 
     .cm {
         position: absolute;
