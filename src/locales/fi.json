@@ -40,7 +40,8 @@
         "save": "Tallenna muutokset",
         "new": "Uusi tapahtuma",
         "zoomin": "Lähennä",
-        "zoomout": "Loitonna"
+        "zoomout": "Loitonna",
+        "lengthMenu": "Aseta aikajanan pituus"
     },
     "$vuetify": {
         "badge": "Badge",
