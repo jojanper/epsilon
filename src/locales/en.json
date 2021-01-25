@@ -36,7 +36,8 @@
         "save": "Save changes",
         "new": "New event",
         "zoomin": "Zoom in",
-        "zoomout": "Zoom out"
+        "zoomout": "Zoom out",
+        "lengthMenu": "Set timeline length"
     },
     "$vuetify": {
         "badge": "Badge",

@@ -44,24 +44,21 @@
 
               <draal-tooltip
                 v-if="timelineMenuWidths.length > 1"
-                name="Set timeline length"
+                :name="$t('timeline.lengthMenu')"
                 :position="toolbarTooltipPosition"
               >
                 <template v-slot:default="{ on: tooltip }">
-                  <v-menu left offset-y absolute>
-                    <template v-slot:activator="{ on }">
+                  <draal-menu
+                    :menuItems="actions"
+                    :menuAttrs="{ left: true, 'offset-y': true, absolute: true }"
+                  >
+                    <template v-slot:default="{ on: menu }">
                       <v-icon
                         v-bind="timelineMenuWidthAttrs"
-                        v-on="{ ...on, ...tooltip}"
+                        v-on="{ ...menu, ...tooltip}"
                       >mdi-dots-vertical</v-icon>
                     </template>
-
-                    <v-list>
-                      <v-list-item v-for="(action, i) in actions" :key="i" @click="action.fn">
-                        <v-list-item-title class="ml-2 mr-2">{{ action.title }}</v-list-item-title>
-                      </v-list-item>
-                    </v-list>
-                  </v-menu>
+                  </draal-menu>
                 </template>
               </draal-tooltip>
             </div>
@@ -148,6 +145,7 @@ import { appActions, appComputed } from '@/store/helpers';
 import DraalDialog from '@/components/core/utils/Dialog.vue';
 import DraalRuler from '@/components/core/utils/Ruler.vue';
 import DraalTooltip from '@/components/core/utils/Tooltip.vue';
+import DraalMenu from '@/components/core/utils/Menu.vue';
 import DraalDataTable from '@/components/core/DataTable.vue';
 
 export default {
@@ -157,7 +155,8 @@ export default {
         DraalDialog,
         DraalRuler,
         DraalDataTable,
-        DraalTooltip
+        DraalTooltip,
+        DraalMenu
     },
     props: {
         /**
@@ -413,6 +412,7 @@ export default {
         saveLength(length) {
             this.saveTimelineLength({ id: this.timelineID, length });
             this.timelineWidth = length;
+            this.rulerRender += 1;
             this.renderTimeline();
         },
 

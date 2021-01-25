@@ -66,12 +66,9 @@ global.prepareVuetify = () => {
 
 global.getVuetify = () => new Vuetify();
 
-global.attachToDocument = () => {
+global.attachToDocument = (target = document.body) => {
     const elem = document.createElement('div');
-    if (document.body) {
-        document.body.appendChild(elem);
-    }
-
+    target.appendChild(elem);
     return elem;
 };
 
