@@ -1,19 +1,30 @@
 <template>
   <div>
+    <div class="row pb-8 pt-4">
+      <draal-file-import
+        class="mx-auto"
+        tooltip-text="Import audio file"
+        tooltip-position="right"
+        icon-color="blue darken-2"
+        icon="mdi-folder-open"
+        @file-select="fileSelect"
+        :multiple="true"
+      ></draal-file-import>
+    </div>
+
     <canvas width="1000" height="400" ref="canvas"></canvas>
-    <draal-file-dialog color="blue" icon="mdi-folder-open" @file-select="fileSelect"></draal-file-dialog>
   </div>
 </template>
 
 <script>
 import { peaks } from './peaks';
 
-import DraalFileDialog from '@/components/core/utils/FileDialog.vue';
+import DraalFileImport from '@/components/core/utils/FileImport.vue';
 import { getMediaDuration } from '@/common/utils';
 
 export default {
     components: {
-        DraalFileDialog
+        DraalFileImport
     },
     mounted() {
         this.canvas = this.$refs.canvas;
@@ -64,9 +75,7 @@ export default {
                     console.log(data);
                     console.log(data.getChannelData(0));
                 },
-                err => {
-                    console.log(err);
-                }
+                console.log
             );
         }
     }
