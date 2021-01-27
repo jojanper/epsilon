@@ -199,8 +199,6 @@ export default {
         clearInterval(this.timerId);
     },
     mounted() {
-        this.$refs.audioplayer.focus();
-
         // Position update
         this.$refs.audioplayer.ontimeupdate = ({ srcElement }) => {
             this.audioPos = (srcElement.currentTime / srcElement.duration) * 100;

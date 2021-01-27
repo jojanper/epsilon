@@ -25,7 +25,6 @@
   },
   "dependencies": {
     "axios": "^0.21.1",
-    "fibers": "^4.0.1",
     "lodash": "^4.17.15",
     "nprogress": "^0.2.0",
     "rxjs": "^6.5.3",
@@ -54,8 +53,8 @@
     "http-server": "latest",
     "mkdirp": "^1.0.4",
     "moxios": "0.4.0",
-    "node-sass": "^4.12.0",
-    "sass-loader": "^7.1.0",
+    "node-sass": "^5.0.0",
+    "sass-loader": "^10.1.1",
     "stylus": "^0.54.5",
     "stylus-loader": "^3.0.2",
     "vue-cli-plugin-i18n": "^0.6.0",

@@ -107,6 +107,7 @@ export default {
         selected(event) {
             this.sendEvent(this.getFiles(event));
             this.updateState(false);
+            this.$refs.fileDialog.value = '';
         },
 
         getFiles(event) {
