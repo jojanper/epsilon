@@ -5,13 +5,9 @@
       <slot name="default" v-bind:on="on"></slot>
 
       <!-- Use icon for tooltip content -->
-      <v-icon
-        v-if="icon"
-        :class="classes"
-        v-on="on"
-        v-bind="iconAttrs"
-        @click="$emit('clicked')"
-      >{{ icon }}</v-icon>
+      <v-btn v-if="icon" icon v-on="on">
+        <v-icon :class="classes" v-bind="iconAttrs" @click="$emit('clicked')">{{ icon }}</v-icon>
+      </v-btn>
 
       <!-- Use link for tooltip content -->
       <a v-if="link" :class="classes" v-on="on" :href="linkUrl" :download="linkDownload">{{ link }}</a>
@@ -23,15 +19,59 @@
 <script>
 export default {
     name: 'DraalTooltip',
-    props: ['position', 'name', 'classes', 'icon', 'iconSize', 'iconColor', 'link', 'linkDownload', 'linkUrl'],
+    props: {
+        name: {
+            type: String,
+            required: true
+        },
+        position: {
+            type: String,
+            required: false,
+            default: 'top'
+        },
+        classes: {
+            type: String,
+            required: false,
+            default: ''
+        },
+        icon: {
+            type: String,
+            required: false,
+            default: ''
+        },
+        iconSize: {
+            type: String,
+            required: false,
+            default: 'x-large'
+        },
+        iconColor: {
+            type: String,
+            required: false,
+            default: null
+        },
+        link: {
+            type: String,
+            required: false,
+            default: null
+        },
+        linkDownload: {
+            type: String,
+            required: false,
+            default: null
+        },
+        linkUrl: {
+            type: String,
+            required: false,
+            default: null
+        }
+    },
     computed: {
         tooltipAttrs() {
             return this.position ? { [`${this.position}`]: true } : {};
         },
 
         iconAttrs() {
-            const iconSize = this.iconSize || 'x-large';
-            const iconColor = this.iconColor || null;
+            const { iconSize, iconColor } = this;
 
             const attrs = {
                 [`${iconSize}`]: true

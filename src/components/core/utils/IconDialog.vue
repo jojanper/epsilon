@@ -2,7 +2,6 @@
   <div>
     <draal-tooltip
       v-bind="tooltipConfig"
-      position="top"
       :name="tooltipText"
       :icon="icon"
       @clicked="helpDialog=true"
@@ -12,7 +11,7 @@
       :model="helpDialog"
       :title="dialogTitle"
       maxWidth="750"
-      @close-dialog="helpDialog = false"
+      @close-dialog="helpDialog=false"
     >
       <template v-slot:body>
         <v-card-text class="text-left" v-html="dialogContent"></v-card-text>
@@ -59,7 +58,9 @@ export default {
         tooltipConfig: {
             type: Object,
             required: false,
-            default: () => {}
+            default: () => ({
+                position: 'top'
+            })
         },
         /**
          * Dialog title.
