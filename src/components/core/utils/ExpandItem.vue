@@ -117,6 +117,11 @@ export default {
             deleteAttrs: this.setDeleteActionAttrs()
         };
     },
+    watch: {
+        openState(newVal) {
+            this.show = newVal;
+        }
+    },
     methods: {
         // Determine delete action attributes
         setDeleteActionAttrs() {

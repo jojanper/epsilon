@@ -18,7 +18,6 @@
           :deleteActionAttrs="toolbar.deleteAction"
           :title="file.title"
           :custom-actions="1"
-          icon-size="large"
           :open-state="file.state"
           @delete="deleteItem(index)"
         >
