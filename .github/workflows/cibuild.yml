@@ -1,0 +1,33 @@
+name: CI Build
+
+on: [push]
+
+jobs:
+  build:
+    strategy:
+      matrix:
+        node-version: [12.x, 14.x]
+        os: [ubuntu-latest]
+
+    runs-on: ${{ matrix.os }}
+
+    steps:
+      - uses: actions/checkout@v1
+
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v1
+        with:
+          node-version: ${{ matrix.node-version }}
+
+      - name: Prepare node-gyp for ubuntu
+        if: ${{ matrix.os == 'ubuntu-latest' }}
+        run: sudo apt-get install g++ build-essential
+
+      - name: npm install, build, and test
+        run: |
+          npm i
+          npm run lint
+          npm run test:unit
+          npm run test:e2e-ci
+        env:
+          CI: true

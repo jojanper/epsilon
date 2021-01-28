@@ -1,18 +1,46 @@
 <template>
   <div>
-    <div class="row pb-8 pt-4">
+    <canvas width="1000" height="400" ref="canvas"></canvas>
+
+    <div class="row p-4 clearfix">
       <draal-file-import
         class="mx-auto"
-        tooltip-text="Import audio file"
-        tooltip-position="right"
-        icon-color="blue darken-2"
+        tooltip-text="Import file"
+        icon-color="blue"
         icon="mdi-folder-open"
         @file-select="fileSelect"
-        :multiple="true"
       ></draal-file-import>
     </div>
 
-    <canvas width="1000" height="400" ref="canvas"></canvas>
+    <div class="w-75 mx-auto">
+      <div class="border p-2 m-2 elevation-1" v-for="(file, index) in files" :key="file.$id">
+        <draal-expand-item
+          :deleteActionAttrs="toolbar.deleteAction"
+          :title="file.title"
+          :custom-actions="1"
+          v-model="file.state"
+          @delete="deleteItem(index)"
+        >
+          <div slot="content" class="p-4">
+            <draal-audio-player
+              :activator="playerActivator"
+              :active-id="file.$id"
+              :name="file.url"
+              :url="file.url"
+              :init-activate="index === 0 ? true : false"
+            ></draal-audio-player>
+          </div>
+          <template slot="action-0">
+            <draal-icon-dialog
+              :tooltip-config="{ position: 'top', 'icon-size': 'medium', 'open-delay': '500', 'close-delay': '250' }"
+              tooltip-text="Icon tooltip"
+              :dialog-title="`This is title ${index}`"
+              dialog-content="This is content"
+            ></draal-icon-dialog>
+          </template>
+        </draal-expand-item>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -20,11 +48,36 @@
 import { peaks } from './peaks';
 
 import DraalFileImport from '@/components/core/utils/FileImport.vue';
-import { getMediaDuration } from '@/common/utils';
+import DraalIconDialog from '@/components/core/utils/IconDialog.vue';
+import DraalExpandItem from '@/components/core/utils/ExpandItem.vue';
+import DraalAudioPlayer from '@/components/core/AudioPlayer.vue';
+import { getMediaDuration, BaseObservableObject } from '@/common/utils';
 
 export default {
     components: {
-        DraalFileImport
+        DraalFileImport,
+        DraalIconDialog,
+        DraalExpandItem,
+        DraalAudioPlayer
+    },
+    data() {
+        return {
+            show: false,
+
+            dialog: false,
+
+            toolbar: {
+                deleteAction: {
+                    name: 'Delete',
+                    iconSize: 'medium'
+                }
+            },
+            files: [],
+            playerActivator: BaseObservableObject.createAsSubject()
+        };
+    },
+    destroyed() {
+        this.playerActivator.close();
     },
     mounted() {
         this.canvas = this.$refs.canvas;
@@ -69,6 +122,20 @@ export default {
     },
     methods: {
         fileSelect(files) {
+            const $id = Date.now();
+
+            this.files.forEach(item => {
+                /* eslint-disable-next-line no-param-reassign */
+                item.state = false;
+            });
+
+            this.files.unshift({
+                state: true,
+                title: files[0].name,
+                url: URL.createObjectURL(files[0]),
+                $id
+            });
+
             getMediaDuration(
                 files[0],
                 data => {
@@ -77,6 +144,11 @@ export default {
                 },
                 console.log
             );
+        },
+
+        deleteItem(index) {
+            URL.revokeObjectURL(this.files[index].url);
+            this.files.splice(index, 1);
         }
     }
 };
