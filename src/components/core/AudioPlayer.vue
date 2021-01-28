@@ -152,6 +152,33 @@ export default {
             type: Number,
             required: false,
             default: 5
+        },
+        /**
+         * Activator function for managing multiple player instances. Only one
+         * player can listen keyboard events at a time and activations between
+         * different instances are handled via this prop. Must return Subject.
+         * If prop is defined, then also activeId prop must be set.
+         */
+        activator: {
+            type: Object,
+            required: false
+        },
+        /**
+         * Player ID for setting up keyboard events.
+         * Must be unique ID within different player instances.
+         */
+        activeId: {
+            type: Number,
+            required: false,
+            default: 0
+        },
+        /**
+         * Set player as active at start up.
+         */
+        initActivate: {
+            type: Boolean,
+            required: false,
+            default: false
         }
     },
     data() {
@@ -187,13 +214,11 @@ export default {
             ArrowLeft: () => { this.$refs.audioplayer.currentTime -= this.fastSeekInc; }
         };
 
-        // Handle keyboard events when key is pressed down
-        window.addEventListener('keydown', this.keyDown);
-
         this.timerId = null;
+        this.active = false;
     },
     destroyed() {
-        window.removeEventListener('keydown', this.keyDown);
+        this.deactivate();
     },
     beforeDestroy() {
         clearInterval(this.timerId);
@@ -237,10 +262,52 @@ export default {
             this.audioPos = 0;
         };
 
+        // Multiple player instances are available
+        if (this.activeId && this.activator) {
+            // Activate this instance
+            if (this.initActivate) {
+                this.activate();
+            }
+
+            // Activatation message received from some player.
+            // Deactivate player from receiving keyboard event if the active ID
+            // does match the ID of this instance.
+            this.activator.asPipe().subscribe(activeId => {
+                if (this.activeId !== activeId && this.active) {
+                    this.deactivate();
+                    this.stop();
+                }
+            });
+        } else {
+            this.activate();
+        }
+
         // Regularly update playback position for smooth progress rendering
         this.timerId = setInterval(this.updateplayPosition, 100);
     },
     methods: {
+        // Add active player status
+        activate() {
+            if (!this.active) {
+                // Handle keyboard events when key is pressed down
+                window.addEventListener('keydown', this.keyDown);
+                this.active = true;
+
+                // Send message to other players that this instance is now active
+                if (this.activator && this.activeId) {
+                    this.activator.send(this.activeId);
+                }
+            }
+        },
+
+        // Remove active player status
+        deactivate() {
+            if (this.active) {
+                this.active = false;
+                window.removeEventListener('keydown', this.keyDown);
+            }
+        },
+
         /**
          * Update current playback position.
          */
@@ -262,6 +329,11 @@ export default {
          */
         async play() {
             if (!this.playing) {
+                // Activate keyboard events
+                if (!this.active && this.activator && this.activeId) {
+                    this.activate();
+                }
+
                 await this.$refs.audioplayer.play();
                 this.playing = true;
                 this.paused = false;

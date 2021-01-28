@@ -17,8 +17,8 @@
 
       <v-list-item-action class="ml-0">
         <v-btn icon>
-          <v-icon v-if="!show" :color="menuColor" @click="show = !show">{{ menuOpenIcon }}</v-icon>
-          <v-icon v-else :color="menuColor" @click="show = !show">{{ menuCloseIcon }}</v-icon>
+          <v-icon v-if="!show" :color="menuColor" @click="changeState(true)">{{ menuOpenIcon }}</v-icon>
+          <v-icon v-else :color="menuColor" @click="changeState(false)">{{ menuCloseIcon }}</v-icon>
         </v-btn>
       </v-list-item-action>
     </v-list-item>
@@ -98,7 +98,7 @@ export default {
         /**
          * Initial expand state: true for open, false for close.
          */
-        openState: {
+        value: {
             type: Boolean,
             required: false,
             default: false
@@ -112,17 +112,30 @@ export default {
         }
 
         return {
-            show: this.openState,
+            show: this.value,
             customSlots,
             deleteAttrs: this.setDeleteActionAttrs()
         };
     },
     watch: {
-        openState(newVal) {
-            this.show = newVal;
+        value(newVal) {
+            if (this.show !== newVal) {
+                this.show = newVal;
+            }
         }
     },
     methods: {
+        changeState(value) {
+            this.show = value;
+
+            /**
+             * Expand state change.
+             *
+             * @param value Expand state (true for open, false for close).
+             */
+            this.$emit('input', this.show);
+        },
+
         // Determine delete action attributes
         setDeleteActionAttrs() {
             const attr = { ...this.deleteActionAttrs };
