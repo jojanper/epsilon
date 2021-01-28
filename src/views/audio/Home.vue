@@ -18,11 +18,17 @@
           :deleteActionAttrs="toolbar.deleteAction"
           :title="file.title"
           :custom-actions="1"
-          :open-state="file.state"
+          v-model="file.state"
           @delete="deleteItem(index)"
         >
           <div slot="content" class="p-4">
-            <draal-audio-player :name="file.url" :url="file.url"></draal-audio-player>
+            <draal-audio-player
+              :activator="playerActivator"
+              :active-id="file.$id"
+              :name="file.url"
+              :url="file.url"
+              :init-activate="index === 0 ? true : false"
+            ></draal-audio-player>
           </div>
           <template slot="action-0">
             <draal-icon-dialog
@@ -45,7 +51,7 @@ import DraalFileImport from '@/components/core/utils/FileImport.vue';
 import DraalIconDialog from '@/components/core/utils/IconDialog.vue';
 import DraalExpandItem from '@/components/core/utils/ExpandItem.vue';
 import DraalAudioPlayer from '@/components/core/AudioPlayer.vue';
-import { getMediaDuration } from '@/common/utils';
+import { getMediaDuration, BaseObservableObject } from '@/common/utils';
 
 export default {
     components: {
@@ -66,8 +72,12 @@ export default {
                     iconSize: 'medium'
                 }
             },
-            files: []
+            files: [],
+            playerActivator: BaseObservableObject.createAsSubject()
         };
+    },
+    destroyed() {
+        this.playerActivator.close();
     },
     mounted() {
         this.canvas = this.$refs.canvas;
@@ -114,11 +124,11 @@ export default {
         fileSelect(files) {
             const $id = Date.now();
 
-            console.log(files[0]);
             this.files.forEach(item => {
                 /* eslint-disable-next-line no-param-reassign */
                 item.state = false;
             });
+
             this.files.unshift({
                 state: true,
                 title: files[0].name,
