@@ -149,6 +149,30 @@ export default {
         deleteItem(index) {
             URL.revokeObjectURL(this.files[index].url);
             this.files.splice(index, 1);
+        },
+
+        calculateAudioDataLength(nSamples, scale) {
+            let dataLength = Math.floor(nSamples / scale);
+            const remaining = nSamples - (dataLength * scale);
+            if (remaining > 0) {
+                dataLength += 1;
+            }
+
+            return dataLength;
+        },
+
+        audioPeaks({ data, length, numberOfChannels }) {
+            const minVal = new Array(numberOfChannels);
+            const maxVal = new Array(numberOfChannels);
+
+            for (let channel = 0; channel < numberOfChannels; channel++) {
+                minVal[channel] = Infinity;
+                maxVal[channel] = -Infinity;
+            }
+
+            for (let i = 0; i < length; i++) {
+                console.log(data[i]);
+            }
         }
     }
 };
