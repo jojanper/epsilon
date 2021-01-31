@@ -36,11 +36,33 @@
                 <draal-tooltip
                   v-for="(event, index) in timelineToolbarIcons"
                   :key="index"
+                  classes="ml-2"
                   v-bind="toolIconAttrs"
                   :name="event.name"
                   :icon="event.icon"
                   @clicked="iconClick(data, event.value)"
                 ></draal-tooltip>
+                <draal-tooltip
+                  v-if="menuPresets.length > 0"
+                  name="More event presets"
+                  :position="toolIconAttrs.position"
+                >
+                  <template v-slot:default="{ on: tooltip }">
+                    <draal-menu
+                      :menuItems="menuPresets"
+                      :cb-data="data"
+                      :menuAttrs="{ left: true, 'offset-y': true }"
+                    >
+                      <template v-slot:default="{ on: menu }">
+                        <v-icon
+                          class="float-right"
+                          v-bind="menuAttrs"
+                          v-on="{ ...menu, ...tooltip}"
+                        >mdi-menu</v-icon>
+                      </template>
+                    </draal-menu>
+                  </template>
+                </draal-tooltip>
               </div>
             </template>
           </draal-form-generator>
@@ -96,6 +118,7 @@ import { NotificationMessage } from '@/common/models';
 import DraalIconDialog from '@/components/core/utils/IconDialog.vue';
 import DraalFileImport from '@/components/core/utils/FileImport.vue';
 import DraalTooltip from '@/components/core/utils/Tooltip.vue';
+import DraalMenu from '@/components/core/utils/Menu.vue';
 
 // TODO: Split to tabs
 
@@ -105,7 +128,8 @@ export default {
         DraalFormGenerator,
         DraalIconDialog,
         DraalFileImport,
-        DraalTooltip
+        DraalTooltip,
+        DraalMenu
     },
     data() {
         const schema = [...SCHEMA];
@@ -182,7 +206,19 @@ export default {
                     icon: 'mdi-pan-left',
                     value: -90
                 }
-            ]
+            ],
+
+            menuPresets: [
+                {
+                    title: 'Preset 1',
+                    fn: data => {
+                        this.iconClick(data, 140);
+                    }
+                }
+            ],
+            menuAttrs: {
+                [`${iconSize}`]: true
+            }
         };
     },
     methods: {
