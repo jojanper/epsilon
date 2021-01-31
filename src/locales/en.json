@@ -37,7 +37,8 @@
         "new": "New event",
         "zoomin": "Zoom in",
         "zoomout": "Zoom out",
-        "lengthMenu": "Set timeline length"
+        "lengthMenu": "Set timeline length",
+        "info": "Quick info"
     },
     "$vuetify": {
         "badge": "Badge",

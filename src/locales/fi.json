@@ -41,7 +41,8 @@
         "new": "Uusi tapahtuma",
         "zoomin": "Lähennä",
         "zoomout": "Loitonna",
-        "lengthMenu": "Aseta aikajanan pituus"
+        "lengthMenu": "Aseta aikajanan pituus",
+        "info": "Pikaopas"
     },
     "$vuetify": {
         "badge": "Badge",

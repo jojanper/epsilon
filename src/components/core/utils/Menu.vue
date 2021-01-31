@@ -10,8 +10,8 @@
     </template>
 
     <v-list>
-      <v-list-item v-for="(action, i) in menuItems" :key="i" @click="action.fn">
-        <v-list-item-title class="draal-menu-action-title">{{ action.title }}</v-list-item-title>
+      <v-list-item v-for="(action, i) in menuItems" :key="i" @click="action.fn(cbData)">
+        <v-list-item-title class="text-left draal-menu-action-title">{{ action.title }}</v-list-item-title>
       </v-list-item>
     </v-list>
   </v-menu>
@@ -47,6 +47,13 @@ export default {
             type: Object,
             required: false,
             default: () => {}
+        },
+        /**
+         * Parameter data for menu item callback.
+         */
+        cbData: {
+            required: false,
+            default: null
         }
     }
 };

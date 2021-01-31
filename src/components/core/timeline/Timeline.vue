@@ -16,6 +16,13 @@
           <div class="clearfix">
             <div class="float-right">
               <draal-tooltip
+                v-if="help"
+                v-bind="toolIconAttrs"
+                :name="$t('timeline.info')"
+                icon="mdi-information-outline"
+                @clicked="$emit('help')"
+              ></draal-tooltip>
+              <draal-tooltip
                 v-if="!saveOnEdit"
                 v-bind="toolIconAttrs"
                 :name="!hasChanges ? $t('timeline.save') : $t('timeline.unsaved')"
@@ -295,6 +302,13 @@ export default {
             type: String,
             required: false,
             default: 'medium'
+        },
+        /**
+         * If true, show help icon on the toolbar. Emits 'help' event on click.
+         */
+        help: {
+            required: false,
+            default: false
         }
     },
     data() {
@@ -330,7 +344,8 @@ export default {
 
             toolIconAttrs: {
                 position: this.toolbarTooltipPosition,
-                iconSize: this.toolbarIconSize
+                iconSize: this.toolbarIconSize,
+                classes: 'ml-1'
             },
 
             leftToolbar: this.leftToolBarRequested(),
