@@ -2,11 +2,11 @@
   <v-tooltip v-bind="tooltipAttrs">
     <template v-slot:activator="{ on }">
       <!-- Scoped slot for advanced tooltip content -->
-      <slot name="default" v-bind:on="on"></slot>
+      <slot name="default" :class="classes" v-bind:on="on"></slot>
 
       <!-- Use icon for tooltip content -->
-      <v-btn v-if="icon" icon v-on="on">
-        <v-icon :class="classes" v-bind="iconAttrs" @click="$emit('clicked')">{{ icon }}</v-icon>
+      <v-btn :class="classes" v-if="icon" icon v-on="on">
+        <v-icon v-bind="iconAttrs" @click="$emit('clicked')">{{ icon }}</v-icon>
       </v-btn>
 
       <!-- Use link for tooltip content -->

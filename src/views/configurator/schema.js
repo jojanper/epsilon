@@ -280,6 +280,10 @@ export const SCHEMA = [
         placeholder: '',
         maxZoom: 15,
         outlined: true,
+        help: {
+            title: 'Timeline info',
+            body: 'Timeline events can be created'
+        },
         timelineWidths: [
             {
                 width: 15,

@@ -30,6 +30,8 @@
             :data-provider="dataRelInput"
             :customSlots="customSlots"
             :toolbarIconSize="toolbarIconSize"
+            :help="help"
+            @help="$emit('form-input-help', name)"
           >
             <template v-for="(def, index) in customRender" v-slot:[def.childSlot]="{ data }">
               <!--
