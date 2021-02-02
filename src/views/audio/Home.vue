@@ -1,6 +1,6 @@
 <template>
   <div>
-    <canvas width="1000" height="400" ref="canvas"></canvas>
+    <canvas width="1500" height="400" ref="canvas"></canvas>
 
     <div class="row p-4 clearfix">
       <draal-file-import
@@ -45,7 +45,7 @@
 </template>
 
 <script>
-import { peaks } from './peaks';
+// import { peaks } from './peaks';
 
 import DraalFileImport from '@/components/core/utils/FileImport.vue';
 import DraalIconDialog from '@/components/core/utils/IconDialog.vue';
@@ -81,6 +81,8 @@ export default {
     },
     mounted() {
         this.canvas = this.$refs.canvas;
+        /*
+        this.canvas = this.$refs.canvas;
         this.ctx = this.canvas.getContext('2d');
 
         this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
@@ -103,7 +105,7 @@ export default {
             const peak = peaks[2 * i] || 0;
             const h = Math.round(peak / absmaxHalf);
             console.log((i - first) * scale + this.halfPixel, halfOffset - h);
-            this.ctx.lineTo((i - first) * scale /* + this.halfPixel */, halfOffset - h);
+            this.ctx.lineTo((i - first) * scale /* + this.halfPixel *, halfOffset - h);
         }
 
         // draw the bottom edge going backwards, to make a single
@@ -119,6 +121,7 @@ export default {
         // this.ctx.restore();
         this.ctx.closePath();
         this.ctx.fill();
+        */
     },
     methods: {
         fileSelect(files) {
@@ -141,6 +144,17 @@ export default {
                 data => {
                     console.log(data);
                     console.log(data.getChannelData(0));
+
+                    const audio = [];
+                    for (let ch = 0; ch < data.numberOfChannels; ch++) {
+                        audio.push(data.getChannelData(ch));
+                    }
+
+                    this.audioPeaks({
+                        length: data.length,
+                        numberOfChannels: data.numberOfChannels,
+                        data: audio
+                    });
                 },
                 console.log
             );
@@ -162,6 +176,13 @@ export default {
         },
 
         audioPeaks({ data, length, numberOfChannels }) {
+            const INT8_MAX = 127;
+            const INT8_MIN = -128;
+            const scale = 1.0;
+            const chunkSize = 512;
+
+            const minPeaks = [[], []];
+            const maxPeaks = [[], []];
             const minVal = new Array(numberOfChannels);
             const maxVal = new Array(numberOfChannels);
 
@@ -170,8 +191,109 @@ export default {
                 maxVal[channel] = -Infinity;
             }
 
+            let counter = 0;
             for (let i = 0; i < length; i++) {
-                console.log(data[i]);
+                for (let ch = 0; ch < numberOfChannels; ch++) {
+                    const sample = Math.floor(INT8_MAX * data[ch][i] * scale);
+
+                    if (sample < minVal[ch]) {
+                        minVal[ch] = sample;
+
+                        if (minVal[ch] < INT8_MIN) {
+                            minVal[ch] = INT8_MIN;
+                        }
+                    }
+
+                    if (sample > maxVal[ch]) {
+                        maxVal[ch] = sample;
+
+                        if (maxVal[ch] > INT8_MAX) {
+                            maxVal[ch] = INT8_MAX;
+                        }
+                    }
+                }
+
+                counter += 1;
+                if (counter === chunkSize) {
+                    for (let ch = 0; ch < numberOfChannels; ch++) {
+                        minPeaks[ch].push(minVal[ch]);
+                        maxPeaks[ch].push(maxVal[ch]);
+                        minVal[ch] = Infinity;
+                        maxVal[ch] = -Infinity;
+                    }
+
+                    counter = 0;
+                }
+            }
+
+            if (counter > 0) {
+                for (let ch = 0; ch < numberOfChannels; ch++) {
+                    minPeaks[ch].push(minVal[ch]);
+                    maxPeaks[ch].push(maxVal[ch]);
+                    minVal[ch] = Infinity;
+                    maxVal[ch] = -Infinity;
+                }
+            }
+
+            // console.log(minPeaks[0]);
+            // console.log(maxPeaks[0]);
+
+            this.drawWaveform(minPeaks, maxPeaks, 1, minPeaks[0].length);
+        },
+
+        drawWaveform(minPeaks, maxPeaks, numberOfChannels, numPeaks) {
+            this.ctx = this.canvas.getContext('2d');
+            this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+            this.ctx.fillStyle = 'violet';
+
+            const { width } = this.canvas;
+
+            const offsetX = 0;
+            /*
+            if (offsetX > waveform.length - canvas.width) {
+                offsetX = waveform.length - canvas.width;
+            }
+            */
+
+            const waveformHeight = this.canvas.height; // / waveform.channels;
+
+            console.log(waveformHeight, width, numPeaks);
+
+            const scaleY = (amplitude, height) => {
+                const range = 384;
+                const offset = 192;
+                return height - ((amplitude + offset) * height) / range;
+            };
+
+            for (let c = 0, offsetY = 0; c < numberOfChannels; c++) {
+                let x;
+                let i;
+
+                this.ctx.beginPath();
+
+                let audioPeaks = maxPeaks[c];
+
+                // eslint-disable-next-line no-plusplus
+                for (x = 0, i = offsetX; x < width && i < numPeaks; x++, i++) {
+                    const val = audioPeaks[i];
+                    // console.log(x + 0.5, offsetY + scaleY(val, waveformHeight) + 0.5);
+                    this.ctx.lineTo(x + 0.5, offsetY + scaleY(val, waveformHeight) + 0.5);
+                }
+
+                console.log('x', x);
+
+                audioPeaks = minPeaks[c];
+
+                // x = canvas.width - 1
+                // eslint-disable-next-line no-plusplus
+                for (x = width - 1, i = offsetX + width - 1; x >= 0; x--, i--) {
+                    const val = audioPeaks[i];
+                    this.ctx.lineTo(x + 0.5, offsetY + scaleY(val, waveformHeight) + 0.5);
+                }
+
+                this.ctx.closePath();
+                this.ctx.stroke();
+                this.ctx.fill();
             }
         }
     }
