@@ -1,19 +1,24 @@
 <template>
-  <v-menu v-bind="menuAttrs">
+  <v-menu v-bind="menuAttrs" v-model="value">
     <template v-slot:activator="{ on }">
       <!--
         @slot Default menu entry point visible to the user.
       -->
-      <slot name="default" v-bind:on="on">
+      <slot name="default" v-bind:on="on" v-bind:setVisibility="setVisibility">
         <v-icon v-if="iconAttrs && iconAttrs.icon" v-bind="iconAttrs" v-on="on">{{ iconAttrs.icon }}</v-icon>
       </slot>
     </template>
 
-    <v-list>
-      <v-list-item v-for="(action, i) in menuItems" :key="i" @click="action.fn(cbData)">
-        <v-list-item-title class="text-left draal-menu-action-title">{{ action.title }}</v-list-item-title>
-      </v-list-item>
-    </v-list>
+    <!--
+      @slot Menu content.
+    -->
+    <slot name="menu-content" v-bind:setVisibility="setVisibility">
+      <v-list v-if="menuItems.length">
+        <v-list-item v-for="(action, i) in menuItems" :key="i" @click="action.fn(cbData)">
+          <v-list-item-title class="text-left draal-menu-action-title">{{ action.title }}</v-list-item-title>
+        </v-list-item>
+      </v-list>
+    </slot>
   </v-menu>
 </template>
 
@@ -34,7 +39,7 @@ export default {
             required: true
         },
         /**
-         * Menu items. Must contain 'fn' and 'title' fields.
+         * Menu items. Each item must contain 'fn' and 'title' fields.
          */
         menuItems: {
             type: Array,
@@ -54,6 +59,16 @@ export default {
         cbData: {
             required: false,
             default: null
+        }
+    },
+    data() {
+        return {
+            value: false
+        };
+    },
+    methods: {
+        setVisibility(status) {
+            this.value = status;
         }
     }
 };

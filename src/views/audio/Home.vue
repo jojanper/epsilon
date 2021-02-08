@@ -12,14 +12,39 @@
       ></draal-file-import>
     </div>
 
-    <div class="w-75 mx-auto">
-      <div class="border p-2 m-2 elevation-1" v-for="(file, index) in files" :key="file.$id">
+    <div class="row p-4">
+      <draal-import
+        class="mx-auto w-75"
+        label="My exported audio"
+        data-key="name"
+        tooltip-text="Export audio meta"
+        icon-color="red darken-2"
+        icon-size="large"
+        @data-select="setAudioMetaData"
+        @data-error="errorData"
+      ></draal-import>
+    </div>
+
+    <div v-if="files.length" class="w-75 mx-auto">
+      <draal-export v-if="exportFiles.length" :url="playlistExport" name="Playlist_export.json">
+        <v-btn color="primary">Export audio playlist</v-btn>
+      </draal-export>
+      <div
+        class="audio-playlist border p-2 m-2 elevation-1"
+        v-for="(file, index) in files"
+        :key="file.$id"
+      >
         <draal-expand-item
-          :deleteActionAttrs="toolbar.deleteAction"
+          :delete-action-attrs="toolbar.deleteAction"
+          :export-action-attrs="toolbar.exportAction"
+          :edit-tooltip="toolbar.editTooltip"
+          :edit-label="toolbar.editLabel"
           :title="file.title"
           :custom-actions="1"
           v-model="file.state"
           @delete="deleteItem(index)"
+          @export="status => setExportItem(index, status)"
+          @export-name="name => setExportName(index, name)"
         >
           <div slot="content" class="p-4">
             <draal-audio-player
@@ -50,15 +75,21 @@ import { peaks } from './peaks';
 import DraalFileImport from '@/components/core/utils/FileImport.vue';
 import DraalIconDialog from '@/components/core/utils/IconDialog.vue';
 import DraalExpandItem from '@/components/core/utils/ExpandItem.vue';
+import DraalExport from '@/components/core/utils/Export.vue';
+import DraalImport from '@/components/core/Import.vue';
 import DraalAudioPlayer from '@/components/core/AudioPlayer.vue';
-import { getMediaDuration, BaseObservableObject } from '@/common/utils';
+import {
+    getMediaDuration, BaseObservableObject, serializeObject, urlObject4Json
+} from '@/common/utils';
 
 export default {
     components: {
         DraalFileImport,
         DraalIconDialog,
         DraalExpandItem,
-        DraalAudioPlayer
+        DraalAudioPlayer,
+        DraalExport,
+        DraalImport
     },
     data() {
         return {
@@ -68,12 +99,20 @@ export default {
 
             toolbar: {
                 deleteAction: {
-                    name: 'Delete',
+                    name: this.$t('audioPage.deleteItem'),
                     iconSize: 'medium'
-                }
+                },
+                exportAction: {
+                    name: this.$t('audioPage.exportItem'),
+                    icon: 'mdi-file-export',
+                    iconSize: 'medium'
+                },
+                editTooltip: 'Click to edit the export name',
+                editLabel: 'Export data name'
             },
             files: [],
-            playerActivator: BaseObservableObject.createAsSubject()
+            playerActivator: BaseObservableObject.createAsSubject(),
+            playlistExport: null
         };
     },
     destroyed() {
@@ -120,7 +159,20 @@ export default {
         this.ctx.closePath();
         this.ctx.fill();
     },
+    computed: {
+        exportFiles() {
+            return this.files.filter(file => file.export);
+        }
+    },
     methods: {
+        errorData(err) {
+            console.log(err);
+        },
+
+        setAudioMetaData(data) {
+            console.log(data);
+        },
+
         fileSelect(files) {
             const $id = Date.now();
 
@@ -132,8 +184,10 @@ export default {
             this.files.unshift({
                 state: true,
                 title: files[0].name,
+                name: files[0].name,
                 url: URL.createObjectURL(files[0]),
-                $id
+                $id,
+                export: false
             });
 
             getMediaDuration(
@@ -151,7 +205,33 @@ export default {
         deleteItem(index) {
             URL.revokeObjectURL(this.files[index].url);
             this.files.splice(index, 1);
+            this.exportPlaylist();
+        },
+
+        setExportItem(index, status) {
+            this.files[index].export = status;
+            this.exportPlaylist();
+        },
+
+        setExportName(index, name) {
+            this.files[index].name = name;
+            this.exportPlaylist();
+        },
+
+        exportPlaylist() {
+            URL.revokeObjectURL(this.playlistExport);
+            this.playlistExport = urlObject4Json(serializeObject(this.exportFiles, ['title', 'name']));
         }
     }
 };
 </script>
+
+<!-- Add "scoped" attribute to limit CSS to this component only -->
+<style lang="scss">
+.audio-playlist {
+    .expand-title {
+        margin-top: 8px !important;
+        margin-bottom: 8px !important;
+    }
+}
+</style>

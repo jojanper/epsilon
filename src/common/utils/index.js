@@ -127,6 +127,46 @@ export function readJson(file) {
     });
 }
 
+/**
+ * Serialize object to JSON.
+ *
+ * @param {*} data Object for JSON serialization.
+ * @param {Array} keys Optional data fields to include for serialization.
+ * @returns Serialized JSON data.
+ */
+export function serializeObject(data, keys = []) {
+    const target = Array.isArray(data) ? data : [data];
+    let data2Serialize = keys.length ? [] : target;
+
+    if (keys.length) {
+        data.forEach(item => {
+            const obj = {};
+            keys.forEach(key => {
+                obj[key] = item[key];
+            });
+
+            data2Serialize.push(obj);
+        });
+
+        if (!Array.isArray(data)) {
+            [data2Serialize] = data2Serialize;
+        }
+    }
+
+    return JSON.stringify(data2Serialize, null, 4);
+}
+
+/**
+ * Get URL object from JSON.
+ *
+ * @param {*} data JSON data.
+ * @returns URL object.
+ */
+export function urlObject4Json(json) {
+    const blob = new Blob([json], { type: 'application/json' });
+    return URL.createObjectURL(blob);
+}
+
 export const timer = timeout => new Promise(resolve => setTimeout(resolve, timeout));
 
 export * from './ansicolors';

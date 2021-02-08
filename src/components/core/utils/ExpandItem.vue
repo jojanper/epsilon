@@ -2,11 +2,43 @@
   <div>
     <v-list-item>
       <v-list-item-content>
-        <v-list-item-title class="text-left ml-2" v-text="title"></v-list-item-title>
+        <v-list-item-title class="text-left ml-2">
+          <div>
+            <div class="float-left expand-title">{{ title }}</div>
+            <draal-tooltip-menu v-if="exportVal" :tooltip-text="editTooltip" :menuAttrs="menuAttrs">
+              <template v-slot:menu-entry="{ menu, tooltip }">
+                <v-icon
+                  class="ml-1 mt-2"
+                  v-bind="exportAttrs"
+                  v-on="{ ...menu, ...tooltip}"
+                  :color="exportColor"
+                >mdi-border-color</v-icon>
+              </template>
+              <template v-slot:menu-content="{ setVisibility }">
+                <v-text-field
+                  class="p-3"
+                  v-model="name"
+                  :label="editLabel"
+                  clearable
+                  hide-details
+                  @input="updateExportName()"
+                >
+                  <v-btn icon slot="append-outer" @click="setVisibility(false)">
+                    <v-icon v-bind="exportAttrs">mdi-check</v-icon>
+                  </v-btn>
+                </v-text-field>
+              </template>
+            </draal-tooltip-menu>
+          </div>
+        </v-list-item-title>
       </v-list-item-content>
 
       <v-list-item-action v-if="deleteActionAttrs" class="mr-0">
         <draal-tooltip v-bind="deleteAttrs" @clicked="deleteEvent()"></draal-tooltip>
+      </v-list-item-action>
+
+      <v-list-item-action v-if="exportActionAttrs" class="mr-0">
+        <draal-tooltip v-bind="exportAttrs" :icon-color="exportColor" @clicked="exportEvent()"></draal-tooltip>
       </v-list-item-action>
 
       <div v-if="customSlots.length">
@@ -35,6 +67,7 @@
 
 <script>
 import DraalTooltip from '@/components/core/utils/Tooltip.vue';
+import DraalTooltipMenu from '@/components/core/utils/TooltipMenu.vue';
 
 /**
  * Expand item with toolbar.
@@ -44,7 +77,8 @@ import DraalTooltip from '@/components/core/utils/Tooltip.vue';
 export default {
     name: 'DraalExpandItem',
     components: {
-        DraalTooltip
+        DraalTooltip,
+        DraalTooltipMenu
     },
     props: {
         /**
@@ -88,6 +122,15 @@ export default {
             default: null
         },
         /**
+         * Include export action with specified attributes.
+         * All draal-tooltip attributes are available.
+         */
+        exportActionAttrs: {
+            type: Object,
+            required: false,
+            default: null
+        },
+        /**
          * Number of custom actions.
          */
         customActions: {
@@ -102,6 +145,30 @@ export default {
             type: Boolean,
             required: false,
             default: false
+        },
+        /**
+         * Initial item export status
+         */
+        export: {
+            type: Boolean,
+            required: false,
+            default: false
+        },
+        /**
+         * Edit tooltip text.
+         */
+        editTooltip: {
+            type: String,
+            required: false,
+            default: ''
+        },
+        /**
+         * Label for export data name input.
+         */
+        editLabel: {
+            type: String,
+            required: false,
+            default: ''
         }
     },
     data() {
@@ -111,10 +178,21 @@ export default {
             customSlots.push(`action-${i}`);
         }
 
+        const menuAttrs = {
+            'close-on-content-click': false,
+            'offset-x': true,
+            'content-class': 'bg-white',
+            'nudge-width': 400
+        };
+
         return {
             show: this.value,
             customSlots,
-            deleteAttrs: this.setDeleteActionAttrs()
+            deleteAttrs: this.setActionAttrs(this.deleteActionAttrs, 'mdi-delete'),
+            exportAttrs: this.setActionAttrs(this.exportActionAttrs, 'mdi-file-export'),
+            exportVal: this.export,
+            name: this.title,
+            menuAttrs
         };
     },
     watch: {
@@ -122,6 +200,11 @@ export default {
             if (this.show !== newVal) {
                 this.show = newVal;
             }
+        }
+    },
+    computed: {
+        exportColor() {
+            return this.exportVal ? 'blue' : '';
         }
     },
     methods: {
@@ -136,13 +219,13 @@ export default {
             this.$emit('input', this.show);
         },
 
-        // Determine delete action attributes
-        setDeleteActionAttrs() {
-            const attr = { ...this.deleteActionAttrs };
+        // Determine action attributes
+        setActionAttrs(inputAttrs, icon) {
+            const attr = { ...inputAttrs };
 
             // Delete icon by default
             if (!attr.icon) {
-                attr.icon = 'mdi-delete';
+                attr.icon = icon;
             }
 
             // Use red color unless something else specified
@@ -153,11 +236,33 @@ export default {
             return attr;
         },
 
+        updateExportName() {
+            this.name = this.name || this.title;
+
+            /**
+             * Update item export name.
+             *
+             * @property name Item export name.
+             */
+            this.$emit('export-name', this.name);
+        },
+
         deleteEvent() {
             /**
-             * Delete item event.
+             * Request item removal.
              */
             this.$emit('delete');
+        },
+
+        exportEvent() {
+            this.exportVal = !this.exportVal;
+
+            /**
+             * Request item export.
+             *
+             * @property status Export status, true for requesting export, false when export request removed.
+             */
+            this.$emit('export', this.exportVal);
         }
     }
 };

@@ -1,5 +1,5 @@
 <template>
-  <div class="clearfix">
+  <div>
     <!-- Enable tooltip component -->
     <draal-tooltip v-if="tooltipText" :name="tooltipText" :position="tooltipPosition">
       <template v-slot:default="{ on }">

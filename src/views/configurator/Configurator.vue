@@ -42,27 +42,22 @@
                   :icon="event.icon"
                   @clicked="iconClick(data, event.value)"
                 ></draal-tooltip>
-                <draal-tooltip
+                <draal-tooltip-menu
                   v-if="menuPresets.length > 0"
-                  name="More event presets"
-                  :position="toolIconAttrs.position"
+                  tooltip-text="More event presets"
+                  :tooltip-attrs="{ position: toolIconAttrs.position }"
+                  :menuItems="menuPresets"
+                  :cb-data="data"
+                  :menuAttrs="{ left: true, 'offset-y': true }"
                 >
-                  <template v-slot:default="{ on: tooltip }">
-                    <draal-menu
-                      :menuItems="menuPresets"
-                      :cb-data="data"
-                      :menuAttrs="{ left: true, 'offset-y': true }"
-                    >
-                      <template v-slot:default="{ on: menu }">
-                        <v-icon
-                          class="float-right"
-                          v-bind="menuAttrs"
-                          v-on="{ ...menu, ...tooltip}"
-                        >mdi-menu</v-icon>
-                      </template>
-                    </draal-menu>
+                  <template v-slot:menu-entry="{ menu, tooltip }">
+                    <v-icon
+                      class="float-right"
+                      v-bind="menuAttrs"
+                      v-on="{ ...menu, ...tooltip}"
+                    >mdi-menu</v-icon>
                   </template>
-                </draal-tooltip>
+                </draal-tooltip-menu>
               </div>
             </template>
           </draal-form-generator>
@@ -86,7 +81,10 @@
               @file-select="fileSelect"
             ></draal-file-import>
 
-            <a class="col-sm" :href="linkUrl" :download="linkDownload">THIS IS LINK</a>
+            <a class="col-sm" :href="linkUrl" :download="linkDownload">
+              <v-btn>Paina tästä</v-btn>
+              <!--v-icon>mdi-export</v-icon-->
+            </a>
           </div>
         </v-expansion-panel-content>
       </v-expansion-panel>
@@ -118,7 +116,7 @@ import { NotificationMessage } from '@/common/models';
 import DraalIconDialog from '@/components/core/utils/IconDialog.vue';
 import DraalFileImport from '@/components/core/utils/FileImport.vue';
 import DraalTooltip from '@/components/core/utils/Tooltip.vue';
-import DraalMenu from '@/components/core/utils/Menu.vue';
+import DraalTooltipMenu from '@/components/core/utils/TooltipMenu.vue';
 
 // TODO: Split to tabs
 
@@ -129,7 +127,7 @@ export default {
         DraalIconDialog,
         DraalFileImport,
         DraalTooltip,
-        DraalMenu
+        DraalTooltipMenu
     },
     data() {
         const schema = [...SCHEMA];
