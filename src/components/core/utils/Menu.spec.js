@@ -5,6 +5,10 @@ import DraalMenu from './Menu.vue';
 describe('DraalMenu', () => {
     beforeAll(() => {
         prepareVuetify();
+
+        const el = document.createElement('div');
+        el.setAttribute('data-app', true);
+        document.body.appendChild(el);
     });
 
     it('menu is opened and item is clicked', async done => {

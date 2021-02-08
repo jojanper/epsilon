@@ -139,7 +139,7 @@ export function serializeObject(data, keys = []) {
     let data2Serialize = keys.length ? [] : target;
 
     if (keys.length) {
-        data.forEach(item => {
+        target.forEach(item => {
             const obj = {};
             keys.forEach(key => {
                 obj[key] = item[key];
@@ -147,10 +147,10 @@ export function serializeObject(data, keys = []) {
 
             data2Serialize.push(obj);
         });
+    }
 
-        if (!Array.isArray(data)) {
-            [data2Serialize] = data2Serialize;
-        }
+    if (!Array.isArray(data)) {
+        [data2Serialize] = data2Serialize;
     }
 
     return JSON.stringify(data2Serialize, null, 4);

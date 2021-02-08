@@ -1,7 +1,8 @@
 /* eslint-disable no-restricted-syntax */
 import {
     getTimestamp, ansiColors, getContentDispositionFilename,
-    getDataField, resetDataBySchema, slotMapping, readJson
+    getDataField, resetDataBySchema, slotMapping, readJson,
+    serializeObject, urlObject4Json
 } from './index';
 
 describe('utils', () => {
@@ -152,5 +153,18 @@ describe('utils', () => {
         expect(data2.message).toEqual('Unexpected token T in JSON at position 0');
 
         done();
+    });
+
+    it('serializeObject', () => {
+        const object = { a: 'foo', b: [1, 2, 3], c: 'c' };
+
+        let data = serializeObject(object);
+        expect(JSON.parse(data)).toEqual(object);
+
+        data = serializeObject(object, ['a']);
+        expect(JSON.parse(data)).toEqual({ a: 'foo' });
+
+        data = serializeObject([object], ['a']);
+        expect(JSON.parse(data)).toEqual([{ a: 'foo' }]);
     });
 });
