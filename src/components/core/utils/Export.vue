@@ -13,10 +13,16 @@
 export default {
     name: 'DraalExport',
     props: {
+        /**
+         * File name.
+         */
         name: {
             type: String,
             required: true
         },
+        /**
+         * File content.
+         */
         url: {
             required: true
         }
