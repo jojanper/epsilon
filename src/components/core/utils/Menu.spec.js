@@ -14,6 +14,7 @@ describe('DraalMenu', () => {
     it('menu is opened and item is clicked', async done => {
         const menuCalled = [0, 0];
         let cbData = null;
+        let emitted = false;
 
         const menuItems = [
             {
@@ -37,10 +38,10 @@ describe('DraalMenu', () => {
             components: {
                 DraalMenu
             },
-            props: ['iconAttrs', 'menuItems', 'cbData'],
+            props: ['iconAttrs', 'menuItems', 'cbData', 'setVisibility'],
             template: `
               <v-app>
-                <draal-menu :menuAttrs="{}" :cbData="cbData" :menuItems="menuItems" :iconAttrs="iconAttrs"></draal-menu>
+                <draal-menu :menuAttrs="{}" :cbData="cbData" :menuItems="menuItems" :iconAttrs="iconAttrs" @visibility="setVisibility"></draal-menu>
               </v-app>
             `
         });
@@ -56,7 +57,10 @@ describe('DraalMenu', () => {
                 iconAttrs: {
                     icon: 'mdi-dots-vertical'
                 },
-                cbData: callback
+                cbData: callback,
+                setVisibility: status => {
+                    emitted = status;
+                }
             },
             stubs: {
                 DraalMenu
@@ -76,6 +80,9 @@ describe('DraalMenu', () => {
         expect(menuCalled[0]).toEqual(1);
         expect(menuCalled[1]).toEqual(0);
         expect(cbData !== null).toBeTruthy();
+
+        // AND visibility event is received
+        expect(emitted).toBeFalsy();
 
         wrapper.destroy();
 
