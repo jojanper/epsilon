@@ -14,8 +14,7 @@
     >
       <template slot="append-outer">
         <slot name="append-outer">
-          <input-help v-if="help" @form-input-help="$emit('form-input-help', name)
-      "></input-help>
+          <input-help v-if="help" @form-input-help="inputHelpEvent"></input-help>
         </slot>
       </template>
     </v-select>
