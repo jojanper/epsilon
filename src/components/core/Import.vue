@@ -8,6 +8,7 @@
       :data-key="dataKey"
       :label="label"
       @input="setData"
+      clearable
     >
       <draal-file-import
         slot="append-outer"
