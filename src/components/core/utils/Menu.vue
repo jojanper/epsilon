@@ -66,6 +66,11 @@ export default {
             value: false
         };
     },
+    watch: {
+        value(newValue) {
+            this.$emit('visibility', newValue);
+        }
+    },
     methods: {
         setVisibility(status) {
             this.value = status;

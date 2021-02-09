@@ -112,18 +112,19 @@ export default {
 
         fileSelect(files) {
             return readJson(files[0]).then(data => {
+                const target = Array.isArray(data) ? data : [data];
+
                 this.counter += 1;
                 this.importData.splice(0, this.importData.length);
-                data.forEach(item => this.importData.push(item));
+                target.forEach(item => this.importData.push(item));
             }).catch(err => {
-                const msg = `Invalid JSON file ${files[0].path}: ${err.message}`;
-
                 /**
                  * Error message.
                  *
+                 * @property path JSON file.
                  * @property error Error message.
                  */
-                this.$emit('data-error', msg);
+                this.$emit('data-error', files[0], err.message);
             });
         }
     }

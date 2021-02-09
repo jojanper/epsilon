@@ -4,8 +4,13 @@
       <v-list-item-content>
         <v-list-item-title class="text-left ml-2">
           <div>
-            <div class="float-left expand-title">{{ title }}</div>
-            <draal-tooltip-menu v-if="exportVal" :tooltip-text="editTooltip" :menuAttrs="menuAttrs">
+            <div class="float-left expand-title">{{ name }}</div>
+            <draal-tooltip-menu
+              v-if="exportVal"
+              :tooltip-text="editTooltip"
+              :menuAttrs="menuAttrs"
+              @visibility="sendEditVisibility"
+            >
               <template v-slot:menu-entry="{ menu, tooltip }">
                 <v-icon
                   class="ml-1 mt-2"
@@ -263,6 +268,15 @@ export default {
              * @property status Export status, true for requesting export, false when export request removed.
              */
             this.$emit('export', this.exportVal);
+        },
+
+        sendEditVisibility(value) {
+            /**
+             * Export edit editing status.
+             *
+             * @property value Editing status (true/false).
+             */
+            this.$emit('edit', value);
         }
     }
 };

@@ -45,6 +45,7 @@
           @delete="deleteItem(index)"
           @export="status => setExportItem(index, status)"
           @export-name="name => setExportName(index, name)"
+          @edit="exportEditing"
         >
           <div slot="content" class="p-4">
             <draal-audio-player
@@ -119,6 +120,16 @@ export default {
         this.playerActivator.close();
     },
     mounted() {
+        // Store currently active player ID to handle editing of audio titles.
+        // Player keyboard handling is deactivated when editing of audio titles occurs.
+        // And activates once editing ends.
+        this.playerId = null;
+        this.playerActivator.asPipe().subscribe(data => {
+            if (data !== null) {
+                this.playerId = data;
+            }
+        });
+
         this.canvas = this.$refs.canvas;
         this.ctx = this.canvas.getContext('2d');
 
@@ -221,6 +232,11 @@ export default {
         exportPlaylist() {
             URL.revokeObjectURL(this.playlistExport);
             this.playlistExport = urlObject4Json(serializeObject(this.exportFiles, ['title', 'name']));
+        },
+
+        exportEditing(status) {
+            const val = (!status) ? this.playerId : null;
+            this.playerActivator.send(val);
         }
     }
 };

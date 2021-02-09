@@ -2,7 +2,7 @@
 import {
     getTimestamp, ansiColors, getContentDispositionFilename,
     getDataField, resetDataBySchema, slotMapping, readJson,
-    serializeObject, urlObject4Json
+    serializeObject
 } from './index';
 
 describe('utils', () => {

@@ -1,7 +1,7 @@
 <template>
   <draal-tooltip v-bind="tooltipAttrs" :name="tooltipText">
     <template v-slot:default="{ on: tooltip }">
-      <draal-menu :menuItems="menuItems" :menuAttrs="menuAttrs" :cbData="cbData">
+      <draal-menu v-on="$listeners" :menuItems="menuItems" :menuAttrs="menuAttrs" :cbData="cbData">
         <template v-slot:default="{ on: menu }">
           <!--
               @slot Menu entry. Component must provide implementation for this.
