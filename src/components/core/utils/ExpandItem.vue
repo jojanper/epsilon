@@ -9,7 +9,7 @@
               v-if="exportVal"
               :tooltip-text="editTooltip"
               :menuAttrs="menuAttrs"
-              @visibility="sendEditVisibility"
+              @visibility="sendEditVisibilityEvent"
             >
               <template v-slot:menu-entry="{ menu, tooltip }">
                 <v-icon
@@ -194,7 +194,7 @@ export default {
             show: this.value,
             customSlots,
             deleteAttrs: this.setActionAttrs(this.deleteActionAttrs, 'mdi-delete'),
-            exportAttrs: this.setActionAttrs(this.exportActionAttrs, 'mdi-file-export'),
+            exportAttrs: this.setActionAttrs(this.exportActionAttrs, 'mdi-export'),
             exportVal: this.export,
             name: this.title,
             menuAttrs
@@ -270,7 +270,7 @@ export default {
             this.$emit('export', this.exportVal);
         },
 
-        sendEditVisibility(value) {
+        sendEditVisibilityEvent(value) {
             /**
              * Export edit editing status.
              *

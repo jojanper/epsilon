@@ -17,6 +17,9 @@
           <input-help v-if="help" @form-input-help="inputHelpEvent"></input-help>
         </slot>
       </template>
+      <template slot="prepend">
+        <slot name="prepend"></slot>
+      </template>
     </v-select>
     <v-autocomplete
       v-else
@@ -34,6 +37,9 @@
         <slot name="append-outer">
           <input-help v-if="help" @form-input-help="inputHelpEvent"></input-help>
         </slot>
+      </template>
+      <template slot="prepend">
+        <slot name="prepend"></slot>
       </template>
     </v-autocomplete>
   </ValidationProvider>

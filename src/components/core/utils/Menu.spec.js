@@ -71,17 +71,23 @@ describe('DraalMenu', () => {
         // WHEN clicking the icon
         let el = wrapper.find('.mdi-dots-vertical');
         el.trigger('click');
-
         await wrapper.vm.$nextTick();
 
-        // THEN callback is called
+        // THEN visibility status is received
+        expect(emitted).toBeTruthy();
+
+        // -----
+
+        // WHEN menu item is clicked
         el = wrapper.findAll('.draal-menu-action-title');
         el.at(0).trigger('click');
+
+        // THEN callback is called
         expect(menuCalled[0]).toEqual(1);
         expect(menuCalled[1]).toEqual(0);
         expect(cbData !== null).toBeTruthy();
 
-        // AND visibility event is received
+        // AND visibility status is again received
         expect(emitted).toBeFalsy();
 
         wrapper.destroy();

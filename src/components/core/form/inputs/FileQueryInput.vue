@@ -241,6 +241,12 @@ export default {
                 }, err => {
                     this.processing = false;
 
+                    this.selectedData = null;
+                    this.customValue = null;
+                    this.customId = false;
+                    this.sendInputEvent();
+                    this.validateInput();
+
                     const error = {};
                     error[this.name] = err;
 

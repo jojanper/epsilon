@@ -92,13 +92,20 @@ export default {
             type: String,
             required: false,
             default: 'mdi-import'
+        },
+        /**
+         * Data array, if any
+         */
+        data: {
+            type: Array,
+            required: true
         }
     },
     data() {
         return {
             counter: 0,
             value: null,
-            importData: []
+            importData: this.data.map(item => item)
         };
     },
     methods: {
@@ -118,6 +125,13 @@ export default {
                 this.counter += 1;
                 this.importData.splice(0, this.importData.length);
                 target.forEach(item => this.importData.push(item));
+
+                /**
+                 * Read data array.
+                 *
+                 * @property data Data array.
+                 */
+                this.$emit('data-array', this.importData);
             }).catch(err => {
                 /**
                  * Error message.

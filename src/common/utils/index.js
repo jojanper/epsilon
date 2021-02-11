@@ -167,6 +167,31 @@ export function urlObject4Json(json) {
     return URL.createObjectURL(blob);
 }
 
+/**
+ * Check if input is string.
+ *
+ * @param {*} str String candidate.
+ * @returns true if string, false otherwise.
+ */
+export function isString(str) {
+    return (typeof str === 'string' || str instanceof String);
+}
+
+/**
+ * Clone input.
+ *
+ * @param {*} obj Input to clone.
+ * @returns Cloned object.
+ */
+export function clone(obj) {
+    if (isString(obj)) {
+        return obj.slice();
+    }
+
+    // May include nested objects -> apply deep copy
+    return JSON.parse(JSON.stringify(obj));
+}
+
 export const timer = timeout => new Promise(resolve => setTimeout(resolve, timeout));
 
 export * from './ansicolors';

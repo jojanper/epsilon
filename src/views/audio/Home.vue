@@ -20,8 +20,10 @@
         tooltip-text="Export audio meta"
         icon-color="red darken-2"
         icon-size="large"
+        :data="importData"
         @data-select="setAudioMetaData"
         @data-error="errorData"
+        @data-array="setImportData"
       ></draal-import>
     </div>
 
@@ -113,7 +115,9 @@ export default {
             },
             files: [],
             playerActivator: BaseObservableObject.createAsSubject(),
-            playlistExport: null
+            playlistExport: null,
+
+            importData: []
         };
     },
     destroyed() {
@@ -237,6 +241,11 @@ export default {
         exportEditing(status) {
             const val = (!status) ? this.playerId : null;
             this.playerActivator.send(val);
+        },
+
+        setImportData(data) {
+            this.importData.splice(0, this.importData.length);
+            data.forEach(item => this.importData.push(item));
         }
     }
 };

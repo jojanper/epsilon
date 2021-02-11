@@ -2,7 +2,7 @@
 import {
     getTimestamp, ansiColors, getContentDispositionFilename,
     getDataField, resetDataBySchema, slotMapping, readJson,
-    serializeObject
+    serializeObject, clone
 } from './index';
 
 describe('utils', () => {
@@ -166,5 +166,21 @@ describe('utils', () => {
 
         data = serializeObject([object], ['a']);
         expect(JSON.parse(data)).toEqual([{ a: 'foo' }]);
+    });
+
+    it('clone', () => {
+        let a = 'foo';
+        const b = clone(a);
+
+        expect(b).toEqual('foo');
+
+        a = 'foo';
+        expect(b).toEqual('foo');
+
+        const c = { a: 'foo', b: [1, 2, 3], c: 'c' };
+        const d = clone(c);
+
+        c.b[2] = 300;
+        expect(d).toEqual({ a: 'foo', b: [1, 2, 3], c: 'c' });
     });
 });
