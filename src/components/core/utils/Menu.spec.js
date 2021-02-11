@@ -11,10 +11,39 @@ describe('DraalMenu', () => {
         document.body.appendChild(el);
     });
 
+    function createMenu(menuItems, template) {
+        const localVue = createLocalVue();
+
+        const App = localVue.component('TestDraalMenu', {
+            components: {
+                DraalMenu
+            },
+            props: ['iconAttrs', 'menuItems', 'cbData'],
+            template
+        });
+
+        function callback() { }
+
+        return mount(App, {
+            localVue,
+            vuetify: getVuetify(),
+            propsData: {
+                menuItems,
+                iconAttrs: {
+                    icon: 'mdi-dots-vertical'
+                },
+                cbData: callback
+            },
+            stubs: {
+                DraalMenu
+            },
+            attachTo: attachToDocument()
+        });
+    }
+
     it('menu is opened and item is clicked', async done => {
         const menuCalled = [0, 0];
         let cbData = null;
-        let emitted = false;
 
         const menuItems = [
             {
@@ -32,49 +61,24 @@ describe('DraalMenu', () => {
             }
         ];
 
-        const localVue = createLocalVue();
+        const template = `
+            <v-app>
+                <draal-menu :menuAttrs="{}" :cbData="cbData" :menuItems="menuItems"
+                :iconAttrs="iconAttrs" @visibility="status => $emit('visibility', status)">
+                </draal-menu>
+            </v-app>
+        `;
 
-        const App = localVue.component('TestDraalMenu', {
-            components: {
-                DraalMenu
-            },
-            props: ['iconAttrs', 'menuItems', 'cbData', 'setVisibility'],
-            template: `
-              <v-app>
-                <draal-menu :menuAttrs="{}" :cbData="cbData" :menuItems="menuItems" :iconAttrs="iconAttrs" @visibility="setVisibility"></draal-menu>
-              </v-app>
-            `
-        });
+        // GIVEN menu component with action items
+        const wrapper = createMenu(menuItems, template);
 
-        function callback() { }
-
-        // GIVEN menu component
-        const wrapper = mount(App, {
-            localVue,
-            vuetify: getVuetify(),
-            propsData: {
-                menuItems,
-                iconAttrs: {
-                    icon: 'mdi-dots-vertical'
-                },
-                cbData: callback,
-                setVisibility: status => {
-                    emitted = status;
-                }
-            },
-            stubs: {
-                DraalMenu
-            },
-            attachTo: attachToDocument()
-        });
-
-        // WHEN clicking the icon
+        // WHEN opening the menu
         let el = wrapper.find('.mdi-dots-vertical');
         el.trigger('click');
         await wrapper.vm.$nextTick();
 
-        // THEN visibility status is received
-        expect(emitted).toBeTruthy();
+        // THEN visibility status is correct
+        expect(wrapper.emitted().visibility[0][0]).toBeTruthy();
 
         // -----
 
@@ -87,8 +91,45 @@ describe('DraalMenu', () => {
         expect(menuCalled[1]).toEqual(0);
         expect(cbData !== null).toBeTruthy();
 
-        // AND visibility status is again received
-        expect(emitted).toBeFalsy();
+        // AND menu is in closed state
+        expect(wrapper.emitted().visibility[0][1]).toBeFalsy();
+
+        wrapper.destroy();
+
+        done();
+    });
+
+    it('custom menu content', async done => {
+        const template = `
+            <v-app>
+              <draal-menu :menuAttrs="{}" :cbData="cbData" :menuItems="menuItems"
+              :iconAttrs="iconAttrs" @visibility="status => $emit('visibility', status)">
+              <template v-slot:menu-content="{ setVisibility }"><v-btn
+              class="menu-content-button" @click="setVisibility(false)">Button</v-btn>
+              </template></draal-menu>
+            </v-app>
+        `;
+
+        // GIVEN menu component with custom content
+        const wrapper = createMenu([], template);
+
+        // WHEN opening the menu
+        let el = wrapper.find('.mdi-dots-vertical');
+        el.trigger('click');
+        await wrapper.vm.$nextTick();
+
+        // THEN visibility status is correct
+        expect(wrapper.emitted().visibility[0][0]).toBeTruthy();
+
+        // -----
+
+        // WHEN button inside menu content is clicked
+        el = wrapper.findAll('.menu-content-button');
+        el.at(0).trigger('click');
+        await wrapper.vm.$nextTick();
+
+        // THEN menu is in closed state
+        expect(wrapper.emitted().visibility[0][1]).toBeFalsy();
 
         wrapper.destroy();
 
