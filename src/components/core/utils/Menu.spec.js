@@ -41,6 +41,16 @@ describe('DraalMenu', () => {
         });
     }
 
+    async function openMenuTest(wrapper) {
+        // WHEN opening the menu
+        const el = wrapper.find('.mdi-dots-vertical');
+        el.trigger('click');
+        await wrapper.vm.$nextTick();
+
+        // THEN visibility status is correct
+        expect(wrapper.emitted().visibility[0][0]).toBeTruthy();
+    }
+
     it('menu is opened and item is clicked', async done => {
         const menuCalled = [0, 0];
         let cbData = null;
@@ -71,20 +81,14 @@ describe('DraalMenu', () => {
 
         // GIVEN menu component with action items
         const wrapper = createMenu(menuItems, template);
-
-        // WHEN opening the menu
-        let el = wrapper.find('.mdi-dots-vertical');
-        el.trigger('click');
-        await wrapper.vm.$nextTick();
-
-        // THEN visibility status is correct
-        expect(wrapper.emitted().visibility[0][0]).toBeTruthy();
+        await openMenuTest(wrapper);
 
         // -----
 
         // WHEN menu item is clicked
-        el = wrapper.findAll('.draal-menu-action-title');
+        const el = wrapper.findAll('.draal-menu-action-title');
         el.at(0).trigger('click');
+        await wrapper.vm.$nextTick();
 
         // THEN callback is called
         expect(menuCalled[0]).toEqual(1);
@@ -112,19 +116,12 @@ describe('DraalMenu', () => {
 
         // GIVEN menu component with custom content
         const wrapper = createMenu([], template);
-
-        // WHEN opening the menu
-        let el = wrapper.find('.mdi-dots-vertical');
-        el.trigger('click');
-        await wrapper.vm.$nextTick();
-
-        // THEN visibility status is correct
-        expect(wrapper.emitted().visibility[0][0]).toBeTruthy();
+        await openMenuTest(wrapper);
 
         // -----
 
         // WHEN button inside menu content is clicked
-        el = wrapper.findAll('.menu-content-button');
+        const el = wrapper.findAll('.menu-content-button');
         el.at(0).trigger('click');
         await wrapper.vm.$nextTick();
 
