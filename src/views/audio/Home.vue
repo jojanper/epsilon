@@ -107,7 +107,7 @@ export default {
                 },
                 exportAction: {
                     name: this.$t('audioPage.exportItem'),
-                    icon: 'mdi-file-export',
+                    icon: 'mdi-export',
                     iconSize: 'medium'
                 },
                 editTooltip: 'Click to edit the export name',

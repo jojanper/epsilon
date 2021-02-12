@@ -46,11 +46,9 @@
         <draal-tooltip v-bind="exportAttrs" :icon-color="exportColor" @clicked="exportEvent()"></draal-tooltip>
       </v-list-item-action>
 
-      <div v-if="customSlots.length">
-        <v-list-item-action class="mr-0">
-          <slot v-for="(slot, index) in customSlots" v-bind:index="index" :name="slot"></slot>
-        </v-list-item-action>
-      </div>
+      <v-list-item-action class="mr-0 ml-0" v-for="(slot, index) in customSlots" :key="index">
+        <slot v-bind:index="index" :name="slot"></slot>
+      </v-list-item-action>
 
       <v-list-item-action class="ml-0">
         <v-btn icon>
