@@ -9,6 +9,10 @@
         ],
         "newVersion": "New version available, click to reload"
     },
+    "audioPage": {
+        "deleteItem": "Delete",
+        "exportItem": "Mark audio meta data for export"
+    },
     "configuratorPage": {
         "title": "Form creation",
         "confPanelTitle": "Create form using schema",

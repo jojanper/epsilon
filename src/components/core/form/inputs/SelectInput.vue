@@ -12,7 +12,14 @@
       v-bind="{ ...attrs, ...inputAttrs }"
       @input="inputChangeEvent"
     >
-      <input-help v-if="help" slot="append-outer" @form-input-help="$emit('form-input-help', name)"></input-help>
+      <template slot="append-outer">
+        <slot name="append-outer">
+          <input-help v-if="help" @form-input-help="inputHelpEvent"></input-help>
+        </slot>
+      </template>
+      <template slot="prepend">
+        <slot name="prepend"></slot>
+      </template>
     </v-select>
     <v-autocomplete
       v-else
@@ -26,7 +33,14 @@
       v-bind="{ ...attrs, ...inputAttrs }"
       @input="inputChangeEvent"
     >
-      <input-help v-if="help" slot="append-outer" @form-input-help="inputHelpEvent"></input-help>
+      <template slot="append-outer">
+        <slot name="append-outer">
+          <input-help v-if="help" @form-input-help="inputHelpEvent"></input-help>
+        </slot>
+      </template>
+      <template slot="prepend">
+        <slot name="prepend"></slot>
+      </template>
     </v-autocomplete>
   </ValidationProvider>
 </template>
