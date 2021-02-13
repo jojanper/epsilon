@@ -273,9 +273,14 @@ export default {
             // Deactivate player from receiving keyboard event if the active ID
             // does match the ID of this instance.
             this.activator.asPipe().subscribe(activeId => {
+                // Someone else requested control, deactivate
                 if (this.activeId !== activeId && this.active) {
                     this.deactivate();
                     this.stop();
+
+                // Someone requested activation of this instance
+                } else if (this.activeId === activeId && !this.active) {
+                    this.activate();
                 }
             });
         } else {

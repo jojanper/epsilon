@@ -1,7 +1,8 @@
 /* eslint-disable no-restricted-syntax */
 import {
     getTimestamp, ansiColors, getContentDispositionFilename,
-    getDataField, resetDataBySchema, slotMapping, readJson
+    getDataField, resetDataBySchema, slotMapping, readJson,
+    serializeObject, clone
 } from './index';
 
 describe('utils', () => {
@@ -152,5 +153,34 @@ describe('utils', () => {
         expect(data2.message).toEqual('Unexpected token T in JSON at position 0');
 
         done();
+    });
+
+    it('serializeObject', () => {
+        const object = { a: 'foo', b: [1, 2, 3], c: 'c' };
+
+        let data = serializeObject(object);
+        expect(JSON.parse(data)).toEqual(object);
+
+        data = serializeObject(object, ['a']);
+        expect(JSON.parse(data)).toEqual({ a: 'foo' });
+
+        data = serializeObject([object], ['a']);
+        expect(JSON.parse(data)).toEqual([{ a: 'foo' }]);
+    });
+
+    it('clone', () => {
+        let a = 'foo';
+        const b = clone(a);
+
+        expect(b).toEqual('foo');
+
+        a = 'foo';
+        expect(b).toEqual('foo');
+
+        const c = { a: 'foo', b: [1, 2, 3], c: 'c' };
+        const d = clone(c);
+
+        c.b[2] = 300;
+        expect(d).toEqual({ a: 'foo', b: [1, 2, 3], c: 'c' });
     });
 });

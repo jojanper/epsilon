@@ -12,6 +12,10 @@
     "homepage": {
         "message": "Tervetuloa Epsilon sovellukseen"
     },
+    "audioPage": {
+        "deleteItem": "Poista",
+        "exportItem": "Ota mukaan audio metan export tiedostoon"
+    },
     "configuratorPage": {
         "title": "Lomakkeen luonti",
         "confPanelTitle": "Luo lomake mallia käyttäen",
