@@ -276,7 +276,10 @@ export default {
                 // Someone else requested control, deactivate
                 if (this.activeId !== activeId && this.active) {
                     this.deactivate();
-                    this.stop();
+
+                    if (this.$refs.audioplayer) {
+                        this.stop();
+                    }
 
                 // Someone requested activation of this instance
                 } else if (this.activeId === activeId && !this.active) {

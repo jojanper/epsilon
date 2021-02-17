@@ -1,6 +1,11 @@
 <template>
   <div>
-    <canvas width="1500" height="400" ref="canvas"></canvas>
+    <!--div class="mx-auto" style="width: 1000px; overflow-x: scroll; "-->
+    <!--canvas height="256" width="4099" ref="canvas"></canvas-->
+    <div style="overflow:auto">
+      <canvas ref="canvas"></canvas>
+    </div>
+    <!--/div-->
 
     <div class="row p-4 clearfix">
       <draal-file-import
@@ -169,7 +174,7 @@ export default {
                 files[0],
                 data => {
                     console.log(data);
-                    console.log(data.getChannelData(0));
+                    // console.log(data.getChannelData(0));
 
                     const audio = [];
                     for (let ch = 0; ch < data.numberOfChannels; ch++) {
@@ -189,6 +194,7 @@ export default {
         deleteItem(index) {
             URL.revokeObjectURL(this.files[index].url);
             this.files.splice(index, 1);
+            this.exportPlaylist();
         },
 
         calculateAudioDataLength(nSamples, scale) {
@@ -205,7 +211,7 @@ export default {
             const INT8_MAX = 127;
             const INT8_MIN = -128;
             const scale = 1.0;
-            const chunkSize = 512;
+            const chunkSize = 180;
 
             const minPeaks = [[], []];
             const maxPeaks = [[], []];
@@ -266,26 +272,58 @@ export default {
         },
 
         drawWaveform(minPeaks, maxPeaks, numberOfChannels, numPeaks) {
-            this.ctx = this.canvas.getContext('2d');
-            this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+            const { canvas } = this.$refs;
+
+            this.ctx = canvas.getContext('2d');
+
+            // this.ctx.canvas.width = 4050;// numPeaks;
+
+            console.log(canvas.width, numPeaks);
+
+            canvas.height = 256;
+            // canvas.style.height = `${canvas.height}px`;
+            canvas.width = numPeaks;
+            // canvas.style.width = `${canvas.width}px`;
+
+            this.ctx.save();
+
+            // const scale = 1.5;
+            // this.ctx.setTransform(scale, 0, 0, scale, 0, 0);
+
+            this.ctx.clearRect(0, 0, canvas.width, canvas.height);
             this.ctx.fillStyle = 'violet';
 
-            const { width } = this.canvas;
-
-            const offsetX = 0;
             /*
-            if (offsetX > waveform.length - canvas.width) {
-                offsetX = waveform.length - canvas.width;
+            this.ctx.fillText('Zoom', 60, 100);
+
+            function square(ctx, pos) {
+                ctx.beginPath();
+                ctx.moveTo(pos, 0);
+                ctx.lineTo(pos, 18);
+                ctx.lineTo(pos + 10.5, 18);
+                ctx.lineTo(pos + 10.5, 0);
+                ctx.lineTo(pos, 0);
+                ctx.fill();
             }
+
+            square(this.ctx, 170);
+            // square(this.ctx, 200);
             */
 
-            const waveformHeight = this.canvas.height; // / waveform.channels;
+            const { width } = canvas;
 
-            console.log(waveformHeight, width, numPeaks);
+            const offsetX = 0;
+            // if (offsetX > waveform.length - canvas.width) {
+            // offsetX = waveform.length - canvas.width;
+            // }
+
+            const waveformHeight = canvas.height; // / waveform.channels;
+
+            console.log(waveformHeight, width, numPeaks, canvas, canvas.width, canvas.height);
 
             const scaleY = (amplitude, height) => {
-                const range = 384;
-                const offset = 192;
+                const range = 256;
+                const offset = 128;
                 return height - ((amplitude + offset) * height) / range;
             };
 
@@ -298,8 +336,11 @@ export default {
                 let audioPeaks = maxPeaks[c];
 
                 // eslint-disable-next-line no-plusplus
+                // for (x = 0, i = offsetX; x < width && i < numPeaks ; x++, i++) {
+                // eslint-disable-next-line no-plusplus
                 for (x = 0, i = offsetX; x < width && i < numPeaks; x++, i++) {
                     const val = audioPeaks[i];
+                    // console.log(x, val);
                     // console.log(x + 0.5, offsetY + scaleY(val, waveformHeight) + 0.5);
                     this.ctx.lineTo(x + 0.5, offsetY + scaleY(val, waveformHeight) + 0.5);
                 }
@@ -319,7 +360,8 @@ export default {
                 this.ctx.stroke();
                 this.ctx.fill();
             }
-            this.exportPlaylist();
+
+            this.ctx.restore();
         },
 
         setExportItem(index, status) {

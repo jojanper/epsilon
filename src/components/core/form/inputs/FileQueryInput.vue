@@ -174,7 +174,7 @@ export default {
         const fieldValue = this.value ? this.value.file : null;
         const listData = this.value ? this.value.listData : [];
         const selectedData = this.value ? this.value.selected : null;
-        const customValue = this.value ? this.value.value : null;
+        const customValue = this.value ? this.value.custom : null;
         const customId = customValue;
 
         return {
@@ -231,6 +231,9 @@ export default {
                 this.fieldValue = file.path || file.name;
                 this.listData.splice(0, this.listData.length);
 
+                this.selectedData = null;
+                this.customValue = null;
+                this.customId = false;
                 this.validateInput();
 
                 // Get the list data
@@ -240,10 +243,6 @@ export default {
                     this.validateInput();
                 }, err => {
                     this.processing = false;
-
-                    this.selectedData = null;
-                    this.customValue = null;
-                    this.customId = false;
                     this.sendInputEvent();
                     this.validateInput();
 
@@ -258,6 +257,7 @@ export default {
 
         // Item selected from list
         setSelectedData(data) {
+            this.customValue = null;
             this.selectedData = data;
             this.validateInput();
 
