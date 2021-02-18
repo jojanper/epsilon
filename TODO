@@ -32,3 +32,4 @@ Some thoughts for further development:
 - Document form input props
 - Form related unit tests
 - Load JSON from file input
+- Dialog service?
