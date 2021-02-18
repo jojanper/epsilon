@@ -23,6 +23,7 @@
 
         <div class="mt-3">
           <v-btn
+            v-if="options.submit"
             class="mr-2"
             :data-dummyvalue="setDisabled(invalid, valid)"
             :disabled="disabled"
@@ -124,6 +125,10 @@ export default {
                     inputs.forEach(cb => cb(target, value));
                 });
             }
+
+            if (!this.options.submit) {
+                this.sendFormData();
+            }
         },
 
         // Clear form data
@@ -166,6 +171,15 @@ export default {
 
                 this.dataRelHandlers[target][name].push(cb);
             });
+        },
+
+        sendFormData() {
+            /**
+             * Send form data.
+             *
+             * @property data Form data.
+             */
+            this.$emit('form-data', this.formData);
         }
     }
 };

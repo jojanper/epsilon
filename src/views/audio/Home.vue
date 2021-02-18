@@ -1,6 +1,11 @@
 <template>
   <div>
-    <canvas width="1000" height="400" ref="canvas"></canvas>
+    <!--div class="mx-auto" style="width: 1000px; overflow-x: scroll; "-->
+    <!--canvas height="256" width="4099" ref="canvas"></canvas-->
+    <div style="overflow:auto">
+      <canvas ref="canvas"></canvas>
+    </div>
+    <!--/div-->
 
     <div class="row p-4 clearfix">
       <draal-file-import
@@ -17,8 +22,8 @@
         class="mx-auto w-75"
         label="My exported audio"
         data-key="name"
-        tooltip-text="Export audio meta"
-        icon-color="red darken-2"
+        tooltip-text="Import audio meta"
+        icon-color="blue darken-2"
         icon-size="large"
         :data="importData"
         @data-select="setAudioMetaData"
@@ -73,8 +78,6 @@
 </template>
 
 <script>
-import { peaks } from './peaks';
-
 import DraalFileImport from '@/components/core/utils/FileImport.vue';
 import DraalIconDialog from '@/components/core/utils/IconDialog.vue';
 import DraalExpandItem from '@/components/core/utils/ExpandItem.vue';
@@ -135,44 +138,6 @@ export default {
         });
 
         this.canvas = this.$refs.canvas;
-        this.ctx = this.canvas.getContext('2d');
-
-        this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
-
-        const first = 0;
-        const absmaxHalf = 0.125 * 0.015625; // 0.015625;
-        const canvasStart = 0;
-        const canvasEnd = 1742;
-        const scale = 1.0;
-        const halfOffset = 200;
-
-        this.halfPixel = 0.5;
-
-        this.ctx.beginPath();
-        this.ctx.fillStyle = 'violet';
-        // this.ctx.moveTo((canvasStart - first) * scale, halfOffset);
-
-        let i;
-        for (i = canvasStart; i < canvasEnd; i++) {
-            const peak = peaks[2 * i] || 0;
-            const h = Math.round(peak / absmaxHalf);
-            console.log((i - first) * scale + this.halfPixel, halfOffset - h);
-            this.ctx.lineTo((i - first) * scale /* + this.halfPixel */, halfOffset - h);
-        }
-
-        // draw the bottom edge going backwards, to make a single
-        // closed hull to fill
-        let j = canvasEnd - 1;
-        for (j; j >= canvasStart; j--) {
-            const peak = peaks[2 * j + 1] || 0;
-            const h = Math.round(peak / absmaxHalf);
-            // console.log((j - first) * scale + this.halfPixel, halfOffset - h);
-            this.ctx.lineTo((j - first) * scale + 1 * this.halfPixel, halfOffset - h);
-        }
-
-        // this.ctx.restore();
-        this.ctx.closePath();
-        this.ctx.fill();
     },
     computed: {
         exportFiles() {
@@ -209,11 +174,20 @@ export default {
                 files[0],
                 data => {
                     console.log(data);
-                    console.log(data.getChannelData(0));
+                    // console.log(data.getChannelData(0));
+
+                    const audio = [];
+                    for (let ch = 0; ch < data.numberOfChannels; ch++) {
+                        audio.push(data.getChannelData(ch));
+                    }
+
+                    this.audioPeaks({
+                        length: data.length,
+                        numberOfChannels: data.numberOfChannels,
+                        data: audio
+                    });
                 },
-                err => {
-                    console.log(err);
-                }
+                console.log
             );
         },
 
@@ -221,6 +195,173 @@ export default {
             URL.revokeObjectURL(this.files[index].url);
             this.files.splice(index, 1);
             this.exportPlaylist();
+        },
+
+        calculateAudioDataLength(nSamples, scale) {
+            let dataLength = Math.floor(nSamples / scale);
+            const remaining = nSamples - (dataLength * scale);
+            if (remaining > 0) {
+                dataLength += 1;
+            }
+
+            return dataLength;
+        },
+
+        audioPeaks({ data, length, numberOfChannels }) {
+            const INT8_MAX = 127;
+            const INT8_MIN = -128;
+            const scale = 1.0;
+            const chunkSize = 180;
+
+            const minPeaks = [[], []];
+            const maxPeaks = [[], []];
+            const minVal = new Array(numberOfChannels);
+            const maxVal = new Array(numberOfChannels);
+
+            for (let channel = 0; channel < numberOfChannels; channel++) {
+                minVal[channel] = Infinity;
+                maxVal[channel] = -Infinity;
+            }
+
+            let counter = 0;
+            for (let i = 0; i < length; i++) {
+                for (let ch = 0; ch < numberOfChannels; ch++) {
+                    const sample = Math.floor(INT8_MAX * data[ch][i] * scale);
+
+                    if (sample < minVal[ch]) {
+                        minVal[ch] = sample;
+
+                        if (minVal[ch] < INT8_MIN) {
+                            minVal[ch] = INT8_MIN;
+                        }
+                    }
+
+                    if (sample > maxVal[ch]) {
+                        maxVal[ch] = sample;
+
+                        if (maxVal[ch] > INT8_MAX) {
+                            maxVal[ch] = INT8_MAX;
+                        }
+                    }
+                }
+
+                counter += 1;
+                if (counter === chunkSize) {
+                    for (let ch = 0; ch < numberOfChannels; ch++) {
+                        minPeaks[ch].push(minVal[ch]);
+                        maxPeaks[ch].push(maxVal[ch]);
+                        minVal[ch] = Infinity;
+                        maxVal[ch] = -Infinity;
+                    }
+
+                    counter = 0;
+                }
+            }
+
+            if (counter > 0) {
+                for (let ch = 0; ch < numberOfChannels; ch++) {
+                    minPeaks[ch].push(minVal[ch]);
+                    maxPeaks[ch].push(maxVal[ch]);
+                }
+            }
+
+            // console.log(minPeaks[0]);
+            // console.log(maxPeaks[0]);
+
+            this.drawWaveform(minPeaks, maxPeaks, 1, minPeaks[0].length);
+        },
+
+        drawWaveform(minPeaks, maxPeaks, numberOfChannels, numPeaks) {
+            const { canvas } = this.$refs;
+
+            this.ctx = canvas.getContext('2d');
+
+            // this.ctx.canvas.width = 4050;// numPeaks;
+
+            console.log(canvas.width, numPeaks);
+
+            canvas.height = 256;
+            // canvas.style.height = `${canvas.height}px`;
+            canvas.width = numPeaks;
+            // canvas.style.width = `${canvas.width}px`;
+
+            this.ctx.save();
+
+            // const scale = 1.5;
+            // this.ctx.setTransform(scale, 0, 0, scale, 0, 0);
+
+            this.ctx.clearRect(0, 0, canvas.width, canvas.height);
+            this.ctx.fillStyle = 'violet';
+
+            /*
+            this.ctx.fillText('Zoom', 60, 100);
+
+            function square(ctx, pos) {
+                ctx.beginPath();
+                ctx.moveTo(pos, 0);
+                ctx.lineTo(pos, 18);
+                ctx.lineTo(pos + 10.5, 18);
+                ctx.lineTo(pos + 10.5, 0);
+                ctx.lineTo(pos, 0);
+                ctx.fill();
+            }
+
+            square(this.ctx, 170);
+            // square(this.ctx, 200);
+            */
+
+            const { width } = canvas;
+
+            const offsetX = 0;
+            // if (offsetX > waveform.length - canvas.width) {
+            // offsetX = waveform.length - canvas.width;
+            // }
+
+            const waveformHeight = canvas.height; // / waveform.channels;
+
+            console.log(waveformHeight, width, numPeaks, canvas, canvas.width, canvas.height);
+
+            const scaleY = (amplitude, height) => {
+                const range = 256;
+                const offset = 128;
+                return height - ((amplitude + offset) * height) / range;
+            };
+
+            for (let c = 0, offsetY = 0; c < numberOfChannels; c++) {
+                let x;
+                let i;
+
+                this.ctx.beginPath();
+
+                let audioPeaks = maxPeaks[c];
+
+                // eslint-disable-next-line no-plusplus
+                // for (x = 0, i = offsetX; x < width && i < numPeaks ; x++, i++) {
+                // eslint-disable-next-line no-plusplus
+                for (x = 0, i = offsetX; x < width && i < numPeaks; x++, i++) {
+                    const val = audioPeaks[i];
+                    // console.log(x, val);
+                    // console.log(x + 0.5, offsetY + scaleY(val, waveformHeight) + 0.5);
+                    this.ctx.lineTo(x + 0.5, offsetY + scaleY(val, waveformHeight) + 0.5);
+                }
+
+                console.log('x', x);
+
+                audioPeaks = minPeaks[c];
+
+                // x = canvas.width - 1
+                // eslint-disable-next-line no-plusplus
+                for (x = width - 1, i = offsetX + width - 1; x >= 0; x--, i--) {
+                    const val = audioPeaks[i];
+                    this.ctx.lineTo(x + 0.5, offsetY + scaleY(val, waveformHeight) + 0.5);
+                }
+
+                this.ctx.closePath();
+                this.ctx.stroke();
+                this.ctx.fill();
+            }
+
+            this.ctx.restore();
         },
 
         setExportItem(index, status) {

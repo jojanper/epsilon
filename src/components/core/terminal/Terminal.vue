@@ -1,5 +1,10 @@
 <template>
-  <v-card v-if="data.length" class="mx-auto mt-3 mb-3 data-screen" max-width="2048">
+  <v-card
+    v-if="data.length"
+    :class="classes"
+    class="mx-auto mt-3 mb-3 data-screen"
+    max-width="2048"
+  >
     <v-card-text class="data-screen-text">
       <div v-for="(item, i) in data" :key="i">
         <div class="text-left pre-wrap data-screen-text" v-if="item.length" v-html="item"></div>
@@ -14,7 +19,7 @@ import { ansiColors } from '../../../common/utils';
 
 export default {
     name: 'DraalTerminal',
-    props: ['dataInput'],
+    props: ['dataInput', 'classes'],
     computed: {
         data() {
             return this.dataInput
