@@ -14,7 +14,6 @@
 
         <div :class="getOutlinedClasses('field-content', errors, required, 'checkbox')">
           <v-checkbox
-            class="classes"
             v-model="fieldValue"
             light
             :error="isRequired(required)"

@@ -98,7 +98,7 @@
         </div>
         <div :key="timelineRender">
           <draal-timeline-item
-            v-for="(timeline) in timelines"
+            v-for="(timeline) in filteredTimelineMarkers"
             :key="timeline.$id"
             :index="timeline.$id"
             :position="timeline.position"
@@ -123,9 +123,11 @@
         :data="timelines"
         :tableAttributes="{'item-key': '$id'}"
         v-bind="tableConfig"
+        :data-filtering="filterStatus"
         @row-click="handleClick"
         @data-edit="editAction"
         @data-delete="deleteAction"
+        @data-filter="setTimelineMarkerFilter"
       >
         <!-- Expose custom render columns for parent rendering -->
         <template v-for="(columnDef, index) in customRenderColumns" v-slot:[columnDef]="{data}">
@@ -361,7 +363,10 @@ export default {
 
             leftToolbar: this.leftToolBarRequested(),
 
-            timelineMenuWidthAttrs
+            timelineMenuWidthAttrs,
+
+            eventFiltering: [],
+            filterStatus: []
         };
     },
     async mounted() {
@@ -411,10 +416,20 @@ export default {
                 title: item.title,
                 fn: () => this.saveLength(item.width)
             }));
+        },
+
+        filteredTimelineMarkers() {
+            return this.eventFiltering.length ? this.getFilteredTimeline() : this.timelines;
         }
     },
     methods: {
         saveTimelineLength: appActions.saveTimelineLength,
+
+        // Filter timeline markers data based on specified conditions
+        getFilteredTimeline() {
+            const { field } = this.tableConfig.dataFilter;
+            return this.timelines.filter(data => this.eventFiltering.indexOf(data[field]) === -1);
+        },
 
         leftToolBarRequested() {
             return this.customSlots.indexOf('toolbar-left') > -1;
@@ -603,6 +618,15 @@ export default {
 
         moveTimeEntry(status) {
             setTimeout(() => { this.moving = status; }, 10);
+        },
+
+        // New event data filtering
+        setTimelineMarkerFilter(data, selected) {
+            this.eventFiltering.splice(0, this.eventFiltering.length);
+            data.forEach(item => this.eventFiltering.push(item));
+
+            this.filterStatus.splice(0, this.filterStatus.length);
+            selected.forEach(item => this.filterStatus.push(item));
         }
     }
 };

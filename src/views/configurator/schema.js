@@ -317,11 +317,26 @@ export const SCHEMA = [
             actions: ['edit', 'delete'],
             actionsConfig: {
                 name: 'Actions'
+            },
+            dataFilter: {
+                field: 'type',
+                types: [
+                    {
+                        type: 'focus',
+                        display: 'Focus'
+                    },
+                    {
+                        type: 'reverse',
+                        display: 'Reverse'
+                    }
+                ]
             }
         },
         accessMethods: {
             new(type) {
-                return type === 'type-2' ? { value: 3 } : { angle: 0, zoom: 0 };
+                const data = type === 'reverse' ? { value: 3 } : { angle: 0, zoom: 0 };
+                data.type = type;
+                return data;
             },
 
             save(source, data) {
