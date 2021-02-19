@@ -15,13 +15,18 @@
         <div class="ml-auto timeline-toolbar-right" :class="toolbarClasses">
           <div class="clearfix">
             <div class="float-right">
-              <draal-tooltip
-                v-if="help"
-                v-bind="toolIconAttrs"
-                :name="$t('timeline.info')"
-                icon="mdi-information-outline"
-                @clicked="$emit('help')"
-              ></draal-tooltip>
+              <!--
+                @slot New timeline event slot.
+                @binding {object} data Timeline manipulation functions.
+              -->
+              <slot name="table.toolbar-right.add" v-bind:data="{ add: addItem }">
+                <draal-tooltip
+                  v-bind="toolIconAttrs"
+                  :name="$t('timeline.new')"
+                  icon="mdi-plus"
+                  @clicked="addItem()"
+                ></draal-tooltip>
+              </slot>
               <draal-tooltip
                 v-if="!saveOnEdit"
                 v-bind="toolIconAttrs"
@@ -29,12 +34,6 @@
                 :icon-color="hasChanges ? 'red' : ''"
                 icon="mdi-content-save-outline"
                 @clicked="sendTimelineEvent"
-              ></draal-tooltip>
-              <draal-tooltip
-                v-bind="toolIconAttrs"
-                :name="$t('timeline.new')"
-                icon="mdi-plus"
-                @clicked="addItem()"
               ></draal-tooltip>
               <draal-tooltip
                 v-bind="toolIconAttrs"
@@ -48,6 +47,18 @@
                 icon="mdi-magnify-minus-outline"
                 @clicked="setZoom(-1)"
               ></draal-tooltip>
+              <draal-tooltip
+                v-if="help"
+                v-bind="toolIconAttrs"
+                :name="$t('timeline.info')"
+                icon="mdi-information-outline"
+                @clicked="$emit('help')"
+              ></draal-tooltip>
+
+              <!--
+                @slot Toolbar right slot
+              -->
+              <slot name="table.toolbar-right"></slot>
 
               <draal-tooltip
                 v-if="timelineMenuWidths.length > 1"
@@ -464,7 +475,7 @@ export default {
         },
 
         // Add new timeline item
-        addItem(count, cb) {
+        addItem(count, cb, params) {
             // Make sure items are added with reasonable distance with
             // respect to previous item. Thus, take into account the
             // length of the currently selected timeline.
@@ -479,7 +490,7 @@ export default {
             if (!cb) {
                 // No callback defined, just add new item to timeline
                 this.timelines.push({
-                    ...this.itemCreator(),
+                    ...this.itemCreator(params),
                     position: position > this.timelineWidth ? this.timelineWidth : position,
                     $clicked: false,
                     $id: baseId

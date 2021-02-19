@@ -67,7 +67,7 @@ export const SCHEMA = [
                     }
                 ],
                 dataRelTarget: ['input'],
-                customSlots: ['angleDir'],
+                customSlots: ['angleDir', 'edit-dialog'],
                 tableConfig: {
                     // Custom rendering via template slot is provided for this data item
                     customColumns: ['angleDir'],
@@ -303,22 +303,25 @@ export const SCHEMA = [
             }
         ],
         dataRelTarget: ['input'],
-        customSlots: ['angleDir', 'toolbar-left'],
+        customSlots: ['angleDir', 'toolbar-left', 'toolbar-right', 'toolbar-right.add'],
         tableConfig: {
             // Custom rendering via template slot is provided for this data item
             customColumns: ['angleDir'],
-            headers: HEADERS,
+            headers: [...HEADERS, {
+                text: 'Value',
+                align: 'left',
+                filterable: false,
+                sortable: false,
+                value: 'value'
+            }],
             actions: ['edit', 'delete'],
             actionsConfig: {
                 name: 'Actions'
             }
         },
         accessMethods: {
-            new() {
-                return {
-                    angle: 0,
-                    zoom: 0
-                };
+            new(type) {
+                return type === 'type-2' ? { value: 3 } : { angle: 0, zoom: 0 };
             },
 
             save(source, data) {

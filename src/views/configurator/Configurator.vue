@@ -27,8 +27,12 @@
               <v-icon :style="renderAzimuth(data)">mdi-arrow-up</v-icon>
             </template>
 
+            <template v-slot:form.row.focusTimeline2.edit-dialog>
+              <v-icon>mdi-arrow-down</v-icon>
+            </template>
+
             <template v-slot:form.focusTimeline.angleDir="{ data }">
-              <v-icon :style="renderAzimuth(data)">mdi-arrow-up</v-icon>
+              <v-icon v-if="data.angle" :style="renderAzimuth(data)">mdi-arrow-up</v-icon>
             </template>
 
             <template v-slot:form.focusTimeline.toolbar-left="{ data }">
@@ -59,6 +63,15 @@
                   </template>
                 </draal-tooltip-menu>
               </div>
+            </template>
+
+            <template v-slot:form.focusTimeline.toolbar-right.add="{ data }">
+              <draal-tooltip
+                v-bind="toolIconAttrs"
+                :name="$t('timeline.new')"
+                icon="mdi-plus"
+                @clicked="addEvent(data, 'type-2')"
+              ></draal-tooltip>
             </template>
           </draal-form-generator>
 
@@ -271,6 +284,10 @@ export default {
             add(5, (position, maxPos, index, cb) => {
                 cb({ angle, zoom: 90, position: position + index * 0.5 });
             });
+        },
+
+        addEvent({ add }, type = 'zoom') {
+            add(null, null, type);
         }
     }
 };
