@@ -84,13 +84,10 @@ export default {
                 shapes[0].y = SHAPE_ORIGINY;
 
                 const angle = decodeAngle(this.fieldValue ? this.fieldValue.angle || 0 : 0);
-
-                if (angle !== 0) {
-                    const x = Math.round(MAXRADIUS * Math.cos(angle));
-                    const y = Math.round(MAXRADIUS * Math.sin(angle));
-                    shapes[0].x = ORIGINX + x;
-                    shapes[0].y = ORIGINY + y;
-                }
+                const x = Math.round(MAXRADIUS * Math.cos(angle));
+                const y = Math.round(MAXRADIUS * Math.sin(angle));
+                shapes[0].x = ORIGINX + x;
+                shapes[0].y = ORIGINY + y;
                 shapes[0].angle = angle;
 
                 this.startRender();
