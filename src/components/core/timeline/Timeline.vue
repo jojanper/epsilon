@@ -564,7 +564,7 @@ export default {
             this.setChanges(status || true);
         },
 
-        // Stop timeline highlighting
+        // Stop timeline item highlighting
         highlightStop(id) {
             const index = this.getTimelineIndex(id);
             this.timelines[index].$clicked = false;
