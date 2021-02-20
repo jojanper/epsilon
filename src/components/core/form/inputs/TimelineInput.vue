@@ -174,10 +174,12 @@ export default {
         }
     },
     methods: {
+        // Get name for component slot
         getComponentSlotName(prefix, slotName) {
             return `${prefix}${this.name}.${slotName}`;
         },
 
+        // Save changed timeline data
         saveEditedValues(source, data, editChanges) {
             this.accessMethods.save(source, data);
             editChanges(true);
