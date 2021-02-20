@@ -15,13 +15,18 @@
         <div class="ml-auto timeline-toolbar-right" :class="toolbarClasses">
           <div class="clearfix">
             <div class="float-right">
-              <draal-tooltip
-                v-if="help"
-                v-bind="toolIconAttrs"
-                :name="$t('timeline.info')"
-                icon="mdi-information-outline"
-                @clicked="$emit('help')"
-              ></draal-tooltip>
+              <!--
+                @slot New timeline event slot.
+                @binding {object} data Timeline manipulation functions.
+              -->
+              <slot name="table.toolbar-right.add" v-bind:data="{ add: addItem }">
+                <draal-tooltip
+                  v-bind="toolIconAttrs"
+                  :name="$t('timeline.new')"
+                  icon="mdi-plus"
+                  @clicked="addItem()"
+                ></draal-tooltip>
+              </slot>
               <draal-tooltip
                 v-if="!saveOnEdit"
                 v-bind="toolIconAttrs"
@@ -29,12 +34,6 @@
                 :icon-color="hasChanges ? 'red' : ''"
                 icon="mdi-content-save-outline"
                 @clicked="sendTimelineEvent"
-              ></draal-tooltip>
-              <draal-tooltip
-                v-bind="toolIconAttrs"
-                :name="$t('timeline.new')"
-                icon="mdi-plus"
-                @clicked="addItem()"
               ></draal-tooltip>
               <draal-tooltip
                 v-bind="toolIconAttrs"
@@ -48,6 +47,18 @@
                 icon="mdi-magnify-minus-outline"
                 @clicked="setZoom(-1)"
               ></draal-tooltip>
+              <draal-tooltip
+                v-if="help"
+                v-bind="toolIconAttrs"
+                :name="$t('timeline.info')"
+                icon="mdi-information-outline"
+                @clicked="$emit('help')"
+              ></draal-tooltip>
+
+              <!--
+                @slot Toolbar right slot
+              -->
+              <slot name="table.toolbar-right"></slot>
 
               <draal-tooltip
                 v-if="timelineMenuWidths.length > 1"
@@ -87,7 +98,7 @@
         </div>
         <div :key="timelineRender">
           <draal-timeline-item
-            v-for="(timeline) in timelines"
+            v-for="(timeline) in filteredTimelineMarkers"
             :key="timeline.$id"
             :index="timeline.$id"
             :position="timeline.position"
@@ -112,9 +123,11 @@
         :data="timelines"
         :tableAttributes="{'item-key': '$id'}"
         v-bind="tableConfig"
+        :data-filtering="filterStatus"
         @row-click="handleClick"
         @data-edit="editAction"
         @data-delete="deleteAction"
+        @data-filter="setTimelineMarkerFilter"
       >
         <!-- Expose custom render columns for parent rendering -->
         <template v-for="(columnDef, index) in customRenderColumns" v-slot:[columnDef]="{data}">
@@ -350,11 +363,14 @@ export default {
 
             leftToolbar: this.leftToolBarRequested(),
 
-            timelineMenuWidthAttrs
+            timelineMenuWidthAttrs,
+
+            eventFiltering: [],
+            filterStatus: []
         };
     },
     async mounted() {
-        // Timeline data duration is updated that affects also this component rendering
+        // Timeline data duration is updated that affects the rendering
         this.dataProvider.subscribe(({ data }) => {
             let duration;
             if (data) {
@@ -363,6 +379,7 @@ export default {
 
             duration = duration || 0;
 
+            // Only one timeline duration available
             this.timelineMenuWidths.splice(0, this.timelineMenuWidths.length);
             this.timelineMenuWidths.push({ width: duration });
             this.timelineWidth = duration;
@@ -394,17 +411,29 @@ export default {
             return customRendering.map(column => (`table.${column}`));
         },
 
-        // Actions to change timeline width
+        // Actions menu to change timeline width
         actions() {
             return this.timelineMenuWidths.map(item => ({
                 title: item.title,
                 fn: () => this.saveLength(item.width)
             }));
+        },
+
+        // Return timeline markers; may return only a subset of events
+        filteredTimelineMarkers() {
+            return this.eventFiltering.length ? this.getFilteredTimeline() : this.timelines;
         }
     },
     methods: {
         saveTimelineLength: appActions.saveTimelineLength,
 
+        // Exclude those timeline markers that are excluded from rendering
+        getFilteredTimeline() {
+            const { field } = this.tableConfig.dataFilter;
+            return this.timelines.filter(data => this.eventFiltering.indexOf(data[field]) === -1);
+        },
+
+        // Is the left toolbar slot requested by parent
         leftToolBarRequested() {
             return this.customSlots.indexOf('toolbar-left') > -1;
         },
@@ -464,7 +493,7 @@ export default {
         },
 
         // Add new timeline item
-        addItem(count, cb) {
+        addItem(count, cb, params) {
             // Make sure items are added with reasonable distance with
             // respect to previous item. Thus, take into account the
             // length of the currently selected timeline.
@@ -479,7 +508,7 @@ export default {
             if (!cb) {
                 // No callback defined, just add new item to timeline
                 this.timelines.push({
-                    ...this.itemCreator(),
+                    ...this.itemCreator(params),
                     position: position > this.timelineWidth ? this.timelineWidth : position,
                     $clicked: false,
                     $id: baseId
@@ -525,19 +554,23 @@ export default {
             this.setChanges(true);
         },
 
+        // Edit dialog closed
         closeDialog() {
             this.editDialog = false;
         },
 
+        // Set changes via dialog template slot
         dialogEditChanges(status) {
             this.setChanges(status || true);
         },
 
+        // Stop timeline item highlighting
         highlightStop(id) {
             const index = this.getTimelineIndex(id);
             this.timelines[index].$clicked = false;
         },
 
+        // Update event position in the timeline
         positionUpdate(id, position) {
             const index = this.getTimelineIndex(id);
             this.timelines[index].position = position;
@@ -559,6 +592,7 @@ export default {
             this.renderTable();
         },
 
+        // Timeline table row clicked
         handleClick(index) {
             /* eslint-disable no-param-reassign */
             this.timelines.forEach(item => {
@@ -569,15 +603,18 @@ export default {
             /* eslint-enable no-param-reassign */
         },
 
+        // Specified timeline ID requested for editing
         timelineEdit(id) {
             const index = this.getTimelineIndex(id);
             this.editAction(index);
         },
 
+        // Get timeline index that corresponds to specified ID
         getTimelineIndex(id) {
             return this.timelines.findIndex(item => item.$id === id);
         },
 
+        // Send timeline to parent
         sendTimelineEvent() {
             /**
              * Timeline data event.
@@ -590,8 +627,21 @@ export default {
             this.setChanges(false);
         },
 
+        // Timeline marker position is under movement
         moveTimeEntry(status) {
             setTimeout(() => { this.moving = status; }, 10);
+        },
+
+        // New timeline marker filtering requested
+        setTimelineMarkerFilter(data, selected) {
+            // Timeline events for filtering
+            this.eventFiltering.splice(0, this.eventFiltering.length);
+            data.forEach(item => this.eventFiltering.push(item));
+
+            // Status of each timeline event type. The above filtering array
+            // contains the types that should get excluded from rendering
+            this.filterStatus.splice(0, this.filterStatus.length);
+            selected.forEach(item => this.filterStatus.push(item));
         }
     }
 };

@@ -44,15 +44,25 @@
 
             <!-- Row data editing occurs here -->
             <template v-slot:editDialog="{ componentKey, editData, editChanges }">
-              <wheel-input
-                :key="componentKey"
-                name
-                label
-                placeholder
-                :value="editData"
-                :zoomtransform="1"
-                @input="(data) => saveEditedValues(editData, data, editChanges)"
-              ></wheel-input>
+              <!--
+                @slot Edit timeline data.
+              -->
+              <slot
+                :name="editSlot"
+                v-bind:componentKey="componentKey"
+                v-bind:editData="editData"
+                v-bind:editChanges="editChanges"
+              >
+                <wheel-input
+                  :key="componentKey"
+                  name
+                  label
+                  placeholder
+                  :value="editData"
+                  :zoomtransform="1"
+                  @input="(data) => saveEditedValues(editData, data, editChanges)"
+                ></wheel-input>
+              </slot>
             </template>
           </draal-timeline>
         </div>
@@ -141,22 +151,35 @@ export default {
         }
     },
     data() {
+        const editSlot = this.getComponentSlotName(this.slotPrefix || '', 'edit-dialog');
+
         return {
             // Changes in timeline are tracked via hidden input validation.
             // Change event from timeline component will make this component invalid
             // and user is explicitly required to save the timeline changes before
             // component validation succeeds.
-            dummyModel: 0
+            dummyModel: 0,
+
+            editSlot
         };
     },
     computed: {
         customRender() {
             const colDef = this.customSlots || [];
             const prefix = this.slotPrefix || '';
-            return colDef.map(column => ({ childSlot: `table.${column}`, componentSlot: `${prefix}${this.name}.${column}` }));
+            return colDef.map(column => ({
+                childSlot: `table.${column}`,
+                componentSlot: this.getComponentSlotName(prefix, column)
+            }));
         }
     },
     methods: {
+        // Get name for component slot
+        getComponentSlotName(prefix, slotName) {
+            return `${prefix}${this.name}.${slotName}`;
+        },
+
+        // Save changed timeline data
         saveEditedValues(source, data, editChanges) {
             this.accessMethods.save(source, data);
             editChanges(true);
