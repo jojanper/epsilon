@@ -370,7 +370,7 @@ export default {
         };
     },
     async mounted() {
-        // Timeline data duration is updated that affects also this component rendering
+        // Timeline data duration is updated that affects the rendering
         this.dataProvider.subscribe(({ data }) => {
             let duration;
             if (data) {
@@ -379,6 +379,7 @@ export default {
 
             duration = duration || 0;
 
+            // Only one timeline duration available
             this.timelineMenuWidths.splice(0, this.timelineMenuWidths.length);
             this.timelineMenuWidths.push({ width: duration });
             this.timelineWidth = duration;
@@ -410,7 +411,7 @@ export default {
             return customRendering.map(column => (`table.${column}`));
         },
 
-        // Actions to change timeline width
+        // Actions menu to change timeline width
         actions() {
             return this.timelineMenuWidths.map(item => ({
                 title: item.title,
@@ -418,6 +419,7 @@ export default {
             }));
         },
 
+        // Return timeline markers; may return only a subset of events
         filteredTimelineMarkers() {
             return this.eventFiltering.length ? this.getFilteredTimeline() : this.timelines;
         }
@@ -425,12 +427,13 @@ export default {
     methods: {
         saveTimelineLength: appActions.saveTimelineLength,
 
-        // Filter timeline markers data based on specified conditions
+        // Exclude those timeline markers that are excluded from rendering
         getFilteredTimeline() {
             const { field } = this.tableConfig.dataFilter;
             return this.timelines.filter(data => this.eventFiltering.indexOf(data[field]) === -1);
         },
 
+        // Is the left toolbar slot requested by parent
         leftToolBarRequested() {
             return this.customSlots.indexOf('toolbar-left') > -1;
         },
@@ -551,19 +554,23 @@ export default {
             this.setChanges(true);
         },
 
+        // Edit dialog closed
         closeDialog() {
             this.editDialog = false;
         },
 
+        // Set changes via dialog template slot
         dialogEditChanges(status) {
             this.setChanges(status || true);
         },
 
+        // Stop timeline highlighting
         highlightStop(id) {
             const index = this.getTimelineIndex(id);
             this.timelines[index].$clicked = false;
         },
 
+        // Update event position in the timeline
         positionUpdate(id, position) {
             const index = this.getTimelineIndex(id);
             this.timelines[index].position = position;
@@ -585,6 +592,7 @@ export default {
             this.renderTable();
         },
 
+        // Timeline table row clicked
         handleClick(index) {
             /* eslint-disable no-param-reassign */
             this.timelines.forEach(item => {
@@ -595,15 +603,18 @@ export default {
             /* eslint-enable no-param-reassign */
         },
 
+        // Specified timeline ID requested for editing
         timelineEdit(id) {
             const index = this.getTimelineIndex(id);
             this.editAction(index);
         },
 
+        // Get timeline index that corresponds to specified ID
         getTimelineIndex(id) {
             return this.timelines.findIndex(item => item.$id === id);
         },
 
+        // Send timeline to parent
         sendTimelineEvent() {
             /**
              * Timeline data event.
@@ -616,15 +627,19 @@ export default {
             this.setChanges(false);
         },
 
+        // Timeline marker position is under movement
         moveTimeEntry(status) {
             setTimeout(() => { this.moving = status; }, 10);
         },
 
-        // New event data filtering
+        // New timeline marker filtering requested
         setTimelineMarkerFilter(data, selected) {
+            // Timeline events for filtering
             this.eventFiltering.splice(0, this.eventFiltering.length);
             data.forEach(item => this.eventFiltering.push(item));
 
+            // Status of each timeline event type. The above filtering array
+            // contains the types that should get excluded from rendering
             this.filterStatus.splice(0, this.filterStatus.length);
             selected.forEach(item => this.filterStatus.push(item));
         }
