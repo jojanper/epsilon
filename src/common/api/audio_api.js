@@ -2,6 +2,8 @@ import { map } from 'rxjs/operators';
 
 import Network from '../network';
 
+const responseType = 'json';
+
 class AudioApi {
     constructor(network) {
         this.rootUrl = '/api/audio/v1/';
@@ -10,18 +12,20 @@ class AudioApi {
     }
 
     getAppMeta() {
-        const options = { responseType: 'json', params: { time: Date.now() } };
+        const options = { responseType, params: { time: Date.now() } };
         return this.network.get(`${this.appUrl}`, options).pipe(
             map(response => response.data[0])
         );
     }
 
     getFile(url, params = {}, settings = null) {
-        return this.network.get(`${this.rootUrl}${url}`, { responseType: 'blob', params: { ...params, time: Date.now() } }, settings);
+        const options = { responseType: 'blob', params: { ...params, time: Date.now() } };
+        return this.network.get(`${this.rootUrl}${url}`, options, settings);
     }
 
     execCommand(params = {}, postFix = 'exec') {
-        return this.network.get(`${this.rootUrl}${postFix}`, { responseType: 'json', params: { ...params, time: Date.now() } });
+        const options = { responseType, params: { ...params, time: Date.now() } };
+        return this.network.get(`${this.rootUrl}${postFix}`, options);
     }
 
     uploadFile(file, progressCallback) {

@@ -204,12 +204,9 @@ export default {
                 text: this.actionsConfig.name,
                 value: '$action',
                 sortable: false,
-                filterable: false
+                filterable: false,
+                ...this.actionsConfig
             };
-
-            if (this.actionsConfig.width) {
-                data.width = this.actionsConfig.width;
-            }
 
             tableHeaders.push(data);
         }

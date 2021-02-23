@@ -670,6 +670,7 @@ export default {
   padding-right: 23px;
   padding-left: 18px;
   padding-bottom: 0.25em;
+  margin-bottom: 10px;
 }
 
 ::-webkit-scrollbar {
