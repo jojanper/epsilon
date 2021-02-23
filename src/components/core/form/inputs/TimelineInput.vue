@@ -49,9 +49,9 @@
               -->
               <slot
                 :name="editSlot"
-                v-bind:componentKey="componentKey"
-                v-bind:editData="editData"
-                v-bind:editChanges="editChanges"
+                v-bind:data="{
+                  save: (input) => saveEditedValues(editData, input, editChanges),
+                  source: editData }"
               >
                 <wheel-input
                   :key="componentKey"

@@ -4,7 +4,8 @@
       <hr
         :data-content="$attrs.dividerStart.label"
         class="form-input-divider mx-auto"
-        :class="$attrs.dividerStart.label ? `f-div-input ${$attrs.dividerStart.class}` : `hr-simple-text ${$attrs.dividerStart.class}`"
+        :class="$attrs.dividerStart.label ? `f-div-input ${$attrs.dividerStart.class}` :
+          `hr-simple-text ${$attrs.dividerStart.class}`"
         :style="$attrs.dividerStart.style"
       />
     </div>
@@ -41,6 +42,7 @@ import { getFormInputName } from './input';
 import TextInput from './inputs/TextInput.vue';
 import SelectInput from './inputs/SelectInput.vue';
 import CheckboxInput from './inputs/CheckboxInput.vue';
+import SwitchInput from './inputs/SwitchInput.vue';
 import RadioInput from './inputs/RadioInput.vue';
 import FileOpenInput from './inputs/FileOpenInput.vue';
 import RemoteFileSaveInput from './inputs/RemoteFileSaveInput.vue';
@@ -60,6 +62,7 @@ export default {
         TextInput,
         SelectInput,
         CheckboxInput,
+        SwitchInput,
         RadioInput,
         TimelineInput,
         FileOpenInput,

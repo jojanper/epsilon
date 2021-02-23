@@ -5,27 +5,22 @@ const HEADERS = [
         align: 'left',
         filterable: false,
         sortable: false,
-        value: 'position'
+        value: 'position',
+        width: '10%'
     },
     {
-        text: 'Direction',
-        value: 'angleDir',
+        text: 'Type',
+        value: 'type',
         sortable: false,
-        filterable: false
-    },
-    {
-        text: 'Angle',
-        value: 'angle',
-        sortable: false,
-        filterable: false
-    },
-    {
-        text: 'Zoom %',
-        value: 'zoom',
-        sortable: false,
-        filterable: false
+        filterable: false,
+        width: '10%'
     }
 ];
+
+export const TIMELINE_TYPES = {
+    dir: 'Direction',
+    switch: 'Audio switch'
+};
 
 export const SCHEMA = [
     {
@@ -56,7 +51,7 @@ export const SCHEMA = [
         schema: [
             {
                 type: 'timeline',
-                name: 'focusTimeline2',
+                name: 'timeline2',
                 label: 'Timeline',
                 placeholder: '',
                 maxZoom: 15,
@@ -267,6 +262,18 @@ export const SCHEMA = [
         outlined: true
     },
     {
+        type: 'switch',
+        name: 'switch',
+        label: '',
+        placeholder: '',
+        display: ['Off', 'On'],
+        help: {
+            title: 'Switch',
+            body: 'On/off states allowed'
+        },
+        outlined: true
+    },
+    {
         type: 'text',
         placeholder: 'Enter notes',
         label: 'Comments',
@@ -275,7 +282,7 @@ export const SCHEMA = [
     },
     {
         type: 'timeline',
-        name: 'focusTimeline',
+        name: 'timeline',
         label: 'Focus events timeline',
         placeholder: '',
         maxZoom: 15,
@@ -303,10 +310,16 @@ export const SCHEMA = [
             }
         ],
         dataRelTarget: ['input'],
-        customSlots: ['angleDir', 'toolbar-left', 'toolbar-right', 'toolbar-right.add'],
+        customSlots: [
+            'value',
+            'toolbar-left',
+            'toolbar-right',
+            'toolbar-right.add',
+            'edit-dialog'
+        ],
         tableConfig: {
             // Custom rendering via template slot is provided for this data item
-            customColumns: ['angleDir'],
+            customColumns: ['value'],
             headers: [...HEADERS, {
                 text: 'Value',
                 align: 'left',
@@ -316,34 +329,53 @@ export const SCHEMA = [
             }],
             actions: ['edit', 'delete'],
             actionsConfig: {
-                name: 'Actions'
+                name: 'Actions',
+                width: '10%',
+                align: 'center'
             },
             dataFilter: {
                 field: 'type',
                 types: [
                     {
-                        type: 'focus',
-                        display: 'Focus'
+                        type: TIMELINE_TYPES.dir,
+                        display: TIMELINE_TYPES.dir
                     },
                     {
-                        type: 'reverse',
-                        display: 'Reverse'
+                        type: TIMELINE_TYPES.switch,
+                        display: TIMELINE_TYPES.switch
                     }
                 ]
             }
         },
         accessMethods: {
             new(type) {
-                const data = type === 'reverse' ? { value: 3 } : { angle: 0, zoom: 0 };
-                data.type = type;
-                return data;
+                if (type === TIMELINE_TYPES.dir) {
+                    return {
+                        type,
+                        angle: 0,
+                        zoom: 0
+                    };
+                }
+
+                if (type === TIMELINE_TYPES.switch) {
+                    return {
+                        type,
+                        value: true
+                    };
+                }
+
+                return {};
             },
 
             save(source, data) {
-                /* eslint-disable no-param-reassign */
-                source.angle = data.angle;
-                source.zoom = data.zoom;
-                /* eslint-enable no-param-reassign */
+                const target = source;
+
+                if (target.type === TIMELINE_TYPES.switch) {
+                    target.value = data.value;
+                } else if (target.type === TIMELINE_TYPES.dir) {
+                    target.angle = data.angle;
+                    target.zoom = data.zoom;
+                }
             }
         }
     }

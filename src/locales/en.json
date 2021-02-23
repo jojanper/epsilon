@@ -17,7 +17,9 @@
         "title": "Form creation",
         "confPanelTitle": "Create form using schema",
         "createRec": "Submit",
-        "clearForm": "Clear"
+        "clearForm": "Clear",
+        "newDirection": "New direction event",
+        "newSwitch": "New switch event"
     },
     "dogApiPage": {
         "quickHelp": "Quick help",
