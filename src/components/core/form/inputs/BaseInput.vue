@@ -3,7 +3,8 @@ import { ValidationProvider } from 'vee-validate';
 
 import InputHelp from './InputHelp.vue';
 import {
-    placeholder, label, name, value, rules, help, classes, clearable, outlined
+    placeholder, label, name, value, rules, help, classes, clearable,
+    outlined, draggingColor
 } from './options';
 
 import * as validation from '@/components/core/form/rules';
@@ -25,6 +26,7 @@ export default {
         classes,
         clearable,
         outlined,
+        draggingColor,
         /**
          * Delay input data change updates.
          */
@@ -36,6 +38,10 @@ export default {
     },
     data() {
         return {
+            loading: false,
+            dragging: false,
+            overlay: false,
+
             fieldValue: this.value,
             inputAttrs: this.getInputAttrs()
         };
@@ -119,6 +125,26 @@ export default {
             }
 
             return cls;
+        },
+
+        // Set dragging status
+        setDragging(status) {
+            this.dragging = status;
+            this.loading = status ? this.draggingColor : false;
+
+            /**
+             * File dragging event.
+             *
+             * @property {boolean} status Drag status.
+             */
+            this.$emit('dragging', this.dragging);
+        },
+
+        drop(e) {
+            e.preventDefault();
+            this.setDragging(false);
+            this.onDrop(e.dataTransfer.files);
+            return false;
         }
     }
 };

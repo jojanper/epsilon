@@ -1,5 +1,9 @@
 <template>
-  <ValidationProvider v-slot="{ errors }" :name="name" :rules="rules">
+  <ValidationProvider
+    v-slot="{ errors }"
+    :name="name"
+    :rules="rules"
+  >
     <v-text-field
       :class="`file-input ${classes}`"
       v-model="fieldValue"
@@ -9,13 +13,33 @@
       @click="clicked"
       @input="inputChangeEvent"
       v-bind="inputAttrs"
+      @dragenter="setDragging(true)"
+      @dragend="setDragging(false)"
+      @dragleave="setDragging(false)"
+      @dragover.prevent
+      @drop="drop"
+      :loading="loading"
     >
-      <input-help v-if="help" slot="append-outer" @form-input-help="inputHelpEvent"></input-help>
+      <v-progress-linear
+        v-if="dragging"
+        slot="progress"
+        :value="100"
+        :color="draggingColor"
+        absolute
+        height="5"
+      ></v-progress-linear>
+
+      <input-help
+        v-if="help"
+        slot="append-outer"
+        @form-input-help="inputHelpEvent"
+      ></input-help>
       <draal-file-drop
         @fileDrop="onDrop"
         slot="append"
         :title="dropTitle || $t('form.remoteInputDropTitle')"
-      ></draal-file-drop>
+      >
+      </draal-file-drop>
     </v-text-field>
   </ValidationProvider>
 </template>

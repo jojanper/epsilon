@@ -87,3 +87,10 @@ export const outlined = {
     required: false,
     default: false
 };
+
+// Dragging color for file inputs
+export const draggingColor = {
+    type: String,
+    required: false,
+    default: '#EE82EE' // violet
+};
