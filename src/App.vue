@@ -1,19 +1,49 @@
 <template>
   <v-app id="app">
     <draal-go-2-top></draal-go-2-top>
-    <draal-header :homeRoute="home" :routes="header.routes" :appName="header.appName"></draal-header>
-    <draal-breadcrumbs :home-route-name="home" :home-name="homeName" class="mt-3 mr-3 ml-3"></draal-breadcrumbs>
+    <draal-header
+      :homeRoute="home"
+      :routes="header.routes"
+      :appName="header.appName"
+    ></draal-header>
+    <draal-breadcrumbs
+      :home-route-name="home"
+      :home-name="homeName"
+      class="mt-3 mr-3 ml-3"
+    ></draal-breadcrumbs>
     <draal-notification></draal-notification>
     <div class="container-fluid app-container">
       <router-view />
-      <v-flex xs12 sm34 text-xs-center>
-        <v-btn class="mr-2" color="primary" v-on:click="addAlert('Success')">Add success alert</v-btn>
-        <v-btn class="mr-2" color="info" v-on:click="addAlert('Info')">Add info alert</v-btn>
-        <v-btn class="mr-2" color="warning" v-on:click="addAlert('Warning')">Add warning alert</v-btn>
-        <v-btn color="error" v-on:click="addAlert('Error')">Add error alert</v-btn>
+      <v-flex
+        xs12
+        sm34
+        text-xs-center
+      >
+        <v-btn
+          class="mr-2"
+          color="primary"
+          v-on:click="addAlert('Success')"
+        >Add success alert</v-btn>
+        <v-btn
+          class="mr-2"
+          color="info"
+          v-on:click="addAlert('Info')"
+        >Add info alert</v-btn>
+        <v-btn
+          class="mr-2"
+          color="warning"
+          v-on:click="addAlert('Warning')"
+        >Add warning alert</v-btn>
+        <v-btn
+          color="error"
+          v-on:click="addAlert('Error')"
+        >Add error alert</v-btn>
       </v-flex>
 
-      <div class="p-3 elevation-3" v-if="data.length">
+      <div
+        class="p-3 elevation-3"
+        v-if="data.length"
+      >
         <div class="row text-left">
           <div class="col-sm">{{ quote.companyName }} ({{ quote.symbol }})</div>
           <div class="col-sm">Close: {{ chart[chart.length - 1].close }}</div>
@@ -45,12 +75,20 @@
             <div v-html="getTime(data.datetime)"></div>
           </template>
           <template v-slot:table.headline="{ data }">
-            <a :href="data.url" target="_blank">{{ data.headline }}</a>
+            <a
+              :href="data.url"
+              target="_blank"
+            >{{ data.headline }}</a>
           </template>
           <template v-slot:table.expand="{ data }">
             <div class="row">
               <div class="hidden-sm-and-down">
-                <img class="p-3" :src="data.image" width="150" height="150" />
+                <img
+                  class="p-3"
+                  :src="data.image"
+                  width="150"
+                  height="150"
+                />
               </div>
               <div class="col text-left">{{ data.summary }}</div>
             </div>
@@ -195,8 +233,6 @@ export default {
     padding-bottom: 15px !important;
 }
 .file-query-input-wrapper {
-    margin-top: 15px;
-
     .file-query-input {
         top: -15px;
         position: relative;

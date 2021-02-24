@@ -53,7 +53,6 @@ export const fileInputMixin = {
             mediaDuration,
             fileDialog: false,
             inputRules,
-            loading: false,
             fileSrc: null
         };
     },

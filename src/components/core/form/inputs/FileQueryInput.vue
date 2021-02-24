@@ -4,7 +4,12 @@
       <ValidationObserver ref="observer">
         <div class="row m-0 first-row">
           <div class="col-sm p-0">
-            <ValidationProvider ref="provider" v-slot="{ errors }" :name="name" :rules="inputRules">
+            <ValidationProvider
+              ref="provider"
+              v-slot="{ errors }"
+              :name="name"
+              :rules="inputRules"
+            >
               <v-text-field
                 :class="outlined ? 'file-input outlined' : ' file-input no-outlined'"
                 v-model="fieldValue"
@@ -14,8 +19,27 @@
                 @click="fileDialog=true"
                 :readonly="true"
                 v-bind="inputAttrs"
+                @dragenter="setDragging(true)"
+                @dragend="setDragging(false)"
+                @dragleave="setDragging(false)"
+                @dragover.prevent
+                @drop="drop"
+                :loading="loading"
               >
-                <input-help v-if="help" slot="append-outer" @form-input-help="inputHelpEvent"></input-help>
+                <v-progress-linear
+                  v-if="dragging"
+                  slot="progress"
+                  :value="100"
+                  :color="draggingColor"
+                  absolute
+                  height="5"
+                ></v-progress-linear>
+
+                <input-help
+                  v-if="help"
+                  slot="append-outer"
+                  @form-input-help="inputHelpEvent"
+                ></input-help>
                 <draal-file-drop
                   @fileDrop="onDrop"
                   slot="append"
@@ -26,9 +50,15 @@
           </div>
         </div>
 
-        <div :class="secondRowCls" v-if="fieldValue">
+        <div
+          :class="secondRowCls"
+          v-if="fieldValue"
+        >
           <div class="col-sm pb-0">
-            <ValidationProvider name="selected" v-if="listData.length">
+            <ValidationProvider
+              name="selected"
+              v-if="listData.length"
+            >
               <select-input
                 classes=" "
                 :placeholder="selectPlaceholder"
@@ -46,7 +76,12 @@
           </div>
 
           <div class="col-sm pb-0">
-            <ValidationProvider name="custom" v-if="customId" v-slot="{ errors }" rules="required">
+            <ValidationProvider
+              name="custom"
+              v-if="customId"
+              v-slot="{ errors }"
+              rules="required"
+            >
               <v-text-field
                 v-model="customValue"
                 :label="customLabel"
@@ -70,7 +105,10 @@
         </div>
 
         <!-- File dialog is also hidden -->
-        <draal-file-dialog v-model="fileDialog" @file-select="onDrop"></draal-file-dialog>
+        <draal-file-dialog
+          v-model="fileDialog"
+          @file-select="onDrop"
+        ></draal-file-dialog>
       </ValidationObserver>
     </div>
   </div>
