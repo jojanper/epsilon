@@ -72,6 +72,10 @@ export default {
                 this.validateInput();
             }
 
+            this.sendChangeEvent(data);
+        },
+
+        sendChangeEvent(data) {
             /**
              * Input data change event.
              *

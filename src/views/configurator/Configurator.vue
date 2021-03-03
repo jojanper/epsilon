@@ -2,12 +2,20 @@
   <div>
     <h1>{{ $t('configuratorPage.title') }}</h1>
 
+    <draal-form-generator
+      :schema="schema1"
+      v-model="formData1"
+      v-on:submit="submit"
+      :options="options"
+    ></draal-form-generator>
+
     <v-expansion-panels
       class="mt-3 mb-3"
       v-model="activePanel"
     >
       <v-expansion-panel>
-        <v-expansion-panel-header>{{ $t('configuratorPage.confPanelTitle') }}</v-expansion-panel-header>
+        <v-expansion-panel-header>{{ $t('configuratorPage.confPanelTitle') }}
+        </v-expansion-panel-header>
         <v-expansion-panel-content>
           <draal-file-import
             class="mb-6"
@@ -148,12 +156,13 @@
 
 <script>
 import { of, throwError } from 'rxjs';
-import { delay } from 'rxjs/operators';
+import { delay, catchError } from 'rxjs/operators';
 
-import { SCHEMA, TIMELINE_TYPES } from './schema';
+import { SCHEMA, TIMELINE_TYPES, SCHEMA1 } from './schema';
 import DraalEventData from './EventData.vue';
 import DraalEventDataEdit from './EventDataEdit.vue';
 
+import { AudioApi } from '@/common/api';
 import DraalSpinner from '@/components/core/utils/Spinner.vue';
 import DraalFormGenerator from '@/components/core/form/Form.vue';
 import { notificationActions } from '@/store/helpers';
@@ -178,8 +187,19 @@ export default {
     },
     data() {
         const schema = [...SCHEMA];
+        const schema1 = [...SCHEMA1];
 
         const iconSize = 'large';
+
+        schema1.forEach(item => {
+            if (item.type === 'local-audio-file') {
+                /* eslint-disable-next-line */
+                item.dataQuery = this.wavQuery.bind(this);
+            } else if (item.type === 'file-data-query') {
+                /* eslint-disable-next-line */
+                item.dataQuery = this.dataQuery.bind(this);
+            }
+        });
 
         schema.forEach(item => {
             if (item.type === 'file-data-query') {
@@ -201,6 +221,13 @@ export default {
             linkDownload,
 
             timelineTypes: TIMELINE_TYPES,
+
+            schema1,
+            formData1: {
+                bin: null,
+                audio: null,
+                fileid: null
+            },
 
             data: null,
             processing: false,
@@ -270,6 +297,11 @@ export default {
     methods: {
         ...notificationActions,
 
+        submit(data) {
+            /* eslint-disable-next-line */
+            console.log(data);
+        },
+
         encode(encData) {
             /* eslint-disable-next-line */
             console.log(encData);
@@ -287,6 +319,15 @@ export default {
         fileSelect(files) {
             /* eslint-disable-next-line */
             console.log('selected', files);
+        },
+
+        wavQuery(filename) {
+            return AudioApi.wavInfo(encodeURIComponent(filename)).pipe(
+                catchError(err => {
+                    console.log(err);
+                    return { data: {} };
+                })
+            );
         },
 
         dataQuery(file) {

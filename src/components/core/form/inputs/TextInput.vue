@@ -1,5 +1,9 @@
 <template>
-  <ValidationProvider v-slot="{ errors }" :name="name" :rules="rules">
+  <ValidationProvider
+    v-slot="{ errors }"
+    :name="name"
+    :rules="rules"
+  >
     <v-text-field
       :class="classes"
       v-model="fieldValue"
@@ -9,7 +13,11 @@
       @input="inputChangeEvent"
       v-bind="inputAttrs"
     >
-      <input-help v-if="help" slot="append-outer" @form-input-help="inputHelpEvent"></input-help>
+      <input-help
+        v-if="help"
+        slot="append-outer"
+        @form-input-help="inputHelpEvent"
+      ></input-help>
     </v-text-field>
   </ValidationProvider>
 </template>

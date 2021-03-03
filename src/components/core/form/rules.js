@@ -6,6 +6,13 @@ const wavaudio = {
     }
 };
 
+// Custom WAV audio file extension validation.
+const wavext = {
+    validate(value) {
+        return value.endsWith('.wav');
+    }
+};
+
 // Custom JSON file validation.
 const jsonfile = {
     validate(value) {
@@ -42,5 +49,6 @@ const filequery = {
 export const rules = {
     wavaudio,
     jsonfile,
-    filequery
+    filequery,
+    wavext
 };

@@ -380,3 +380,51 @@ export const SCHEMA = [
         }
     }
 ];
+
+export const SCHEMA1 = [
+    {
+        type: 'text',
+        placeholder: 'Enter binary name',
+        label: 'Binary',
+        name: 'bin',
+        rules: 'required',
+        clearable: true,
+        help: {
+            title: 'Binary name',
+            body: 'Binary used for execution.'
+        }
+    },
+    {
+        type: 'local-audio-file',
+        placeholder: 'Enter audio file name',
+        label: 'WAVE file',
+        name: 'audio',
+        wavAudioRule: true,
+        rules: 'required|wavext',
+        clearable: true,
+        help: {
+            title: 'Audio file',
+            body: 'Audio as WAVE file.'
+        }
+    },
+    {
+        type: 'file-data-query',
+        mode: 'text',
+        placeholder: 'Enter ID file',
+        label: 'ID file',
+        name: 'fileid',
+        rules: 'required',
+        selectPlaceholder: 'Select ID',
+        selectLabel: 'Select ID',
+        customPlaceholder: 'Manually set the ID',
+        customLabel: 'Enter your ID',
+        dataKey: 'uuid',
+        selectKey: 'uuid',
+        queryRule: 'filequery',
+        clearable: true,
+        help: {
+            title: 'ID file',
+            body: 'Target ID selection.'
+        }
+    }
+];

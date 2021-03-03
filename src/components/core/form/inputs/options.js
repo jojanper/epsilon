@@ -94,3 +94,9 @@ export const draggingColor = {
     required: false,
     default: '#EE82EE' // violet
 };
+
+// Data query function. Must return observable.
+export const dataQuery = {
+    type: Function,
+    required: true
+};

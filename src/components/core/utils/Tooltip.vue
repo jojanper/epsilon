@@ -1,16 +1,33 @@
 <template>
   <v-tooltip v-bind="tooltipAttrs">
-    <template v-slot:activator="{ on }">
+    <template v-slot:activator="{ on, attrs }">
       <!-- Scoped slot for advanced tooltip content -->
-      <slot name="default" :class="classes" v-bind:on="on"></slot>
+      <slot
+        name="default"
+        :class="classes"
+        v-bind:on="on"
+      ></slot>
 
       <!-- Use icon for tooltip content -->
-      <v-btn :class="classes" v-if="icon" icon v-on="on">
-        <v-icon v-bind="iconAttrs" @click="$emit('clicked')">{{ icon }}</v-icon>
+      <v-btn
+        :class="classes"
+        v-bind="attrs"
+        v-if="icon"
+        icon
+        v-on="on"
+        @click="$emit('clicked')"
+      >
+        <v-icon v-bind="iconAttrs">{{ icon }}</v-icon>
       </v-btn>
 
       <!-- Use link for tooltip content -->
-      <a v-if="link" :class="classes" v-on="on" :href="linkUrl" :download="linkDownload">{{ link }}</a>
+      <a
+        v-if="link"
+        :class="classes"
+        v-on="on"
+        :href="linkUrl"
+        :download="linkDownload"
+      >{{ link }}</a>
     </template>
     <span>{{ name }}</span>
   </v-tooltip>
