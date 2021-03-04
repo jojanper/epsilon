@@ -192,12 +192,13 @@ export default {
         const iconSize = 'large';
 
         schema1.forEach(item => {
+            const data = item;
+
             if (item.type === 'local-audio-file') {
-                /* eslint-disable-next-line */
-                item.dataQuery = this.wavQuery.bind(this);
+                data.dataQuery = this.wavQuery.bind(this);
+                data.fileQueryFn = this.fileQuery.bind(this);
             } else if (item.type === 'file-data-query') {
-                /* eslint-disable-next-line */
-                item.dataQuery = this.dataQuery.bind(this);
+                data.dataQuery = this.dataQuery.bind(this);
             }
         });
 
@@ -323,10 +324,13 @@ export default {
 
         wavQuery(filename) {
             return AudioApi.wavInfo(encodeURIComponent(filename)).pipe(
-                catchError(err => {
-                    console.log(err);
-                    return { data: {} };
-                })
+                catchError(() => ({ data: {} }))
+            );
+        },
+
+        fileQuery(prefix, ext) {
+            return AudioApi.fileList(prefix, ext).pipe(
+                catchError(() => ({ data: [] }))
             );
         },
 

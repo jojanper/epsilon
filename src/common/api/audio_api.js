@@ -38,6 +38,12 @@ class AudioApi {
         const params = { filename };
         return this.network.post(`${this.mediaUrl}/wave`, params);
     }
+
+    // Query file listing from remote
+    fileList(prefix, ext) {
+        const options = { params: { path: prefix, ext, time: Date.now() } };
+        return this.network.get(`${this.mediaUrl}/file-listing`, options);
+    }
 }
 
 const service = new AudioApi(Network);

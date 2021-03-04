@@ -401,6 +401,7 @@ export const SCHEMA1 = [
         name: 'audio',
         wavAudioRule: true,
         rules: 'required|wavext',
+        fileExt: '.wav',
         clearable: true,
         help: {
             title: 'Audio file',
