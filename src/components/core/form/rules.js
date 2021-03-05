@@ -6,17 +6,11 @@ const wavaudio = {
     }
 };
 
-// Custom WAV audio file extension validation.
-const wavext = {
-    validate(value) {
-        return value.endsWith('.wav');
-    }
-};
-
-// Custom JSON file validation.
-const jsonfile = {
-    validate(value) {
-        return value.endsWith('.json');
+// Custom file extension validation
+const fileext = {
+    params: ['ext'],
+    validate(value, { ext }) {
+        return value.endsWith(ext);
     }
 };
 
@@ -48,7 +42,6 @@ const filequery = {
 
 export const rules = {
     wavaudio,
-    jsonfile,
     filequery,
-    wavext
+    fileext
 };

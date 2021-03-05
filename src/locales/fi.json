@@ -38,7 +38,7 @@
     },
     "form": {
         "remoteInputDropTitle": "Pudota tiedosto tänne",
-        "audioInfoQuery": "Tarkistetaan tiedostoa..."
+        "fileInfoQuery": "Tarkistetaan tiedostoa..."
     },
     "timeline": {
         "unsaved": "Tallentamattomia muutoksia",
@@ -135,8 +135,7 @@
         "required_if": "Pakollinen",
         "size": "{_field_} tulee olla vähemmän kuin {size}kB",
         "wavaudio": "Ei WAV tiedosto",
-        "wavext": "Ei .wav tiedostopääte",
-        "jsonfile": "Ei JSON tiedosto",
-        "filequery": "Täytä puuttuvat tiedot alapuolella"
+        "filequery": "Täytä puuttuvat tiedot alapuolella",
+        "fileext": "{ext} tiedostopääte puuttuu"
     }
 }

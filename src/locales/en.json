@@ -36,7 +36,7 @@
     },
     "form": {
         "remoteInputDropTitle": "Drop file here",
-        "audioInfoQuery": "Validating input..."
+        "fileInfoQuery": "Validating input..."
     },
     "timeline": {
         "unsaved": "Unsaved changes",
@@ -138,8 +138,7 @@
         "required": "Required",
         "size": "The {_field_} field size must be less than {size}KB",
         "wavaudio": "Not a valid WAV file",
-        "wavext": "No .wav file extension",
-        "jsonfile": "Not a JSON file",
-        "filequery": "Fill all required information below"
+        "filequery": "Fill all required information below",
+        "fileext": "{ext} file extension required"
     }
 }

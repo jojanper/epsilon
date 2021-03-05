@@ -199,16 +199,22 @@ export default {
                 data.fileQueryFn = this.fileQuery.bind(this);
             } else if (item.type === 'file-data-query') {
                 data.dataQuery = this.dataQuery.bind(this);
+                data.fileQueryFn = this.fileQuery.bind(this);
+            } else if (item.type === 'file-open') {
+                data.fileQueryFn = this.fileQuery.bind(this);
             }
         });
 
         schema.forEach(item => {
+            const data = item;
+
             if (item.type === 'file-data-query') {
-                /* eslint-disable-next-line */
-                item.dataQuery = this.dataQuery.bind(this);
+                data.dataQuery = this.dataQuery.bind(this);
+                data.fileQueryFn = this.fileQuery.bind(this);
             } else if (item.type === 'timeline') {
-                /* eslint-disable-next-line */
-                item.toolbarIconSize = iconSize;
+                data.toolbarIconSize = iconSize;
+            } else if (item.type === 'file-open') {
+                data.fileQueryFn = this.fileQuery.bind(this);
             }
         });
 
@@ -337,7 +343,7 @@ export default {
         dataQuery(file) {
             if (this.queryFailure) {
                 const timeout = 5000;
-                const msg = `Error in parsing file ${file.name}`;
+                const msg = `Error in parsing file ${file.name || file.path}`;
                 this.addNotification(NotificationMessage.createError(msg, { timeout }));
 
                 this.queryFailure = false;

@@ -11,7 +11,7 @@
               :rules="inputRules"
             >
               <v-text-field
-                v-if="mode === 'file'"
+                v-if="mode === RENDER_MODES.file"
                 :class="outlined ? 'file-input outlined' : ' file-input no-outlined'"
                 v-model="fieldValue"
                 :error-messages="errors"
@@ -49,7 +49,7 @@
               </v-text-field>
 
               <v-text-field
-                v-if="mode === 'text'"
+                v-if="mode === RENDER_MODES.text"
                 :class="outlined ? 'outlined' : 'no-outlined'"
                 v-model="fieldValue"
                 :error-messages="errors"
@@ -64,6 +64,30 @@
                   @form-input-help="inputHelpEvent"
                 ></input-help>
               </v-text-field>
+
+              <v-autocomplete
+                v-if="mode === RENDER_MODES.filesystem"
+                :class="outlined ? 'outlined' : 'no-outlined'"
+                v-model="fieldValue"
+                :error-messages="loading ? [$t('form.fileInfoQuery')] : errors"
+                :items="items"
+                :search-input.sync="search"
+                :label="label"
+                :placeholder="placeholder"
+                @input="changeEvent"
+                @paste="onPaste"
+                v-bind="inputAttrs"
+                :loading="loading"
+                flat
+                hide-no-data
+                cache-items
+              >
+                <input-help
+                  v-if="help"
+                  slot="append-outer"
+                  @form-input-help="inputHelpEvent"
+                ></input-help>
+              </v-autocomplete>
             </ValidationProvider>
           </div>
         </div>
@@ -136,9 +160,10 @@
 import { ValidationObserver } from 'vee-validate';
 
 import { dataKey, dropTitle, dataQuery } from './options';
-
+import { fileListingMixin, RENDER_MODES } from './fileListingMixin';
 import BaseInput from './BaseInput.vue';
 import SelectInput from './SelectInput.vue';
+
 import { debounce } from '@/common/utils';
 import DraalFileDrop from '@/components/core/utils/FileDrop.vue';
 import DraalFileDialog from '@/components/core/utils/FileDialog.vue';
@@ -162,6 +187,7 @@ import DraalSpinner from '@/components/core/utils/Spinner.vue';
 export default {
     name: 'FileQueryInput',
     extends: BaseInput,
+    mixins: [fileListingMixin],
     components: {
         ValidationObserver,
         SelectInput,
@@ -173,14 +199,6 @@ export default {
         dataKey,
         dropTitle,
         dataQuery,
-        /**
-         * Input mode: text or file.
-         */
-        mode: {
-            type: String,
-            required: false,
-            default: 'file'
-        },
         /**
          * Data field from selected object used to indicate data changes.
          */
@@ -283,6 +301,10 @@ export default {
     methods: {
         // User typed file path to input
         getFileInfo(value) {
+            if (this.mode === RENDER_MODES.filesystem && this.fileExt && !this.validExtension(value)) {
+                return;
+            }
+
             this.onDrop([{ path: value }]);
         },
 

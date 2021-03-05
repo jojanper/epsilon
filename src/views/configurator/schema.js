@@ -204,7 +204,7 @@ export const SCHEMA = [
         placeholder: 'Click to select location of the JSON file or drag file to icon',
         label: 'JSON file',
         name: 'output',
-        rules: 'required|jsonfile',
+        rules: 'required|fileext:.json',
         fileObject: true,
         clearable2: true,
         outlined2: true
@@ -383,7 +383,8 @@ export const SCHEMA = [
 
 export const SCHEMA1 = [
     {
-        type: 'text',
+        type: 'file-open',
+        mode: 'filesystem',
         placeholder: 'Enter binary name',
         label: 'Binary',
         name: 'bin',
@@ -400,7 +401,7 @@ export const SCHEMA1 = [
         label: 'WAVE file',
         name: 'audio',
         wavAudioRule: true,
-        rules: 'required|wavext',
+        rules: 'required|fileext:.wav',
         fileExt: '.wav',
         clearable: true,
         help: {
@@ -410,11 +411,12 @@ export const SCHEMA1 = [
     },
     {
         type: 'file-data-query',
-        mode: 'text',
+        mode: 'filesystem',
+        fileExt: '.license',
         placeholder: 'Enter ID file',
         label: 'ID file',
         name: 'fileid',
-        rules: 'required',
+        rules: 'required|fileext:.license',
         selectPlaceholder: 'Select ID',
         selectLabel: 'Select ID',
         customPlaceholder: 'Manually set the ID',
