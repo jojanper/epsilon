@@ -39,6 +39,10 @@ export const fileListingMixin = {
     created() {
         // Debounce query to reduce remote calls and smooth the UI behaviour
         this.remoteQuery = debounce(this.remoteQuery, 500);
+
+        if (this.fieldValue) {
+            this.setInitItem(this.fieldValue);
+        }
     },
     watch: {
         search(val) {
@@ -49,6 +53,10 @@ export const fileListingMixin = {
         }
     },
     methods: {
+        setInitItem(data) {
+            this.items = [data];
+        },
+
         validExtension(value) {
             if (!this.fileExt) {
                 return false;
