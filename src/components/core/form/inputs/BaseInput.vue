@@ -157,6 +157,11 @@ export default {
 
         disableLoading() {
             this.loading = false;
+        },
+
+        // Get name for component slot
+        getComponentSlotName(prefix, slotName) {
+            return `${prefix}${this.name}.${slotName}`;
         }
     }
 };

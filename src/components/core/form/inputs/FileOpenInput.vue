@@ -63,11 +63,19 @@
         hide-no-data
         cache-items
       >
-        <input-help
-          v-if="help"
+        <slot
           slot="append-outer"
-          @form-input-help="inputHelpEvent"
-        ></input-help>
+          :name="getComponentSlotName('', 'append-outer')"
+        >
+          <input-help
+            v-if="help"
+            @form-input-help="inputHelpEvent"
+          ></input-help>
+        </slot>
+        <slot
+          slot="prepend"
+          :name="getComponentSlotName('', 'prepend')"
+        ></slot>
       </v-autocomplete>
     </ValidationProvider>
 

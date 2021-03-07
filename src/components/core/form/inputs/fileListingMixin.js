@@ -20,6 +20,11 @@ export const fileListingMixin = {
             required: false,
             default: ''
         },
+        // Remote file query options.
+        fileOptions: {
+            required: false,
+            default: () => { }
+        },
         /**
          * Input mode: text, file, filesystem.
          */
@@ -38,7 +43,7 @@ export const fileListingMixin = {
     },
     created() {
         // Debounce query to reduce remote calls and smooth the UI behaviour
-        this.remoteQuery = debounce(this.remoteQuery, 500);
+        this.remoteQuery = debounce(this.remoteDataQuery, 600);
 
         if (this.fieldValue) {
             this.setInitItem(this.fieldValue);
@@ -47,7 +52,7 @@ export const fileListingMixin = {
     watch: {
         search(val) {
             // Determine if remote file query should be performed
-            if (val && val !== this.select) {
+            if (val && val !== this.select && val !== this.fieldValue) {
                 this.remoteQuery(val);
             }
         }
@@ -71,14 +76,14 @@ export const fileListingMixin = {
             return false;
         },
 
-        remoteQuery(value) {
+        remoteDataQuery(value) {
             // Check if query should be applied now
             if (this.validExtension(value)) {
                 return;
             }
 
             // Get file listing
-            this.fileQueryFn(value, this.fileExt).subscribe(
+            this.fileQueryFn(value, this.fileExt, this.fileOptions).subscribe(
                 ({ data }) => {
                     if (data.length) {
                         this.items = data;

@@ -381,6 +381,24 @@ export const SCHEMA = [
     }
 ];
 
+export const SCHEMA2 = [
+    {
+        type: 'file-open',
+        mode: 'filesystem',
+        placeholder: 'Enter base path',
+        label: 'Base path for configuration files search',
+        name: 'configpath',
+        clearable: true,
+        fileOptions: {
+            onlydir: true
+        },
+        help: {
+            title: 'Base path for configuration files',
+            body: 'Binary used for execution.'
+        }
+    }
+];
+
 export const SCHEMA1 = [
     {
         type: 'file-open',

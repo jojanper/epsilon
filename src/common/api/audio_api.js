@@ -40,8 +40,12 @@ class AudioApi {
     }
 
     // Query file listing from remote
-    fileList(prefix, ext) {
-        const options = { params: { path: prefix, ext, time: Date.now() } };
+    fileList(prefix, ext, params = {}) {
+        const options = {
+            params: {
+                path: prefix, ext, time: Date.now(), ...params
+            }
+        };
         return this.network.get(`${this.mediaUrl}/file-listing`, options);
     }
 }
