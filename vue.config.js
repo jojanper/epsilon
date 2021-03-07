@@ -62,7 +62,10 @@ module.exports = {
     devServer: {
         proxy: {
             '/locales': {
-                target: 'http://localhost:8090'
+                target: 'http://localhost:3000'
+            },
+            '/api': {
+                target: 'http://localhost:3000'
             }
         }
     }

@@ -32,7 +32,7 @@ describe('App module', () => {
             const req1 = moxios.requests.at(0);
             await req1.respondWith({
                 status: 200,
-                response: { data: [{ version: '0.0.1' }] }
+                response: { data: { version: '0.0.1' } }
             });
 
             // No new version is available for 1st query

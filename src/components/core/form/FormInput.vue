@@ -1,6 +1,9 @@
 <template>
   <div>
-    <div v-if="$attrs.dividerStart" class="clearfix">
+    <div
+      v-if="$attrs.dividerStart"
+      class="clearfix"
+    >
       <hr
         :data-content="$attrs.dividerStart.label"
         class="form-input-divider mx-auto"
@@ -16,17 +19,27 @@
       v-on="$listeners"
       :data-rel-input="dataRel.asPipe()"
     >
-      <template v-for="(def, index) in slotsDef" v-slot:[def.childSlot]="{ data }">
+      <template
+        v-for="(def, index) in slotsDef"
+        v-slot:[def.childSlot]="{ data }"
+      >
         <!--
         @slot Custom input data rendering.
         @binding {number} inputKey Input key (Vue key attribute).
         @binding {object} data Input data.
         -->
-        <slot :name="def.componentSlot" v-bind:inputKey="index" v-bind:data="data"></slot>
+        <slot
+          :name="def.componentSlot"
+          v-bind:inputKey="index"
+          v-bind:data="data"
+        ></slot>
       </template>
     </component>
 
-    <div v-if="$attrs.dividerEnd" class="clearfix">
+    <div
+      v-if="$attrs.dividerEnd"
+      class="clearfix"
+    >
       <hr
         :data-content="$attrs.dividerEnd.label"
         class="form-input-divider mx-auto"
@@ -45,6 +58,7 @@ import CheckboxInput from './inputs/CheckboxInput.vue';
 import SwitchInput from './inputs/SwitchInput.vue';
 import RadioInput from './inputs/RadioInput.vue';
 import FileOpenInput from './inputs/FileOpenInput.vue';
+import LocalAudioFileInput from './inputs/LocalAudioFileInput.vue';
 import RemoteFileSaveInput from './inputs/RemoteFileSaveInput.vue';
 import FileQueryInput from './inputs/FileQueryInput.vue';
 import TimelineInput from './inputs/TimelineInput.vue';
@@ -67,6 +81,7 @@ export default {
         TimelineInput,
         FileOpenInput,
         RemoteFileSaveInput,
+        LocalAudioFileInput,
         FileQueryInput,
         GroupInput
     },

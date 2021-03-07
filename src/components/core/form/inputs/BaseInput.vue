@@ -72,6 +72,10 @@ export default {
                 this.validateInput();
             }
 
+            this.sendChangeEvent(data);
+        },
+
+        sendChangeEvent(data) {
             /**
              * Input data change event.
              *
@@ -145,6 +149,19 @@ export default {
             this.setDragging(false);
             this.onDrop(e.dataTransfer.files);
             return false;
+        },
+
+        enableLoading(status) {
+            this.loading = status ? this.draggingColor : true;
+        },
+
+        disableLoading() {
+            this.loading = false;
+        },
+
+        // Get name for component slot
+        getComponentSlotName(prefix, slotName) {
+            return `${prefix}${this.name}.${slotName}`;
         }
     }
 };

@@ -204,7 +204,7 @@ export const SCHEMA = [
         placeholder: 'Click to select location of the JSON file or drag file to icon',
         label: 'JSON file',
         name: 'output',
-        rules: 'required|jsonfile',
+        rules: 'required|fileext:.json',
         fileObject: true,
         clearable2: true,
         outlined2: true
@@ -377,6 +377,75 @@ export const SCHEMA = [
                     target.zoom = data.zoom;
                 }
             }
+        }
+    }
+];
+
+export const SCHEMA2 = [
+    {
+        type: 'file-open',
+        mode: 'filesystem',
+        placeholder: 'Enter base path',
+        label: 'Base path for configuration files search',
+        name: 'configpath',
+        clearable: true,
+        fileOptions: {
+            onlydir: true
+        },
+        help: {
+            title: 'Base path for configuration files',
+            body: 'Binary used for execution.'
+        }
+    }
+];
+
+export const SCHEMA1 = [
+    {
+        type: 'file-open',
+        mode: 'filesystem',
+        placeholder: 'Enter binary name',
+        label: 'Binary',
+        name: 'bin',
+        rules: 'required',
+        clearable: true,
+        help: {
+            title: 'Binary name',
+            body: 'Binary used for execution.'
+        }
+    },
+    {
+        type: 'local-audio-file',
+        placeholder: 'Enter audio file name',
+        label: 'WAVE file',
+        name: 'audio',
+        wavAudioRule: true,
+        rules: 'required|fileext:.wav',
+        fileExt: '.wav',
+        clearable: true,
+        help: {
+            title: 'Audio file',
+            body: 'Audio as WAVE file.'
+        }
+    },
+    {
+        type: 'file-data-query',
+        mode: 'filesystem',
+        fileExt: '.license',
+        placeholder: 'Enter ID file',
+        label: 'ID file',
+        name: 'fileid',
+        rules: 'required|fileext:.license',
+        selectPlaceholder: 'Select ID',
+        selectLabel: 'Select ID',
+        customPlaceholder: 'Manually set the ID',
+        customLabel: 'Enter your ID',
+        dataKey: 'uuid',
+        selectKey: 'uuid',
+        queryRule: 'filequery',
+        clearable: true,
+        help: {
+            title: 'ID file',
+            body: 'Target ID selection.'
         }
     }
 ];

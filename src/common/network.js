@@ -12,6 +12,10 @@ class Network {
         return this.execute('get', [url, options], settings);
     }
 
+    post(url, params = {}, settings = null) {
+        return this.execute('post', [url, params], settings);
+    }
+
     uploadFiles(url, files, progressCallback) {
         const options = {
             headers: {

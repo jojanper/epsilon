@@ -243,9 +243,8 @@ export default {
         }
 
         .spinner-wrapper {
-            top: -5px;
             position: relative;
-            margin-bottom: 3px;
+            margin-bottom: 15px;
 
             .no-outlined {
                 top: 10px;

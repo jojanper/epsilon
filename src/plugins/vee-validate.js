@@ -10,7 +10,7 @@ configure({
     defaultMessage: (field, values) => i18n.t(`validation.${values._rule_}`, values)
 });
 
-// Install required rule
+// Install library rules
 extend('required', required);
 
 // Install custom rules

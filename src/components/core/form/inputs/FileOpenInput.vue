@@ -7,6 +7,7 @@
       :rules="inputRules"
     >
       <v-text-field
+        v-if="mode === RENDER_MODES.file"
         :class="`file-input ${classes}`"
         v-model="fieldValue"
         :error-messages="errors"
@@ -44,6 +45,38 @@
         >
         </draal-file-drop>
       </v-text-field>
+
+      <v-autocomplete
+        v-if="mode === RENDER_MODES.filesystem"
+        :class="classes"
+        v-model="fieldValue"
+        :error-messages="loading ? [$t('form.fileInfoQuery')] : errors"
+        :items="items"
+        :search-input.sync="search"
+        :label="label"
+        :placeholder="placeholder"
+        @input="inputChangeEvent"
+        @paste="onPaste"
+        v-bind="inputAttrs"
+        :loading="loading"
+        flat
+        hide-no-data
+        cache-items
+      >
+        <slot
+          slot="append-outer"
+          :name="getComponentSlotName('', 'append-outer')"
+        >
+          <input-help
+            v-if="help"
+            @form-input-help="inputHelpEvent"
+          ></input-help>
+        </slot>
+        <slot
+          slot="prepend"
+          :name="getComponentSlotName('', 'prepend')"
+        ></slot>
+      </v-autocomplete>
     </ValidationProvider>
 
     <!-- Media file duration is available in hidden input -->
@@ -72,6 +105,7 @@
 
 <script>
 import { fileInputMixin } from './fileInputMixin';
+import { fileListingMixin } from './fileListingMixin';
 
 /**
  * File input with support for different file validators.
@@ -80,6 +114,6 @@ import { fileInputMixin } from './fileInputMixin';
  */
 export default {
     name: 'FileOpenInput',
-    mixins: [fileInputMixin]
+    mixins: [fileInputMixin, fileListingMixin]
 };
 </script>

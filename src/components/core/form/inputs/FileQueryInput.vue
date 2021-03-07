@@ -11,6 +11,7 @@
               :rules="inputRules"
             >
               <v-text-field
+                v-if="mode === RENDER_MODES.file"
                 :class="outlined ? 'file-input outlined' : ' file-input no-outlined'"
                 v-model="fieldValue"
                 :error-messages="errors"
@@ -46,6 +47,47 @@
                   :title="dropTitle || $t('form.remoteInputDropTitle')"
                 ></draal-file-drop>
               </v-text-field>
+
+              <v-text-field
+                v-if="mode === RENDER_MODES.text"
+                :class="outlined ? 'outlined' : 'no-outlined'"
+                v-model="fieldValue"
+                :error-messages="errors"
+                :label="label"
+                :placeholder="placeholder"
+                v-bind="inputAttrs"
+                @input="changeEvent"
+              >
+                <input-help
+                  v-if="help"
+                  slot="append-outer"
+                  @form-input-help="inputHelpEvent"
+                ></input-help>
+              </v-text-field>
+
+              <v-autocomplete
+                v-if="mode === RENDER_MODES.filesystem"
+                :class="outlined ? 'outlined' : 'no-outlined'"
+                v-model="fieldValue"
+                :error-messages="loading ? [$t('form.fileInfoQuery')] : errors"
+                :items="items"
+                :search-input.sync="search"
+                :label="label"
+                :placeholder="placeholder"
+                @input="changeEvent"
+                @paste="onPaste"
+                v-bind="inputAttrs"
+                :loading="loading"
+                flat
+                hide-no-data
+                cache-items
+              >
+                <input-help
+                  v-if="help"
+                  slot="append-outer"
+                  @form-input-help="inputHelpEvent"
+                ></input-help>
+              </v-autocomplete>
             </ValidationProvider>
           </div>
         </div>
@@ -117,10 +159,12 @@
 <script>
 import { ValidationObserver } from 'vee-validate';
 
-import { dataKey, dropTitle } from './options';
-
+import { dataKey, dropTitle, dataQuery } from './options';
+import { fileListingMixin, RENDER_MODES } from './fileListingMixin';
 import BaseInput from './BaseInput.vue';
 import SelectInput from './SelectInput.vue';
+
+import { debounce } from '@/common/utils';
 import DraalFileDrop from '@/components/core/utils/FileDrop.vue';
 import DraalFileDialog from '@/components/core/utils/FileDialog.vue';
 import DraalSpinner from '@/components/core/utils/Spinner.vue';
@@ -143,6 +187,7 @@ import DraalSpinner from '@/components/core/utils/Spinner.vue';
 export default {
     name: 'FileQueryInput',
     extends: BaseInput,
+    mixins: [fileListingMixin],
     components: {
         ValidationObserver,
         SelectInput,
@@ -153,6 +198,7 @@ export default {
     props: {
         dataKey,
         dropTitle,
+        dataQuery,
         /**
          * Data field from selected object used to indicate data changes.
          */
@@ -190,13 +236,6 @@ export default {
             required: true
         },
         /**
-         * Data query function. Must return observable.
-         */
-        dataQuery: {
-            type: Function,
-            required: true
-        },
-        /**
          * Validation rule for the query input.
          */
         queryRule: {
@@ -214,6 +253,8 @@ export default {
         const selectedData = this.value ? this.value.selected : null;
         const customValue = this.value ? this.value.custom : null;
         const customId = customValue;
+
+        this.changeEvent = debounce(this.getFileInfo, 400);
 
         return {
             fieldValue,
@@ -258,6 +299,15 @@ export default {
         }
     },
     methods: {
+        // User typed file path to input
+        getFileInfo(value) {
+            if (this.mode === RENDER_MODES.filesystem && this.fileExt && !this.validExtension(value)) {
+                return;
+            }
+
+            this.onDrop([{ path: value }]);
+        },
+
         // User selected file (either using file dialog or file was dropped)
         onDrop(files) {
             if (files.length) {

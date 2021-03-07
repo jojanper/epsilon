@@ -2,12 +2,64 @@
   <div>
     <h1>{{ $t('configuratorPage.title') }}</h1>
 
+    <!--draal-form-generator
+      :schema="schema2"
+      v-model="formData2"
+      v-on:submit="setConfigBasePath"
+      :options="options"
+    >
+      <draal-tooltip
+        slot="form.configpath.prepend"
+        v-bind="toolIconAttrs"
+        :name="$t('configuratorPage.newSwitch')"
+        icon="mdi-reload"
+        @clicked="setConfigBasePath(formData2)"
+      ></draal-tooltip>
+      <draal-icon-dialog
+        slot="form.configpath.append-outer"
+        :tooltip-config="{ 'icon-size': 'large' }"
+        tooltip-text="Icon tooltip"
+        dialog-title="This is title"
+        dialog-content="This is content"
+      ></draal-icon-dialog>
+    </draal-form-generator-->
+
+    <draal-file-open-input
+      v-model="formData2.configpath"
+      v-bind="schema2[0]"
+      outlined
+    >
+      <draal-tooltip
+        v-if="formData2.configpath"
+        slot="configpath.prepend"
+        v-bind="toolIconAttrs"
+        :name="$t('configuratorPage.newSwitch')"
+        icon="mdi-reload"
+        @clicked="setConfigBasePath(formData2)"
+      ></draal-tooltip>
+      <draal-icon-dialog
+        slot="configpath.append-outer"
+        :tooltip-config="{ 'icon-size': 'large' }"
+        tooltip-text="Icon tooltip"
+        dialog-title="This is title"
+        dialog-content="This is content"
+      ></draal-icon-dialog>
+    </draal-file-open-input>
+
+    <draal-form-generator
+      :schema="schema1"
+      v-model="formData1"
+      v-on:submit="submit"
+      :options="options"
+    ></draal-form-generator>
+
     <v-expansion-panels
       class="mt-3 mb-3"
       v-model="activePanel"
     >
       <v-expansion-panel>
-        <v-expansion-panel-header>{{ $t('configuratorPage.confPanelTitle') }}</v-expansion-panel-header>
+        <v-expansion-panel-header>{{ $t('configuratorPage.confPanelTitle') }}
+        </v-expansion-panel-header>
         <v-expansion-panel-content>
           <draal-file-import
             class="mb-6"
@@ -148,14 +200,18 @@
 
 <script>
 import { of, throwError } from 'rxjs';
-import { delay } from 'rxjs/operators';
+import { delay, catchError } from 'rxjs/operators';
 
-import { SCHEMA, TIMELINE_TYPES } from './schema';
+import {
+    SCHEMA, TIMELINE_TYPES, SCHEMA1, SCHEMA2
+} from './schema';
 import DraalEventData from './EventData.vue';
 import DraalEventDataEdit from './EventDataEdit.vue';
 
+import { AudioApi } from '@/common/api';
 import DraalSpinner from '@/components/core/utils/Spinner.vue';
 import DraalFormGenerator from '@/components/core/form/Form.vue';
+import DraalFileOpenInput from '@/components/core/form/inputs/FileOpenInput.vue';
 import { notificationActions } from '@/store/helpers';
 import { NotificationMessage } from '@/common/models';
 import DraalIconDialog from '@/components/core/utils/IconDialog.vue';
@@ -174,20 +230,54 @@ export default {
         DraalTooltip,
         DraalTooltipMenu,
         DraalEventData,
-        DraalEventDataEdit
+        DraalEventDataEdit,
+        DraalFileOpenInput
     },
     data() {
         const schema = [...SCHEMA];
+        const schema1 = [...SCHEMA1];
+        const schema2 = [...SCHEMA2];
 
         const iconSize = 'large';
 
+        schema1.forEach(item => {
+            const data = item;
+
+            if (item.type === 'local-audio-file') {
+                data.dataQuery = this.wavQuery.bind(this);
+                data.fileQueryFn = this.fileQuery.bind(this);
+            } else if (item.type === 'file-data-query') {
+                data.dataQuery = this.dataQuery.bind(this);
+                data.fileQueryFn = this.fileQuery.bind(this);
+            } else if (item.type === 'file-open') {
+                data.fileQueryFn = this.fileQuery.bind(this);
+            }
+        });
+
+        schema2.forEach(item => {
+            const data = item;
+
+            if (item.type === 'local-audio-file') {
+                data.dataQuery = this.wavQuery.bind(this);
+                data.fileQueryFn = this.fileQuery.bind(this);
+            } else if (item.type === 'file-data-query') {
+                data.dataQuery = this.dataQuery.bind(this);
+                data.fileQueryFn = this.fileQuery.bind(this);
+            } else if (item.type === 'file-open') {
+                data.fileQueryFn = this.fileQuery.bind(this);
+            }
+        });
+
         schema.forEach(item => {
+            const data = item;
+
             if (item.type === 'file-data-query') {
-                /* eslint-disable-next-line */
-                item.dataQuery = this.dataQuery.bind(this);
+                data.dataQuery = this.dataQuery.bind(this);
+                data.fileQueryFn = this.fileQuery.bind(this);
             } else if (item.type === 'timeline') {
-                /* eslint-disable-next-line */
-                item.toolbarIconSize = iconSize;
+                data.toolbarIconSize = iconSize;
+            } else if (item.type === 'file-open') {
+                data.fileQueryFn = this.fileQuery.bind(this);
             }
         });
 
@@ -201,6 +291,20 @@ export default {
             linkDownload,
 
             timelineTypes: TIMELINE_TYPES,
+
+            schema1,
+            formData1: {
+                bin: null,
+                audio: null,
+                fileid: null
+            },
+
+            schema2,
+            formData2: {
+                bin: null,
+                audio: null,
+                fileid: null
+            },
 
             data: null,
             processing: false,
@@ -270,6 +374,11 @@ export default {
     methods: {
         ...notificationActions,
 
+        submit(data) {
+            /* eslint-disable-next-line */
+            console.log(data);
+        },
+
         encode(encData) {
             /* eslint-disable-next-line */
             console.log(encData);
@@ -289,10 +398,22 @@ export default {
             console.log('selected', files);
         },
 
+        wavQuery(filename) {
+            return AudioApi.wavInfo(encodeURIComponent(filename)).pipe(
+                catchError(() => ({ data: {} }))
+            );
+        },
+
+        fileQuery(prefix, ext, params = {}) {
+            return AudioApi.fileList(prefix, ext, params).pipe(
+                catchError(() => ({ data: [] }))
+            );
+        },
+
         dataQuery(file) {
             if (this.queryFailure) {
                 const timeout = 5000;
-                const msg = `Error in parsing file ${file.name}`;
+                const msg = `Error in parsing file ${file.name || file.path}`;
                 this.addNotification(NotificationMessage.createError(msg, { timeout }));
 
                 this.queryFailure = false;
@@ -327,6 +448,54 @@ export default {
 
         addEvent({ add }, type = TIMELINE_TYPES.dir) {
             add(null, null, type);
+        },
+
+        setConfigBasePath({ configpath }) {
+            console.log(configpath);
+            const params = {
+                recursive: true,
+                base: 'ozoaudioencapp'
+            };
+
+            const ext = [
+                {
+                    ext: '.wav',
+                    key: 'input'
+                },
+                {
+                    ext: '.license',
+                    key: 'license'
+                }
+            ];
+
+            const fileConfigData = {
+                binary: []
+            };
+
+            const queryExt = ext.map(item => item.ext).join(',');
+
+            this.fileQuery(configpath, queryExt, params).subscribe(({ data }) => {
+                console.log(data);
+
+                data.forEach(item => {
+                    for (let i = 0; i < ext.length; i++) {
+                        if (item.endsWith(ext[i].ext)) {
+                            if (!fileConfigData[ext[i].key]) {
+                                fileConfigData[ext[i].key] = [];
+                            }
+
+                            fileConfigData[ext[i].key].push(item);
+                            return;
+                        }
+                    }
+
+                    if (item.indexOf(params.base) > -1) {
+                        fileConfigData.binary.push(item);
+                    }
+                });
+
+                console.log(fileConfigData);
+            });
         }
     }
 };

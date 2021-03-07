@@ -1,12 +1,22 @@
 <template>
-  <div class="form-wrapper-outer" :class="classes">
+  <div
+    class="form-wrapper-outer"
+    :class="classes"
+  >
     <div :class="getOutlinedClasses('field-wrapper')">
-      <div class="clearfix" v-if="!outlined">
+      <div
+        class="clearfix"
+        v-if="!outlined"
+      >
         <div class="float-left pl-0">
           <v-label>{{ label }}</v-label>
         </div>
       </div>
-      <div v-else :style="getOutlinedStyle()" :class="getOutlinedClasses('field-placeholder')">
+      <div
+        v-else
+        :style="getOutlinedStyle()"
+        :class="getOutlinedClasses('field-placeholder')"
+      >
         <span>
           <v-label>{{ label }}</v-label>
         </span>
@@ -15,7 +25,11 @@
         <div class="timeline-content">
           <!-- Validation via hidden input -->
           <ValidationProvider rules="required">
-            <input class="d-none" type="number" v-model="dummyModel" />
+            <input
+              class="d-none"
+              type="number"
+              v-model="dummyModel"
+            />
           </ValidationProvider>
 
           <!-- Input gets invalid every time timeline changes -->
@@ -33,13 +47,20 @@
             :help="help"
             @help="$emit('form-input-help', name)"
           >
-            <template v-for="(def, index) in customRender" v-slot:[def.childSlot]="{ data }">
+            <template
+              v-for="(def, index) in customRender"
+              v-slot:[def.childSlot]="{ data }"
+            >
               <!--
                 @slot Custom table column data rendering.
                 @binding {number} inputKey Column index (Vue key attribute).
                 @binding {object} data Column data.
               -->
-              <slot :name="def.componentSlot" v-bind:inputKey="index" v-bind:data="data"></slot>
+              <slot
+                :name="def.componentSlot"
+                v-bind:inputKey="index"
+                v-bind:data="data"
+              ></slot>
             </template>
 
             <!-- Row data editing occurs here -->
@@ -174,11 +195,6 @@ export default {
         }
     },
     methods: {
-        // Get name for component slot
-        getComponentSlotName(prefix, slotName) {
-            return `${prefix}${this.name}.${slotName}`;
-        },
-
         // Save changed timeline data
         saveEditedValues(source, data, editChanges) {
             this.accessMethods.save(source, data);
