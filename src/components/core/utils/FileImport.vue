@@ -1,20 +1,46 @@
 <template>
   <div>
     <!-- Enable tooltip component -->
-    <draal-tooltip v-if="tooltipText" :name="tooltipText" :position="tooltipPosition">
+    <draal-tooltip
+      v-if="tooltipText"
+      :name="tooltipText"
+      :position="tooltipPosition"
+    >
       <template v-slot:default="{ on }">
-        <div v-on="on" class="float-left pointer-cursor" @click="fileDialog=true">
-          <draal-file-drop v-if="drag" v-bind="$attrs" :cls="cls" @fileDrop="fileSelect"></draal-file-drop>
+        <div
+          v-on="on"
+          class="float-left pointer-cursor"
+          @click="fileDialog=true"
+        >
+          <draal-file-drop
+            v-if="drag"
+            v-bind="$attrs"
+            :cls="cls"
+            @fileDrop="fileSelect"
+          ></draal-file-drop>
           <v-icon v-else>{{ icon }}</v-icon>
         </div>
       </template>
     </draal-tooltip>
     <!-- Enable file selection & dropping without tooltip -->
-    <div v-else class="float-left pointer-cursor" @click="fileDialog=true">
-      <draal-file-drop v-if="drag" v-bind="$attrs" :cls="cls" @fileDrop="fileSelect"></draal-file-drop>
+    <div
+      v-else
+      class="float-left pointer-cursor"
+      @click="fileDialog=true"
+    >
+      <draal-file-drop
+        v-if="drag"
+        v-bind="$attrs"
+        :cls="cls"
+        @fileDrop="fileSelect"
+      ></draal-file-drop>
       <v-icon v-else>{{ icon }}</v-icon>
     </div>
-    <draal-file-dialog v-bind="attrs" v-model="fileDialog" @file-select="fileSelect"></draal-file-dialog>
+    <draal-file-dialog
+      v-bind="attrs"
+      v-model="fileDialog"
+      @file-select="fileSelect"
+    ></draal-file-dialog>
   </div>
 </template>
 

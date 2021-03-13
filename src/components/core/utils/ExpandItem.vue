@@ -2,7 +2,10 @@
   <div>
     <v-list-item>
       <v-list-item-content>
-        <v-list-item-title class="text-left ml-2">
+        <v-list-item-title
+          @click="changeState(!show)"
+          class="text-left ml-2 cursor-pointer"
+        >
           <div>
             <div class="float-left expand-title">{{ name }}</div>
             <draal-tooltip-menu
@@ -28,7 +31,11 @@
                   hide-details
                   @input="updateExportName()"
                 >
-                  <v-btn icon slot="append-outer" @click="setVisibility(false)">
+                  <v-btn
+                    icon
+                    slot="append-outer"
+                    @click="setVisibility(false)"
+                  >
                     <v-icon v-bind="exportAttrs">mdi-check</v-icon>
                   </v-btn>
                 </v-text-field>
@@ -38,22 +45,50 @@
         </v-list-item-title>
       </v-list-item-content>
 
-      <v-list-item-action v-if="deleteActionAttrs" class="mr-0">
-        <draal-tooltip v-bind="deleteAttrs" @clicked="deleteEvent()"></draal-tooltip>
+      <v-list-item-action
+        v-if="deleteActionAttrs"
+        class="mr-0"
+      >
+        <draal-tooltip
+          v-bind="deleteAttrs"
+          @clicked="deleteEvent()"
+        ></draal-tooltip>
       </v-list-item-action>
 
-      <v-list-item-action v-if="exportActionAttrs" class="mr-0">
-        <draal-tooltip v-bind="exportAttrs" :icon-color="exportColor" @clicked="exportEvent()"></draal-tooltip>
+      <v-list-item-action
+        v-if="exportActionAttrs"
+        class="mr-0"
+      >
+        <draal-tooltip
+          v-bind="exportAttrs"
+          :icon-color="exportColor"
+          @clicked="exportEvent()"
+        ></draal-tooltip>
       </v-list-item-action>
 
-      <v-list-item-action class="mr-0 ml-0" v-for="(slot, index) in customSlots" :key="index">
-        <slot v-bind:index="index" :name="slot"></slot>
+      <v-list-item-action
+        class="mr-0 ml-0"
+        v-for="(slot, index) in customSlots"
+        :key="index"
+      >
+        <slot
+          v-bind:index="index"
+          :name="slot"
+        ></slot>
       </v-list-item-action>
 
       <v-list-item-action class="ml-0">
         <v-btn icon>
-          <v-icon v-if="!show" :color="menuColor" @click="changeState(true)">{{ menuOpenIcon }}</v-icon>
-          <v-icon v-else :color="menuColor" @click="changeState(false)">{{ menuCloseIcon }}</v-icon>
+          <v-icon
+            v-if="!show"
+            :color="menuColor"
+            @click="changeState(true)"
+          >{{ menuOpenIcon }}</v-icon>
+          <v-icon
+            v-else
+            :color="menuColor"
+            @click="changeState(false)"
+          >{{ menuCloseIcon }}</v-icon>
         </v-btn>
       </v-list-item-action>
     </v-list-item>

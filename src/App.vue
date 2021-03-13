@@ -313,4 +313,12 @@ export default {
 .navbar-brand {
     color: #0065ed !important;
 }
+
+.cursor-pointer {
+    cursor: pointer;
+}
+
+.text-underline {
+    text-decoration: underline;
+}
 </style>

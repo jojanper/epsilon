@@ -66,6 +66,7 @@
               </v-text-field>
 
               <v-autocomplete
+                ref="autocomplete"
                 v-if="mode === RENDER_MODES.filesystem"
                 :class="outlined ? 'outlined' : 'no-outlined'"
                 v-model="fieldValue"

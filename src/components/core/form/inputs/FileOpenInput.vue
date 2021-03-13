@@ -47,21 +47,21 @@
       </v-text-field>
 
       <v-autocomplete
+        ref="autocomplete"
         v-if="mode === RENDER_MODES.filesystem"
         :class="classes"
         v-model="fieldValue"
-        :error-messages="loading ? [$t('form.fileInfoQuery')] : errors"
+        :error-messages="loading && inputRules ? [$t('form.fileInfoQuery')] : errors"
         :items="items"
         :search-input.sync="search"
         :label="label"
         :placeholder="placeholder"
         @input="inputChangeEvent"
         @paste="onPaste"
-        v-bind="inputAttrs"
+        v-bind="fileInputAttrs"
         :loading="loading"
         flat
         hide-no-data
-        cache-items
       >
         <slot
           slot="append-outer"

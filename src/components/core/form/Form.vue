@@ -1,7 +1,13 @@
 <template>
-  <div :key="componentKey" :class="cls">
-    <ValidationObserver ref="observer" v-slot="{ invalid, valid }">
-      <form class="pb-2">
+  <div
+    :key="componentKey"
+    :class="cls"
+  >
+    <ValidationObserver
+      ref="observer"
+      v-slot="{ invalid, valid, changed }"
+    >
+      <form :class="formCls">
         <draal-form-input
           v-for="(field, index) in schema"
           :key="index"
@@ -11,26 +17,38 @@
           @form-input-help="formInputHelp"
           @data-rel-update="registerUpdateHandler"
         >
-          <template v-for="(def, index) in slotsDef" v-slot:[def.childSlot]="{ data }">
+          <template
+            v-for="(def, index) in slotsDef"
+            v-slot:[def.childSlot]="{ data }"
+          >
             <!--
               @slot Custom input data rendering.
               @binding {number} inputKey Input key (Vue key attribute).
               @binding {object} data Input data.
             -->
-            <slot :name="def.componentSlot" v-bind:inputKey="index" v-bind:data="data"></slot>
+            <slot
+              :name="def.componentSlot"
+              v-bind:inputKey="index"
+              v-bind:data="data"
+            ></slot>
           </template>
         </draal-form-input>
 
-        <div class="mt-3">
+        <div
+          class="mt-3"
+          :data-dummyvalue="setDisabled(invalid, valid,changed)"
+        >
           <v-btn
             v-if="options.submit"
             class="mr-2"
-            :data-dummyvalue="setDisabled(invalid, valid)"
             :disabled="disabled"
             v-on:click="$emit('submit', formData)"
             color="primary"
           >{{ options.submit }}</v-btn>
-          <v-btn v-if="options.clear" @click="clear">{{ options.clear }}</v-btn>
+          <v-btn
+            v-if="options.clear"
+            @click="clear"
+          >{{ options.clear }}</v-btn>
         </div>
       </form>
     </ValidationObserver>
@@ -43,7 +61,10 @@
       maxWidth="500"
     >
       <template v-slot:body>
-        <v-card-text class="text-left" v-html="helpText.body"></v-card-text>
+        <v-card-text
+          class="text-left"
+          v-html="helpText.body"
+        ></v-card-text>
       </template>
     </draal-dialog>
   </div>
@@ -66,7 +87,36 @@ export default {
         DraalFormInput,
         DraalDialog
     },
-    props: ['schema', 'value', 'options', 'reset', 'cls'],
+    props: {
+        schema: {
+            type: Array,
+            required: true
+        },
+        value: {
+            required: true
+        },
+        options: {
+            required: true
+        },
+        reset: {
+            required: false
+        },
+        cls: {
+            type: String,
+            required: false,
+            default: ''
+        },
+        formCls: {
+            type: String,
+            required: false,
+            default: 'pb-2'
+        },
+        debouncedDisabled: {
+            type: Number,
+            required: false,
+            default: 200
+        }
+    },
     data() {
         const slotsDef = [];
         slotMapping(slotsDef, this.schema, '', 'input', 'form');
@@ -85,7 +135,7 @@ export default {
     },
     created() {
         this.dataRelHandlers = {};
-        this.setDisabled = debounce(this._setDisabled, 200);
+        this.setDisabled = debounce(this._setDisabled, this.debouncedDisabled);
     },
     destroyed() {
         this.setDisabled.cancel();
@@ -100,8 +150,19 @@ export default {
         }
     },
     methods: {
-        _setDisabled(invalid, valid) {
-            this.disabled = invalid || !valid;
+        _setDisabled(invalid, valid, changed) {
+            // Disable when no changes, invalid and not valid states
+            this.valid = valid;
+            this.disabled = !changed || invalid || !valid;
+
+            if (this.canSendFormData) {
+                this.sendFormData();
+            }
+        },
+
+        // Send only when data is valid or explicit data send requested
+        canSendFormData() {
+            return this.options.sendData;
         },
 
         forceRendeder() {
@@ -124,10 +185,6 @@ export default {
                     const inputs = this.dataRelHandlers[target][key];
                     inputs.forEach(cb => cb(target, value));
                 });
-            }
-
-            if (!this.options.submit) {
-                this.sendFormData();
             }
         },
 
@@ -178,8 +235,9 @@ export default {
              * Send form data.
              *
              * @property data Form data.
+             * @property status Data status (true for valid data).
              */
-            this.$emit('form-data', this.formData);
+            this.$emit('form-data', this.formData, this.valid);
         }
     }
 };

@@ -122,4 +122,10 @@ describe('App module', () => {
         store.dispatch('saveTimelineLength', { id: 'test', length: 234 });
         expect(store.getters.getTimelineLength('test')).toEqual(234);
     });
+
+    it('config files are stored', () => {
+        const data = { bin: [1, 2, 3] };
+        store.dispatch('setConfigFiles', data);
+        expect(store.getters.getConfigFiles('bin')).toEqual([1, 2, 3]);
+    });
 });

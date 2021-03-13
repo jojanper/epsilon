@@ -100,3 +100,10 @@ export const dataQuery = {
     type: Function,
     required: true
 };
+
+// External loading status to component
+export const loadingStatus = {
+    type: Boolean,
+    required: false,
+    default: false
+};

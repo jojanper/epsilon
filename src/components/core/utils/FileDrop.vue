@@ -5,7 +5,7 @@
     @dragleave="setDragging(false)"
     @dragover.prevent
     @drop="onDrop"
-    :class="[`dropbox ${cls}`, dragging ? 'dropbox-highlight' : '']"
+    :class="[`dropbox ${cls}`, dragging ? `${dragClass}` : '']"
     v-bind="attrs"
     :title="title"
   >{{ icon }}</v-icon>
@@ -59,6 +59,22 @@ export default {
             type: String,
             required: false,
             default: ''
+        },
+        /**
+         * Dragging class.
+         */
+        dragClass: {
+            type: String,
+            required: false,
+            default: 'dropbox-highlight'
+        },
+        /**
+         * Icon size on dragging.
+         */
+        iconSizeDrag: {
+            type: String,
+            required: false,
+            default: 'x-large'
         }
     },
     data() {
@@ -68,7 +84,7 @@ export default {
     },
     computed: {
         attrs() {
-            const iconSize = this.dragging ? 'x-large' : this.iconSize;
+            const iconSize = this.dragging ? this.iconSizeDrag : this.iconSize;
             const attrs = {
                 [`${iconSize}`]: true
             };

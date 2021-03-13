@@ -2,49 +2,17 @@
   <div>
     <h1>{{ $t('configuratorPage.title') }}</h1>
 
-    <!--draal-form-generator
-      :schema="schema2"
-      v-model="formData2"
-      v-on:submit="setConfigBasePath"
-      :options="options"
-    >
-      <draal-tooltip
-        slot="form.configpath.prepend"
-        v-bind="toolIconAttrs"
-        :name="$t('configuratorPage.newSwitch')"
-        icon="mdi-reload"
-        @clicked="setConfigBasePath(formData2)"
-      ></draal-tooltip>
-      <draal-icon-dialog
-        slot="form.configpath.append-outer"
-        :tooltip-config="{ 'icon-size': 'large' }"
-        tooltip-text="Icon tooltip"
-        dialog-title="This is title"
-        dialog-content="This is content"
-      ></draal-icon-dialog>
-    </draal-form-generator-->
-
-    <draal-file-open-input
-      v-model="formData2.configpath"
-      v-bind="schema2[0]"
-      outlined
-    >
-      <draal-tooltip
-        v-if="formData2.configpath"
-        slot="configpath.prepend"
-        v-bind="toolIconAttrs"
-        :name="$t('configuratorPage.newSwitch')"
-        icon="mdi-reload"
-        @clicked="setConfigBasePath(formData2)"
-      ></draal-tooltip>
-      <draal-icon-dialog
-        slot="configpath.append-outer"
-        :tooltip-config="{ 'icon-size': 'large' }"
-        tooltip-text="Icon tooltip"
-        dialog-title="This is title"
-        dialog-content="This is content"
-      ></draal-icon-dialog>
-    </draal-file-open-input>
+    <draal-config-paths
+      class="mb-10"
+      title="File path configuration"
+      reload-text="Reload files from specified path"
+      v-model="configpath"
+      :schema="schema2[0]"
+      :tool-icon-attrs="toolIconAttrs"
+      :file-query="fileQuery"
+      :filter-options="filterOptions"
+      @data-loaded="addMessage('Configuration data successfully loaded')"
+    ></draal-config-paths>
 
     <draal-form-generator
       :schema="schema1"
@@ -69,6 +37,9 @@
             icon="mdi-import"
             @file-select="fileSelect"
             :multiple="true"
+            drag-class="text-underline"
+            icon-size="large"
+            icon-size-drag="large"
           ></draal-file-import>
 
           <draal-form-generator
@@ -207,6 +178,7 @@ import {
 } from './schema';
 import DraalEventData from './EventData.vue';
 import DraalEventDataEdit from './EventDataEdit.vue';
+import DraalConfigPaths from './ConfigPaths.vue';
 
 import { AudioApi } from '@/common/api';
 import DraalSpinner from '@/components/core/utils/Spinner.vue';
@@ -218,6 +190,7 @@ import DraalIconDialog from '@/components/core/utils/IconDialog.vue';
 import DraalFileImport from '@/components/core/utils/FileImport.vue';
 import DraalTooltip from '@/components/core/utils/Tooltip.vue';
 import DraalTooltipMenu from '@/components/core/utils/TooltipMenu.vue';
+import DraalExpandItem from '@/components/core/utils/ExpandItem.vue';
 
 // TODO: Split to tabs
 
@@ -231,7 +204,9 @@ export default {
         DraalTooltipMenu,
         DraalEventData,
         DraalEventDataEdit,
-        DraalFileOpenInput
+        DraalFileOpenInput,
+        DraalExpandItem,
+        DraalConfigPaths
     },
     data() {
         const schema = [...SCHEMA];
@@ -292,6 +267,8 @@ export default {
 
             timelineTypes: TIMELINE_TYPES,
 
+            configpath: '',
+
             schema1,
             formData1: {
                 bin: null,
@@ -300,10 +277,24 @@ export default {
             },
 
             schema2,
-            formData2: {
-                bin: null,
-                audio: null,
-                fileid: null
+            filterOptions: {
+                params: {
+                    recursive: true,
+                    base: 'ozoaudioencapp'
+                },
+                ext: [
+                    {
+                        key: 'bin'
+                    },
+                    {
+                        ext: '.wav',
+                        key: 'inputWav'
+                    },
+                    {
+                        ext: '.license',
+                        key: 'license'
+                    }
+                ]
             },
 
             data: null,
@@ -373,6 +364,11 @@ export default {
     },
     methods: {
         ...notificationActions,
+
+        addMessage(msg, type = 'Success', timeout = 3000) {
+            const method = `create${type}`;
+            this.addNotification(NotificationMessage[method](msg, { timeout }));
+        },
 
         submit(data) {
             /* eslint-disable-next-line */
@@ -448,54 +444,6 @@ export default {
 
         addEvent({ add }, type = TIMELINE_TYPES.dir) {
             add(null, null, type);
-        },
-
-        setConfigBasePath({ configpath }) {
-            console.log(configpath);
-            const params = {
-                recursive: true,
-                base: 'ozoaudioencapp'
-            };
-
-            const ext = [
-                {
-                    ext: '.wav',
-                    key: 'input'
-                },
-                {
-                    ext: '.license',
-                    key: 'license'
-                }
-            ];
-
-            const fileConfigData = {
-                binary: []
-            };
-
-            const queryExt = ext.map(item => item.ext).join(',');
-
-            this.fileQuery(configpath, queryExt, params).subscribe(({ data }) => {
-                console.log(data);
-
-                data.forEach(item => {
-                    for (let i = 0; i < ext.length; i++) {
-                        if (item.endsWith(ext[i].ext)) {
-                            if (!fileConfigData[ext[i].key]) {
-                                fileConfigData[ext[i].key] = [];
-                            }
-
-                            fileConfigData[ext[i].key].push(item);
-                            return;
-                        }
-                    }
-
-                    if (item.indexOf(params.base) > -1) {
-                        fileConfigData.binary.push(item);
-                    }
-                });
-
-                console.log(fileConfigData);
-            });
         }
     }
 };

@@ -15,6 +15,13 @@ export const mutations = {
 
     SAVE_TIMELINELENGTH(state, { id, length }) {
         state.timelineLen[id] = length;
+    },
+
+    SET_CONFIGFILES(state, obj) {
+        Object.keys(obj).forEach(key => {
+            state.configFiles[key].splice(0, state.configFiles[key].length);
+            obj[key].forEach(item => state.configFiles[key].push(item));
+        });
     }
 };
 
@@ -32,7 +39,9 @@ export const getters = {
     },
 
     // Return timeline length for specified ID
-    getTimelineLength: state => id => state.timelineLen[id]
+    getTimelineLength: state => id => state.timelineLen[id],
+
+    getConfigFiles: state => id => state.configFiles[id]
 };
 
 export const actions = {
@@ -91,6 +100,10 @@ export const actions = {
 
     saveTimelineLength({ commit }, obj) {
         commit('SAVE_TIMELINELENGTH', obj);
+    },
+
+    setConfigFiles({ commit }, obj) {
+        commit('SET_CONFIGFILES', obj);
     }
 };
 
@@ -100,5 +113,10 @@ export const state = {
         reload: false
     },
     lang: null,
-    timelineLen: {}
+    timelineLen: {},
+    configFiles: {
+        bin: [],
+        inputWav: [],
+        license: []
+    }
 };

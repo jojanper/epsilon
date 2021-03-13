@@ -385,14 +385,18 @@ export const SCHEMA2 = [
     {
         type: 'file-open',
         mode: 'filesystem',
+        fileCache: false,
         placeholder: 'Enter base path',
         label: 'Base path for configuration files search',
         name: 'configpath',
+        debounce: 50,
         clearable: true,
         fileOptions: {
-            onlydir: true
+            onlydir: true,
+            nodotdir: true
         },
         help: {
+            tooltip: 'What is this',
             title: 'Base path for configuration files',
             body: 'Binary used for execution.'
         }
@@ -403,6 +407,7 @@ export const SCHEMA1 = [
     {
         type: 'file-open',
         mode: 'filesystem',
+        storeId: 'bin',
         placeholder: 'Enter binary name',
         label: 'Binary',
         name: 'bin',
@@ -421,6 +426,7 @@ export const SCHEMA1 = [
         wavAudioRule: true,
         rules: 'required|fileext:.wav',
         fileExt: '.wav',
+        storeId: 'inputWav',
         clearable: true,
         help: {
             title: 'Audio file',
@@ -431,6 +437,7 @@ export const SCHEMA1 = [
         type: 'file-data-query',
         mode: 'filesystem',
         fileExt: '.license',
+        storeId: 'license',
         placeholder: 'Enter ID file',
         label: 'ID file',
         name: 'fileid',

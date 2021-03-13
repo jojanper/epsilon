@@ -9,7 +9,8 @@ export const appComputed = {
         'newAppVersionAvailable',
         'appVersion',
         'appLang',
-        'getTimelineLength'
+        'getTimelineLength',
+        'getConfigFiles'
     ])
 };
 
@@ -18,7 +19,8 @@ export const appActions = mapActions(appModule, [
     'checkVersion',
     'reloadApp',
     'setLang',
-    'saveTimelineLength'
+    'saveTimelineLength',
+    'setConfigFiles'
 ]);
 
 
