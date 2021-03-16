@@ -1,7 +1,10 @@
 <template>
   <draal-spinner :state="processing">
     <p>{{ description }}</p>
-    <draal-file-drop @fileDrop="onDrop"></draal-file-drop>
+    <draal-file-drop
+      @fileDrop="onDrop"
+      v-bind="$attrs"
+    ></draal-file-drop>
 
     <div v-if="terminalData.length">
       <p>{{ fileName }}:</p>
@@ -19,8 +22,9 @@
 <script>
 import DraalTerminal from './Terminal.vue';
 import { terminalMixin } from './terminalMixin';
-import DraalFileDrop from '../utils/FileDrop.vue';
-import DraalSpinner from '../utils/Spinner.vue';
+
+import DraalFileDrop from '@/components/core/utils/FileDrop.vue';
+import DraalSpinner from '@/components/core/utils/Spinner.vue';
 
 /**
  * Upload file to remote and show response in terminal window.
@@ -72,8 +76,8 @@ export default {
 
 <style lang="scss" scoped>
 .dropbox {
-    margin-top: 48px;
-    margin-bottom: 48px;
+    margin-top: 0px;
+    margin-bottom: 20px;
     font-size: 128px;
 }
 </style>

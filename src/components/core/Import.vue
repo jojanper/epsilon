@@ -9,12 +9,15 @@
       :label="label"
       @input="setData"
       clearable
+      outlined
     >
       <draal-file-import
         slot="append-outer"
         :tooltip-text="tooltipText"
         :tooltip-position="tooltipPosition"
         :icon-size="iconSize"
+        :icon-size-drag="iconSize"
+        drag-class="text-underline"
         :icon-color="iconColor"
         :icon="icon"
         @file-select="fileSelect"

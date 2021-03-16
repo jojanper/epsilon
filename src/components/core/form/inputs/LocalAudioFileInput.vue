@@ -7,6 +7,7 @@
       :rules="inputRules"
     >
       <v-autocomplete
+        ref="autocomplete"
         :class="classes"
         v-model="fieldValue"
         :error-messages="loading ? [$t('form.fileInfoQuery')] : errors"

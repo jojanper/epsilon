@@ -4,7 +4,7 @@ import { ValidationProvider } from 'vee-validate';
 import InputHelp from './InputHelp.vue';
 import {
     placeholder, label, name, value, rules, help, classes, clearable,
-    outlined, draggingColor
+    outlined, draggingColor, loadingStatus
 } from './options';
 
 import * as validation from '@/components/core/form/rules';
@@ -27,6 +27,7 @@ export default {
         clearable,
         outlined,
         draggingColor,
+        loadingStatus,
         /**
          * Delay input data change updates.
          */
@@ -55,6 +56,15 @@ export default {
     },
     destroyed() {
         this.inputChangeEvent.cancel();
+    },
+    watch: {
+        loadingStatus(newVal) {
+            if (newVal) {
+                this.enableLoading(true);
+            } else {
+                this.disableLoading();
+            }
+        }
     },
     methods: {
         inputHelpEvent() {
