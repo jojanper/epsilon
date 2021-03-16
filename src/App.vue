@@ -321,4 +321,8 @@ export default {
 .text-underline {
     text-decoration: underline;
 }
+
+.utils-terminal-upload {
+    color: red !important;
+}
 </style>

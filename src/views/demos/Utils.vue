@@ -9,7 +9,12 @@
       <v-tab-item>
         <v-card flat>
           <v-card-text class="text-left">
-            <draal-upload-terminal :description="$t('fileUtils.text')" :uploadFn="uploadFn"></draal-upload-terminal>
+            <draal-upload-terminal
+              :description="$t('fileUtils.text')"
+              :uploadFn="uploadFn"
+              drag-class="text-underline utils-terminal-upload"
+              icon-size-drag="medium"
+            ></draal-upload-terminal>
           </v-card-text>
         </v-card>
       </v-tab-item>
