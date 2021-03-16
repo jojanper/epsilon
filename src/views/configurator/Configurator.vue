@@ -280,7 +280,7 @@ export default {
             filterOptions: {
                 params: {
                     recursive: true,
-                    base: 'ozoaudioencapp'
+                    base: 'audioencapp'
                 },
                 ext: [
                     {
