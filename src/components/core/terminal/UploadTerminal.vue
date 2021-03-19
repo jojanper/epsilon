@@ -7,9 +7,11 @@
     ></draal-file-drop>
 
     <div v-if="terminalData.length">
-      <p>{{ fileName }}:</p>
       <!-- Show shell response data -->
-      <draal-terminal :dataInput="terminalData"></draal-terminal>
+      <draal-terminal
+        :title="fileName"
+        :dataInput="terminalData"
+      ></draal-terminal>
     </div>
 
     <!-- Show also upload progress while spinner is visible -->
