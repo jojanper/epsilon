@@ -124,7 +124,7 @@ $terminal-height: 32px;
 
 .terminal-menu {
     box-sizing: border-box;
-    height: $terminal-height;
+    height: #{$terminal-height};
     background-color: #bbb;
     margin: 0 auto;
     overflow: hidden;
@@ -154,7 +154,7 @@ $terminal-height: 32px;
     padding: 5px;
     background-color: black;
     box-sizing: border-box;
-    height: calc(100% - $terminal-height);
+    height: calc(100% - #{$terminal-height});
     @include terminalBorders();
 }
 
