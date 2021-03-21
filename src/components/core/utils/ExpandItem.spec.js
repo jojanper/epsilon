@@ -100,16 +100,25 @@ describe('DraalExpandItem', () => {
         wrapper.find('.mdi-border-color').trigger('click');
         await wrapper.vm.$nextTick();
 
-        // AND editing the title name
-        const textInput = wrapper.find('input[type="text"]');
-        await textInput.setValue('Title2');
+        // THEN edit event is emitted
+        expect(wrapper.emitted().edit[0][0]).toBeTruthy();
 
-        // AND accepting the edited title
+        // -----
+
+        // WHEN editing the title name
+        const editValue = 'Title2';
+        const textInput = wrapper.find('input[type="text"]');
+        await textInput.setValue(editValue);
+
+        // AND then accepting the edited title
         wrapper.find('.mdi-check').trigger('click');
         await wrapper.vm.$nextTick();
 
         // THEN new title is visible
-        expect(wrapper.find('.expand-title').text()).toEqual('Title2');
+        expect(wrapper.find('.expand-title').text()).toEqual(editValue);
+
+        // AND export/title name is emitted
+        expect(wrapper.emitted()['export-name'][0][0]).toEqual(editValue);
 
         // -----
 
@@ -121,5 +130,29 @@ describe('DraalExpandItem', () => {
         expect(wrapper.emitted().export[0][1]).toBeFalsy();
 
         wrapper.destroy();
+    });
+
+    function getTestComponent(template, propsData = {}) {
+        return createTestComponent(
+            'TestDraalExpandItem',
+            { DraalExpandItem },
+            template,
+            [],
+            propsData
+        );
+    }
+
+    it('custom actions are added', async () => {
+        const template = `<draal-expand-item title="title" :custom-actions="2">
+            <template slot="action-0">Custom action1</template>
+            <template slot="action-1">Custom action2</template>
+            <div class="expand-content" slot="content">CONTENT</div>
+            </draal-expand-item>`;
+
+        const wrapper = getTestComponent(template);
+
+        expect(wrapper.findAll('.v-list-item__action').at(0).text()).toEqual('Custom action1');
+        expect(wrapper.findAll('.v-list-item__action').at(1).text()).toEqual('Custom action2');
+        expect(wrapper.find('.expand-content').text()).toEqual('CONTENT');
     });
 });

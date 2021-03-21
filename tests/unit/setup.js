@@ -83,7 +83,7 @@ global.mountedComponentFactory = (component, propsData = {}) => {
     return mount(component, options);
 };
 
-global.createTestComponent = (name, components, template, props, propsData, options) => {
+global.createTestComponent = (name, components, template, props, propsData, options = {}) => {
     const localVue = createLocalVue();
 
     const App = localVue.component(name, {
