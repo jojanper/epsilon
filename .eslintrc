@@ -79,6 +79,7 @@
         "getDropEvent": false,
         "prepareVuetify": false,
         "getVuetify": false,
+        "mountedComponentFactory": false,
         "attachToDocument": false
     }
 }

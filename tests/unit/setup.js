@@ -2,7 +2,7 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
 import Vuetify from 'vuetify/lib';
-import { createLocalVue } from '@vue/test-utils';
+import { createLocalVue, mount } from '@vue/test-utils';
 import { cloneDeep } from 'lodash';
 
 import { CONFIG } from '@/plugins/vuetify';
@@ -70,6 +70,11 @@ global.attachToDocument = (target = document.body) => {
     const elem = document.createElement('div');
     target.appendChild(elem);
     return elem;
+};
+
+global.mountedComponentFactory = (component, propsData = {}) => {
+    const options = { vuetify: getVuetify(), propsData };
+    return mount(component, options);
 };
 
 window.URL.createObjectURL = function createObjectURL() { };
