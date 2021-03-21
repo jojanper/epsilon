@@ -1,44 +1,32 @@
-import { mount, createLocalVue } from '@vue/test-utils';
-
 import DraalMenu from './Menu.vue';
 
 describe('DraalMenu', () => {
     beforeAll(() => {
         prepareVuetify();
-
-        const el = document.createElement('div');
-        el.setAttribute('data-app', true);
-        document.body.appendChild(el);
+        createDataApp();
     });
 
     function createMenu(menuItems, template) {
-        const localVue = createLocalVue();
-
-        const App = localVue.component('TestDraalMenu', {
-            components: {
-                DraalMenu
-            },
-            props: ['iconAttrs', 'menuItems', 'cbData'],
-            template
-        });
-
         function callback() { }
 
-        return mount(App, {
-            localVue,
-            vuetify: getVuetify(),
-            propsData: {
+        return createTestComponent(
+            'TestDraalMenu',
+            { DraalMenu },
+            template,
+            ['iconAttrs', 'menuItems', 'cbData'],
+            {
                 menuItems,
                 iconAttrs: {
                     icon: 'mdi-dots-vertical'
                 },
                 cbData: callback
             },
-            stubs: {
-                DraalMenu
-            },
-            attachTo: attachToDocument()
-        });
+            {
+                stubs: {
+                    DraalMenu
+                }
+            }
+        );
     }
 
     async function openMenuTest(wrapper) {
@@ -51,7 +39,7 @@ describe('DraalMenu', () => {
         expect(wrapper.emitted().visibility[0][0]).toBeTruthy();
     }
 
-    it('menu is opened and item is clicked', async done => {
+    it('menu is opened and item is clicked', async () => {
         const menuCalled = [0, 0];
         let cbData = null;
 
@@ -99,11 +87,9 @@ describe('DraalMenu', () => {
         expect(wrapper.emitted().visibility[0][1]).toBeFalsy();
 
         wrapper.destroy();
-
-        done();
     });
 
-    it('custom menu content', async done => {
+    it('custom menu content', async () => {
         const template = `
             <v-app>
               <draal-menu :menuAttrs="{}" :cbData="cbData" :menuItems="menuItems"
@@ -129,7 +115,5 @@ describe('DraalMenu', () => {
         expect(wrapper.emitted().visibility[0][1]).toBeFalsy();
 
         wrapper.destroy();
-
-        done();
     });
 });

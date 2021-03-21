@@ -72,9 +72,32 @@ global.attachToDocument = (target = document.body) => {
     return elem;
 };
 
+global.createDataApp = () => {
+    const el = document.createElement('div');
+    el.setAttribute('data-app', true);
+    document.body.appendChild(el);
+};
+
 global.mountedComponentFactory = (component, propsData = {}) => {
     const options = { vuetify: getVuetify(), propsData };
     return mount(component, options);
+};
+
+global.createTestComponent = (name, components, template, props, propsData, options) => {
+    const localVue = createLocalVue();
+
+    const App = localVue.component(name, {
+        components,
+        props,
+        template
+    });
+
+    return mount(App, {
+        localVue,
+        vuetify: getVuetify(),
+        propsData,
+        ...options
+    });
 };
 
 window.URL.createObjectURL = function createObjectURL() { };
