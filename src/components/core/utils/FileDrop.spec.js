@@ -1,5 +1,3 @@
-import { mount } from '@vue/test-utils';
-
 import DraalFileDrop from './FileDrop.vue';
 
 describe('DraalFileDrop', () => {
@@ -10,15 +8,16 @@ describe('DraalFileDrop', () => {
 
     beforeAll(() => {
         prepareVuetify();
+        createDataApp();
     });
 
     it('file is dropped', async () => {
         // GIVEN file drop component
-        const wrapper = mount(DraalFileDrop, {
-            vuetify: getVuetify(),
-            attachTo: attachToDocument(),
-            propsData: { title }
+        const wrapper = mountedComponentFactory(DraalFileDrop, {
+            title,
+            iconColor: 'blue'
         });
+        expect(wrapper.findAll('.blue--text').length).toEqual(1);
 
         // WHEN dropping file content to component
         const el = wrapper.find('.dropbox');

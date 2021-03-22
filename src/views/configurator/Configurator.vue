@@ -174,6 +174,13 @@ import { of, throwError } from 'rxjs';
 import { delay, catchError } from 'rxjs/operators';
 
 import {
+    VExpansionPanels,
+    VExpansionPanel,
+    VExpansionPanelHeader,
+    VExpansionPanelContent
+} from 'vuetify/lib';
+
+import {
     SCHEMA, TIMELINE_TYPES, SCHEMA1, SCHEMA2
 } from './schema';
 import DraalEventData from './EventData.vue';
@@ -196,6 +203,11 @@ import DraalExpandItem from '@/components/core/utils/ExpandItem.vue';
 
 export default {
     components: {
+        VExpansionPanels,
+        VExpansionPanel,
+        VExpansionPanelHeader,
+        VExpansionPanelContent,
+
         DraalSpinner,
         DraalFormGenerator,
         DraalIconDialog,
