@@ -1,7 +1,8 @@
 <template>
   <div v-if="show && data.length">
-    <div class="terminal-menu terminal-menu-focus">
+    <div class="terminal-menu terminal-menu-focus clearfix">
       <div
+        v-if="canClose"
         class="terminal-buttons terminal-close"
         @click="close"
       ></div>
@@ -70,6 +71,14 @@ export default {
             type: String,
             required: false,
             default: ''
+        },
+        /**
+         * Close button status (is close allowed).
+         */
+        canClose: {
+            type: Boolean,
+            required: false,
+            default: true
         }
     },
     data() {
@@ -115,9 +124,7 @@ export default {
 }
 
 @mixin terminalBorders() {
-    border-bottom-left-radius: 5px;
-    border-bottom-right-radius: 5px;
-    box-shadow: 0px 0px 4px 0px rgba(0,0,0,0.59);
+    box-shadow: 0px 0px 3px 0px rgba(0,0,0,0.59);
 }
 
 $terminal-height: 32px;
@@ -130,6 +137,8 @@ $terminal-height: 32px;
     overflow: hidden;
     top: 29px;
     @include terminalBorders();
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
 
     > span {
         font-size: 0.8em;
@@ -144,6 +153,7 @@ $terminal-height: 32px;
     }
 
     padding-left: 5px;
+    text-align: center;
 }
 
 .terminal-menu-focus {
@@ -156,11 +166,15 @@ $terminal-height: 32px;
     box-sizing: border-box;
     height: calc(100% - #{$terminal-height});
     @include terminalBorders();
+    border-bottom-left-radius: 5px;
+    border-bottom-right-radius: 5px;
 }
 
 .terminal-title-text {
-    margin-top: 6px;
+    margin-top: 5px;
     margin-left: 10px;
+    font-weight: 700;
+    font-size: 14px !important;
 }
 
 .terminal-buttons {
@@ -169,7 +183,8 @@ $terminal-height: 32px;
     border-radius: 50%;
     border: 1px solid #000;
     position: relative;
-    display: inline-block;
+    float: left;
+    top: 10px;
 }
 
 @mixin terminalButton($bgColor, $borderColor) {

@@ -25,14 +25,14 @@ describe('DraalExpandItem', () => {
         const wrapper = factory({
             value: true
         });
-        expect(wrapper.find('.mdi-menu-up')).toBeDefined();
+        expect(wrapper.findAll('.mdi-menu-up').length).toEqual(1);
 
         // WHEN closing the item programmatically
         await wrapper.setProps({ value: false });
         await wrapper.vm.$nextTick();
 
         // THEN item is in closed state
-        expect(wrapper.find('.mdi-menu-down')).toBeDefined();
+        expect(wrapper.findAll('.mdi-menu-down').length).toEqual(1);
 
         wrapper.destroy();
     });
