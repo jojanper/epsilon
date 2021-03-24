@@ -14,7 +14,10 @@
       @close-dialog="helpDialog=false"
     >
       <template v-slot:body>
-        <v-card-text class="text-left" v-html="dialogContent"></v-card-text>
+        <v-card-text
+          class="text-left"
+          v-html="dialogContent"
+        ></v-card-text>
       </template>
     </draal-dialog>
   </div>
@@ -25,7 +28,7 @@ import DraalTooltip from './Tooltip.vue';
 import DraalDialog from './Dialog.vue';
 
 /**
- * Icon with dialog on click.
+ * Icon that on click opens dialog.
  *
  * @displayName DraalIconDialog
  */

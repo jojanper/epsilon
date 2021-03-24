@@ -1,12 +1,14 @@
-import { mount } from '@vue/test-utils';
-
 import DraalFileDialog from './FileDialog.vue';
 
 describe('DraalFileDialog', () => {
-    function factory(props) {
-        return mount(DraalFileDialog, {
-            attachToDocument: true,
-            propsData: props
+    beforeAll(() => {
+        prepareVuetify();
+        createDataApp();
+    });
+
+    function factory(propsData) {
+        return mountedComponentFactory(DraalFileDialog, {
+            ...propsData
         });
     }
 
@@ -15,16 +17,13 @@ describe('DraalFileDialog', () => {
         const wrapper = factory({ value: false, multiple: true });
 
         // Return some dummy file info
-        wrapper.setMethods({
-            getFiles() {
-                return [
-                    {
-                        type: 'audio/wav',
-                        size: 1000
-                    }
-                ];
-            }
-        });
+        jest.spyOn(wrapper.vm, 'getFiles')
+            .mockImplementation(() => [
+                {
+                    type: 'audio/wav',
+                    size: 1000
+                }
+            ]);
 
         // No file dialog open yet
         expect(wrapper.vm.open).toBeFalsy();
@@ -53,6 +52,8 @@ describe('DraalFileDialog', () => {
         expect(files[0].type).toEqual('audio/wav');
         expect(files[0].size).toEqual(1000);
         expect(wrapper.vm.open).toBeFalsy();
+
+        wrapper.destroy();
     });
 
     it('dialog is canceled', async () => {
@@ -85,6 +86,8 @@ describe('DraalFileDialog', () => {
 
         // THEN file dialog has been closed
         expect(wrapper.vm.open).toBeFalsy();
+
+        wrapper.destroy();
     });
 
     it('file is extracted from event', async () => {
@@ -102,5 +105,7 @@ describe('DraalFileDialog', () => {
         };
 
         expect(wrapper.vm.getFiles(event)).toEqual([file]);
+
+        wrapper.destroy();
     });
 });
