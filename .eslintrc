@@ -74,6 +74,7 @@
         "parser": "babel-eslint"
     },
     "globals": {
+        "jest": false,
         "createModuleStore": false,
         "createLocalNotificationStore": false,
         "getDropEvent": false,
@@ -81,7 +82,9 @@
         "getVuetify": false,
         "mountedComponentFactory": false,
         "createDataApp": false,
+        "removeDataApp": false,
         "createTestComponent": false,
+        "shallowMountedComponentFactory": false,
         "attachToDocument": false
     }
 }

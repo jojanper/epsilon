@@ -2,7 +2,7 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
 import Vuetify from 'vuetify/lib';
-import { createLocalVue, mount } from '@vue/test-utils';
+import { createLocalVue, mount, shallowMount } from '@vue/test-utils';
 import { cloneDeep } from 'lodash';
 
 import { CONFIG } from '@/plugins/vuetify';
@@ -76,11 +76,25 @@ global.createDataApp = () => {
     const el = document.createElement('div');
     el.setAttribute('data-app', true);
     document.body.appendChild(el);
+    return el;
 };
 
-global.mountedComponentFactory = (component, propsData = {}) => {
-    const options = { vuetify: getVuetify(), propsData };
+global.removeDataApp = el => document.body.removeChild(el);
+
+global.mountedComponentFactory = (component, propsData = {}, params = {}) => {
+    const localVue = createLocalVue();
+    const options = {
+        localVue, vuetify: getVuetify(), propsData, ...params
+    };
     return mount(component, options);
+};
+
+global.shallowMountedComponentFactory = (component, propsData = {}, params = {}) => {
+    const localVue = createLocalVue();
+    const options = {
+        localVue, vuetify: getVuetify(), propsData, ...params
+    };
+    return shallowMount(component, options);
 };
 
 global.createTestComponent = (name, components, template, props, propsData, options = {}) => {

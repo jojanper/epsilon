@@ -108,13 +108,9 @@ export default {
     data() {
         return {
             fileDialog: false,
-            attrs: this.getAttrs()
+            attrs: this.getAttrs(),
+            icon: this.$attrs.icon || 'mdi-import'
         };
-    },
-    computed: {
-        icon() {
-            return this.$attrs.icon || 'mdi-import';
-        }
     },
     methods: {
         getAttrs() {
