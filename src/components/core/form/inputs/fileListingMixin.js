@@ -60,6 +60,14 @@ export const fileListingMixin = {
             type: Boolean,
             required: false,
             default: true
+        },
+        /**
+         * Remote file query debounce.
+         */
+        remoteDebounce: {
+            type: Number,
+            required: false,
+            default: 600
         }
     },
     data() {
@@ -72,7 +80,7 @@ export const fileListingMixin = {
     },
     created() {
         // Debounce query to reduce remote calls and smooth the UI behaviour
-        this.remoteQuery = debounce(this.remoteDataQuery, 600);
+        this.remoteQuery = debounce(this.remoteDataQuery, this.remoteDebounce);
 
         if (this.fieldValue) {
             this.setItems(this.fieldValue);
