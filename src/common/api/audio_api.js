@@ -12,6 +12,10 @@ class AudioApi {
         this.network = network;
     }
 
+    /**
+     * Get application meta data from remote. Meta data contains information such as version, etc.
+     * @returns Observable that on subscription returns the meta data.
+     */
     getAppMeta() {
         const options = { responseType, params: { time: Date.now() } };
         return this.network.get(`${this.appUrl}metadata`, options).pipe(
@@ -19,9 +23,18 @@ class AudioApi {
         );
     }
 
-    getFile(url, params = {}, settings = null) {
+    /**
+     * Request file download from remote.
+     *
+     * @param {*} file File name.
+     * @param {*} params Query parameters, if any.
+     * @param {*} settings Request settings.
+     * @returns Observable that on subscription returns the file as Blob.
+     */
+    getFile(file, params = {}, settings = null) {
+        const url = `${this.rootUrl}media-download/${file}`;
         const options = { responseType: 'blob', params: { ...params, time: Date.now() } };
-        return this.network.get(`${this.rootUrl}${url}`, options, settings);
+        return this.network.get(url, options, settings);
     }
 
     execCommand(params = {}, postFix = 'exec') {
@@ -29,8 +42,9 @@ class AudioApi {
         return this.network.get(`${this.rootUrl}${postFix}`, options);
     }
 
-    uploadFile(file, progressCallback) {
-        return this.network.uploadFiles(`${this.appUrl}/media-upload`, [file], progressCallback);
+    uploadFile(file, data, progressCallback) {
+        const url = `${this.appUrl}/media-upload`;
+        return this.network.uploadFiles(url, [file], data, progressCallback);
     }
 
     // Query WAVE info data from remote

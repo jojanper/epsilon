@@ -128,4 +128,8 @@ describe('App module', () => {
         store.dispatch('setConfigFiles', data);
         expect(store.getters.getConfigFiles('bin')).toEqual([1, 2, 3]);
     });
+
+    it('getUtilsViewProperties', () => {
+        expect(store.getters.getUtilsViewProperties('fileProperties').length).toEqual(2);
+    });
 });

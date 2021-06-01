@@ -16,7 +16,7 @@ class Network {
         return this.execute('post', [url, params], settings);
     }
 
-    uploadFiles(url, files, progressCallback) {
+    uploadFiles(url, files, data, progressCallback) {
         const options = {
             headers: {
                 'Content-Type': 'multipart/form-data'
@@ -30,6 +30,11 @@ class Network {
         const formData = new FormData();
         const inFiles = Array.isArray(files) ? files : [files];
         inFiles.forEach((file, i) => formData.append(`files[${i}]`, file));
+
+        // Attach the associated data
+        if (data) {
+            formData.append('data', JSON.stringify(data));
+        }
 
         return this.execute('post', [url, formData, options]);
     }
