@@ -17,7 +17,7 @@ describe('DraalUploadTerminal', () => {
             vuetify: getVuetify(),
             propsData: {
                 description: 'Upload data',
-                uploadFn: (file, cb) => {
+                uploadFn: (file, data, cb) => {
                     // Update progress
                     cb({
                         loaded: 100,
