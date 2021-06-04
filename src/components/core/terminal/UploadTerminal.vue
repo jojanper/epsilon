@@ -1,10 +1,17 @@
 <template>
   <draal-spinner :state="processing">
     <p>{{ description }}</p>
-    <draal-file-drop
-      @fileDrop="onDrop"
-      v-bind="$attrs"
-    ></draal-file-drop>
+    <div class="row">
+      <div class="col-md-1">
+        <draal-file-drop
+          @fileDrop="onDrop"
+          v-bind="$attrs"
+        ></draal-file-drop>
+      </div>
+      <div class="col-md-11">
+        <slot name=icon-right></slot>
+      </div>
+    </div>
 
     <div v-if="terminalData.length">
       <!-- Show shell response data -->
@@ -53,6 +60,14 @@ export default {
         uploadFn: {
             type: Function,
             required: true
+        },
+        /**
+         * Additional plain object data to be associated with upload.
+         */
+        extData: {
+            type: Object,
+            required: false,
+            default: null
         }
     },
     data() {
@@ -67,7 +82,7 @@ export default {
             this.terminalExec(
                 // Terminal mixin will handle the remote response -> pass Observable as input parameter
                 // Upload progress is handled in this component.
-                this.uploadFn(files[0], progress => {
+                this.uploadFn(files[0], this.extData, progress => {
                     this.completed = Math.round((progress.loaded * 100) / progress.total);
                 })
             );

@@ -67,7 +67,7 @@
           :headers="headers"
           :customColumns="['datetime','headline']"
           expand="More..."
-          :tableAttributes="{'item-key': 'url', ':search': search}"
+          :tableAttributes="{'item-key': 'index', ':search': search}"
           :actions="['edit', 'delete']"
           :actionsConfig="{name: 'Actions', width: '15%'}"
         >
@@ -81,7 +81,7 @@
             >{{ data.headline }}</a>
           </template>
           <template v-slot:table.expand="{ data }">
-            <div class="row">
+            <div class="row mt-1 mb-1">
               <div class="hidden-sm-and-down">
                 <img
                   class="p-3"
@@ -131,7 +131,7 @@ export default {
         IEXApi.stock('aapl').subscribe(data => {
             this.quote = Object.assign({}, data.quote);
             data.chart.forEach(chart => this.chart.push(chart));
-            data.news.forEach(news => this.data.push(news));
+            data.news.forEach((news, index) => this.data.push({ ...news, index }));
         }, dummyErrorHandler);
 
         // Get and check initial version
@@ -225,13 +225,16 @@ export default {
 .v-label.theme--light.error--text {
     animation: none !important;
 }
+
 .v-data-table tbody tr.v-data-table__expanded__content {
     -webkit-box-shadow: none !important;
     box-shadow: none !important;
 }
+
 .v-messages {
     padding-bottom: 15px !important;
 }
+
 .file-query-input-wrapper {
     .file-query-input {
         top: -15px;

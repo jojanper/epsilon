@@ -41,7 +41,9 @@ export const getters = {
     // Return timeline length for specified ID
     getTimelineLength: state => id => state.timelineLen[id],
 
-    getConfigFiles: state => id => state.configFiles[id]
+    getConfigFiles: state => id => state.configFiles[id],
+
+    getUtilsViewProperties: state => prop => state.views.demo.utils[prop]
 };
 
 export const actions = {
@@ -118,5 +120,12 @@ export const state = {
         bin: [],
         inputWav: [],
         license: []
+    },
+    views: {
+        demo: {
+            utils: {
+                fileProperties: ['Property 1', 'Property 2']
+            }
+        }
     }
 };

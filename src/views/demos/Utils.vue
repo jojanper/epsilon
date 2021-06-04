@@ -14,7 +14,24 @@
               :uploadFn="uploadFn"
               drag-class="text-underline utils-terminal-upload"
               icon-size-drag="medium"
-            ></draal-upload-terminal>
+              :ext-data="{ versions: data }"
+            >
+              <template v-slot:icon-right>
+                <div class="w-50 mt-8">
+                  <select-input
+                    :placeholder="$t('fileUtils.select')"
+                    :value="data"
+                    :data="getUtilsViewProperties('fileProperties')"
+                    name="test"
+                    :label="$t('fileUtils.select')"
+                    @input="setData"
+                    multiple
+                    outlined
+                    clearable
+                  ></select-input>
+                </div>
+              </template>
+            </draal-upload-terminal>
           </v-card-text>
         </v-card>
       </v-tab-item>
@@ -24,17 +41,29 @@
 
 <script>
 import { AudioApi } from '@/common/api';
+import { appComputed } from '@/store/helpers';
+import SelectInput from '@/components/core/form/inputs/SelectInput.vue';
 import DraalUploadTerminal from '@/components/core/terminal/UploadTerminal.vue';
 
 export default {
     name: 'DraalUploadUtils',
     components: {
-        DraalUploadTerminal
+        DraalUploadTerminal,
+        SelectInput
     },
     data() {
         return {
+            data: [],
             uploadFn: AudioApi.uploadFile.bind(AudioApi)
         };
+    },
+    computed: {
+        getUtilsViewProperties: appComputed.getUtilsViewProperties
+    },
+    methods: {
+        setData(data) {
+            this.data = data;
+        }
     }
 };
 </script>

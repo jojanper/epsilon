@@ -1,5 +1,9 @@
 <template>
-  <ValidationProvider v-slot="{ errors }" :name="name" :rules="rules">
+  <ValidationProvider
+    v-slot="{ errors }"
+    :name="name"
+    :rules="rules"
+  >
     <v-select
       :class="classes"
       v-if="!autocomplete"
@@ -14,7 +18,10 @@
     >
       <template slot="append-outer">
         <slot name="append-outer">
-          <input-help v-if="help" @form-input-help="inputHelpEvent"></input-help>
+          <input-help
+            v-if="help"
+            @form-input-help="inputHelpEvent"
+          ></input-help>
         </slot>
       </template>
       <template slot="prepend">
@@ -35,7 +42,10 @@
     >
       <template slot="append-outer">
         <slot name="append-outer">
-          <input-help v-if="help" @form-input-help="inputHelpEvent"></input-help>
+          <input-help
+            v-if="help"
+            @form-input-help="inputHelpEvent"
+          ></input-help>
         </slot>
       </template>
       <template slot="prepend">
@@ -62,10 +72,22 @@ export default {
             type: Boolean,
             required: false,
             default: false
+        },
+        /*
+         * Enable multiple selections.
+         */
+        multiple: {
+            type: Boolean,
+            required: false,
+            default: false
         }
     },
     data() {
         const attrs = this.dataKey ? { 'return-object': true } : {};
+
+        if (this.multiple) {
+            attrs.multiple = true;
+        }
 
         return {
             attrs

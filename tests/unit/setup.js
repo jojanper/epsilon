@@ -72,27 +72,33 @@ global.attachToDocument = (target = document.body) => {
     return elem;
 };
 
-global.createDataApp = () => {
+global.createDataApp = (cls = '', attach = true) => {
     const el = document.createElement('div');
     el.setAttribute('data-app', true);
-    document.body.appendChild(el);
+
+    if (cls) {
+        el.setAttribute('class', cls);
+    }
+
+    if (attach) {
+        document.body.appendChild(el);
+    }
+
     return el;
 };
 
 global.removeDataApp = el => document.body.removeChild(el);
 
 global.mountedComponentFactory = (component, propsData = {}, params = {}) => {
-    const localVue = createLocalVue();
     const options = {
-        localVue, vuetify: getVuetify(), propsData, ...params
+        localVue: createLocalVue(), vuetify: getVuetify(), propsData, ...params
     };
     return mount(component, options);
 };
 
 global.shallowMountedComponentFactory = (component, propsData = {}, params = {}) => {
-    const localVue = createLocalVue();
     const options = {
-        localVue, vuetify: getVuetify(), propsData, ...params
+        localVue: createLocalVue(), vuetify: getVuetify(), propsData, ...params
     };
     return shallowMount(component, options);
 };

@@ -10,6 +10,7 @@ export const appComputed = {
         'appVersion',
         'appLang',
         'getTimelineLength',
+        'getUtilsViewProperties',
         'getConfigFiles'
     ])
 };

@@ -32,7 +32,8 @@
     },
     "fileUtils": {
         "title": "Media file summary",
-        "text": "Extract media file info. Drop media file to icon"
+        "text": "Extract media file info, select properties to include. Drop media file to icon",
+        "select": "Included file properties"
     },
     "form": {
         "remoteInputDropTitle": "Drop file here",

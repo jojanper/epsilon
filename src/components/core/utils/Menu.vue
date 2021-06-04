@@ -1,21 +1,40 @@
 <template>
-  <v-menu v-bind="menuAttrs" v-model="value">
+  <v-menu
+    v-bind="menuAttrs"
+    v-model="value"
+  >
     <template v-slot:activator="{ on }">
       <!--
         @slot Default menu entry point visible to the user.
       -->
-      <slot name="default" v-bind:on="on" v-bind:setVisibility="setVisibility">
-        <v-icon v-if="iconAttrs && iconAttrs.icon" v-bind="iconAttrs" v-on="on">{{ iconAttrs.icon }}</v-icon>
+      <slot
+        name="default"
+        v-bind:on="on"
+        v-bind:setVisibility="setVisibility"
+      >
+        <v-icon
+          v-if="iconAttrs && iconAttrs.icon"
+          v-bind="iconAttrs"
+          v-on="on"
+        >{{ iconAttrs.icon }}</v-icon>
       </slot>
     </template>
 
     <!--
       @slot Menu content.
     -->
-    <slot name="menu-content" v-bind:setVisibility="setVisibility">
+    <slot
+      name="menu-content"
+      v-bind:setVisibility="setVisibility"
+    >
       <v-list v-if="menuItems.length">
-        <v-list-item v-for="(action, i) in menuItems" :key="i" @click="action.fn(cbData)">
-          <v-list-item-title class="text-left draal-menu-action-title">{{ action.title }}</v-list-item-title>
+        <v-list-item
+          v-for="(action, i) in menuItems"
+          :key="i"
+          @click="action.fn(cbData)"
+        >
+          <v-list-item-title class="text-left draal-menu-action-title">{{ action.title }}
+          </v-list-item-title>
         </v-list-item>
       </v-list>
     </slot>

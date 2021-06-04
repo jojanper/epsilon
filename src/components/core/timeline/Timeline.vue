@@ -2,24 +2,36 @@
   <div :style="`--thumb: ${timelineScrollColor}; --thumbHover: ${timelineScrollHoverColor}`">
     <div class="row m-0 pl-0 pt-0 pr-0 timeline-toolbar">
       <div class="col-sm-9 pl-0">
-        <div v-if="leftToolbar" :class="toolbarClasses">
+        <div
+          v-if="leftToolbar"
+          :class="toolbarClasses"
+        >
           <!--
             @slot Toolbar left slot
             @binding {object} data Timeline manipulation functions.
           -->
-          <slot name="table.toolbar-left" v-bind:data="{ add: addItem }"></slot>
+          <slot
+            name="table.toolbar-left"
+            v-bind:data="{ add: addItem }"
+          ></slot>
         </div>
       </div>
 
       <div class="col-sm pr-0">
-        <div class="ml-auto timeline-toolbar-right" :class="toolbarClasses">
+        <div
+          class="ml-auto timeline-toolbar-right"
+          :class="toolbarClasses"
+        >
           <div class="clearfix">
             <div class="float-right">
               <!--
                 @slot New timeline event slot.
                 @binding {object} data Timeline manipulation functions.
               -->
-              <slot name="table.toolbar-right.add" v-bind:data="{ add: addItem }">
+              <slot
+                name="table.toolbar-right.add"
+                v-bind:data="{ add: addItem }"
+              >
                 <draal-tooltip
                   v-bind="toolIconAttrs"
                   :name="$t('timeline.new')"
@@ -85,8 +97,15 @@
       </div>
     </div>
 
-    <div class="row scrolling-wrapper" v-if="mounted" :key="durationUpdated">
-      <div ref="timeline" class="timeline">
+    <div
+      class="row scrolling-wrapper"
+      v-if="mounted"
+      :key="durationUpdated"
+    >
+      <div
+        ref="timeline"
+        class="timeline"
+      >
         <div>
           <draal-ruler
             :zoom="zoom"
@@ -130,13 +149,24 @@
         @data-filter="setTimelineMarkerFilter"
       >
         <!-- Expose custom render columns for parent rendering -->
-        <template v-for="(columnDef, index) in customRenderColumns" v-slot:[columnDef]="{data}">
-          <slot :name="columnDef" v-bind:colunmKey="index" v-bind:data="data"></slot>
+        <template
+          v-for="(columnDef, index) in customRenderColumns"
+          v-slot:[columnDef]="{data}"
+        >
+          <slot
+            :name="columnDef"
+            v-bind:colunmKey="index"
+            v-bind:data="data"
+          ></slot>
         </template>
       </draal-data-table>
     </div>
 
-    <draal-dialog :maxWidth="dialogWidth" :model="editDialog" @close-dialog="closeDialog">
+    <draal-dialog
+      :maxWidth="dialogWidth"
+      :model="editDialog"
+      @close-dialog="closeDialog"
+    >
       <template v-slot:header>
         <div class="headline pt-3">{{ editText }}</div>
       </template>
@@ -501,7 +531,8 @@ export default {
 
             // Add new timeline item next to last item
             const len = this.timelines.length;
-            const position = len ? this.timelines[len - 1].position + incPos : 0;
+            let position = len ? this.timelines[len - 1].position + incPos : 0;
+            position = parseFloat(position.toFixed(1), 10);
 
             const baseId = Date.now();
 
@@ -598,7 +629,9 @@ export default {
             this.timelines.forEach(item => {
                 item.$clicked = false;
             });
-            this.timelines[index].$clicked = true;
+            if (this.timelines[index]) {
+                this.timelines[index].$clicked = true;
+            }
             this.renderTimeline();
             /* eslint-enable no-param-reassign */
         },

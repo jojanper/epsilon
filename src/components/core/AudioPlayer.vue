@@ -1,6 +1,9 @@
 <template>
   <div>
-    <audio :src="url" ref="audioplayer"></audio>
+    <audio
+      :src="url"
+      ref="audioplayer"
+    ></audio>
 
     <div class="row">
       <div class="col pb-0">
@@ -16,17 +19,40 @@
           <v-icon v-else>mdi-pause</v-icon>
         </v-btn>
 
-        <v-btn outlined icon class="ma-2" :color="color" @click.native="stop()" :disabled="!loaded">
+        <v-btn
+          outlined
+          icon
+          class="ma-2"
+          :color="color"
+          @click.native="stop()"
+          :disabled="!loaded"
+        >
           <v-icon>mdi-stop</v-icon>
         </v-btn>
 
-        <v-btn outlined icon class="ma-2" :color="color" @click.native="mute()" :disabled="!loaded">
+        <v-btn
+          outlined
+          icon
+          class="ma-2"
+          :color="color"
+          @click.native="mute()"
+          :disabled="!loaded"
+        >
           <v-icon v-if="!muted">mdi-volume-high</v-icon>
           <v-icon v-else>mdi-volume-mute</v-icon>
         </v-btn>
 
-        <v-btn outlined icon class="ma-2" :color="color" :disabled="!loaded">
-          <a :href="url" :download="name">
+        <v-btn
+          outlined
+          icon
+          class="ma-2"
+          :color="color"
+          :disabled="!loaded"
+        >
+          <a
+            :href="url"
+            :download="name"
+          >
             <v-icon>mdi-download</v-icon>
           </a>
         </v-btn>
@@ -46,7 +72,8 @@
       </div>
     </div>
 
-    <div class="float-right">{{ getDisplayTime(audioPos * duration * 0.01) }} / {{ renderDuration }}</div>
+    <div class="float-right">{{ getDisplayTime(audioPos * duration * 0.01) }} / {{ renderDuration }}
+    </div>
 
     <v-progress-linear
       :class="[{'hover': playing}]"
@@ -58,23 +85,45 @@
     ></v-progress-linear>
 
     <div class="position-relative mt-3 mb-3 pb-3">
-      <div v-for="(item, i) in events" :key="i">
-        <v-hover v-slot="{ hover }" open-delay="400">
-          <div class="audio-event-wrapper" :style="getEventPosStyle(item)">
+      <div
+        v-for="(item, i) in events"
+        :key="i"
+      >
+        <v-hover
+          v-slot="{ hover }"
+          open-delay="400"
+        >
+          <div
+            class="audio-event-wrapper"
+            :style="getEventPosStyle(item)"
+          >
             <!--
               @slot Event marker slot.
             -->
             <slot name="marker">
-              <v-icon :color="color" class="audio-event-marker">mdi-map-marker</v-icon>
+              <v-icon
+                :color="color"
+                class="audio-event-marker"
+              >mdi-map-marker</v-icon>
             </slot>
-            <div v-if="hover" class="audio-event-hover position-absolute">
+            <div
+              v-if="hover"
+              class="audio-event-hover position-absolute"
+            >
               <!--
                 @slot Event slot.
                 @binding {number} eventIndex Event index.
                 @binding {number} event Event position.
               -->
-              <slot name="event" v-bind:eventIndex="i" v-bind:event="item">
-                <v-card class="p-1 z-index-10" color="grey lighten-4">
+              <slot
+                name="event"
+                v-bind:eventIndex="i"
+                v-bind:event="item"
+              >
+                <v-card
+                  class="p-1 z-index-10"
+                  color="grey lighten-4"
+                >
                   <v-card-text class="p-1">
                     <div class="font-weight-light audio-event-text">
                       <!--
@@ -82,7 +131,11 @@
                         @binding {number} eventIndex Event index.
                         @binding {number} event Event position.
                       -->
-                      <slot name="item" v-bind:eventIndex="i" v-bind:event="item">{{ item }}</slot>
+                      <slot
+                        name="item"
+                        v-bind:eventIndex="i"
+                        v-bind:event="item"
+                      >{{ item }}</slot>
                     </div>
                   </v-card-text>
                 </v-card>
@@ -222,6 +275,8 @@ export default {
     },
     beforeDestroy() {
         clearInterval(this.timerId);
+        this.$refs.audioplayer.ontimeupdate = null;
+        this.$refs.audioplayer.onloadeddata = null;
     },
     mounted() {
         // Position update

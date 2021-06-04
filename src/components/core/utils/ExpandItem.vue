@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="expand-item">
     <v-list-item>
       <v-list-item-content>
         <v-list-item-title
