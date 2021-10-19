@@ -2,7 +2,7 @@
 import {
     getTimestamp, ansiColors, getContentDispositionFilename,
     getDataField, resetDataBySchema, slotMapping, readJson,
-    serializeObject, clone
+    serializeObject, clone, isObject
 } from './index';
 
 describe('utils', () => {
@@ -182,5 +182,11 @@ describe('utils', () => {
 
         c.b[2] = 300;
         expect(d).toEqual({ a: 'foo', b: [1, 2, 3], c: 'c' });
+    });
+
+    it('isObject', () => {
+        expect(isObject({})).toBeTruthy();
+        expect(isObject(1)).toBeFalsy();
+        expect(isObject('string')).toBeFalsy();
     });
 });

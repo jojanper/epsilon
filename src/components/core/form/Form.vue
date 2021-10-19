@@ -36,7 +36,7 @@
 
         <div
           class="mt-3"
-          :data-dummyvalue="setDisabled(invalid, valid,changed)"
+          :data-dummyvalue="setDisabled(invalid, valid, changed)"
         >
           <v-btn
             v-if="options.submit"
@@ -77,7 +77,7 @@ import DraalFormInput from './FormInput.vue';
 import DraalDialog from '../utils/Dialog.vue';
 import { appComputed } from '@/store/helpers';
 import {
-    getDataField, resetDataBySchema, slotMapping, debounce
+    getDataField, resetDataBySchema, slotMapping, debounce, isObject
 } from '@/common/utils';
 
 export default {
@@ -180,10 +180,11 @@ export default {
             // If input data relations are defined, send the changed data
             // to relevant form input components
             if (this.dataRelHandlers[target]) {
+                const data = isObject(value) ? value : { data: value };
                 const targetInputs = Object.keys(this.dataRelHandlers[target]);
                 targetInputs.forEach(key => {
                     const inputs = this.dataRelHandlers[target][key];
-                    inputs.forEach(cb => cb(target, value));
+                    inputs.forEach(cb => cb(target, data));
                 });
             }
         },

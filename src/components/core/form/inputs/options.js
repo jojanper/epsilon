@@ -107,3 +107,17 @@ export const loadingStatus = {
     required: false,
     default: false
 };
+
+// Data relation definition, input may depend on
+export const dataRelTarget = {
+    type: Array,
+    required: false,
+    default: () => []
+};
+
+// Data relation observable for providing updates from other form inputs.
+export const dataRelInput = {
+    type: Object,
+    required: false,
+    default: null
+};

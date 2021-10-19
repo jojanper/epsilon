@@ -320,7 +320,7 @@ export default {
                 windscreen: false,
                 timeline: [],
                 row: {},
-                radio: -1
+                radio: null
             },
             options: {
                 submit: this.$t('configuratorPage.createRec'),

@@ -123,14 +123,6 @@ export default {
             default: 10
         },
         /**
-         * Data relation observable for providing updates from other form inputs.
-         */
-        dataRelInput: {
-            type: Object,
-            required: false,
-            default: null
-        },
-        /**
          * Timeline data table configuration.
          */
         tableConfig: {

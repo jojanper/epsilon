@@ -178,6 +178,17 @@ export function isString(str) {
 }
 
 /**
+ * Check if input is object.
+ *
+ * @param {*} obj Object candicate.
+ * @returns true if object, false otherwise.
+ */
+export function isObject(obj) {
+    const type = typeof obj;
+    return type === 'function' || (type === 'object' && !!obj);
+}
+
+/**
  * Clone input.
  *
  * @param {*} obj Input to clone.
