@@ -1,4 +1,4 @@
-export const mutations = {
+const mutations = {
     ADD_NOTIFICATION(state, obj) {
         state.notifications.push(obj);
     },
@@ -8,14 +8,14 @@ export const mutations = {
     }
 };
 
-export const getters = {
+const getters = {
     // Return notifications array
     appNotifications(state) {
         return state.notifications;
     }
 };
 
-export const actions = {
+const actions = {
     addNotification({ commit, dispatch }, obj) {
         commit('ADD_NOTIFICATION', obj);
 
@@ -30,6 +30,34 @@ export const actions = {
     }
 };
 
-export const state = {
+const state = {
     notifications: []
 };
+
+export const name = 'notification';
+
+const helperGetters = [
+    'appNotifications'
+];
+
+const helperActions = [
+    'addNotification',
+    'removeNotification'
+];
+
+export const storeModule = {};
+
+storeModule[name] = {
+    namespaced: true,
+    state,
+    actions,
+    getters,
+    mutations
+};
+
+export function createHelpers(mapGetters, mapActions) {
+    return {
+        computed: { ...mapGetters(name, helperGetters) },
+        actions: mapActions(name, helperActions)
+    };
+}

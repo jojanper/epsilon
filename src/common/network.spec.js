@@ -65,7 +65,7 @@ describe('Network', () => {
         return obj;
     }
 
-    fit('supports uploadFiles', async done => {
+    it('supports uploadFiles', async done => {
         let data;
 
         // File upload with progress callback

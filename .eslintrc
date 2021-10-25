@@ -75,10 +75,10 @@
     },
     "globals": {
         "jest": false,
-        "createModuleStore": false,
-        "createLocalNotificationStore": false,
+        "createTestStore": false,
         "getDropEvent": false,
         "prepareVuetify": false,
+        "prepareVuex": false,
         "getVuetify": false,
         "mountedComponentFactory": false,
         "createDataApp": false,
