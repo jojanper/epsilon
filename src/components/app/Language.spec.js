@@ -7,7 +7,6 @@ import { mount, RouterLinkStub, createLocalVue } from '@vue/test-utils';
 import DraalLanguageSelection from './Language.vue';
 import { CONFIG } from '../../plugins/vuetify';
 
-
 Vue.use(Vuetify, CONFIG);
 Vue.use(VueI18n);
 Vue.use(Vuex);
@@ -79,7 +78,7 @@ describe('DraalLanguageSelection', () => {
                 DraalLanguageSelection
             },
             i18n,
-            attachToDocument: true,
+            attachTo: attachToDocument(),
             vuetify: getVuetify()
         });
     });

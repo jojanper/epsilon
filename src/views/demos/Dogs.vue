@@ -17,12 +17,15 @@
         @selected="selected"
       ></draal-multi-stage-select>
 
-      <v-carousel class="mx-auto" v-if="images.length">
+      <v-carousel
+        class="mx-auto"
+        v-if="images.length"
+      >
         <v-carousel-item
           v-for="(img,i) in images"
           :key="i"
           :src="img"
-          style="width: 100%; height: auto"
+          style="width: auto; height: auto"
           reverse-transition="fade-transition"
           transition="fade-transition"
         ></v-carousel-item>
@@ -36,7 +39,10 @@
         @close-dialog="helpDialog = false"
       >
         <template v-slot:body>
-          <v-card-text class="text-left" v-html="$t('dogApiPage.helpContent')"></v-card-text>
+          <v-card-text
+            class="text-left"
+            v-html="$t('dogApiPage.helpContent')"
+          ></v-card-text>
         </template>
       </draal-dialog>
     </draal-spinner>

@@ -1,8 +1,7 @@
-import DraalFormGenerator from './Form.vue';
+import DraalFormGenerator from '../Form.vue';
 import { storeModule } from '@/store/modules/app';
 import { timer } from '@/common/utils';
 import { initialize } from '@/components/core/form/vee-validate';
-
 
 const TEXT_SCHEMA = [{
     type: 'text',

@@ -3,7 +3,6 @@ import moxios from 'moxios';
 import { storeModule, name } from './app';
 import Network from '@/common/network';
 
-
 describe('App module', () => {
     let store;
 

@@ -1,6 +1,5 @@
 import { NotificationMessage } from './notification';
 
-
 describe('NotificationMessage', () => {
     it('instance includes unique ID', () => {
         const a = NotificationMessage.createSuccess('A');

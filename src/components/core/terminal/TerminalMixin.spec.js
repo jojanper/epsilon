@@ -3,6 +3,7 @@ import { createLocalVue } from '@vue/test-utils';
 
 import { terminalMixin } from './terminalMixin';
 import DraalTerminal from './Terminal.vue';
+import { timer } from '@/common/utils';
 import { storeModule, name } from '@/store/modules/notification';
 
 const GET_NOTIFICATIONS = `${name}/appNotifications`;
@@ -94,6 +95,7 @@ describe('terminalMixin', () => {
 
         // Terminal data is set directly
         wrapper.vm.setTerminalData(['data 1', 'data 2']);
+        await timer(0);
 
         // Data is rendered correctly
         el = wrapper.find('div.data-screen-text');

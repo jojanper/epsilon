@@ -188,16 +188,13 @@ import DraalEventDataEdit from './EventDataEdit.vue';
 import DraalConfigPaths from './ConfigPaths.vue';
 
 import { AudioApi } from '@/common/api';
-import DraalSpinner from '@/components/core/utils/Spinner.vue';
 import DraalFormGenerator from '@/components/core/form/Form.vue';
-import DraalFileOpenInput from '@/components/core/form/inputs/FileOpenInput.vue';
 import { notificationActions } from '@/store/helpers';
 import { NotificationMessage } from '@/common/models';
 import DraalIconDialog from '@/components/core/utils/IconDialog.vue';
 import DraalFileImport from '@/components/core/utils/FileImport.vue';
 import DraalTooltip from '@/components/core/utils/Tooltip.vue';
 import DraalTooltipMenu from '@/components/core/utils/TooltipMenu.vue';
-import DraalExpandItem from '@/components/core/utils/ExpandItem.vue';
 
 // TODO: Split to tabs
 
@@ -208,7 +205,6 @@ export default {
         VExpansionPanelHeader,
         VExpansionPanelContent,
 
-        DraalSpinner,
         DraalFormGenerator,
         DraalIconDialog,
         DraalFileImport,
@@ -216,8 +212,6 @@ export default {
         DraalTooltipMenu,
         DraalEventData,
         DraalEventDataEdit,
-        DraalFileOpenInput,
-        DraalExpandItem,
         DraalConfigPaths
     },
     data() {
