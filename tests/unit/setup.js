@@ -71,16 +71,26 @@ global.createDataApp = (cls = '', attach = true) => {
 
 global.removeDataApp = el => document.body.removeChild(el);
 
-global.mountedComponentFactory = (component, propsData = {}, params = {}) => {
+global.mountedComponentFactory = (component, propsData = {}, componentParams = {}) => {
+    const params = componentParams;
+    if (!params.localVue) {
+        params.localVue = createLocalVue();
+    }
+
     const options = {
-        localVue: createLocalVue(), vuetify: getVuetify(), propsData, ...params
+        vuetify: getVuetify(), propsData, ...params
     };
     return mount(component, options);
 };
 
-global.shallowMountedComponentFactory = (component, propsData = {}, params = {}) => {
+global.shallowMountedComponentFactory = (component, propsData = {}, componentParams = {}) => {
+    const params = componentParams;
+    if (!params.localVue) {
+        params.localVue = createLocalVue();
+    }
+
     const options = {
-        localVue: createLocalVue(), vuetify: getVuetify(), propsData, ...params
+        vuetify: getVuetify(), propsData, ...params
     };
     return shallowMount(component, options);
 };
