@@ -66,8 +66,6 @@ describe('DraalTooltipMenu', () => {
 
         // THEN menu action is called with correct parameter
         expect(clickData).toEqual({ foo: 'bar' });
-
-        wrapper.destroy();
     });
 
     it('custom menu', async () => {
@@ -102,7 +100,5 @@ describe('DraalTooltipMenu', () => {
 
         // THEN custom menu content is no longer visible
         expect(wrapper.findAll('.menuable__content__active').length).toEqual(0);
-
-        wrapper.destroy();
     });
 });

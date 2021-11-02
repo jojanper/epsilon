@@ -89,6 +89,8 @@
         "removeDataApp": false,
         "createTestComponent": false,
         "shallowMountedComponentFactory": false,
-        "attachToDocument": false
+        "attachToDocument": false,
+        "flushTest": false,
+        "flushTestAll": false
     }
 }

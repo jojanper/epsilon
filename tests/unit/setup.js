@@ -2,6 +2,7 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
 import Vuetify from 'vuetify/lib';
+import flushPromises from 'flush-promises';
 import { createLocalVue, mount, shallowMount } from '@vue/test-utils';
 import { cloneDeep } from 'lodash';
 
@@ -110,6 +111,19 @@ global.createTestComponent = (name, components, template, props, propsData, opti
         propsData,
         ...options
     });
+};
+
+global.flushTest = async () => flushPromises();
+
+global.flushTestAll = async () => {
+    // Get rid of any pending validations on the leading edge
+    await flushPromises();
+
+    // Any delayed or debounced state computations
+    jest.runAllTimers();
+
+    // Get rid of the pending rendering tick
+    await flushPromises();
 };
 
 window.URL.createObjectURL = function createObjectURL() { };

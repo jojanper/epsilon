@@ -32,8 +32,6 @@ describe('DraalGo2Top', () => {
             // Screen is scrolled back to top
             expect(window.scrollTo).toHaveBeenCalled();
 
-            wrapper.destroy();
-
             done();
         });
     });

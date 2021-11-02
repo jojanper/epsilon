@@ -1,7 +1,7 @@
 import DraalFormGenerator from '../Form.vue';
 import { storeModule } from '@/store/modules/app';
-import { timer } from '@/common/utils';
 import { initialize } from '@/components/core/form/vee-validate';
+import i18n from '@/i18n';
 
 const TEXT_SCHEMA = [{
     type: 'text',
@@ -18,12 +18,20 @@ const OPTIONS = {
     debouncedDisabled: 0
 };
 
+const TEXT_VALUE = 'My text';
+
 describe('DraalFormGenerator', () => {
     beforeAll(() => {
         prepareVuex();
         prepareVuetify();
         createDataApp();
-        initialize();
+        initialize(i18n);
+
+        jest.useFakeTimers();
+    });
+
+    beforeEach(() => {
+        jest.runAllTimers();
     });
 
     function factory(propsData = {}, params = {}) {
@@ -34,7 +42,7 @@ describe('DraalFormGenerator', () => {
         }, { ...params, store });
     }
 
-    it('text input is submitted', async () => {
+    it.only('text input is supported', async () => {
         const props = {
             schema: TEXT_SCHEMA,
             options: OPTIONS,
@@ -46,25 +54,38 @@ describe('DraalFormGenerator', () => {
         const wrapper = factory(props);
 
         // Set text input
-        const editValue = 'My text';
         const textInput = wrapper.find('input[type="text"]');
-        await textInput.setValue(editValue);
-        await timer(275);
 
-        // Submit form
+        // Set invalid text value
+        await textInput.setValue(' ');
+        await flushTest();
+
+        // Error is reported
+        let errorEl = wrapper.find('.v-messages');
+        expect(errorEl.text()).toContain('Required');
+
+        // -----
+
+        // Valid text value is set
+        await textInput.setValue(TEXT_VALUE);
+        await flushTest();
+
+        // No errors are reported
+        errorEl = wrapper.find('.v-messages');
+        expect(errorEl.text()).toContain('');
+
+        // -----
+
+        // Form is submitted
         const buttons = wrapper.findAll('button');
         await buttons.at(0).trigger('click');
+        await flushTestAll();
 
-        setTimeout(() => {
-            const submitData = wrapper.emitted()['form-data'][0];
+        // Data is valid
+        const submitData = wrapper.emitted()['form-data'][0];
+        expect(submitData[1]).toBeTruthy();
 
-            // Data is valid
-            expect(submitData[1]).toBeTruthy();
-
-            // Data is as expected
-            expect(submitData[0].text).toEqual('My text');
-
-            wrapper.destroy();
-        }, 0);
+        // Data is as expected
+        expect(submitData[0].text).toEqual(TEXT_VALUE);
     });
 });

@@ -85,8 +85,6 @@ describe('DraalMenu', () => {
 
         // AND menu is in closed state
         expect(wrapper.emitted().visibility[0][1]).toBeFalsy();
-
-        wrapper.destroy();
     });
 
     it('custom menu content', async () => {
@@ -113,7 +111,5 @@ describe('DraalMenu', () => {
 
         // THEN menu is in closed state
         expect(wrapper.emitted().visibility[0][1]).toBeFalsy();
-
-        wrapper.destroy();
     });
 });

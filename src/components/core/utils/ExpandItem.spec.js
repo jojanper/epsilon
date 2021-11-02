@@ -17,7 +17,6 @@ describe('DraalExpandItem', () => {
         const wrapper = factory();
         const el = wrapper.find('.expand-title');
         expect(el.text()).toEqual('Expand');
-        wrapper.destroy();
     });
 
     it('item is closed', async () => {
@@ -33,8 +32,6 @@ describe('DraalExpandItem', () => {
 
         // THEN item is in closed state
         expect(wrapper.findAll('.mdi-menu-down').length).toEqual(1);
-
-        wrapper.destroy();
     });
 
     it('item is opened and closed', async () => {
@@ -56,8 +53,6 @@ describe('DraalExpandItem', () => {
 
         // THEN stete is closed
         expect(wrapper.emitted().input[0][1]).toBeFalsy();
-
-        wrapper.destroy();
     });
 
     it('item is deleted', async () => {
@@ -75,8 +70,6 @@ describe('DraalExpandItem', () => {
 
         // THEN delete event is emitted
         expect(Object.prototype.hasOwnProperty.call(wrapper.emitted(), 'delete')).toBeTruthy();
-
-        wrapper.destroy();
     });
 
     it('item is exported', async () => {
@@ -128,8 +121,6 @@ describe('DraalExpandItem', () => {
 
         // THEN export event is emitted
         expect(wrapper.emitted().export[0][1]).toBeFalsy();
-
-        wrapper.destroy();
     });
 
     function getTestComponent(template, propsData = {}) {

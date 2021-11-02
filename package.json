@@ -52,6 +52,7 @@
     "eslint-plugin-import": "^2.25.2",
     "eslint-plugin-vue": "^7.20.0",
     "cypress": "^5.2.0",
+    "flush-promises": "1.0.2",
     "http-server": "latest",
     "mkdirp": "^1.0.4",
     "moxios": "0.4.0",

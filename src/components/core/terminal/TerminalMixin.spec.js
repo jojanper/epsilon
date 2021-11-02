@@ -115,7 +115,5 @@ describe('terminalMixin', () => {
 
         // Data is received correctly
         expect(response).toEqual(['Errors via text interface']);
-
-        wrapper.destroy();
     });
 });

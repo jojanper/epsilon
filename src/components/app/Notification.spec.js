@@ -31,7 +31,5 @@ describe('DraalNotification', () => {
         const element = wrapper.find('.alert-success');
         element.trigger('click');
         expect(store.getters[GET_NOTIFICATIONS].length).toEqual(0);
-
-        wrapper.destroy();
     });
 });

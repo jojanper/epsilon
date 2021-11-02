@@ -33,7 +33,5 @@ describe('DraalFileDrop', () => {
 
         // THEN dragging event is emitted
         expect(wrapper.emitted().dragging[0][0]).toBeTruthy();
-
-        wrapper.destroy();
     });
 });
