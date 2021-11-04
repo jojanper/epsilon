@@ -53,7 +53,7 @@ describe('DraalFormGenerator', () => {
         const textInput = wrapper.find('input[type="text"]');
 
         // Set invalid text value
-        jest.runAllTimers();
+        // jest.runAllTimers();
         await textInput.setValue(' ');
         await flushTestAll();
 
@@ -64,7 +64,7 @@ describe('DraalFormGenerator', () => {
         // -----
 
         // Valid text value is set
-        jest.runAllTimers();
+        // jest.runAllTimers();
         await textInput.setValue(TEXT_VALUE);
         await flushTestAll();
 
