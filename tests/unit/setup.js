@@ -115,12 +115,16 @@ global.createTestComponent = (name, components, template, props, propsData, opti
 
 global.flushTest = async () => flushPromises();
 
-global.flushTestAll = async () => {
+global.flushTestAll = async (allTimers = false) => {
     // Get rid of any pending validations on the leading edge
     await flushPromises();
 
     // Any delayed or debounced state computations
-    jest.runAllTimers();
+    if (allTimers) {
+        jest.runAllTimers();
+    } else {
+        jest.runOnlyPendingTimers();
+    }
 
     // Get rid of the pending rendering tick
     await flushPromises();

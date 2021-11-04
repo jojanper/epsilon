@@ -27,7 +27,7 @@ describe('DraalFormGenerator', () => {
         createDataApp();
         initialize(i18n);
 
-        jest.useFakeTimers();
+        jest.useFakeTimers('modern');
     });
 
     function factory(propsData = {}, params = {}) {
@@ -66,7 +66,7 @@ describe('DraalFormGenerator', () => {
         // Valid text value is set
         // jest.runAllTimers();
         await textInput.setValue(TEXT_VALUE);
-        await flushTestAll();
+        await flushTest();
 
         // No errors are reported
         errorEl = wrapper.find('.v-messages');
@@ -77,13 +77,16 @@ describe('DraalFormGenerator', () => {
         // Form is submitted
         const buttons = wrapper.findAll('button');
         await buttons.at(0).trigger('click');
-        await flushTest();
+        // await flushTest();
 
-        // Data is valid
-        const submitData = wrapper.emitted()['form-data'][0];
-        expect(submitData[1]).toBeTruthy();
+        setTimeout(() => {
+            // Data is valid
+            const submitData = wrapper.emitted()['form-data'][0];
+            console.log(submitData);
+            expect(submitData[1]).toBeTruthy();
 
-        // Data is as expected
-        expect(submitData[0].text).toEqual(TEXT_VALUE);
+            // Data is as expected
+            expect(submitData[0].text).toEqual(TEXT_VALUE);
+        }, 0);
     });
 });
