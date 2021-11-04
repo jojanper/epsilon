@@ -55,7 +55,7 @@ describe('DraalFormGenerator', () => {
         // Set invalid text value
         jest.runAllTimers();
         await textInput.setValue(' ');
-        await flushTest();
+        await flushTestAll();
 
         // Error is reported
         let errorEl = wrapper.find('.v-messages');
@@ -64,8 +64,9 @@ describe('DraalFormGenerator', () => {
         // -----
 
         // Valid text value is set
+        jest.runAllTimers();
         await textInput.setValue(TEXT_VALUE);
-        await flushTest();
+        await flushTestAll();
 
         // No errors are reported
         errorEl = wrapper.find('.v-messages');
@@ -76,7 +77,7 @@ describe('DraalFormGenerator', () => {
         // Form is submitted
         const buttons = wrapper.findAll('button');
         await buttons.at(0).trigger('click');
-        await flushTestAll();
+        await flushTest();
 
         // Data is valid
         const submitData = wrapper.emitted()['form-data'][0];
