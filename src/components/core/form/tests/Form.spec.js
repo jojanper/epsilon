@@ -30,10 +30,6 @@ describe('DraalFormGenerator', () => {
         jest.useFakeTimers();
     });
 
-    beforeEach(() => {
-        jest.runAllTimers();
-    });
-
     function factory(propsData = {}, params = {}) {
         const store = createTestStore(storeModule);
 
@@ -42,7 +38,7 @@ describe('DraalFormGenerator', () => {
         }, { ...params, store });
     }
 
-    it.only('text input is supported', async () => {
+    it('text input is supported', async () => {
         const props = {
             schema: TEXT_SCHEMA,
             options: OPTIONS,
@@ -58,6 +54,7 @@ describe('DraalFormGenerator', () => {
 
         // Set invalid text value
         await textInput.setValue(' ');
+        jest.runAllTimers();
         await flushTest();
 
         // Error is reported
