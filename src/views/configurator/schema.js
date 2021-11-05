@@ -463,10 +463,7 @@ export const SCHEMA1 = [
         name: 'comments2',
         rules: 'required',
         dataRelTarget: ['device'],
-        dataRelTargetHandler: data => {
-            console.log('data received for dataRelTargetHandler', data);
-            return data === 1 ? 'foo.txt' : 'foo.mp4';
-        }
+        dataRelTargetHandler: data => (data === 1 ? 'foo.txt' : 'foo.mp4')
     },
     {
         type: 'radio',
