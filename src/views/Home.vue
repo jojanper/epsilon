@@ -22,7 +22,7 @@ import DraalAudioPlayer from '@/components/core/AudioPlayer.vue';
 const URL = 'http://codeskulptor-demos.commondatastorage.googleapis.com/GalaxyInvaders/theme_01.mp3';
 
 export default {
-    name: 'home',
+    name: 'DraalAppHome',
     components: {
         DraalAudioPlayer
     },

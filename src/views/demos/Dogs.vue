@@ -57,6 +57,7 @@ import DraalMultiStageSelect from '../../components/core/MultiStageSelect.vue';
 import { DogApi } from '@/common/api';
 
 export default {
+    name: 'DraalAppDogs',
     components: {
         DraalSpinner,
         DraalDialog,

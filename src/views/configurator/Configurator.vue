@@ -199,6 +199,7 @@ import DraalTooltipMenu from '@/components/core/utils/TooltipMenu.vue';
 // TODO: Split to tabs
 
 export default {
+    name: 'DraalAppConfigurator',
     components: {
         VExpansionPanels,
         VExpansionPanel,
