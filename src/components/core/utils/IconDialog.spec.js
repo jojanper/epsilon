@@ -25,7 +25,5 @@ describe('DraalIconDialog', () => {
 
         // THEN dialog is opened
         expect(wrapper.vm.helpDialog).toBeTruthy();
-
-        wrapper.destroy();
     });
 });

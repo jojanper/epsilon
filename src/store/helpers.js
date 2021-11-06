@@ -1,39 +1,14 @@
 import { mapGetters, mapActions } from 'vuex';
 
-const appModule = 'app';
-const notificationModule = 'notification';
+import { createHelpers as appHelpers } from './modules/app';
+import { createHelpers as notifyHelpers } from './modules/notification';
 
-// Mapped high level application getters
-export const appComputed = {
-    ...mapGetters(appModule, [
-        'newAppVersionAvailable',
-        'appVersion',
-        'appLang',
-        'getTimelineLength',
-        'getUtilsViewProperties',
-        'getConfigFiles'
-    ])
-};
+// Mapped high level application getters and actions
+const app = appHelpers(mapGetters, mapActions);
+export const appComputed = app.computed;
+export const appActions = app.actions;
 
-// Mapped high level application actions
-export const appActions = mapActions(appModule, [
-    'checkVersion',
-    'reloadApp',
-    'setLang',
-    'saveTimelineLength',
-    'setConfigFiles'
-]);
-
-
-// Mapped notification getters
-export const notificationComputed = {
-    ...mapGetters(notificationModule, [
-        'appNotifications'
-    ])
-};
-
-// Mapped notification actions
-export const notificationActions = mapActions(notificationModule, [
-    'addNotification',
-    'removeNotification'
-]);
+// Mapped notification getters and actions
+const notify = notifyHelpers(mapGetters, mapActions);
+export const notificationComputed = notify.computed;
+export const notificationActions = notify.actions;

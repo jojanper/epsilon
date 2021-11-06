@@ -1,43 +1,43 @@
-import Vuex from 'vuex';
 import { of, throwError } from 'rxjs';
-import { mount, createLocalVue } from '@vue/test-utils';
+import { createLocalVue } from '@vue/test-utils';
 
 import { terminalMixin } from './terminalMixin';
 import DraalTerminal from './Terminal.vue';
+import { timer } from '@/common/utils';
+import { storeModule, name } from '@/store/modules/notification';
 
-const localVue = createLocalVue();
-localVue.use(Vuex);
+const GET_NOTIFICATIONS = `${name}/appNotifications`;
 
-const App = localVue.component('TestTerminal', {
-    mixins: [terminalMixin],
-    components: {
-        DraalTerminal
-    },
-    template: `
+function getTestComponent(localVue) {
+    return localVue.component('TestTerminal', {
+        mixins: [terminalMixin],
+        components: {
+            DraalTerminal
+        },
+        template: `
       <div>
       <draal-terminal :dataInput="terminalData"></draal-terminal>
       </div>
     `
-});
+    });
+}
 
 function execTerminal(wrapper, data) {
     return new Promise(resolve => wrapper.vm.terminalExec(data, resolve));
 }
 
 describe('terminalMixin', () => {
-    const { state, store } = createLocalNotificationStore();
-
-    const wrapper = mount(App, {
-        localVue,
-        store,
-        vuetify: getVuetify()
-    });
-
     beforeAll(() => {
         prepareVuetify();
+        prepareVuex();
     });
 
     it('data is provided to mixin', async () => {
+        const localVue = createLocalVue();
+        const App = getTestComponent(localVue);
+        const store = createTestStore(storeModule);
+        const wrapper = mountedComponentFactory(App, {}, { localVue, store });
+
         // Terminal receives string data via observable
         const exec = execTerminal(wrapper, of({
             cmddata: 'terminal data1\nterminal data2'
@@ -71,9 +71,10 @@ describe('terminalMixin', () => {
         }));
 
         // Error is reported via notifications
-        expect(state.notifications.length).toEqual(1);
-        expect(state.notifications[0].type).toEqual('error');
-        expect(state.notifications[0].data).toEqual('Error');
+        const notifications = store.getters[GET_NOTIFICATIONS];
+        expect(notifications.length).toEqual(1);
+        expect(notifications[0].type).toEqual('error');
+        expect(notifications[0].data).toEqual('Error');
 
         // -----
 
@@ -94,6 +95,7 @@ describe('terminalMixin', () => {
 
         // Terminal data is set directly
         wrapper.vm.setTerminalData(['data 1', 'data 2']);
+        await timer(0);
 
         // Data is rendered correctly
         el = wrapper.find('div.data-screen-text');

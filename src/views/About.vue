@@ -1,7 +1,10 @@
 <template>
   <div class="about">
     <h1>This is an about page</h1>
-    <draal-nested-view class="w-25" :nodes="list"></draal-nested-view>
+    <draal-nested-view
+      class="w-25"
+      :nodes="list"
+    ></draal-nested-view>
   </div>
 </template>
 
@@ -9,6 +12,7 @@
 import DraalNestedView from './Nested.vue';
 
 export default {
+    name: 'DraalAppAbout',
     components: {
         DraalNestedView
     },

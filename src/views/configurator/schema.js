@@ -248,7 +248,8 @@ export const SCHEMA = [
         placeholder: '',
         data: [
             {
-                label: 'Option 1'
+                label: 'Option 1',
+                default: true
             },
             {
                 label: 'Option 2'
@@ -454,5 +455,35 @@ export const SCHEMA1 = [
             title: 'ID file',
             body: 'Target ID selection.'
         }
+    },
+    {
+        type: 'text',
+        placeholder: 'Enter notes',
+        label: 'Comments',
+        name: 'comments2',
+        rules: 'required',
+        dataRelTarget: ['device'],
+        dataRelTargetHandler: data => (data === 1 ? 'foo.txt' : 'foo.mp4')
+    },
+    {
+        type: 'radio',
+        name: 'device',
+        label: 'Radio selection',
+        placeholder: '',
+        data: [
+            {
+                label: 'Option 1',
+                default: true
+            },
+            {
+                label: 'Option 2'
+            }
+        ],
+        help: {
+            title: 'Radio options',
+            body: 'Option 1 does this and Option 2 does that'
+        },
+        rules: 'required',
+        outlined: true
     }
 ];

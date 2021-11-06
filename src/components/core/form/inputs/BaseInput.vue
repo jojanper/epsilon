@@ -4,7 +4,7 @@ import { ValidationProvider } from 'vee-validate';
 import InputHelp from './InputHelp.vue';
 import {
     placeholder, label, name, value, rules, help, classes, clearable,
-    outlined, draggingColor, loadingStatus
+    outlined, draggingColor, loadingStatus, dataRelInput, dataRelTarget
 } from './options';
 
 import * as validation from '@/components/core/form/rules';
@@ -28,6 +28,16 @@ export default {
         outlined,
         draggingColor,
         loadingStatus,
+        dataRelInput,
+        dataRelTarget,
+        /**
+         *
+         */
+        dataRelTargetHandler: {
+            type: Function,
+            required: false,
+            default: null
+        },
         /**
          * Delay input data change updates.
          */
@@ -38,21 +48,30 @@ export default {
         }
     },
     data() {
+        const fieldValue = this.getInitialValue(this.value);
+
         return {
             loading: false,
             dragging: false,
             overlay: false,
 
-            fieldValue: this.value,
+            fieldValue,
             inputAttrs: this.getInputAttrs()
         };
     },
     created() {
         // Check if custom data validation is to be triggered on each input change
-        const data = Object.keys(validation.rules).filter(key => this.rules.indexOf(key) > -1);
-        this.customValidation = data.length > 0;
+        const val = Object.keys(validation.rules).filter(key => this.rules.indexOf(key) > -1);
+        this.customValidation = val.length > 0;
 
         this.inputChangeEvent = debounce(this._inputChangeEvent, this.debounce);
+
+        if (this.dataRelTarget.length && this.dataRelTargetHandler) {
+            this.dataRelInput.subscribe(({ data }) => {
+                this.fieldValue = this.dataRelTargetHandler(data.data);
+                this._inputChangeEvent(this.fieldValue);
+            });
+        }
     },
     destroyed() {
         this.inputChangeEvent.cancel();
@@ -67,6 +86,10 @@ export default {
         }
     },
     methods: {
+        getInitialValue(val) {
+            return val;
+        },
+
         inputHelpEvent() {
             /**
              * Request help for input data.

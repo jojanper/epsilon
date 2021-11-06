@@ -26,8 +26,6 @@ describe('DraalFileImport', () => {
 
         // THEN dialog is opened
         expect(wrapper.vm.fileDialog).toBeTruthy();
-
-        wrapper.destroy();
     });
 
     it('files are dropped to component', async () => {
@@ -41,7 +39,5 @@ describe('DraalFileImport', () => {
         const event = wrapper.emitted()['file-select'][0][0];
         expect(event[0]).toEqual(files[0]);
         expect(event[1]).toEqual(files[1]);
-
-        wrapper.destroy();
     });
 });

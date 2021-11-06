@@ -32,8 +32,15 @@
       ></draal-import>
     </div>
 
-    <div v-if="files.length" class="w-75 mx-auto">
-      <draal-export v-if="exportFiles.length" :url="playlistExport" name="Playlist_export.json">
+    <div
+      v-if="files.length"
+      class="w-75 mx-auto"
+    >
+      <draal-export
+        v-if="exportFiles.length"
+        :url="playlistExport"
+        name="Playlist_export.json"
+      >
         <v-btn color="primary">Export audio playlist</v-btn>
       </draal-export>
       <div
@@ -54,7 +61,10 @@
           @export-name="name => setExportName(index, name)"
           @edit="exportEditing"
         >
-          <div slot="content" class="p-4">
+          <div
+            slot="content"
+            class="p-4"
+          >
             <draal-audio-player
               :activator="playerActivator"
               :active-id="file.$id"
@@ -89,6 +99,7 @@ import {
 } from '@/common/utils';
 
 export default {
+    name: 'DraalAppAudioHome',
     components: {
         DraalFileImport,
         DraalIconDialog,

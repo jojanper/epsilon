@@ -1,6 +1,5 @@
 import Network from '../network';
 
-
 const TOKEN = process.env.VUE_APP_IEXAPI_TOKEN;
 
 class IEXApi {

@@ -2,7 +2,6 @@ import axios from 'axios';
 import { from, throwError } from 'rxjs';
 import { catchError, map, first } from 'rxjs/operators';
 
-
 class Network {
     constructor() {
         this.network = axios;

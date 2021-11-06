@@ -93,7 +93,7 @@ export default {
         };
     },
     mounted() {
-        if (this.$attrs.dataRelTarget) {
+        if (this.$attrs.dataRelTarget && this.$attrs.dataRelTarget.length) {
             /**
              * Request data notifications from related input components
              *

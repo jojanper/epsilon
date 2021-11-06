@@ -1,7 +1,7 @@
 import Network from '@/common/network';
 import { AudioApi } from '@/common/api';
 
-export const mutations = {
+const mutations = {
     SET_LANG(state, obj) {
         const i18 = obj.instance;
         i18.locale = obj.lang;
@@ -25,7 +25,7 @@ export const mutations = {
     }
 };
 
-export const getters = {
+const getters = {
     newAppVersionAvailable(state) {
         return state.appVersion.reload;
     },
@@ -46,7 +46,7 @@ export const getters = {
     getUtilsViewProperties: state => prop => state.views.demo.utils[prop]
 };
 
-export const actions = {
+const actions = {
     // Check if new application version is available
     checkVersion({ commit, state }) {
         AudioApi.getAppMeta().subscribe(data => {
@@ -109,7 +109,7 @@ export const actions = {
     }
 };
 
-export const state = {
+const state = {
     appVersion: {
         localRef: null,
         reload: false
@@ -129,3 +129,39 @@ export const state = {
         }
     }
 };
+
+export const name = 'app';
+
+const helperGetters = [
+    'newAppVersionAvailable',
+    'appVersion',
+    'appLang',
+    'getTimelineLength',
+    'getUtilsViewProperties',
+    'getConfigFiles'
+];
+
+const helperActions = [
+    'checkVersion',
+    'reloadApp',
+    'setLang',
+    'saveTimelineLength',
+    'setConfigFiles'
+];
+
+export const storeModule = {};
+
+storeModule[name] = {
+    namespaced: true,
+    state,
+    actions,
+    getters,
+    mutations
+};
+
+export function createHelpers(mapGetters, mapActions) {
+    return {
+        computed: { ...mapGetters(name, helperGetters) },
+        actions: mapActions(name, helperActions)
+    };
+}

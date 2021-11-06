@@ -18,9 +18,10 @@ module.exports = {
 
     configureWebpack: {
         plugins: [
-            new CopyWebpackPlugin([
-                { from: 'src/locales', to: 'locales' }
-            ])
+            new CopyWebpackPlugin({
+                patterns:
+                    [{ from: 'src/locales', to: 'locales' }]
+            })
         ],
         optimization: {
             splitChunks: {

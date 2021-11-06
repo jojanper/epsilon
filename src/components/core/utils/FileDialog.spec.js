@@ -52,8 +52,6 @@ describe('DraalFileDialog', () => {
         expect(files[0].type).toEqual('audio/wav');
         expect(files[0].size).toEqual(1000);
         expect(wrapper.vm.open).toBeFalsy();
-
-        wrapper.destroy();
     });
 
     it('dialog is canceled', async () => {
@@ -86,8 +84,6 @@ describe('DraalFileDialog', () => {
 
         // THEN file dialog has been closed
         expect(wrapper.vm.open).toBeFalsy();
-
-        wrapper.destroy();
     });
 
     it('file is extracted from event', async () => {
@@ -105,7 +101,5 @@ describe('DraalFileDialog', () => {
         };
 
         expect(wrapper.vm.getFiles(event)).toEqual([file]);
-
-        wrapper.destroy();
     });
 });

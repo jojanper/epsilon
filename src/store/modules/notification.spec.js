@@ -1,19 +1,27 @@
-import * as notificationModule from './notification';
+import { storeModule, name } from './notification';
 import { NotificationMessage, NotificationMessageTypes } from '../../common/models';
 
+const ADD_NOTIFICATION = `${name}/addNotification`;
+const GET_NOTIFICATIONS = `${name}/appNotifications`;
+const REMOVE_NOTIFICATIONS = `${name}/removeNotification`;
 
 describe('Notification module', () => {
     let store;
 
     beforeEach(() => {
-        store = createModuleStore(notificationModule);
+        prepareVuex();
+        store = createTestStore(storeModule);
     });
+
+    function getNotifications() {
+        return store.getters[GET_NOTIFICATIONS];
+    }
 
     async function verifyNotification(mode, msg, options) {
         const obj = NotificationMessage[`create${mode}`](msg, options);
-        await store.dispatch('addNotification', obj);
+        await store.dispatch(ADD_NOTIFICATION, obj);
 
-        const data = store.getters.appNotifications;
+        const data = getNotifications();
 
         expect(data.length).toEqual(1);
         expect(data[0].type).toEqual(NotificationMessageTypes[mode.toUpperCase()]);
@@ -23,46 +31,40 @@ describe('Notification module', () => {
         return obj;
     }
 
-    it('success notification', async done => {
+    it('success notification', async () => {
         await verifyNotification('Success', 'Success message');
-        done();
     });
 
-    it('info notification', async done => {
+    it('info notification', async () => {
         await verifyNotification('Info', 'Info message');
-        done();
     });
 
-    it('warning notification', async done => {
+    it('warning notification', async () => {
         await verifyNotification('Warning', 'Warning message');
-        done();
     });
 
-    it('error notification', async done => {
+    it('error notification', async () => {
         await verifyNotification('Error', 'Errr message');
-        done();
     });
 
-    it('notification is removed', async done => {
+    it('notification is removed', async () => {
         const obj = await verifyNotification('Error', 'Errr message');
 
-        await store.dispatch('removeNotification', {});
-        expect(store.getters.appNotifications.length).toEqual(1);
+        await store.dispatch(REMOVE_NOTIFICATIONS, {});
+        expect(getNotifications().length).toEqual(1);
 
-        await store.dispatch('removeNotification', obj);
-        expect(store.getters.appNotifications.length).toEqual(0);
-
-        done();
+        await store.dispatch(REMOVE_NOTIFICATIONS, obj);
+        expect(getNotifications().length).toEqual(0);
     });
 
     it('notification is removed with timeout', async done => {
         const options = { timeout: 1000 };
         await verifyNotification('Error', 'Errr message', options);
 
-        expect(store.getters.appNotifications.length).toEqual(1);
+        expect(getNotifications().length).toEqual(1);
 
         setTimeout(() => {
-            expect(store.getters.appNotifications.length).toEqual(0);
+            expect(getNotifications().length).toEqual(0);
             done();
         }, options.timeout);
     });

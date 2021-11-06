@@ -1,8 +1,12 @@
 <template>
   <div>
-    <div v-for="(item, index) in configData" :key="index">
+    <div
+      v-for="(item, index) in configData"
+      :key="index"
+    >
       <select-input
         :key="currentSelect"
+        :autocomplete="true"
         v-if="index <= currentSelect"
         :placeholder="item.placeholder"
         :value="selectedData[index]"

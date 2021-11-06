@@ -1,16 +1,11 @@
 import Vue from 'vue';
-import Vuex from 'vuex';
 import VueI18n from 'vue-i18n';
-import Vuetify from 'vuetify/lib';
-import { mount, RouterLinkStub, createLocalVue } from '@vue/test-utils';
+import { RouterLinkStub, createLocalVue } from '@vue/test-utils';
 
 import DraalLanguageSelection from './Language.vue';
-import { CONFIG } from '../../plugins/vuetify';
+import { storeModule, name } from '@/store/modules/app';
 
-
-Vue.use(Vuetify, CONFIG);
 Vue.use(VueI18n);
-Vue.use(Vuex);
 
 const i18n = new VueI18n({
     locale: 'en',
@@ -39,26 +34,15 @@ const i18n = new VueI18n({
 
 describe('DraalLanguageSelection', () => {
     let wrapper;
-    let localVue;
-    let selectedLang = null;
-
-    const store = new Vuex.Store({
-        modules: {
-            app: {
-                namespaced: true,
-                state: {},
-                actions: {
-                    setLang(_state, obj) {
-                        selectedLang = obj.lang;
-                    }
-                },
-                getters: {}
-            }
-        }
-    });
+    let store;
 
     beforeEach(() => {
-        localVue = createLocalVue();
+        prepareVuetify();
+        prepareVuex();
+
+        const localVue = createLocalVue();
+
+        store = createTestStore(storeModule);
 
         const App = localVue.component('TestDraalHeader', {
             components: {
@@ -71,7 +55,7 @@ describe('DraalLanguageSelection', () => {
             `
         });
 
-        wrapper = mount(App, {
+        wrapper = mountedComponentFactory(App, {}, {
             store,
             localVue,
             stubs: {
@@ -79,8 +63,7 @@ describe('DraalLanguageSelection', () => {
                 DraalLanguageSelection
             },
             i18n,
-            attachToDocument: true,
-            vuetify: getVuetify()
+            attachTo: attachToDocument()
         });
     });
 
@@ -95,7 +78,7 @@ describe('DraalLanguageSelection', () => {
             langEls.at(1).trigger('click');
 
             // Language is selected
-            expect(selectedLang).toEqual('fi');
+            expect(store.getters[`${name}/appLang`]).toEqual('fi');
 
             done();
         });

@@ -1,14 +1,14 @@
 import moxios from 'moxios';
 
-import * as appModule from './app';
+import { storeModule, name } from './app';
 import Network from '@/common/network';
-
 
 describe('App module', () => {
     let store;
 
     beforeEach(() => {
-        store = createModuleStore(appModule);
+        prepareVuex();
+        store = createTestStore(storeModule);
         moxios.install(Network.network);
     });
 
@@ -18,15 +18,15 @@ describe('App module', () => {
 
     it('new application version is reloaded', () => {
         spyOn(window.location, 'reload');
-        store.dispatch('reloadApp');
+        store.dispatch(`${name}/reloadApp`);
         expect(window.location.reload).toHaveBeenCalled();
     });
 
     it('new application version is checked', async done => {
         // 3 appplication version queries are performed
-        store.dispatch('checkVersion');
-        store.dispatch('checkVersion');
-        store.dispatch('checkVersion');
+        store.dispatch(`${name}/checkVersion`);
+        store.dispatch(`${name}/checkVersion`);
+        store.dispatch(`${name}/checkVersion`);
 
         moxios.wait(async () => {
             const req1 = moxios.requests.at(0);
@@ -36,8 +36,8 @@ describe('App module', () => {
             });
 
             // No new version is available for 1st query
-            expect(store.getters.newAppVersionAvailable).toBeFalsy();
-            expect(store.getters.appVersion).toEqual('0.0.1');
+            expect(store.getters[`${name}/newAppVersionAvailable`]).toBeFalsy();
+            expect(store.getters[`${name}/appVersion`]).toEqual('0.0.1');
 
             const req2 = moxios.requests.at(1);
             await req2.respondWith({
@@ -46,8 +46,8 @@ describe('App module', () => {
             });
 
             // 2nd query results in new available version
-            expect(store.getters.newAppVersionAvailable).toBeTruthy();
-            expect(store.getters.appVersion).toEqual('0.0.1');
+            expect(store.getters[`${name}/newAppVersionAvailable`]).toBeTruthy();
+            expect(store.getters[`${name}/appVersion`]).toEqual('0.0.1');
 
             const req3 = moxios.requests.at(2);
             await req3.respondWith({
@@ -58,8 +58,8 @@ describe('App module', () => {
             // 3rd query results in same response
             // - New version is available
             // - Version data still points to original version
-            expect(store.getters.newAppVersionAvailable).toBeTruthy();
-            expect(store.getters.appVersion).toEqual('0.0.1');
+            expect(store.getters[`${name}/newAppVersionAvailable`]).toBeTruthy();
+            expect(store.getters[`${name}/appVersion`]).toEqual('0.0.1');
 
             done();
         });
@@ -91,7 +91,7 @@ describe('App module', () => {
         };
 
         // WHEN locale is changed
-        store.dispatch('setLang', obj);
+        store.dispatch(`${name}/setLang`, obj);
 
         moxios.wait(async () => {
             // THEN new locale is set
@@ -104,12 +104,12 @@ describe('App module', () => {
             expect(i18.messages.fi).toBeDefined();
 
             // AND current locale is set correctly
-            expect(store.getters.appLang).toEqual(obj.lang);
+            expect(store.getters[`${name}/appLang`]).toEqual(obj.lang);
 
             // -----
 
             // WHEN locate is changed again (to same locale in this case)
-            await store.dispatch('setLang', obj);
+            await store.dispatch(`${name}/setLang`, obj);
 
             // THEN no new locale messages assignment occurs
             expect(counter).toEqual(1);
@@ -119,17 +119,17 @@ describe('App module', () => {
     });
 
     it('timeline length is saved', () => {
-        store.dispatch('saveTimelineLength', { id: 'test', length: 234 });
-        expect(store.getters.getTimelineLength('test')).toEqual(234);
+        store.dispatch(`${name}/saveTimelineLength`, { id: 'test', length: 234 });
+        expect(store.getters[`${name}/getTimelineLength`]('test')).toEqual(234);
     });
 
     it('config files are stored', () => {
         const data = { bin: [1, 2, 3] };
-        store.dispatch('setConfigFiles', data);
-        expect(store.getters.getConfigFiles('bin')).toEqual([1, 2, 3]);
+        store.dispatch(`${name}/setConfigFiles`, data);
+        expect(store.getters[`${name}/getConfigFiles`]('bin')).toEqual([1, 2, 3]);
     });
 
     it('getUtilsViewProperties', () => {
-        expect(store.getters.getUtilsViewProperties('fileProperties').length).toEqual(2);
+        expect(store.getters[`${name}/getUtilsViewProperties`]('fileProperties').length).toEqual(2);
     });
 });

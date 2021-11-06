@@ -129,7 +129,7 @@ export default {
 
     created() {
         IEXApi.stock('aapl').subscribe(data => {
-            this.quote = Object.assign({}, data.quote);
+            this.quote = { ...data.quote };
             data.chart.forEach(chart => this.chart.push(chart));
             data.news.forEach((news, index) => this.data.push({ ...news, index }));
         }, dummyErrorHandler);
