@@ -1,10 +1,10 @@
-[![build][travis-image]][travis-url]
+[![build][actions-image]][actions-url]
 [![codecov.io][codecov-image]][codecov-url]
 [![Dependency Status][david-image]][david-url]
 [![devDependency Status][david-dev-image]][david-dev-url]
 
-[travis-image]: https://travis-ci.org/jojanper/epsilon.svg?branch=master
-[travis-url]: https://travis-ci.org/jojanper/epsilon
+[actions-image]: https://github.com/jojanper/epsilon/workflows/CI%20Build/badge.svg
+[actions-url]: https://github.com/jojanper/epsilon/actions
 [codecov-image]: https://codecov.io/gh/jojanper/epsilon/coverage.svg?branch=master
 [codecov-url]: https://codecov.io/gh/jojanper/epsilon?branch=master
 [david-image]: https://david-dm.org/jojanper/esilon.svg
