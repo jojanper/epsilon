@@ -1,16 +1,11 @@
 [![build][actions-image]][actions-url]
 [![codecov.io][codecov-image]][codecov-url]
-[![Dependency Status][david-image]][david-url]
-[![devDependency Status][david-dev-image]][david-dev-url]
+![dependabot status](https://img.shields.io/badge/dependabot-enabled-025e8c?logo=Dependabot)
 
 [actions-image]: https://github.com/jojanper/epsilon/workflows/CI%20Build/badge.svg
 [actions-url]: https://github.com/jojanper/epsilon/actions
 [codecov-image]: https://codecov.io/gh/jojanper/epsilon/coverage.svg?branch=master
 [codecov-url]: https://codecov.io/gh/jojanper/epsilon?branch=master
-[david-image]: https://david-dm.org/jojanper/esilon.svg
-[david-url]: https://david-dm.org/jojanper/epsilon
-[david-dev-image]: https://david-dm.org/jojanper/epsilon/dev-status.svg
-[david-dev-url]: https://david-dm.org/jojanper/epsilon#info=devDependencies
 
 # epsilon
 
