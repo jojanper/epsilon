@@ -2,7 +2,7 @@ import Vue from 'vue';
 import VueI18n from 'vue-i18n';
 import { RouterLinkStub, createLocalVue } from '@vue/test-utils';
 
-import DraalLanguageSelection from './Language.vue';
+import DraalLanguageSelection from '../Language.vue';
 import { storeModule, name } from '@/store/modules/app';
 
 Vue.use(VueI18n);

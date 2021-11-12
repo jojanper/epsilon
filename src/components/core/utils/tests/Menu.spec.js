@@ -1,4 +1,4 @@
-import DraalMenu from './Menu.vue';
+import DraalMenu from '../Menu.vue';
 
 describe('DraalMenu', () => {
     beforeAll(() => {

@@ -1,6 +1,6 @@
 import { shallowMount, RouterLinkStub, createLocalVue } from '@vue/test-utils';
 
-import DraalHeader from './Header.vue';
+import DraalHeader from '../Header.vue';
 
 describe('DraalHeader', () => {
     let localVue;

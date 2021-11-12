@@ -1,4 +1,4 @@
-import DraalNotification from './Notification.vue';
+import DraalNotification from '../Notification.vue';
 import { storeModule, name } from '@/store/modules/notification';
 import { NotificationMessage } from '@/common/models';
 

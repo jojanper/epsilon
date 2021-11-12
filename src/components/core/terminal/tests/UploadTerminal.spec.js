@@ -1,7 +1,7 @@
 import { mount } from '@vue/test-utils';
 import { of } from 'rxjs';
 
-import DraalUploadTerminal from './UploadTerminal.vue';
+import DraalUploadTerminal from '../UploadTerminal.vue';
 
 describe('DraalUploadTerminal', () => {
     const files = ['This is a file'];

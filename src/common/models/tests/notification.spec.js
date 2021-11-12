@@ -1,4 +1,4 @@
-import { NotificationMessage } from './notification';
+import { NotificationMessage } from '../notification';
 
 describe('NotificationMessage', () => {
     it('instance includes unique ID', () => {

@@ -1,4 +1,4 @@
-import DraalExpandItem from './ExpandItem.vue';
+import DraalExpandItem from '../ExpandItem.vue';
 
 describe('DraalExpandItem', () => {
     beforeAll(() => {

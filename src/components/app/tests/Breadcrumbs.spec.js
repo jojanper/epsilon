@@ -1,6 +1,6 @@
 import { shallowMount, createLocalVue, RouterLinkStub } from '@vue/test-utils';
 
-import DraalBreadcrumbs from './Breadcrumbs.vue';
+import DraalBreadcrumbs from '../Breadcrumbs.vue';
 
 const $route = {
     path: '/',
