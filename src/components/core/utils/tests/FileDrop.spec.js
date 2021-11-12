@@ -1,4 +1,4 @@
-import DraalFileDrop from './FileDrop.vue';
+import DraalFileDrop from '../FileDrop.vue';
 
 describe('DraalFileDrop', () => {
     const title = 'Drop file to icon';

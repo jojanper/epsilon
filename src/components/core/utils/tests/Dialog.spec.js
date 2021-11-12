@@ -1,6 +1,6 @@
 import { shallowMount } from '@vue/test-utils';
 
-import DraalDialog from './Dialog.vue';
+import DraalDialog from '../Dialog.vue';
 
 describe('DraalDialog', () => {
     const text = 'dialog text';

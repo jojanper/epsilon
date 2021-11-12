@@ -1,6 +1,6 @@
 import { shallowMount } from '@vue/test-utils';
 
-import DraalGo2Top from './Gotop.vue';
+import DraalGo2Top from '../Gotop.vue';
 
 describe('DraalGo2Top', () => {
     beforeAll(() => {

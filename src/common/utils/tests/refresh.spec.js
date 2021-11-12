@@ -1,6 +1,6 @@
 /* eslint-disable no-plusplus */
-import { timer } from './index';
-import AppRefresh from './refresh';
+import { timer } from '../index';
+import AppRefresh from '../refresh';
 
 describe('AppRefresh', () => {
     afterEach(() => {

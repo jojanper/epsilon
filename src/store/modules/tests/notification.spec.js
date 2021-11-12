@@ -1,5 +1,5 @@
-import { storeModule, name } from './notification';
-import { NotificationMessage, NotificationMessageTypes } from '../../common/models';
+import { storeModule, name } from '../notification';
+import { NotificationMessage, NotificationMessageTypes } from '@/common/models';
 
 const ADD_NOTIFICATION = `${name}/addNotification`;
 const GET_NOTIFICATIONS = `${name}/appNotifications`;

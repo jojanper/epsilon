@@ -1,4 +1,4 @@
-import DraalTooltipMenu from './TooltipMenu.vue';
+import DraalTooltipMenu from '../TooltipMenu.vue';
 
 describe('DraalTooltipMenu', () => {
     let elAttach;

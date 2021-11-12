@@ -1,4 +1,4 @@
-import { BaseObservableObject } from './rxjs';
+import { BaseObservableObject } from '../rxjs';
 
 describe('BaseObservableObject', () => {
     it('new subject to emitted', done => {

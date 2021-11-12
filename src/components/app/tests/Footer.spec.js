@@ -1,4 +1,4 @@
-import DraalFooter from './Footer.vue';
+import DraalFooter from '../Footer.vue';
 import { storeModule, name } from '@/store/modules/app';
 
 describe('DraalFooter', () => {

@@ -1,4 +1,4 @@
-import { encodeAngle, decodeAngle } from './transform';
+import { encodeAngle, decodeAngle } from '../transform';
 
 describe('Coordinate transforms', () => {
     it('encode and decode angle', () => {

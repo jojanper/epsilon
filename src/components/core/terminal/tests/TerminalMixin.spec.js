@@ -1,8 +1,8 @@
 import { of, throwError } from 'rxjs';
 import { createLocalVue } from '@vue/test-utils';
 
-import { terminalMixin } from './terminalMixin';
-import DraalTerminal from './Terminal.vue';
+import { terminalMixin } from '../terminalMixin';
+import DraalTerminal from '../Terminal.vue';
 import { timer } from '@/common/utils';
 import { storeModule, name } from '@/store/modules/notification';
 

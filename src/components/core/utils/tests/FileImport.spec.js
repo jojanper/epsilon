@@ -1,4 +1,4 @@
-import DraalFileImport from './FileImport.vue';
+import DraalFileImport from '../FileImport.vue';
 
 describe('DraalFileImport', () => {
     const files = ['This is a file', 'This is another file'];

@@ -3,7 +3,7 @@ import {
     getTimestamp, ansiColors, getContentDispositionFilename,
     getDataField, resetDataBySchema, slotMapping, readJson,
     serializeObject, clone, isObject
-} from './index';
+} from '../index';
 
 describe('utils', () => {
     it('getTimestamp', () => {

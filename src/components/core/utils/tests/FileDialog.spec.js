@@ -1,4 +1,4 @@
-import DraalFileDialog from './FileDialog.vue';
+import DraalFileDialog from '../FileDialog.vue';
 
 describe('DraalFileDialog', () => {
     beforeAll(() => {

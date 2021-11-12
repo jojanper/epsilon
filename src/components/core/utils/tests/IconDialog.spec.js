@@ -1,4 +1,4 @@
-import DraalIconDialog from './IconDialog.vue';
+import DraalIconDialog from '../IconDialog.vue';
 
 describe('DraalIconDialog', () => {
     beforeAll(() => {

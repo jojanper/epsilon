@@ -1,6 +1,6 @@
 import { mount } from '@vue/test-utils';
 
-import DraalTerminal from './Terminal.vue';
+import DraalTerminal from '../Terminal.vue';
 
 describe('DraalTerminal', () => {
     beforeAll(() => {

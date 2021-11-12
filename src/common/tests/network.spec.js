@@ -1,7 +1,7 @@
 /* eslint-disable no-restricted-syntax */
 import moxios from 'moxios';
 
-import Network from './network';
+import Network from '../network';
 
 const RESPONSE = {
     status: 200,
