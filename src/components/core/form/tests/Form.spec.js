@@ -9,7 +9,8 @@ const TEXT_SCHEMA = [{
     label: 'Text',
     name: 'text',
     rules: 'required',
-    debouce: 0
+    debouce: 0,
+    defaultValue: 'I am default value'
 }];
 
 const OPTIONS = {
@@ -49,8 +50,13 @@ describe('DraalFormGenerator', () => {
 
         const wrapper = factory(props);
 
-        // Set text input
+        // Text input
         const textInput = wrapper.find('input[type="text"]');
+
+        // Default value is set
+        expect(textInput.element.value).toEqual(TEXT_SCHEMA[0].defaultValue);
+
+        // -----
 
         // Set invalid text value
         await textInput.setValue(' ');

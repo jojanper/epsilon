@@ -121,3 +121,9 @@ export const dataRelInput = {
     required: false,
     default: null
 };
+
+// Input default value if no value specified
+export const defaultValue = {
+    required: false,
+    default: undefined
+};

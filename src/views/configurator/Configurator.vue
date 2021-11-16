@@ -188,6 +188,10 @@ import DraalEventDataEdit from './EventDataEdit.vue';
 import DraalConfigPaths from './ConfigPaths.vue';
 
 import { AudioApi } from '@/common/api';
+import {
+    initDataFromSchema, LOCAL_AUDIOFILE_INPUT, FILE_DATA_QUERY_INPUT,
+    FILE_OPEN_INPUT, TIMELINE_INPUT
+} from '@/components/core/form/input';
 import DraalFormGenerator from '@/components/core/form/Form.vue';
 import { notificationActions } from '@/store/helpers';
 import { NotificationMessage } from '@/common/models';
@@ -225,13 +229,13 @@ export default {
         schema1.forEach(item => {
             const data = item;
 
-            if (item.type === 'local-audio-file') {
+            if (item.type === LOCAL_AUDIOFILE_INPUT) {
                 data.dataQuery = this.wavQuery.bind(this);
                 data.fileQueryFn = this.fileQuery.bind(this);
-            } else if (item.type === 'file-data-query') {
+            } else if (item.type === FILE_DATA_QUERY_INPUT) {
                 data.dataQuery = this.dataQuery.bind(this);
                 data.fileQueryFn = this.fileQuery.bind(this);
-            } else if (item.type === 'file-open') {
+            } else if (item.type === FILE_OPEN_INPUT) {
                 data.fileQueryFn = this.fileQuery.bind(this);
             }
         });
@@ -239,13 +243,13 @@ export default {
         schema2.forEach(item => {
             const data = item;
 
-            if (item.type === 'local-audio-file') {
+            if (item.type === LOCAL_AUDIOFILE_INPUT) {
                 data.dataQuery = this.wavQuery.bind(this);
                 data.fileQueryFn = this.fileQuery.bind(this);
-            } else if (item.type === 'file-data-query') {
+            } else if (item.type === FILE_DATA_QUERY_INPUT) {
                 data.dataQuery = this.dataQuery.bind(this);
                 data.fileQueryFn = this.fileQuery.bind(this);
-            } else if (item.type === 'file-open') {
+            } else if (item.type === FILE_OPEN_INPUT) {
                 data.fileQueryFn = this.fileQuery.bind(this);
             }
         });
@@ -253,12 +257,12 @@ export default {
         schema.forEach(item => {
             const data = item;
 
-            if (item.type === 'file-data-query') {
+            if (item.type === FILE_DATA_QUERY_INPUT) {
                 data.dataQuery = this.dataQuery.bind(this);
                 data.fileQueryFn = this.fileQuery.bind(this);
-            } else if (item.type === 'timeline') {
+            } else if (item.type === TIMELINE_INPUT) {
                 data.toolbarIconSize = iconSize;
-            } else if (item.type === 'file-open') {
+            } else if (item.type === FILE_OPEN_INPUT) {
                 data.fileQueryFn = this.fileQuery.bind(this);
             }
         });
@@ -277,11 +281,7 @@ export default {
             configpath: '',
 
             schema1,
-            formData1: {
-                bin: null,
-                audio: null,
-                fileid: null
-            },
+            formData1: initDataFromSchema(schema1),
 
             schema2,
             filterOptions: {
@@ -306,17 +306,7 @@ export default {
 
             data: null,
             processing: false,
-            formData: {
-                device: null,
-                bitrate: null,
-                input: null,
-                output: null,
-                comment: null,
-                windscreen: false,
-                timeline: [],
-                row: {},
-                radio: null
-            },
+            formData: initDataFromSchema(schema),
             options: {
                 submit: this.$t('configuratorPage.createRec'),
                 clear: this.$t('configuratorPage.clearForm')

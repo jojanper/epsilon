@@ -485,5 +485,33 @@ export const SCHEMA1 = [
         },
         rules: 'required',
         outlined: true
+    },
+    {
+        type: 'select',
+        placeholder: 'Select bitrate in kbps',
+        label: 'Bitrate (kbps)',
+        name: 'bitrate',
+        rules: 'required',
+        multiple: true,
+        clearable: true,
+        outlined: true,
+        data: [192, 256, 512]
+    },
+    {
+        type: 'checkbox',
+        placeholder: 'Windscreen',
+        label: 'Windscreen',
+        name: 'windscreen',
+        help: {
+            title: 'Audio Windscreen',
+            body: 'Audio Windscreen lets users capture crystal-clear audio quality on '
+                + 'their smartphone in less than ideal conditions. Sophisticated wind '
+                + 'detection algorithms identify and automatically adjust suppression '
+                + 'processing to suit the wind noise conditions. Clearer audio even when '
+                + 'conditions aren’t.'
+        },
+        rules: 'required',
+        outlined: true,
+        defaultValue: true
     }
 ];

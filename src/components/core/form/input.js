@@ -49,6 +49,34 @@ INPUT_TYPES[FILE_DATA_QUERY_INPUT] = 'FileQueryInput';
 INPUT_TYPES[TIMELINE_INPUT] = 'TimelineInput';
 INPUT_TYPES[GROUP_INPUT_WRAPPER] = 'GroupInput';
 
+/**
+ * Map schema input name into corresponding component name.
+ *
+ * @param {*} inType Input type name (typically in the schema).
+ * @returns Component name.
+ */
 export function getFormInputName(inType) {
     return INPUT_TYPES[inType];
+}
+
+/**
+ * Initializes data object for form handling based on specified input schema.
+ *
+ * @param {*} schema Form schema.
+ * @returns Form data object.
+ */
+export function initDataFromSchema(schema) {
+    const data = {};
+
+    schema.forEach(item => {
+        if (item.type === GROUP_INPUT_WRAPPER) {
+            data[item.name] = initDataFromSchema(item.schema);
+        } else if (item.type === TIMELINE_INPUT) {
+            data[item.name] = [];
+        } else {
+            data[item.name] = null;
+        }
+    });
+
+    return data;
 }
