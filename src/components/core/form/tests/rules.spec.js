@@ -25,20 +25,30 @@ describe('Form input rules', () => {
 
     it('filequery', () => {
         const rule = rules.filequery;
+        const value = {};
 
-        result = rule.validate({}, { selected: {} });
+        // Value is available and selected data exists and does not request custom value
+        result = rule.validate(value, { selected: {} });
         expect(result).toEqual(true);
 
-        result = rule.validate({}, {});
+        // Only value is available
+        result = rule.validate(value, {});
         expect(result).toEqual(false);
 
-        result = rule.validate({}, { selected: { custom: true } });
+        // Custom input is requested but not present
+        result = rule.validate(value, { selected: { custom: true } });
         expect(result).toEqual(false);
 
-        result = rule.validate({}, { selected: { custom: true }, custom: '' });
+        // Custom input is requested but its value is null
+        result = rule.validate(value, { selected: { custom: true }, custom: null });
         expect(result).toEqual(false);
 
-        result = rule.validate({}, { selected: { custom: true }, custom: 'file' });
+        // Custom input is requested but its does not have value
+        result = rule.validate(value, { selected: { custom: true }, custom: '' });
+        expect(result).toEqual(false);
+
+        // Custom input is requested but its value is valid
+        result = rule.validate(value, { selected: { custom: true }, custom: 'file' });
         expect(result).toEqual(true);
     });
 });
