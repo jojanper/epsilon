@@ -22,7 +22,7 @@ const fileext = {
 const filequery = {
     params: ['selected', 'custom'],
     validate(value, { selected, custom }) {
-        // File exists, selected data exists and it is not equesting manual input
+        // File exists, selected data exists and it is not requesting manual input
         if (value && selected && !selected.custom) {
             return true;
         }

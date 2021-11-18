@@ -4,7 +4,8 @@ import { ValidationProvider } from 'vee-validate';
 import InputHelp from './InputHelp.vue';
 import {
     placeholder, label, name, value, rules, help, classes, clearable,
-    outlined, draggingColor, loadingStatus, dataRelInput, dataRelTarget
+    outlined, draggingColor, loadingStatus, dataRelInput, dataRelTarget,
+    defaultValue
 } from './options';
 
 import * as validation from '@/components/core/form/rules';
@@ -28,6 +29,7 @@ export default {
         outlined,
         draggingColor,
         loadingStatus,
+        defaultValue,
         dataRelInput,
         dataRelTarget,
         /**
@@ -87,7 +89,16 @@ export default {
     },
     methods: {
         getInitialValue(val) {
-            return val;
+            let output = val;
+
+            // Select default item if such specified when no input value available
+            if ((output === undefined || output === null) && this.defaultValue !== undefined) {
+                output = this.defaultValue;
+                this.fieldValue = output;
+                this.sendChangeEvent(this.fieldValue);
+            }
+
+            return output;
         },
 
         inputHelpEvent() {
