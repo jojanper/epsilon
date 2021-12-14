@@ -57,7 +57,7 @@ global.attachToDocument = (target = document.body) => {
 
 global.createDataApp = (cls = '', attach = true) => {
     const el = document.createElement('div');
-    el.setAttribute('data-app', true);
+    el.setAttribute('data-app', 'true');
 
     if (cls) {
         el.setAttribute('class', cls);

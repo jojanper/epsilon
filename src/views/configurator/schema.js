@@ -466,6 +466,14 @@ export const SCHEMA1 = [
         dataRelTargetHandler: data => (data === 1 ? 'foo.txt' : 'foo.mp4')
     },
     {
+        type: 'text',
+        placeholder: 'Enter notes 3',
+        label: 'Comments 3',
+        name: 'comments3',
+        rules: 'required',
+        defaultValue: 'I am default value'
+    },
+    {
         type: 'radio',
         name: 'device',
         label: 'Radio selection',

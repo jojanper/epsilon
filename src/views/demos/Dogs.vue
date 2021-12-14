@@ -17,19 +17,23 @@
         @selected="selected"
       ></draal-multi-stage-select>
 
-      <v-carousel
-        class="mx-auto"
-        v-if="images.length"
-      >
-        <v-carousel-item
-          v-for="(img,i) in images"
-          :key="i"
-          :src="img"
-          style="width: auto; height: auto"
-          reverse-transition="fade-transition"
-          transition="fade-transition"
-        ></v-carousel-item>
-      </v-carousel>
+      <div>
+        <v-carousel
+          class="mx-auto"
+          :style=style
+          v-if="images.length"
+          :hide-delimiters="images.length > 10 ? true : false"
+        >
+          <v-carousel-item
+            v-for="(img,i) in images"
+            :key="i"
+            :src="img"
+            :style=style
+            reverse-transition="fade-transition"
+            transition="fade-transition"
+          ></v-carousel-item>
+        </v-carousel>
+      </div>
 
       <!-- Help dialog -->
       <draal-dialog
@@ -70,7 +74,8 @@ export default {
             helpDialog: false,
             processing: false,
             selectedData: [],
-            listData: [[], []]
+            listData: [[], []],
+            style: 'width: 800px !important'
         };
     },
     computed: {
@@ -78,11 +83,13 @@ export default {
             return [
                 {
                     placeholder: this.$t('dogApiPage.breedPlaceHolder'),
-                    label: this.$t('dogApiPage.breedLabel')
+                    label: this.$t('dogApiPage.breedLabel'),
+                    outlined: true
                 },
                 {
                     placeholder: this.$t('dogApiPage.subBreedPlaceHolder'),
-                    label: this.$t('dogApiPage.subBreedLabel')
+                    label: this.$t('dogApiPage.subBreedLabel'),
+                    outlined: true
                 }
             ];
         }
