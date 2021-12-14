@@ -69,7 +69,7 @@ export function resetDataBySchema(schema, data, prefix, resetCb) {
         } else if (Array.isArray(data[fieldName])) {
             data[fieldName].splice(0, data[fieldName].length);
         } else {
-            data[fieldName] = resetCb(`${prefix}${fieldName}`);
+            data[fieldName] = resetCb ? resetCb(`${prefix}${fieldName}`) : null;
         }
     }
     /* eslint-enable no-param-reassign */

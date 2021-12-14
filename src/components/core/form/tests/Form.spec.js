@@ -9,7 +9,7 @@ const TEXT_SCHEMA = [{
     label: 'Text',
     name: 'text',
     rules: 'required',
-    debouce: 0,
+    debounce: 0,
     defaultValue: 'I am default value'
 }];
 
@@ -39,6 +39,10 @@ describe('DraalFormGenerator', () => {
         }, { ...params, store });
     }
 
+    function getTextInput(wrapper) {
+        return wrapper.find('input[type="text"]');
+    }
+
     it('text input is supported', async () => {
         const props = {
             schema: TEXT_SCHEMA,
@@ -51,7 +55,7 @@ describe('DraalFormGenerator', () => {
         const wrapper = factory(props);
 
         // Text input
-        const textInput = wrapper.find('input[type="text"]');
+        let textInput = getTextInput(wrapper);
 
         // Default value is set
         expect(textInput.element.value).toEqual(TEXT_SCHEMA[0].defaultValue);
@@ -68,27 +72,37 @@ describe('DraalFormGenerator', () => {
 
         // -----
 
+        // Form is reset
+        await wrapper.findAll('button').at(1).trigger('click');
+
+        // Value is set to default
+        textInput = getTextInput(wrapper);
+        expect(textInput.element.value).toEqual(TEXT_SCHEMA[0].defaultValue);
+
+        // -----
+
         // Valid text value is set
         await textInput.setValue(TEXT_VALUE);
-        await flushTest();
+        await flushTestAll();
 
         // No errors are reported
         errorEl = wrapper.find('.v-messages');
         expect(errorEl.text()).toContain('');
 
-        // -----
+        // Input value is correct
+        textInput = getTextInput(wrapper);
+        expect(textInput.element.value).toEqual(TEXT_VALUE);
+
+        // ------
 
         // Form is submitted
-        const buttons = wrapper.findAll('button');
-        await buttons.at(0).trigger('click');
+        await wrapper.findAll('button').at(0).trigger('click');
+        await flushTestAll();
 
-        setTimeout(() => {
-            // Data is valid
-            const submitData = wrapper.emitted()['form-data'][0];
-            expect(submitData[1]).toBeTruthy();
+        // Data is valid
+        const submitData = wrapper.emitted().submit[0][0];
 
-            // Data is as expected
-            expect(submitData[0].text).toEqual(TEXT_VALUE);
-        }, 0);
+        // Data is as expected
+        expect(submitData.text).toEqual(TEXT_VALUE);
     });
 });

@@ -3,16 +3,16 @@
     <div
       v-for="(item, index) in configData"
       :key="index"
+      class="multiselect-item"
     >
       <select-input
         :key="currentSelect"
-        :autocomplete="true"
-        v-if="index <= currentSelect"
-        :placeholder="item.placeholder"
+        :autocomplete="autoComplete"
+        v-show="index <= currentSelect && listData[index].length > 0"
         :value="selectedData[index]"
         :data="listData[index]"
         :name="getName(index)"
-        :label="item.label"
+        v-bind="item"
         @input="(data) => setInputValue(data, index)"
       ></select-input>
     </div>
@@ -55,10 +55,18 @@ export default {
         configData: {
             type: Array,
             required: true
+        },
+        /**
+         * Use selection list with autocomplete.
+         */
+        autoComplete: {
+            type: Boolean,
+            required: false,
+            default: true
         }
     },
     data() {
-        // How many selects should be visible initially
+        // How many select lists should be visible initially
         let currentSelect = 0;
         for (let i = 0; i < this.selectedData.length; i++) {
             if (this.selectedData[i] !== undefined) {
