@@ -5,7 +5,7 @@ const homeUrl = '#/';
 const aboutUrl = '#/about';
 
 const homePageTitle = 'Epsilon';
-const formPageTitle = 'Form creation';
+const formPageTitle = 'Component examples';
 const aboutTitle = 'This is an about page';
 
 const URL_LINKS = 5;
