@@ -11,11 +11,11 @@ const routes = [
 if (!isElectron()) {
     routes.push(
         {
-            title: 'Configurator',
-            path: '/configurator',
-            name: 'configurator',
+            title: 'Examples',
+            path: '/examples',
+            name: 'examples',
             meta: {
-                breadcrumb: 'Configurator'
+                breadcrumb: 'Examples'
             }
         },
         {

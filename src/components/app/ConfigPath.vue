@@ -48,10 +48,10 @@ import DraalExpandItem from '@/components/core/utils/ExpandItem.vue';
 /**
  * Show config path component as expandable item.
  *
- * @displayName DraalConfigPaths
+ * @displayName DraalConfigPath
  */
 export default {
-    name: 'DraalConfigPaths',
+    name: 'DraalConfigPath',
     components: {
         DraalIconDialog,
         DraalTooltip,
@@ -161,8 +161,10 @@ export default {
 
                 /**
                  * New config data loaded to store.
+                 *
+                 * @property {object} data File config data.
                  */
-                this.$emit('data-loaded');
+                this.$emit('data-loaded', fileConfigData);
             });
         }
     }

@@ -87,7 +87,7 @@
 import { SCHEMA, TIMELINE_TYPES } from './schema';
 import DraalEventData from './EventData.vue';
 import DraalEventDataEdit from './EventDataEdit.vue';
-import { configuratorMixin } from './mixin';
+import { configuratorMixin } from '../mixin';
 
 import { initDataFromSchema } from '@/components/core/form/input';
 import DraalFormGenerator from '@/components/core/form/Form.vue';
