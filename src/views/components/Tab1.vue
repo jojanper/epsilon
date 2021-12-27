@@ -16,7 +16,7 @@
       :tool-icon-attrs="toolIconAttrs"
       :file-query="fileQuery"
       :filter-options="filterOptions"
-      @data-loaded="addMessage('Configuration data successfully loaded')"
+      @data-loaded="configDataLoaded"
     ></draal-config-path>
 
     Loaded config data
@@ -27,7 +27,7 @@
 <script>
 import { configuratorMixin } from './mixin';
 
-import { appComputed } from '@/store/helpers';
+import { appComputed, appActions } from '@/store/helpers';
 import { FILE_OPEN_INPUT } from '@/components/core/form/input';
 import DraalConfigPath from '@/components/app/ConfigPath.vue';
 
@@ -100,6 +100,16 @@ export default {
             });
 
             return data;
+        }
+    },
+    methods: {
+        setConfigFiles: appActions.setConfigFiles,
+
+        configDataLoaded(data) {
+            // Add results to store
+            this.setConfigFiles(data);
+
+            this.addMessage('Configuration data successfully loaded');
         }
     }
 };

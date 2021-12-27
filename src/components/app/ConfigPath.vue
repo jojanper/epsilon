@@ -39,7 +39,6 @@
 </template>
 
 <script>
-import { appActions } from '@/store/helpers';
 import DraalFileOpenInput from '@/components/core/form/inputs/FileOpenInput.vue';
 import DraalIconDialog from '@/components/core/utils/IconDialog.vue';
 import DraalTooltip from '@/components/core/utils/Tooltip.vue';
@@ -123,8 +122,6 @@ export default {
         };
     },
     methods: {
-        setConfigFiles: appActions.setConfigFiles,
-
         // Query the files and assign result to store
         setConfigBasePath() {
             const { params, ext } = this.filterOptions;
@@ -155,8 +152,6 @@ export default {
                     }
                 });
 
-                // Add results to store
-                this.setConfigFiles(fileConfigData);
                 this.configfilesLoading = false;
 
                 /**
