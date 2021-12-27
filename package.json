@@ -56,7 +56,7 @@
     "http-server": "latest",
     "mkdirp": "^1.0.4",
     "moxios": "^0.4.0",
-    "node-sass": "^6.0.1",
+    "node-sass": "^7.0.1",
     "prettier-eslint": "^13.0.0",
     "sass-loader": "^10",
     "stylus": "^0.55.0",
