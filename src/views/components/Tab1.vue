@@ -1,7 +1,7 @@
 <template>
   <div>
     <v-card flat>
-      <v-card-text class="text-left text-md-body-1">
+      <v-card-text class="text-left text-xl-h5">
         Filter data from remote based on selected file path. User types path prefix, autocomplete
         functionality offers available filesystem paths and user selects the path to use. Data from
         path is loaded when user clicks the reload icon.

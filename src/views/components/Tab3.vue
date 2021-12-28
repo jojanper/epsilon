@@ -1,5 +1,10 @@
 <template>
-  <div>
+  <div class="text-left">
+    <v-card flat>
+      <v-card-text class="text-xl-h5">
+        Dialog is opened when icon is clicked
+      </v-card-text>
+    </v-card>
     <draal-icon-dialog
       :tooltip-config="{ 'icon-size': 'large' }"
       tooltip-text="Icon tooltip"

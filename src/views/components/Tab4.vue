@@ -1,44 +1,53 @@
 <template>
-  <div class="row">
-    <draal-file-import
-      class="col-sm"
-      tooltip-text="Import JSON"
-      tooltip-position="right"
-      icon-color="red darken-2"
-      icon="mdi-import"
-      @file-select="fileSelect"
-      :multiple="true"
-      drag-class="text-underline"
-      icon-size="large"
-      icon-size-drag="large"
-    ></draal-file-import>
+  <div>
+    <v-card flat>
+      <v-card-text class="text-left text-xl-h5">
+        File import alternatives
+      </v-card-text>
+    </v-card>
+    <div class="row elevation-3 mb-4 rounded mt-1">
+      <draal-file-import
+        class="
+      col-sm"
+        tooltip-text="Import JSON"
+        tooltip-position="right"
+        icon-color="red darken-2"
+        icon="mdi-import"
+        @file-select="fileSelect"
+        :multiple="true"
+        drag-class="text-underline"
+        icon-size="large"
+        icon-size-drag="large"
+      >
+      </draal-file-import>
 
-    <draal-file-import
-      tooltip-text="Open"
-      class="col-sm"
-      icon-color="blue"
-      icon="mdi-folder-open"
-      @file-select="fileSelect"
-    ></draal-file-import>
+      <draal-file-import
+        tooltip-text="Open"
+        class="col-sm"
+        icon-color="blue"
+        icon="mdi-folder-open"
+        @file-select="fileSelect"
+      ></draal-file-import>
 
-    <draal-file-import
-      tooltip-text="Open multiple files"
-      class="col-sm"
-      icon-color="blue"
-      icon="mdi-plus"
-      :drag="false"
-      :multiple="true"
-      @file-select="fileSelect"
-    ></draal-file-import>
+      <draal-file-import
+        tooltip-text="Open multiple files"
+        class="col-sm"
+        icon-color="blue"
+        icon="mdi-plus"
+        :drag="false"
+        :multiple="true"
+        @file-select="fileSelect"
+      ></draal-file-import>
 
-    <a
-      class="col-sm"
-      :href="linkUrl"
-      :download="linkDownload"
-    >
-      <v-btn>Paina tästä</v-btn>
-      <!--v-icon>mdi-export</v-icon-->
-    </a>
+      <a
+        class="col-sm"
+        :href="linkUrl"
+        :download="linkDownload"
+      >
+        <v-btn>Paina tästä</v-btn>
+        <!--v-icon>mdi-export</v-icon-->
+      </a>
+    </div>
   </div>
 </template>
 

@@ -1,5 +1,10 @@
 <template>
   <div>
+    <v-card flat>
+      <v-card-text class="text-left text-xl-h5 mb-2">
+        Example form with various inputs
+      </v-card-text>
+    </v-card>
     <draal-form-generator
       :schema="schema"
       v-model="formData"
