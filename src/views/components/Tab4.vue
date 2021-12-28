@@ -1,10 +1,8 @@
 <template>
   <div>
-    <v-card flat>
-      <v-card-text class="text-left text-xl-h5">
-        File import alternatives
-      </v-card-text>
-    </v-card>
+    <div class="text-left mb-4 text-lg-subtitle-1">
+      File import alternatives
+    </div>
     <div class="row elevation-3 mb-4 rounded mt-1">
       <draal-file-import
         class="

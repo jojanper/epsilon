@@ -1,12 +1,10 @@
 <template>
   <div>
-    <v-card flat>
-      <v-card-text class="text-left text-xl-h5">
-        Filter data from remote based on selected file path. User types path prefix, autocomplete
-        functionality offers available filesystem paths and user selects the path to use. Data from
-        path is loaded when user clicks the reload icon.
-      </v-card-text>
-    </v-card>
+    <div class="text-left mb-4 text-lg-subtitle-1">
+      Filter data from remote based on selected file path. User types path prefix, autocomplete
+      functionality offers available filesystem paths and user selects the path to use. Data from
+      path is loaded when user clicks the reload icon.
+    </div>
     <draal-config-path
       class="mb-10"
       title="File path configuration"

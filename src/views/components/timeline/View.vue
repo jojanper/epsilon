@@ -1,10 +1,8 @@
 <template>
   <div>
-    <v-card flat>
-      <v-card-text class="text-left text-xl-h5 mb-2">
-        Example form using custom slot rendering for specified inputs
-      </v-card-text>
-    </v-card>
+    <div class="text-left mb-4 text-lg-subtitle-1">
+      Example form using custom slot rendering for specified inputs
+    </div>
     <draal-form-generator
       :schema="schema"
       v-model="formData"
