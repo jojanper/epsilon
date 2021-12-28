@@ -39,7 +39,6 @@
 </template>
 
 <script>
-import { appActions } from '@/store/helpers';
 import DraalFileOpenInput from '@/components/core/form/inputs/FileOpenInput.vue';
 import DraalIconDialog from '@/components/core/utils/IconDialog.vue';
 import DraalTooltip from '@/components/core/utils/Tooltip.vue';
@@ -48,10 +47,10 @@ import DraalExpandItem from '@/components/core/utils/ExpandItem.vue';
 /**
  * Show config path component as expandable item.
  *
- * @displayName DraalConfigPaths
+ * @displayName DraalConfigPath
  */
 export default {
-    name: 'DraalConfigPaths',
+    name: 'DraalConfigPath',
     components: {
         DraalIconDialog,
         DraalTooltip,
@@ -123,8 +122,6 @@ export default {
         };
     },
     methods: {
-        setConfigFiles: appActions.setConfigFiles,
-
         // Query the files and assign result to store
         setConfigBasePath() {
             const { params, ext } = this.filterOptions;
@@ -155,14 +152,14 @@ export default {
                     }
                 });
 
-                // Add results to store
-                this.setConfigFiles(fileConfigData);
                 this.configfilesLoading = false;
 
                 /**
                  * New config data loaded to store.
+                 *
+                 * @property {object} data File config data.
                  */
-                this.$emit('data-loaded');
+                this.$emit('data-loaded', fileConfigData);
             });
         }
     }

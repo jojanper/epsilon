@@ -7,7 +7,7 @@ import AppRefresh from '@/common/utils/refresh';
 import DemosHomeView from '@/views/demos/DemosHome.vue';
 import DogsView from '@/views/demos/Dogs.vue';
 import UtilsView from '@/views/demos/Utils.vue';
-import Configurator from '@/views/configurator/Configurator.vue';
+import ComponentExamples from '@/views/components/Examples.vue';
 import AboutView from '@/views/About.vue';
 import HomeView from '@/views/Home.vue';
 import AudioView from '@/views/audio/Home.vue';
@@ -33,7 +33,11 @@ const routes = [
     },
     {
         ...CONFIG.routes[1],
-        component: Configurator
+        component: ComponentExamples,
+        props: route => ({
+            vtab: route.query.vtab ? parseInt(route.query.vtab, 10) : null,
+            htab: route.query.htab ? parseInt(route.query.htab, 10) : null
+        })
     },
     {
         ...CONFIG.routes[2],

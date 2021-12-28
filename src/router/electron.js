@@ -2,14 +2,14 @@ import Vue from 'vue';
 import Router from 'vue-router';
 
 import { CONFIG } from './navigation';
-import Configurator from '@/views/configurator/Configurator.vue';
+import ComponentExamples from '@/views/components/Examples.vue';
 
 Vue.use(Router);
 
 const routes = [
     {
         ...CONFIG.routes[0],
-        component: Configurator
+        component: ComponentExamples
     },
 
     // Redirect any unmatched routes to the home page.

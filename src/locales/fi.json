@@ -17,7 +17,7 @@
         "exportItem": "Ota mukaan audio metan export tiedostoon"
     },
     "configuratorPage": {
-        "title": "Lomakkeen luonti",
+        "title": "Komponentti esimerkkejä",
         "confPanelTitle": "Luo lomake mallia käyttäen",
         "downloadLink": "Download",
         "createRec": "Lähetä",
