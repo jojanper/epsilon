@@ -52,6 +52,13 @@ if (!isElectron()) {
                             ]
                         }
                     ]
+                },
+                {
+                    path: 'iex-api',
+                    name: 'iex-api',
+                    meta: {
+                        breadcrumb: 'IEX API'
+                    }
                 }
             ]
         },

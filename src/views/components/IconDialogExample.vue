@@ -16,7 +16,7 @@
 import DraalIconDialog from '@/components/core/utils/IconDialog.vue';
 
 export default {
-    name: 'DraalAppConfiguratorTab3',
+    name: 'DraalExampleIconDialog',
     components: {
         DraalIconDialog
     }

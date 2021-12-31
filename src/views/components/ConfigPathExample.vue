@@ -72,7 +72,7 @@ const FILTEROPTIONS = {
 const KEYS = FILTEROPTIONS.ext.map(item => item.key);
 
 export default {
-    name: 'DraalAppConfiguratorTab1',
+    name: 'DraalExampleConfigPath',
     mixins: [configuratorMixin],
     components: {
         DraalConfigPath

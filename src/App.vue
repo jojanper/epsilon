@@ -14,87 +14,6 @@
     <draal-notification></draal-notification>
     <div class="container-fluid app-container">
       <router-view />
-      <v-flex
-        xs12
-        sm34
-        text-xs-center
-      >
-        <v-btn
-          class="mr-2"
-          color="primary"
-          v-on:click="addAlert('Success')"
-        >Add success alert</v-btn>
-        <v-btn
-          class="mr-2"
-          color="info"
-          v-on:click="addAlert('Info')"
-        >Add info alert</v-btn>
-        <v-btn
-          class="mr-2"
-          color="warning"
-          v-on:click="addAlert('Warning')"
-        >Add warning alert</v-btn>
-        <v-btn
-          color="error"
-          v-on:click="addAlert('Error')"
-        >Add error alert</v-btn>
-      </v-flex>
-
-      <div
-        class="p-3 elevation-3"
-        v-if="data.length"
-      >
-        <div class="row text-left">
-          <div class="col-sm">{{ quote.companyName }} ({{ quote.symbol }})</div>
-          <div class="col-sm">Close: {{ chart[chart.length - 1].close }}</div>
-          <div class="col-sm">High: {{ chart[chart.length - 1].high }}</div>
-          <div class="col-sm">Low: {{ chart[chart.length - 1].low }}</div>
-        </div>
-
-        <div class="pb-3">
-          <v-text-field
-            v-model="search"
-            append-icon="mdi-magnify"
-            label="Search"
-            single-line
-            hide-details
-          ></v-text-field>
-        </div>
-
-        <draal-data-table
-          :search="search"
-          :data="data"
-          :headers="headers"
-          :customColumns="['datetime','headline']"
-          expand="More..."
-          :tableAttributes="{'item-key': 'index', ':search': search}"
-          :actions="['edit', 'delete']"
-          :actionsConfig="{name: 'Actions', width: '15%'}"
-        >
-          <template v-slot:table.datetime="{ data }">
-            <div v-html="getTime(data.datetime)"></div>
-          </template>
-          <template v-slot:table.headline="{ data }">
-            <a
-              :href="data.url"
-              target="_blank"
-            >{{ data.headline }}</a>
-          </template>
-          <template v-slot:table.expand="{ data }">
-            <div class="row mt-1 mb-1">
-              <div class="hidden-sm-and-down">
-                <img
-                  class="p-3"
-                  :src="data.image"
-                  width="150"
-                  height="150"
-                />
-              </div>
-              <div class="col text-left">{{ data.summary }}</div>
-            </div>
-          </template>
-        </draal-data-table>
-      </div>
     </div>
     <draal-footer></draal-footer>
   </v-app>
@@ -106,15 +25,10 @@ import DraalFooter from '@/components/app/Footer.vue';
 import DraalNotification from '@/components/app/Notification.vue';
 import DraalBreadcrumbs from '@/components/app/Breadcrumbs.vue';
 import DraalGo2Top from '@/components/core/utils/Gotop.vue';
-import { IEXApi } from '@/common/api';
-import { NotificationMessage } from '@/common/models';
 import AppRefresh from '@/common/utils/refresh';
 import { isElectron } from '@/common/utils';
 import { CONFIG } from '@/router/navigation';
-import { appActions, notificationActions } from '@/store/helpers';
-import DraalDataTable from '@/components/core/DataTable.vue';
-
-function dummyErrorHandler() {}
+import { appActions } from '@/store/helpers';
 
 export default {
     name: 'App',
@@ -123,17 +37,10 @@ export default {
         DraalFooter,
         DraalNotification,
         DraalGo2Top,
-        DraalBreadcrumbs,
-        DraalDataTable
+        DraalBreadcrumbs
     },
 
     created() {
-        IEXApi.stock('aapl').subscribe(data => {
-            this.quote = { ...data.quote };
-            data.chart.forEach(chart => this.chart.push(chart));
-            data.news.forEach((news, index) => this.data.push({ ...news, index }));
-        }, dummyErrorHandler);
-
         // Get and check initial version
         this.checkVersion();
 
@@ -192,16 +99,7 @@ export default {
     },
 
     methods: {
-        ...notificationActions,
-        ...appActions,
-        addAlert(mode) {
-            const timeout = Math.floor(Math.random() * 5000);
-            const msg = `${mode} notification. Timeout ${timeout}msec`;
-            this.addNotification(NotificationMessage[`create${mode}`](msg, { timeout }));
-        },
-        getTime(ts) {
-            return new Date(ts).toDateString();
-        }
+        ...appActions
     }
 };
 </script>

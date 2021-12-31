@@ -142,7 +142,7 @@ const SCHEMA = [
 ];
 
 export default {
-    name: 'DraalAppConfiguratorTab2',
+    name: 'DraalExampleForm1',
     mixins: [configuratorMixin],
     components: {
         DraalFormGenerator

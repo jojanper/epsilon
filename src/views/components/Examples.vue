@@ -46,11 +46,12 @@
 </template>
 
 <script>
-import DraalAppConfiguratorTab1 from './Tab1.vue';
-import DraalAppConfiguratorTab2 from './Tab2.vue';
-import DraalAppConfiguratorTab3 from './Tab3.vue';
-import DraalAppConfiguratorTab4 from './Tab4.vue';
-import DraalAppConfiguratorTab5 from './timeline/View.vue';
+import DraalExampleConfigPath from './ConfigPathExample.vue';
+import DraalExampleForm1 from './FormExample1.vue';
+import DraalExampleIconDialog from './IconDialogExample.vue';
+import DraalExampleFileImport from './FileImportExample.vue';
+import DraalExampleFormTimeline from './timeline/View.vue';
+import DraalExampleAlerts from './AlertExample.vue';
 
 const VIEWS = [
     {
@@ -59,11 +60,11 @@ const VIEWS = [
         [
             {
                 title: 'Example form 1',
-                component: DraalAppConfiguratorTab2
+                component: DraalExampleForm1
             },
             {
                 title: 'Example form 2',
-                component: DraalAppConfiguratorTab5
+                component: DraalExampleFormTimeline
             }
         ]
     },
@@ -72,15 +73,19 @@ const VIEWS = [
         children: [
             {
                 title: 'Config path',
-                component: DraalAppConfiguratorTab1
+                component: DraalExampleConfigPath
             },
             {
                 title: 'Icon dialog',
-                component: DraalAppConfiguratorTab3
+                component: DraalExampleIconDialog
             },
             {
                 title: 'File imports',
-                component: DraalAppConfiguratorTab4
+                component: DraalExampleFileImport
+            },
+            {
+                title: 'Alerts & Notifications',
+                component: DraalExampleAlerts
             }
         ]
     }
@@ -89,11 +94,12 @@ const VIEWS = [
 export default {
     name: 'DraalAppConfigurator',
     components: {
-        DraalAppConfiguratorTab1,
-        DraalAppConfiguratorTab2,
-        DraalAppConfiguratorTab3,
-        DraalAppConfiguratorTab4,
-        DraalAppConfiguratorTab5
+        DraalExampleConfigPath,
+        DraalExampleForm1,
+        DraalExampleIconDialog,
+        DraalExampleFileImport,
+        DraalExampleFormTimeline,
+        DraalExampleAlerts
     },
     props: {
         vtab: {
