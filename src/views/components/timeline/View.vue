@@ -98,7 +98,7 @@ import DraalTooltip from '@/components/core/utils/Tooltip.vue';
 import DraalTooltipMenu from '@/components/core/utils/TooltipMenu.vue';
 
 export default {
-    name: 'DraalAppConfiguratorTab5',
+    name: 'DraalExampleFormTimeline',
     mixins: [configuratorMixin],
     components: {
         DraalFormGenerator,

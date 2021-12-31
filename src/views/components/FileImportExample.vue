@@ -53,7 +53,7 @@
 import DraalFileImport from '@/components/core/utils/FileImport.vue';
 
 export default {
-    name: 'DraalAppConfiguratorTab4',
+    name: 'DraalExampleFileImport',
     components: {
         DraalFileImport
     },

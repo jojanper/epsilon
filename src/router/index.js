@@ -7,6 +7,7 @@ import AppRefresh from '@/common/utils/refresh';
 import DemosHomeView from '@/views/demos/DemosHome.vue';
 import DogsView from '@/views/demos/Dogs.vue';
 import UtilsView from '@/views/demos/Utils.vue';
+import DraalAppIEX from '@/views/demos/IEX.vue';
 import ComponentExamples from '@/views/components/Examples.vue';
 import AboutView from '@/views/About.vue';
 import HomeView from '@/views/Home.vue';
@@ -19,6 +20,10 @@ const DOGS = {
         {
             ...CONFIG.routes[2].children[0],
             component: DogsView
+        },
+        {
+            ...CONFIG.routes[2].children[1],
+            component: DraalAppIEX
         }
     ]
 };
