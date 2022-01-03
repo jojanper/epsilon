@@ -84,6 +84,15 @@
         </draal-expand-item>
       </div>
     </div>
+
+    <draal-audio-player
+      class="p-3 mb-4 w-75 mx-auto elevation-2"
+      :name="url"
+      :url="url"
+      :events="eventPos"
+    >
+      <template v-slot:item="{ event }">Position: {{ event }}s</template>
+    </draal-audio-player>
   </div>
 </template>
 
@@ -97,6 +106,8 @@ import DraalAudioPlayer from '@/components/core/AudioPlayer.vue';
 import {
     getMediaDuration, BaseObservableObject, serializeObject, urlObject4Json
 } from '@/common/utils';
+
+const URL = 'http://codeskulptor-demos.commondatastorage.googleapis.com/GalaxyInvaders/theme_01.mp3';
 
 export default {
     name: 'DraalAppAudioHome',
@@ -131,7 +142,16 @@ export default {
             playerActivator: BaseObservableObject.createAsSubject(),
             playlistExport: null,
 
-            importData: []
+            importData: [],
+
+            url: URL,
+            eventPos: [
+                0.5,
+                2,
+                10,
+                70,
+                45
+            ]
         };
     },
     destroyed() {
