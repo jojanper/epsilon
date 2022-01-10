@@ -12,8 +12,44 @@
       class="mt-3 mr-3 ml-3"
     ></draal-breadcrumbs>
     <draal-notification></draal-notification>
-    <div class="container-fluid app-container">
-      <router-view />
+    <div class="app-container">
+      <div class="row row-offcanvas row-offcanvas-right">
+        <div
+          v-if="items.length"
+          class="col-xs-6 sidebar-offcanvas mt-3"
+        >
+          <v-navigation-drawer
+            floating
+            permanent
+            width="192"
+          >
+            <v-list
+              dense
+              rounded
+            >
+              <v-list-item
+                v-for="item in items"
+                :key="item.title"
+                link
+              >
+                <!--v-list-item-icon>
+                  <v-icon>{{ item.icon }}</v-icon>
+                </v-list-item-icon-->
+
+                <v-list-item-content>
+                  <v-list-item-title>{{ item.title }}</v-list-item-title>
+                </v-list-item-content>
+              </v-list-item>
+            </v-list>
+          </v-navigation-drawer>
+        </div>
+
+        <div class="col-md">
+          <div class="container-fluid">
+            <router-view />
+          </div>
+        </div>
+      </div>
     </div>
     <draal-footer></draal-footer>
   </v-app>
@@ -48,6 +84,22 @@ export default {
         if (!isElectron()) {
             // Start version check timer
             AppRefresh.init({ callback: this.checkVersion.bind(this) }).runCheck();
+        }
+    },
+
+    watch: {
+        $route(current) {
+            const route2 = this.$router.options.routes.find(route => route.path === current.path);
+
+            console.log(route2);
+
+            /*
+            if (route && Array.isArray(route.children)) {
+                this.children = route.children
+            } else if (route) {
+                this.children = []
+            }
+            */
         }
     },
 
@@ -94,6 +146,11 @@ export default {
                     value: 'datetime',
                     width: '15%'
                 }
+            ],
+
+            items: [
+                { title: 'Home', icon: 'mdi-view-dashboard' },
+                { title: 'About', icon: 'mdi-forum' }
             ]
         };
     },
