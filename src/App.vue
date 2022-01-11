@@ -16,12 +16,12 @@
       <div class="row row-offcanvas row-offcanvas-right">
         <div
           v-if="items.length"
-          class="col-xs-6 sidebar-offcanvas mt-3"
+          class="col-xs-6 sidebar-offcanvas mt-3 ml-3"
         >
           <v-navigation-drawer
             floating
             permanent
-            width="192"
+            width="160"
           >
             <v-list
               dense
@@ -93,6 +93,22 @@ export default {
 
             console.log(route2);
 
+            this.items.splice(0, this.items.length);
+            if (route2 && route2.children) {
+                if (route2 && Array.isArray(route2.children)) {
+                    // route2.children.forEach()
+                    route2.children.forEach(item => {
+                        const title = item.meta.breadcrumb;
+                        console.log(item.meta, title);
+                        this.items.push({ title });
+                    });
+                    /*
+                    this.items.push({ title: 'Home', icon: 'mdi-view-dashboard' });
+                    this.items.push({ title: 'About', icon: 'mdi-forum' });
+                    */
+                }
+            }
+
             /*
             if (route && Array.isArray(route.children)) {
                 this.children = route.children
@@ -149,8 +165,10 @@ export default {
             ],
 
             items: [
+                /*
                 { title: 'Home', icon: 'mdi-view-dashboard' },
                 { title: 'About', icon: 'mdi-forum' }
+                */
             ]
         };
     },
