@@ -2,10 +2,23 @@
   <div v-if="breadcrumbs.length">
     <ol class="breadcrumb">
       <li class="breadcrumb-item">
-        <router-link exact-active-class active-class :to="{ name: homeRouteName }">{{ homeName }}</router-link>
-      </li>
-      <li v-for="(data, i) in breadcrumbs" :key="i" class="breadcrumb-item">
         <router-link
+          exact-active-class
+          active-class
+          :to="{ name: homeRouteName }"
+        >{{ homeName }}</router-link>
+      </li>
+      <li
+        v-for="(data, i) in breadcrumbs"
+        :key="i"
+        class="breadcrumb-item"
+      >
+        <a
+          style="cursor: default"
+          v-if="i === breadcrumbs.length - 1"
+        >{{ getDisplayName(data.meta) }}</a>
+        <router-link
+          v-else
           exact-active-class
           active-class
           :to="{ name: data.name, params: $route.params }"
