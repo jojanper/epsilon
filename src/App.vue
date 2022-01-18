@@ -12,18 +12,14 @@
       class="mt-3 mr-3 ml-3"
     ></draal-breadcrumbs>
     <draal-notification />
-    <div class="app-container">
-      <div class="row row-offcanvas row-offcanvas-right">
-        <div class="col-xs-6 sidebar-offcanvas mt-3 ml-3">
-          <draal-side-menu />
-        </div>
-
-        <div class="col-md">
-          <div class="container-fluid">
-            <router-view />
-          </div>
-        </div>
-      </div>
+    <div class="app-container container-fluid">
+      <draal-content-view
+        wrapper-cls="row row-offcanvas row-offcanvas-right"
+        sidemenu-cls="col-xs sidebar-offcanvas"
+        content-cls="col-md"
+      >
+        <router-view />
+      </draal-content-view>
     </div>
     <draal-footer />
   </v-app>
@@ -34,7 +30,7 @@ import DraalHeader from '@/components/app/Header.vue';
 import DraalFooter from '@/components/app/Footer.vue';
 import DraalNotification from '@/components/app/Notification.vue';
 import DraalBreadcrumbs from '@/components/app/Breadcrumbs.vue';
-import DraalSideMenu from '@/components/app/Sidemenu.vue';
+import DraalContentView from '@/components/app/Content.vue';
 import DraalGo2Top from '@/components/core/utils/Gotop.vue';
 import AppRefresh from '@/common/utils/refresh';
 import { isElectron } from '@/common/utils';
@@ -49,9 +45,8 @@ export default {
         DraalNotification,
         DraalGo2Top,
         DraalBreadcrumbs,
-        DraalSideMenu
+        DraalContentView
     },
-
     created() {
         // Get and check initial version
         this.checkVersion();
@@ -62,7 +57,6 @@ export default {
             AppRefresh.init({ callback: this.checkVersion.bind(this) }).runCheck();
         }
     },
-
     data() {
         return {
             home: CONFIG.home,
@@ -109,7 +103,6 @@ export default {
             ]
         };
     },
-
     methods: {
         ...appActions
     }
