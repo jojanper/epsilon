@@ -12,12 +12,8 @@
       class="mt-3 mr-3 ml-3"
     ></draal-breadcrumbs>
     <draal-notification />
-    <div class="app-container container-fluid">
-      <draal-content-view
-        wrapper-cls="row row-offcanvas row-offcanvas-right"
-        sidemenu-cls="col-xs sidebar-offcanvas"
-        content-cls="col-md"
-      >
+    <div class="app-container mr-3 ml-3">
+      <draal-content-view>
         <router-view />
       </draal-content-view>
     </div>

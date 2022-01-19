@@ -1,11 +1,10 @@
 <template>
-  <div>
+  <div v-if="hasSideMenu">
     <v-navigation-drawer
       floating
       permanent
       :width="menuWidth"
-      v-if="hasSideMenu"
-      class="hidden-sm-and-down"
+      v-if="!mobile"
     >
       <v-list
         dense
@@ -22,35 +21,30 @@
                 exact-active-class
                 active-class
                 :to="{ name: item.name, params: $route.params }"
-              >{{ item.title }}</router-link>
+              >{{ item.title }} 3</router-link>
             </v-list-item-title>
           </v-list-item-content>
         </v-list-item>
       </v-list>
     </v-navigation-drawer>
-    <!-- https://codepen.io/seriawei/pen/rjqMQN -->
-    <div class="hidden-md-and-up nav-wrapper">
+
+    <div
+      v-else
+      class="nav-wrapper"
+    >
       <ul>
         <li
-          v-for="(item, i) in items"
+          v-for="(item, i) in sideMenu"
           :key="i"
           class="mt-2"
-        >{{item}}</li>
+        >
+          <router-link
+            exact-active-class
+            active-class
+            :to="{ name: item.name, params: $route.params }"
+          >{{ item.title }} 2</router-link>
+        </li>
       </ul>
-      <!--ul>
-        <li><a href="#home">Home</a></li>
-        <li><a href="#news">News</a></li>
-        <li><a href="#contact">Contact</a></li>
-        <li><a href="#about">About</a></li>
-        <li><a href="#home">Home</a></li>
-        <li><a href="#news">News</a></li>
-        <li><a href="#contact">Contact</a></li>
-        <li><a href="#about">About</a></li>
-        <li><a href="#home">Home</a></li>
-        <li><a href="#news">News</a></li>
-        <li><a href="#contact">Contact</a></li>
-        <li><a href="#about">About</a></li>
-      </ul-->
     </div>
   </div>
 </template>
@@ -61,19 +55,16 @@
  */
 export default {
     name: 'DraalSideMenu',
+    props: {
+        mobile: {
+            type: Boolean,
+            required: false,
+            default: false
+        }
+    },
     data() {
         return {
-            menuWidth: 160,
-            items: [
-                'A',
-                'B',
-                'C',
-                'D',
-                'E',
-                'F',
-                'G',
-                'H'
-            ]
+            menuWidth: 160
         };
     },
     computed: {
@@ -106,44 +97,22 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-
-.nav-wrapper{
+.nav-wrapper {
     overflow: hidden;
 
-/*
     ul {
-  list-style-type: none;
-  margin: 0;
-  padding: 0;
-  overflow: hidden;
-}
-
-li {
-  float: left;
-}
-
-li a {
-  display: block;
-  text-align: center;
-  padding: 16px;
-  text-decoration: none;
-}
-*/
-
-    ul{
         text-align:center;
         white-space: nowrap;
         overflow-x: auto;
         overflow-y: hidden;
-        // padding-bottom: 0px;
-        margin-bottom: 0px;
+        padding-bottom: 50px;
+        margin-bottom: -50px;
 
-    li {
-        list-style:none;
-        display:inline-block;
-        margin-right: 10px;
+        li {
+            list-style:none;
+            display:inline-block;
+            margin-right: 10px;
+        }
     }
-}
-
 }
 </style>
