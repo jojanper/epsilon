@@ -16,12 +16,12 @@
           link
         >
           <v-list-item-content>
-            <v-list-item-title>
+            <v-list-item-title class="side-menu-title">
               <router-link
                 exact-active-class
                 active-class
                 :to="{ name: item.name, params: $route.params }"
-              >{{ item.title }} 3</router-link>
+              >{{ item.title }}</router-link>
             </v-list-item-title>
           </v-list-item-content>
         </v-list-item>
@@ -42,7 +42,7 @@
             exact-active-class
             active-class
             :to="{ name: item.name, params: $route.params }"
-          >{{ item.title }} 2</router-link>
+          >{{ item.title }}</router-link>
         </li>
       </ul>
     </div>
@@ -74,14 +74,10 @@ export default {
 
         sideMenu() {
             const menus = [];
-            const route = this.getChildRoutes();
-
-            if (route) {
-                route.children.forEach(item => {
-                    const title = item.meta.breadcrumb;
-                    menus.push({ title, name: item.name });
-                });
-            }
+            this.getChildRoutes().children.forEach(item => {
+                const title = item.meta.breadcrumb;
+                menus.push({ title, name: item.name });
+            });
 
             return menus;
         }
