@@ -17,7 +17,7 @@
               :ext-data="{ versions: data }"
             >
               <template v-slot:icon-right>
-                <div class="w-50 mt-8">
+                <div class="w-50 mt-8 float-left">
                   <select-input
                     :placeholder="$t('fileUtils.select')"
                     :value="data"

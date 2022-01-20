@@ -44,6 +44,33 @@ export default {
                     ]
                 },
                 {
+                    text: 'Fuuas',
+                    active: false,
+                    children: [
+                        {
+                            text: 'AA',
+                            active: false
+                        },
+                        {
+                            text: 'BB',
+                            active: false
+                        }
+                        /*
+                        ,
+                        {
+                            text: 'C',
+                            active: false,
+                            children: [
+                                {
+                                    text: 'A',
+                                    active: false
+                                }
+                            ]
+                        }
+                        */
+                    ]
+                },
+                {
                     text: 'Bar',
                     active: false
                 },
@@ -53,7 +80,7 @@ export default {
                 },
                 {
                     text: 'BarFoo',
-                    active: false
+                    active: true
                 }
             ]
         };

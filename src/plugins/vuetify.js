@@ -11,6 +11,7 @@ import Vuetify, {
     VListItemContent,
     VListItemTitle,
     VListItemAction,
+    VListItemIcon,
     VListGroup,
     VBtn,
     VFlex,
@@ -37,7 +38,8 @@ import Vuetify, {
     VRadio,
     VHover,
     VLabel,
-    VExpandTransition
+    VExpandTransition,
+    VNavigationDrawer
 } from 'vuetify/lib';
 
 import i18n from '../i18n';
@@ -56,6 +58,7 @@ export const CONFIG = {
         VListItemContent,
         VListItemTitle,
         VListItemAction,
+        VListItemIcon,
         VListGroup,
         VBtn,
         VFlex,
@@ -82,7 +85,8 @@ export const CONFIG = {
         VRadio,
         VHover,
         VLabel,
-        VExpandTransition
+        VExpandTransition,
+        VNavigationDrawer
     },
     global: {
         ripples: false

@@ -1,6 +1,6 @@
 <template>
   <v-app id="app">
-    <draal-go-2-top></draal-go-2-top>
+    <draal-go-2-top />
     <draal-header
       :homeRoute="home"
       :routes="header.routes"
@@ -11,11 +11,13 @@
       :home-name="homeName"
       class="mt-3 mr-3 ml-3"
     ></draal-breadcrumbs>
-    <draal-notification></draal-notification>
-    <div class="container-fluid app-container">
-      <router-view />
+    <draal-notification />
+    <div class="app-container mr-3 ml-3">
+      <draal-content-view>
+        <router-view />
+      </draal-content-view>
     </div>
-    <draal-footer></draal-footer>
+    <draal-footer />
   </v-app>
 </template>
 
@@ -24,6 +26,7 @@ import DraalHeader from '@/components/app/Header.vue';
 import DraalFooter from '@/components/app/Footer.vue';
 import DraalNotification from '@/components/app/Notification.vue';
 import DraalBreadcrumbs from '@/components/app/Breadcrumbs.vue';
+import DraalContentView from '@/components/app/Content.vue';
 import DraalGo2Top from '@/components/core/utils/Gotop.vue';
 import AppRefresh from '@/common/utils/refresh';
 import { isElectron } from '@/common/utils';
@@ -37,9 +40,9 @@ export default {
         DraalFooter,
         DraalNotification,
         DraalGo2Top,
-        DraalBreadcrumbs
+        DraalBreadcrumbs,
+        DraalContentView
     },
-
     created() {
         // Get and check initial version
         this.checkVersion();
@@ -50,7 +53,6 @@ export default {
             AppRefresh.init({ callback: this.checkVersion.bind(this) }).runCheck();
         }
     },
-
     data() {
         return {
             home: CONFIG.home,
@@ -97,7 +99,6 @@ export default {
             ]
         };
     },
-
     methods: {
         ...appActions
     }
