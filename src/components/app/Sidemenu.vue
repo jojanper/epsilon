@@ -64,17 +64,30 @@ export default {
     },
     data() {
         return {
-            menuWidth: 160
+            menuWidth: 160,
+            menus: null
         };
     },
+    /*
+    watch: {
+        $route() {
+            console.log('ROUTE CHANGED');
+        }
+    },
+    */
     computed: {
         hasSideMenu() {
-            return this.getChildRoutes();
+            console.log('HEP');
+            const route = this.getChildRoutes2(true);
+            console.log(route);
+            return route;
+            // return this.getChildRoutes();
         },
 
         sideMenu() {
+            console.log('HOP');
             const menus = [];
-            this.getChildRoutes().children.forEach(item => {
+            this.getChildRoutes2(false).forEach(item => {
                 const title = item.meta.breadcrumb;
                 menus.push({ title, name: item.name });
             });
@@ -83,10 +96,59 @@ export default {
         }
     },
     methods: {
+        getChildRoutes2(status) {
+            return !status ? this.menus : this.getChildRoutes();
+        },
+
         getChildRoutes() {
+            /*
+            function recursiveChildrenSearch(routes, name) {
+  for (let route of routes) {
+    if (route.name === name)
+      return route.children;
+    else if (route.children.length > 0)
+      return recursiveChildrenSearch(route.children, name);
+  }
+}
+            */
+
+            let buildPath = '';
+            let { routes } = this.$router.options;
+            this.$route.matched.forEach(item => {
+                // buildPath = index === 0 ? buildPath : `${buildPath}/${item.path}`;
+
+                // console.log(index, item, routes, buildPath);
+
+                routes = routes.find(r => `${buildPath}${r.path}` === item.path);
+                // console.log(routes);
+                if (routes) {
+                    buildPath = `${buildPath}${routes.path}/`;
+                    routes = routes.children;
+                }
+
+                // console.log(routes, buildPath);
+            });
+            console.log('RESULTS');
+            // console.log(routes);
+
+            this.menus = null;
+
+            if (routes && Array.isArray(routes)) {
+                this.menus = routes.filter(item => !item.path.includes(':'));
+                return this.menus;
+            }
+
+            return null;
+
+            /*
             const current = this.$route;
+            console.log(current);
+            console.log(current.path, this.$router.options.routes);
+            console.log(this.$router);
             const route = this.$router.options.routes.find(r => r.path === current.path);
+            console.log(route);
             return route && Array.isArray(route.children) ? route : null;
+            */
         }
     }
 };

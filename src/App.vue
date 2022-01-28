@@ -64,39 +64,7 @@ export default {
             footer: {
                 link: 'https://github.com/jojanper/epsilon',
                 name: 'Epsilon powered by Vue'
-            },
-
-            data: [],
-            chart: [],
-            quote: {},
-
-            search: '',
-            headers: [
-                {
-                    text: 'Source',
-                    align: 'left',
-                    filterable: true,
-                    sortable: true,
-                    value: 'source',
-                    width: '20%'
-                },
-                {
-                    text: 'Summary',
-                    align: 'left',
-                    filterable: true,
-                    sortable: true,
-                    value: 'headline',
-                    width: '50%'
-                },
-                {
-                    text: 'Date',
-                    align: 'left',
-                    filterable: true,
-                    sortable: true,
-                    value: 'datetime',
-                    width: '15%'
-                }
-            ]
+            }
         };
     },
     methods: {
