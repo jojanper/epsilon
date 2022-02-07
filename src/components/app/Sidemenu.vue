@@ -60,11 +60,15 @@ export default {
             type: Boolean,
             required: false,
             default: false
+        },
+        menuWidth: {
+            type: Number,
+            required: false,
+            default: 160
         }
     },
     data() {
         return {
-            menuWidth: 160,
             menus: null
         };
     },
@@ -77,15 +81,16 @@ export default {
     */
     computed: {
         hasSideMenu() {
-            console.log('HEP');
-            const route = this.getChildRoutes2(true);
-            console.log(route);
-            return route;
+            return this.getChildRoutes2(true);
+            // console.log('HEP');
+            // const route = this.getChildRoutes2(true);
+            // console.log(route);
+            // return route;
             // return this.getChildRoutes();
         },
 
         sideMenu() {
-            console.log('HOP');
+            // console.log('HOP');
             const menus = [];
             this.getChildRoutes2(false).forEach(item => {
                 const title = item.meta.breadcrumb;
@@ -112,12 +117,14 @@ export default {
 }
             */
 
+            // console.log(this.$route.matched);
+
             let buildPath = '';
             let { routes } = this.$router.options;
             this.$route.matched.forEach(item => {
                 // buildPath = index === 0 ? buildPath : `${buildPath}/${item.path}`;
 
-                // console.log(index, item, routes, buildPath);
+                // console.log(item, routes, buildPath);
 
                 routes = routes.find(r => `${buildPath}${r.path}` === item.path);
                 // console.log(routes);
@@ -128,7 +135,7 @@ export default {
 
                 // console.log(routes, buildPath);
             });
-            console.log('RESULTS');
+            // console.log('RESULTS');
             // console.log(routes);
 
             this.menus = null;
