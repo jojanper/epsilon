@@ -75,13 +75,13 @@ export default {
     computed: {
         // Check is side menus available
         hasSideMenu() {
-            return this.getChildRoutes2(true);
+            return this.getChildRoutes(true);
         },
 
         // Return side menu data for rendering
         sideMenu() {
             const menus = [];
-            this.getChildRoutes2(false).forEach(item => {
+            this.getChildRoutes(false).forEach(item => {
                 const title = item.meta.breadcrumb;
                 menus.push({ title, name: item.name });
             });
@@ -90,11 +90,11 @@ export default {
         }
     },
     methods: {
-        getChildRoutes2(status) {
-            return !status ? this.menus : this.getChildRoutes();
+        getChildRoutes(status) {
+            return !status ? this.menus : this.getInternalChildRoutes();
         },
 
-        getChildRoutes() {
+        getInternalChildRoutes() {
             let buildPath = '';
             let { routes } = this.$router.options;
 
