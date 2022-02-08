@@ -72,25 +72,14 @@ export default {
             menus: null
         };
     },
-    /*
-    watch: {
-        $route() {
-            console.log('ROUTE CHANGED');
-        }
-    },
-    */
     computed: {
+        // Check is side menus available
         hasSideMenu() {
             return this.getChildRoutes2(true);
-            // console.log('HEP');
-            // const route = this.getChildRoutes2(true);
-            // console.log(route);
-            // return route;
-            // return this.getChildRoutes();
         },
 
+        // Return side menu data for rendering
         sideMenu() {
-            // console.log('HOP');
             const menus = [];
             this.getChildRoutes2(false).forEach(item => {
                 const title = item.meta.breadcrumb;
@@ -106,37 +95,15 @@ export default {
         },
 
         getChildRoutes() {
-            /*
-            function recursiveChildrenSearch(routes, name) {
-  for (let route of routes) {
-    if (route.name === name)
-      return route.children;
-    else if (route.children.length > 0)
-      return recursiveChildrenSearch(route.children, name);
-  }
-}
-            */
-
-            // console.log(this.$route.matched);
-
             let buildPath = '';
             let { routes } = this.$router.options;
             this.$route.matched.forEach(item => {
-                // buildPath = index === 0 ? buildPath : `${buildPath}/${item.path}`;
-
-                // console.log(item, routes, buildPath);
-
                 routes = routes.find(r => `${buildPath}${r.path}` === item.path);
-                // console.log(routes);
                 if (routes) {
                     buildPath = `${buildPath}${routes.path}/`;
                     routes = routes.children;
                 }
-
-                // console.log(routes, buildPath);
             });
-            // console.log('RESULTS');
-            // console.log(routes);
 
             this.menus = null;
 
@@ -146,16 +113,6 @@ export default {
             }
 
             return null;
-
-            /*
-            const current = this.$route;
-            console.log(current);
-            console.log(current.path, this.$router.options.routes);
-            console.log(this.$router);
-            const route = this.$router.options.routes.find(r => r.path === current.path);
-            console.log(route);
-            return route && Array.isArray(route.children) ? route : null;
-            */
         }
     }
 };
