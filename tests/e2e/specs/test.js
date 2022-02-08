@@ -69,7 +69,7 @@ describe('Home page', () => {
 
     it('exists', () => {
         cy.visit(homeUrl);
-        cy.contains('h1', homePageTitle);
+        cy.get('.home').should('have.length', 1);
     });
 });
 
