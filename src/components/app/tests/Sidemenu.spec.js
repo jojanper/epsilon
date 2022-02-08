@@ -5,7 +5,7 @@ import DraalSideMenu from '../Sidemenu.vue';
 const $route = {
     path: '/',
     matched: [{
-        name: 'somepage',
+        path: '/',
         meta: {
             breadcrumb: 'Some Page'
         }
@@ -19,11 +19,13 @@ const $router = {
                 path: '/',
                 children: [
                     {
+                        path: 'link1',
                         meta: {
                             breadcrumb: 'Link 1'
                         }
                     },
                     {
+                        path: 'link2',
                         meta: {
                             breadcrumb: 'Link 2'
                         }

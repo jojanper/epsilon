@@ -107,7 +107,7 @@ import {
     getMediaDuration, BaseObservableObject, serializeObject, urlObject4Json
 } from '@/common/utils';
 
-const URL = 'http://codeskulptor-demos.commondatastorage.googleapis.com/GalaxyInvaders/theme_01.mp3';
+const MP3 = 'http://codeskulptor-demos.commondatastorage.googleapis.com/GalaxyInvaders/theme_01.mp3';
 
 export default {
     name: 'DraalAppAudioHome',
@@ -144,7 +144,7 @@ export default {
 
             importData: [],
 
-            url: URL,
+            url: MP3,
             eventPos: [
                 0.5,
                 2,
@@ -248,6 +248,8 @@ export default {
             const maxPeaks = [[], []];
             const minVal = new Array(numberOfChannels);
             const maxVal = new Array(numberOfChannels);
+
+            console.log(numberOfChannels);
 
             for (let channel = 0; channel < numberOfChannels; channel++) {
                 minVal[channel] = Infinity;

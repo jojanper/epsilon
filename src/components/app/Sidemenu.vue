@@ -60,21 +60,28 @@ export default {
             type: Boolean,
             required: false,
             default: false
+        },
+        menuWidth: {
+            type: Number,
+            required: false,
+            default: 160
         }
     },
     data() {
         return {
-            menuWidth: 160
+            menus: null
         };
     },
     computed: {
+        // Check is side menus available
         hasSideMenu() {
-            return this.getChildRoutes();
+            return this.getChildRoutes(true);
         },
 
+        // Return side menu data for rendering
         sideMenu() {
             const menus = [];
-            this.getChildRoutes().children.forEach(item => {
+            this.getChildRoutes(false).forEach(item => {
                 const title = item.meta.breadcrumb;
                 menus.push({ title, name: item.name });
             });
@@ -83,10 +90,32 @@ export default {
         }
     },
     methods: {
-        getChildRoutes() {
-            const current = this.$route;
-            const route = this.$router.options.routes.find(r => r.path === current.path);
-            return route && Array.isArray(route.children) ? route : null;
+        getChildRoutes(status) {
+            return !status ? this.menus : this.getInternalChildRoutes();
+        },
+
+        getInternalChildRoutes() {
+            let buildPath = '';
+            let { routes } = this.$router.options;
+
+            // Locate the child route that matches the current route
+            this.$route.matched.forEach(item => {
+                routes = routes.find(r => `${buildPath}${r.path}` === item.path);
+                if (routes) {
+                    buildPath = `${buildPath}${routes.path}/`;
+                    routes = routes.children;
+                }
+            });
+
+            this.menus = null;
+
+            // Exclude child routes that are parameter dependent
+            if (routes && Array.isArray(routes)) {
+                this.menus = routes.filter(item => !item.path.includes(':'));
+                return this.menus;
+            }
+
+            return null;
         }
     }
 };

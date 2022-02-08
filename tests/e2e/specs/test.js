@@ -2,9 +2,12 @@
 // https://docs.cypress.io/api/introduction/api.html
 
 const homeUrl = '#/';
+const examplesUrl = '#/examples';
+const demosUrl = '#/demos';
+const utilsUrl = '#/utils';
+const audioUrl = '#/audio';
 const aboutUrl = '#/about';
 
-const homePageTitle = 'Epsilon';
 const formPageTitle = 'Component examples';
 const aboutTitle = 'This is an about page';
 
@@ -69,7 +72,39 @@ describe('Home page', () => {
 
     it('exists', () => {
         cy.visit(homeUrl);
-        cy.contains('h1', homePageTitle);
+        cy.get('.home').should('have.length', 1);
+    });
+});
+
+describe('Examples page', () => {
+    beforeEach(() => setUp(cy));
+
+    it('exists', () => {
+        cy.visit(examplesUrl);
+    });
+});
+
+describe('Demos page', () => {
+    beforeEach(() => setUp(cy));
+
+    it('exists', () => {
+        cy.visit(demosUrl);
+    });
+});
+
+describe('Utils page', () => {
+    beforeEach(() => setUp(cy));
+
+    it('exists', () => {
+        cy.visit(utilsUrl);
+    });
+});
+
+describe('Audio page', () => {
+    beforeEach(() => setUp(cy));
+
+    it('exists', () => {
+        cy.visit(audioUrl);
     });
 });
 
