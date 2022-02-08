@@ -97,6 +97,8 @@ export default {
         getChildRoutes() {
             let buildPath = '';
             let { routes } = this.$router.options;
+
+            // Locate the child route that matches the current route
             this.$route.matched.forEach(item => {
                 routes = routes.find(r => `${buildPath}${r.path}` === item.path);
                 if (routes) {
@@ -107,6 +109,7 @@ export default {
 
             this.menus = null;
 
+            // Exclude child routes that are parameter dependent
             if (routes && Array.isArray(routes)) {
                 this.menus = routes.filter(item => !item.path.includes(':'));
                 return this.menus;
