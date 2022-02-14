@@ -112,7 +112,7 @@ export default {
             // Exclude child routes that are parameter dependent
             if (routes && Array.isArray(routes)) {
                 this.menus = routes.filter(item => !item.path.includes(':'));
-                return this.menus;
+                return this.menus.length ? this.menus : null;
             }
 
             return null;

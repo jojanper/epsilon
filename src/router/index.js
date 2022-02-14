@@ -28,9 +28,6 @@ const DOGS = {
     ]
 };
 
-DOGS.children[0].children[0].component = DogsView;
-DOGS.children[0].children[0].children[0].component = DogsView;
-
 const routes = [
     {
         ...CONFIG.routes[0],

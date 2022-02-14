@@ -7,25 +7,18 @@
       @clicked="helpDialog=true"
     ></draal-tooltip>
 
-    <draal-dialog
-      :model="helpDialog"
+    <draal-simple-dialog
+      v-model="helpDialog"
       :title="dialogTitle"
-      maxWidth="750"
-      @close-dialog="helpDialog=false"
-    >
-      <template v-slot:body>
-        <v-card-text
-          class="text-left"
-          v-html="dialogContent"
-        ></v-card-text>
-      </template>
-    </draal-dialog>
+      :content="dialogContent"
+      width=500
+    ></draal-simple-dialog>
   </div>
 </template>
 
 <script>
 import DraalTooltip from './Tooltip.vue';
-import DraalDialog from './Dialog.vue';
+import DraalSimpleDialog from './SimpleDialog.vue';
 
 /**
  * Icon that on click opens dialog.
@@ -36,7 +29,7 @@ export default {
     name: 'DraalIconDialog',
     components: {
         DraalTooltip,
-        DraalDialog
+        DraalSimpleDialog
     },
     props: {
         /**
