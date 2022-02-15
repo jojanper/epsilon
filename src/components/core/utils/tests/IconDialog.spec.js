@@ -12,7 +12,7 @@ describe('DraalIconDialog', () => {
             dialogTitle: 'Tile',
             dialogContent: 'Content',
             ...propsData
-        }, { stubs: { DraalDialog: true } });
+        }, { stubs: { DraalSimpleDialog: true } });
     }
 
     it('icon is clicked', async () => {

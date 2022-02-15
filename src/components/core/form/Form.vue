@@ -53,20 +53,12 @@
       </form>
     </ValidationObserver>
 
-    <draal-dialog
-      :model="helpDialog"
+    <draal-simple-dialog
+      v-model="helpDialog"
       :title="helpText.title"
-      @close-dialog="helpDialog=false"
-      bodyCls="text-left"
-      maxWidth="500"
-    >
-      <template v-slot:body>
-        <v-card-text
-          class="text-left"
-          v-html="helpText.body"
-        ></v-card-text>
-      </template>
-    </draal-dialog>
+      :content="helpText.body"
+      width=500
+    ></draal-simple-dialog>
   </div>
 </template>
 
@@ -74,7 +66,7 @@
 import { ValidationObserver } from 'vee-validate';
 
 import DraalFormInput from './FormInput.vue';
-import DraalDialog from '../utils/Dialog.vue';
+import DraalSimpleDialog from '../utils/SimpleDialog.vue';
 import { appComputed } from '@/store/helpers';
 import {
     getDataField, resetDataBySchema, slotMapping, debounce, isObject
@@ -85,7 +77,7 @@ export default {
     components: {
         ValidationObserver,
         DraalFormInput,
-        DraalDialog
+        DraalSimpleDialog
     },
     props: {
         schema: {

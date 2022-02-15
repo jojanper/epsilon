@@ -14,12 +14,21 @@
         :name="getName(index)"
         v-bind="item"
         @input="(data) => setInputValue(data, index)"
+        @form-input-help="() => inputHelp(index)"
       ></select-input>
     </div>
+
+    <draal-simple-dialog
+      v-model="helpDialog"
+      :title="helpText.title"
+      :content="helpText.body"
+      width=500
+    ></draal-simple-dialog>
   </div>
 </template>
 
 <script>
+import DraalSimpleDialog from '@/components/core/utils/SimpleDialog.vue';
 import SelectInput from '@/components/core/form/inputs/SelectInput.vue';
 
 /**
@@ -31,7 +40,8 @@ import SelectInput from '@/components/core/form/inputs/SelectInput.vue';
 export default {
     name: 'DraalMultiStageSelect',
     components: {
-        SelectInput
+        SelectInput,
+        DraalSimpleDialog
     },
     props: {
         /**
@@ -76,7 +86,12 @@ export default {
         }
 
         return {
-            currentSelect
+            currentSelect,
+            helpDialog: false,
+            helpText: {
+                title: null,
+                body: null
+            }
         };
     },
     methods: {
@@ -97,6 +112,12 @@ export default {
                  */
                 this.$emit('selected', index, data);
             }
+        },
+
+        inputHelp(index) {
+            // Show the help data
+            this.helpText = this.configData[index].help;
+            this.helpDialog = true;
         }
     }
 };

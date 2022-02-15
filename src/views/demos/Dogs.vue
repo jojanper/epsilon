@@ -1,14 +1,6 @@
 <template>
   <div class="mt-3 mb-3">
     <draal-spinner :state="processing">
-      <draal-tooltip
-        position="top"
-        :name="$t('dogApiPage.quickHelp')"
-        classes="pl-3 ml-3 mb-3"
-        icon="mdi-information-outline"
-        @clicked="helpDialog=true"
-      ></draal-tooltip>
-
       <!-- Select dog breed and possibly sub-breed -->
       <draal-multi-stage-select
         :configData="selectData"
@@ -34,38 +26,19 @@
           ></v-carousel-item>
         </v-carousel>
       </div>
-
-      <!-- Help dialog -->
-      <draal-dialog
-        :model="helpDialog"
-        :title="$t('dogApiPage.helpContentTitle')"
-        maxWidth="350"
-        @close-dialog="helpDialog = false"
-      >
-        <template v-slot:body>
-          <v-card-text
-            class="text-left"
-            v-html="$t('dogApiPage.helpContent')"
-          ></v-card-text>
-        </template>
-      </draal-dialog>
     </draal-spinner>
   </div>
 </template>
 
 <script>
-import DraalSpinner from '../../components/core/utils/Spinner.vue';
-import DraalDialog from '../../components/core/utils/Dialog.vue';
-import DraalTooltip from '../../components/core/utils/Tooltip.vue';
-import DraalMultiStageSelect from '../../components/core/MultiStageSelect.vue';
+import DraalSpinner from '@/components/core/utils/Spinner.vue';
+import DraalMultiStageSelect from '@/components/core/MultiStageSelect.vue';
 import { DogApi } from '@/common/api';
 
 export default {
     name: 'DraalAppDogs',
     components: {
         DraalSpinner,
-        DraalDialog,
-        DraalTooltip,
         DraalMultiStageSelect
     },
     data() {
@@ -84,7 +57,11 @@ export default {
                 {
                     placeholder: this.$t('dogApiPage.breedPlaceHolder'),
                     label: this.$t('dogApiPage.breedLabel'),
-                    outlined: true
+                    outlined: true,
+                    help: {
+                        title: this.$t('dogApiPage.quickHelp'),
+                        body: this.$t('dogApiPage.helpContent')
+                    }
                 },
                 {
                     placeholder: this.$t('dogApiPage.subBreedPlaceHolder'),
@@ -123,9 +100,13 @@ export default {
 
             if (index === 0) {
                 this.processing = true;
+
+                // Clear previous data
+                this.selectedData[1] = data;
+                this.listData[1].splice(0, this.listData[1].length);
+
                 if (this.breeds[data].length) {
-                    // Clear previous sub-breeds and select new sub-breeds
-                    this.listData[1].splice(0, this.listData[1].length);
+                    // Select new sub-breeds
                     this.breeds[data].forEach(subBreed => this.listData[1].push(subBreed));
                     this.processing = false;
                 } else {
