@@ -26,7 +26,7 @@ describe('DraalGo2Top', () => {
 
             // When component is clicked
             const el = wrapper.findAll('.go-top');
-            spyOn(window, 'scrollTo');
+            jest.spyOn(window, 'scrollTo');
             el.at(0).trigger('click');
 
             // Screen is scrolled back to top

@@ -15,8 +15,7 @@ const TEXT_SCHEMA = [{
 
 const OPTIONS = {
     submit: 'Submit',
-    clear: 'Clear',
-    debouncedDisabled: 0
+    clear: 'Clear'
 };
 
 const TEXT_VALUE = 'My text';
@@ -47,6 +46,7 @@ describe('DraalFormGenerator', () => {
         const props = {
             schema: TEXT_SCHEMA,
             options: OPTIONS,
+            debouncedDisabled: 0,
             value: {
                 text: null
             }
@@ -96,8 +96,8 @@ describe('DraalFormGenerator', () => {
         // ------
 
         // Form is submitted
-        await wrapper.findAll('button').at(0).trigger('click');
         await flushTestAll();
+        await wrapper.findAll('button').at(0).trigger('click');
 
         // Data is valid
         const submitData = wrapper.emitted().submit[0][0];

@@ -57,15 +57,17 @@ describe('Notification module', () => {
         expect(getNotifications().length).toEqual(0);
     });
 
-    it('notification is removed with timeout', async done => {
+    it('notification is removed with timeout', async () => {
         const options = { timeout: 1000 };
         await verifyNotification('Error', 'Errr message', options);
 
         expect(getNotifications().length).toEqual(1);
 
-        setTimeout(() => {
-            expect(getNotifications().length).toEqual(0);
-            done();
-        }, options.timeout);
+        return new Promise(resolve => {
+            setTimeout(() => {
+                expect(getNotifications().length).toEqual(0);
+                resolve();
+            }, options.timeout);
+        });
     });
 });

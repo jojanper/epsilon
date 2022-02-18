@@ -131,3 +131,20 @@ global.flushTestAll = async (allTimers = false) => {
 };
 
 window.URL.createObjectURL = function createObjectURL() { };
+
+const noop = () => { };
+Object.defineProperty(window, 'scrollTo', { value: noop, writable: true });
+
+const mockResponse = jest.fn();
+Object.defineProperty(window, 'location', {
+    value: {
+        hash: {
+            endsWith: mockResponse,
+            includes: mockResponse
+        },
+        assign: mockResponse
+    },
+    writable: true
+});
+
+Object.defineProperty(window.location, 'reload', { value: noop, writable: true });
