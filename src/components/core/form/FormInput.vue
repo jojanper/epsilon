@@ -101,10 +101,12 @@ export default {
              * @param targets Requested inputs from related input components.
              * @param cb Callback for data updates.
              */
-            this.$emit('data-rel-update',
+            this.$emit(
+                'data-rel-update',
                 this.$attrs.name,
                 this.$attrs.dataRelTarget,
-                this.dataUpdate.bind(this));
+                this.dataUpdate.bind(this)
+            );
         }
     },
     destroyed() {

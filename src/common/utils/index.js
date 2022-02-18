@@ -89,9 +89,13 @@ export function resetDataBySchema(schema, data, prefix, resetCb) {
 export function slotMapping(inputSlots, schema, prefix, childPrefix, componentPrefix) {
     schema.forEach(entry => {
         if (entry.schema && entry.schema.length) {
-            slotMapping(inputSlots, entry.schema,
+            slotMapping(
+                inputSlots,
+                entry.schema,
                 `${prefix}${entry.name}.`, // Extend the name prefix
-                childPrefix, componentPrefix);
+                childPrefix,
+                componentPrefix
+            );
         } else {
             const slots = entry.customSlots || [];
             slots.forEach(column => inputSlots.push({
