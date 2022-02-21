@@ -7,7 +7,7 @@ describe('AppRefresh', () => {
         AppRefresh.clear();
     });
 
-    it('forced interval support', async done => {
+    it('forced interval support', async () => {
         let callCount = 0;
 
         // Timeout clearing succeeds (does not crash)
@@ -36,11 +36,9 @@ describe('AppRefresh', () => {
         // No callback is triggered since timers are not available
         await timer(150);
         expect(callCount).toEqual(2);
-
-        done();
     });
 
-    it('periodic interval support', async done => {
+    it('periodic interval support', async () => {
         let callCount = 0;
 
         // Timers check succeeds even though no timers are available
@@ -68,7 +66,5 @@ describe('AppRefresh', () => {
         // Timers check is executed and callback occurs
         AppRefresh.runCheck();
         expect(callCount).toEqual(2);
-
-        done();
     });
 });

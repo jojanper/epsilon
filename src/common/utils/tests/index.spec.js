@@ -138,7 +138,7 @@ describe('utils', () => {
         ]);
     });
 
-    it('readJson', async done => {
+    it('readJson', async () => {
         const json = { a: 'foo', b: [1, 2, 3] };
         const blob = new Blob([JSON.stringify(json, null, 4)], { type: 'application/json' });
 
@@ -151,8 +151,6 @@ describe('utils', () => {
         // Reading non-JSON file/blob fails
         const data2 = await readJson(blob2).catch(err => err);
         expect(data2.message).toEqual('Unexpected token T in JSON at position 0');
-
-        done();
     });
 
     it('serializeObject', () => {

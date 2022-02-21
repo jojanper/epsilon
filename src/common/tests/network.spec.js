@@ -65,7 +65,7 @@ describe('Network', () => {
         return obj;
     }
 
-    it('supports uploadFiles', async done => {
+    it('supports uploadFiles', async () => {
         let data;
 
         // File upload with progress callback
@@ -78,28 +78,30 @@ describe('Network', () => {
         const attachData = { test: 'test' };
         network.uploadFiles(url, ['this is another file'], attachData).subscribe(() => { });
 
-        moxios.wait(async () => {
-            const request = moxios.requests.at(0);
-            await request.respondWith(RESPONSE);
+        return new Promise(resolve => {
+            moxios.wait(async () => {
+                const request = moxios.requests.at(0);
+                await request.respondWith(RESPONSE);
 
-            // Data entries must match the expected and upload progress defined
-            const formData = request.config.data;
-            let obj = map2Object(formData);
-            expect(obj['files[0]']).toEqual('this is a file');
-            expect(request.config.onUploadProgress).toBeDefined();
-            expect(data.length).toEqual(1);
-            expect(data[0].id).toEqual(1);
+                // Data entries must match the expected and upload progress defined
+                const formData = request.config.data;
+                let obj = map2Object(formData);
+                expect(obj['files[0]']).toEqual('this is a file');
+                expect(request.config.onUploadProgress).toBeDefined();
+                expect(data.length).toEqual(1);
+                expect(data[0].id).toEqual(1);
 
-            const request2 = moxios.requests.at(1);
-            await request2.respondWith(RESPONSE);
+                const request2 = moxios.requests.at(1);
+                await request2.respondWith(RESPONSE);
 
-            // Data entries must match the expected and upload progress not defined
-            obj = map2Object(request2.config.data);
-            expect(obj['files[0]']).toEqual('this is another file');
-            expect(JSON.parse(obj.data)).toEqual({ test: 'test' });
-            expect(request2.config.onUploadProgress).toBeUndefined();
+                // Data entries must match the expected and upload progress not defined
+                obj = map2Object(request2.config.data);
+                expect(obj['files[0]']).toEqual('this is another file');
+                expect(JSON.parse(obj.data)).toEqual({ test: 'test' });
+                expect(request2.config.onUploadProgress).toBeUndefined();
 
-            done();
+                resolve();
+            });
         });
     });
 });

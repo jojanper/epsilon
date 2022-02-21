@@ -64,7 +64,7 @@ describe('DraalFileDialog', () => {
         // -----
 
         // WHEN opening file dialog
-        spyOn(wrapper.vm, 'clicked').and.callThrough();
+        jest.spyOn(wrapper.vm, 'clicked');
         await wrapper.setProps({ value: true });
 
         // AND click event occurs
