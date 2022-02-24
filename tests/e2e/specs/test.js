@@ -4,14 +4,13 @@
 const homeUrl = '#/';
 const examplesUrl = '#/examples';
 const demosUrl = '#/demos';
-const utilsUrl = '#/utils';
 const audioUrl = '#/audio';
 const aboutUrl = '#/about';
 
 const formPageTitle = 'Component examples';
 const aboutTitle = 'This is an about page';
 
-const URL_LINKS = 5;
+const URL_LINKS = 4;
 
 const IEX_API_CALL = {
     method: 'GET',
@@ -89,14 +88,6 @@ describe('Demos page', () => {
 
     it('exists', () => {
         cy.visit(demosUrl);
-    });
-});
-
-describe('Utils page', () => {
-    beforeEach(() => setUp(cy));
-
-    it('exists', () => {
-        cy.visit(utilsUrl);
     });
 });
 

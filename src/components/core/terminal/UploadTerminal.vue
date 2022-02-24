@@ -2,15 +2,11 @@
   <draal-spinner :state="processing">
     <p>{{ description }}</p>
     <div class="row">
-      <div class="col-md-1">
-        <draal-file-drop
-          @fileDrop="onDrop"
-          v-bind="$attrs"
-        ></draal-file-drop>
-      </div>
-      <div class="col-md-11">
-        <slot name=icon-right></slot>
-      </div>
+      <draal-file-drop
+        @fileDrop="onDrop"
+        v-bind="$attrs"
+      ></draal-file-drop>
+      <slot name=icon-right></slot>
     </div>
 
     <div v-if="terminalData.length">

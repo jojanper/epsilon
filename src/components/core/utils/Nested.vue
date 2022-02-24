@@ -7,33 +7,35 @@
         :key="i"
         class="ml-0"
       >
-        <!--v-list-item
-          @click.prevent
-          slot="activator"
-        >
-          <v-list-item-title class="text-left">{{node.text}}</v-list-item-title>
-        </v-list-item-->
-
         <div
           slot="activator"
           class="v-list-item pl-0 ml-0"
         >
-          {{node.text}}
+          <v-list-item>
+            <v-list-item-title style="flex: none;">{{node.text}}</v-list-item-title>
+          </v-list-item>
         </div>
 
         <draal-nested-view
-          class="pl-4 ml-4"
+          class="pl-2 ml-2"
           :nodes="node.children"
+          @selected="$emit('selected', i, node)"
         />
       </v-list-group>
-      <v-list-item
+      <v-list-group
         :key="i"
-        @click.prevent
+        append-icon=""
         v-else
-        class="ml-4"
       >
-        <v-list-item-title class="text-left">{{node.text}}</v-list-item-title>
-      </v-list-item>
+        <div
+          slot="activator"
+          class="v-list-item pl-0 ml-0"
+        >
+          <v-list-item @click="$emit('selected', i, node)">
+            <v-list-item-title class="text-left">{{node.text}}</v-list-item-title>
+          </v-list-item>
+        </div>
+      </v-list-group>
     </template>
   </v-list>
 </template>
@@ -41,12 +43,16 @@
 <script>
 export default {
     name: 'DraalNestedView',
-    props: ['nodes']
+    props: {
+        nodes: {
+            type: Array,
+            required: true
+        }
+    }
 };
 </script>
 
 <style scoped lang="scss">
-
 .v-list-group__header {
     padding-left: 0px !important;
 }

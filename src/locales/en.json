@@ -31,7 +31,6 @@
         "subBreedLabel": "Dog sub-breed"
     },
     "fileUtils": {
-        "title": "Media file summary",
         "text": "Extract media file info, select properties to include. Drop media file to icon",
         "select": "Included file properties"
     },

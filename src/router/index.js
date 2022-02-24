@@ -4,9 +4,8 @@ import NProgress from 'nprogress/nprogress';
 
 import { CONFIG } from './navigation';
 import AppRefresh from '@/common/utils/refresh';
-import DemosHomeView from '@/views/demos/DemosHome.vue';
+import DemosHomeView from '@/views/demos/Home.vue';
 import DogsView from '@/views/demos/Dogs.vue';
-import UtilsView from '@/views/demos/Utils.vue';
 import DraalAppIEX from '@/views/demos/IEX.vue';
 import ComponentExamples from '@/views/components/Examples.vue';
 import AboutView from '@/views/About.vue';
@@ -49,16 +48,11 @@ const routes = [
 
     {
         ...CONFIG.routes[3],
-        component: UtilsView
-    },
-
-    {
-        ...CONFIG.routes[4],
         component: AudioView
     },
 
     {
-        ...CONFIG.routes[5],
+        ...CONFIG.routes[4],
         component: AboutView
     },
 

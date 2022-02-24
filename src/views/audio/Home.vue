@@ -1,8 +1,11 @@
 <template>
-  <div>
+  <div class="mt-3 mb-3">
     <!--div class="mx-auto" style="width: 1000px; overflow-x: scroll; "-->
     <!--canvas height="256" width="4099" ref="canvas"></canvas-->
-    <div style="overflow:auto">
+    <div
+      style="overflow:auto"
+      v-on:wheel.prevent="handleWheel"
+    >
       <canvas ref="canvas"></canvas>
     </div>
     <!--/div-->
@@ -151,7 +154,11 @@ export default {
                 10,
                 70,
                 45
-            ]
+            ],
+
+            audioData: null,
+            zoomLevel: 1,
+            chunkSize: 128
         };
     },
     destroyed() {
@@ -204,6 +211,8 @@ export default {
             getMediaDuration(
                 files[0],
                 data => {
+                    this.audioData = data;
+
                     console.log(data);
                     // console.log(data.getChannelData(0));
 
@@ -215,7 +224,8 @@ export default {
                     this.audioPeaks({
                         length: data.length,
                         numberOfChannels: data.numberOfChannels,
-                        data: audio
+                        data: audio,
+                        chunkSize: this.chunkSize
                     });
                 },
                 console.log
@@ -238,11 +248,14 @@ export default {
             return dataLength;
         },
 
-        audioPeaks({ data, length, numberOfChannels }) {
+        audioPeaks({
+            data, length, numberOfChannels, chunkSize
+        }) {
             const INT8_MAX = 127;
             const INT8_MIN = -128;
             const scale = 1.0;
-            const chunkSize = 180;
+
+            // console.log(chunkSize, length / chunkSize, length / 25000);
 
             const minPeaks = [[], []];
             const maxPeaks = [[], []];
@@ -420,6 +433,46 @@ export default {
         setImportData(data) {
             this.importData.splice(0, this.importData.length);
             data.forEach(item => this.importData.push(item));
+        },
+
+        handleWheel(data) {
+            // console.log(data);
+            if (data.deltaY < 0) {
+                console.log('scrolling up');
+
+                this.zoomLevel += 1;
+
+                const audio = [];
+                for (let ch = 0; ch < this.audioData.numberOfChannels; ch++) {
+                    audio.push(this.audioData.getChannelData(ch));
+                }
+
+                this.audioPeaks({
+                    length: this.audioData.length,
+                    numberOfChannels: this.audioData.numberOfChannels,
+                    data: audio,
+                    chunkSize: this.chunkSize * this.zoomLevel
+                });
+            } else if (data.deltaY > 0) {
+                console.log('scrolling down');
+
+                this.zoomLevel -= 1;
+                if (this.zoomLevel < 1) {
+                    this.zoomLevel = 1;
+                }
+
+                const audio = [];
+                for (let ch = 0; ch < this.audioData.numberOfChannels; ch++) {
+                    audio.push(this.audioData.getChannelData(ch));
+                }
+
+                this.audioPeaks({
+                    length: this.audioData.length,
+                    numberOfChannels: this.audioData.numberOfChannels,
+                    data: audio,
+                    chunkSize: this.chunkSize * this.zoomLevel
+                });
+            }
         }
     }
 };
