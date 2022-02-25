@@ -56,6 +56,7 @@
     "eslint": "^8.9.0",
     "eslint-plugin-import": "^2.25.3",
     "eslint-plugin-vue": "^8.2.0",
+    "eslint-plugin-vuejs-accessibility": "^1.1.1",
     "flush-promises": "^1.0.2",
     "http-server": "latest",
     "jest": "^27.1.0",
