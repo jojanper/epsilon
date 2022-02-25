@@ -1,14 +1,21 @@
 <template>
   <div>
-    <v-icon v-if="icon" :color="color" @click="openDialog">{{ icon }}</v-icon>
-    <input
-      type="file"
-      ref="fileDialog"
-      v-bind="attrs"
-      class="d-none"
-      @click="clicked"
-      @change="selected"
-    />
+    <v-icon
+      v-if="icon"
+      :color="color"
+      @click="openDialog"
+    >{{ icon }}</v-icon>
+    <label for="hiddenInput">
+      <input
+        type="file"
+        ref="fileDialog"
+        v-bind="attrs"
+        class="d-none"
+        @click="clicked"
+        @change="selected"
+        id="hiddenInput"
+      />
+    </label>
   </div>
 </template>
 

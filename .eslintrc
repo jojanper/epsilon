@@ -6,6 +6,7 @@
     },
     "extends": [
         "plugin:vue/essential",
+        "plugin:vuejs-accessibility/recommended",
         "@vue/airbnb"
     ],
     "rules": {
@@ -54,6 +55,7 @@
         "vue/valid-v-on": 0,
         "vue/no-parsing-error": 0,
         "import/prefer-default-export": 0,
+        "no-promise-executor-return": 0,
         "no-underscore-dangle": [
             "error",
             {

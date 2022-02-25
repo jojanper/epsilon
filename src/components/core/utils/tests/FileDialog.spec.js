@@ -34,7 +34,8 @@ describe('DraalFileDialog', () => {
         const input = wrapper.find('input');
 
         // THEN multiple file can be selected
-        expect(input.html()).toEqual('<input type="file" multiple="multiple" class="d-none">');
+        const html = '<input type="file" id="hiddenInput" multiple="multiple" class="d-none">';
+        expect(input.html()).toEqual(html);
 
         // AND file dialog is open
         expect(wrapper.vm.open).toBeTruthy();

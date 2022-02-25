@@ -11,6 +11,7 @@
           v-on="on"
           class="float-left pointer-cursor"
           @click="fileDialog=true"
+          @keyup="fileDialog=true"
         >
           <draal-file-drop
             v-if="drag"
@@ -27,6 +28,7 @@
       v-else
       class="float-left pointer-cursor"
       @click="fileDialog=true"
+      @keyup="fileDialog=true"
     >
       <draal-file-drop
         v-if="drag"

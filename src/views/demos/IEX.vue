@@ -47,6 +47,7 @@
               :src="data.image"
               width="150"
               height="150"
+              alt="Image"
             />
           </div>
           <div class="col text-left">{{ data.summary }}</div>

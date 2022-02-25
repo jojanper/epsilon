@@ -3,7 +3,9 @@
     <audio
       :src="url"
       ref="audioplayer"
-    ></audio>
+    >
+      <track kind="captions" />
+    </audio>
 
     <div class="row">
       <div class="col pb-0">
