@@ -52,6 +52,8 @@ import DraalExampleIconDialog from './IconDialogExample.vue';
 import DraalExampleFileImport from './FileImportExample.vue';
 import DraalExampleFormTimeline from './timeline/View.vue';
 import DraalExampleAlerts from './AlertExample.vue';
+import DraalExampleMediaProperties from './MediaProperties.vue';
+import DraalExampleNested from './NestedExample.vue';
 
 const VIEWS = [
     {
@@ -86,6 +88,14 @@ const VIEWS = [
             {
                 title: 'Alerts & Notifications',
                 component: DraalExampleAlerts
+            },
+            {
+                title: 'Media file properties',
+                component: DraalExampleMediaProperties
+            },
+            {
+                title: 'Nested data',
+                component: DraalExampleNested
             }
         ]
     }
@@ -99,7 +109,9 @@ export default {
         DraalExampleIconDialog,
         DraalExampleFileImport,
         DraalExampleFormTimeline,
-        DraalExampleAlerts
+        DraalExampleAlerts,
+        DraalExampleMediaProperties,
+        DraalExampleNested
     },
     props: {
         vtab: {

@@ -26,8 +26,8 @@ describe('AppRefresh', () => {
         await timer(200);
         expect(callCount).toEqual(1);
 
-        // After 250ms more, callback is triggered
-        await timer(250);
+        // After 275ms more, callback is triggered
+        await timer(275);
         expect(callCount).toEqual(2);
 
         // Timers are cleared

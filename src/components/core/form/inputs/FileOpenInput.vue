@@ -92,7 +92,9 @@
       v-if="wavAudioRule"
       :src="fileSrc"
       ref="audio"
-    ></audio>
+    >
+      <track kind="captions" />
+    </audio>
 
     <!-- File dialog is also hidden -->
     <draal-file-dialog

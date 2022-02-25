@@ -25,11 +25,14 @@
         <div class="timeline-content">
           <!-- Validation via hidden input -->
           <ValidationProvider rules="required">
-            <input
-              class="d-none"
-              type="number"
-              v-model="dummyModel"
-            />
+            <label for="hiddenInput">
+              <input
+                class="d-none"
+                type="number"
+                v-model="dummyModel"
+                id="hiddenInput"
+              />
+            </label>
           </ValidationProvider>
 
           <!-- Input gets invalid every time timeline changes -->

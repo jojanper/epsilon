@@ -12,6 +12,19 @@ describe('DraalFileDialog', () => {
         });
     }
 
+    it('dialog can be opened via icon', async () => {
+        // Icon is available for opening the file dialog
+        const wrapper = factory({ icon: 'mdi-open', value: false });
+        const el = wrapper.findAll('.mdi-open');
+        expect(el.length).toEqual(1);
+        expect(wrapper.vm.open).toBeFalsy();
+
+        // Dialog is opened via icon click
+        const icon = wrapper.find('button');
+        icon.trigger('click');
+        expect(wrapper.vm.open).toBeTruthy();
+    });
+
     it('dialog is opened', async () => {
         // GIVEN file dialog component with possibility to select multiple files
         const wrapper = factory({ value: false, multiple: true });
@@ -34,7 +47,8 @@ describe('DraalFileDialog', () => {
         const input = wrapper.find('input');
 
         // THEN multiple file can be selected
-        expect(input.html()).toEqual('<input type="file" multiple="multiple" class="d-none">');
+        const html = '<input type="file" id="hiddenInput" multiple="multiple" class="d-none">';
+        expect(input.html()).toEqual(html);
 
         // AND file dialog is open
         expect(wrapper.vm.open).toBeTruthy();

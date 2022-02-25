@@ -4,7 +4,8 @@
       v-for="(msg, index) in appNotifications"
       :key="index"
       :class="getClass(msg)"
-      v-on:click.prevent="removeNotification(msg)"
+      @click.prevent="removeNotification(msg)"
+      @keyup="removeNotification(msg)"
     >{{ msg.data }}</div>
   </div>
 </template>

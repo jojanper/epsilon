@@ -43,14 +43,6 @@ if (!isElectron()) {
             ]
         },
         {
-            title: 'Utils',
-            path: '/utils',
-            name: 'utils',
-            meta: {
-                breadcrumb: 'Utils'
-            }
-        },
-        {
             title: 'Audio',
             path: '/audio',
             name: 'audio',

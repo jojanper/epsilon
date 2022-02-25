@@ -1,6 +1,9 @@
 <template>
   <div class="home">
-    <img src="../assets/logo.png" />
+    <img
+      alt="Logo"
+      src="../assets/logo.png"
+    />
   </div>
 </template>
 

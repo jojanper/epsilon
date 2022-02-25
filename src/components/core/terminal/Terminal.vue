@@ -5,6 +5,7 @@
         v-if="canClose"
         class="terminal-buttons terminal-close"
         @click="close"
+        @keyup="close"
       ></div>
       <span
         v-if="title"

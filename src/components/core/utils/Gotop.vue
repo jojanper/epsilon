@@ -1,6 +1,15 @@
 <template>
-  <div class="go-top" :class="getClass()" @click="backToTop">
-    <v-icon x-large dark color="red">mdi-arrow-up-bold-circle</v-icon>
+  <div
+    class="go-top"
+    :class="getClass()"
+    @click="backToTop"
+    @keyup="backToTop"
+  >
+    <v-icon
+      x-large
+      dark
+      color="red"
+    >mdi-arrow-up-bold-circle</v-icon>
   </div>
 </template>
 

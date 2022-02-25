@@ -3,6 +3,7 @@ import DraalFileImport from '../FileImport.vue';
 describe('DraalFileImport', () => {
     const files = ['This is a file', 'This is another file'];
     const dropEvent = getDropEvent('drop', { files });
+    const tooltipText = 'Import data from file';
 
     beforeAll(() => {
         prepareVuetify();
@@ -11,14 +12,13 @@ describe('DraalFileImport', () => {
 
     function factory(propsData = {}) {
         return mountedComponentFactory(DraalFileImport, {
-            tooltipText: 'Import data from file',
             ...propsData
         });
     }
 
-    it('file dialog is opened', async () => {
+    async function fileDialogOpened(props) {
         // GIVEN component
-        const wrapper = factory();
+        const wrapper = factory(props);
 
         // WHEN user clicks icon
         wrapper.find('.mdi-drag').trigger('click');
@@ -26,11 +26,16 @@ describe('DraalFileImport', () => {
 
         // THEN dialog is opened
         expect(wrapper.vm.fileDialog).toBeTruthy();
+    }
+
+    it('file dialog is opened', async () => {
+        fileDialogOpened();
+        fileDialogOpened({ tooltipText });
     });
 
-    it('files are dropped to component', async () => {
+    async function filesDropped(props) {
         // GIVEN multiple files can be dropped
-        const wrapper = factory({ multiple: true });
+        const wrapper = factory({ multiple: true, ...props });
 
         // WHEN files are dropped
         wrapper.find('.mdi-drag').element.dispatchEvent(dropEvent);
@@ -39,5 +44,10 @@ describe('DraalFileImport', () => {
         const event = wrapper.emitted()['file-select'][0][0];
         expect(event[0]).toEqual(files[0]);
         expect(event[1]).toEqual(files[1]);
+    }
+
+    it('files are dropped to component', async () => {
+        filesDropped();
+        filesDropped({ tooltipText });
     });
 });
