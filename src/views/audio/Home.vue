@@ -107,7 +107,7 @@ import DraalExport from '@/components/core/utils/Export.vue';
 import DraalImport from '@/components/core/Import.vue';
 import DraalAudioPlayer from '@/components/core/AudioPlayer.vue';
 import {
-    getMediaDuration, BaseObservableObject, serializeObject, urlObject4Json
+    getMediaDuration, BaseObservableObject, serializeObject, urlObject4Json, debounce
 } from '@/common/utils';
 
 const MP3 = 'http://codeskulptor-demos.commondatastorage.googleapis.com/GalaxyInvaders/theme_01.mp3';
@@ -163,6 +163,9 @@ export default {
     },
     destroyed() {
         this.playerActivator.close();
+    },
+    created() {
+        this.renderAudio = debounce(this.renderAudioZoom, 250);
     },
     mounted() {
         // Store currently active player ID to handle editing of audio titles.
@@ -435,44 +438,36 @@ export default {
             data.forEach(item => this.importData.push(item));
         },
 
+        renderAudioZoom() {
+            const audio = [];
+            for (let ch = 0; ch < this.audioData.numberOfChannels; ch++) {
+                audio.push(this.audioData.getChannelData(ch));
+            }
+
+            this.audioPeaks({
+                length: this.audioData.length,
+                numberOfChannels: this.audioData.numberOfChannels,
+                data: audio,
+                chunkSize: this.chunkSize * this.zoomLevel
+            });
+        },
+
         handleWheel(data) {
             // console.log(data);
             if (data.deltaY < 0) {
-                console.log('scrolling up');
-
                 this.zoomLevel += 1;
 
-                const audio = [];
-                for (let ch = 0; ch < this.audioData.numberOfChannels; ch++) {
-                    audio.push(this.audioData.getChannelData(ch));
-                }
-
-                this.audioPeaks({
-                    length: this.audioData.length,
-                    numberOfChannels: this.audioData.numberOfChannels,
-                    data: audio,
-                    chunkSize: this.chunkSize * this.zoomLevel
-                });
+                console.log('scrolling up', this.zoomLevel);
             } else if (data.deltaY > 0) {
-                console.log('scrolling down');
-
                 this.zoomLevel -= 1;
                 if (this.zoomLevel < 1) {
                     this.zoomLevel = 1;
                 }
 
-                const audio = [];
-                for (let ch = 0; ch < this.audioData.numberOfChannels; ch++) {
-                    audio.push(this.audioData.getChannelData(ch));
-                }
-
-                this.audioPeaks({
-                    length: this.audioData.length,
-                    numberOfChannels: this.audioData.numberOfChannels,
-                    data: audio,
-                    chunkSize: this.chunkSize * this.zoomLevel
-                });
+                console.log('scrolling down', this.zoomLevel);
             }
+
+            this.renderAudio();
         }
     }
 };
