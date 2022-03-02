@@ -2,9 +2,17 @@
   <div>
     <slot></slot>
     <div class="ruler">
-      <div class="timeline-bar" :style="getTimelineBar"></div>
+      <div
+        class="timeline-bar"
+        :style="getTimelineBar"
+      ></div>
       <div ref="ruler">
-        <div v-for="index in maxIndex" :key="index" class="cm" :style="getRulerStyle(index)"></div>
+        <div
+          v-for="index in maxIndex"
+          :key="index"
+          class="cm"
+          :style="getRulerStyle(index)"
+        ></div>
       </div>
     </div>
   </div>

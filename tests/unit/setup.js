@@ -132,6 +132,14 @@ global.flushTestAll = async (allTimers = false) => {
 
 window.URL.createObjectURL = function createObjectURL() { };
 
+class ResizeObserver {
+    observe() { }
+
+    disconnect() { }
+}
+
+window.ResizeObserver = ResizeObserver;
+
 const noop = () => { };
 Object.defineProperty(window, 'scrollTo', { value: noop, writable: true });
 
