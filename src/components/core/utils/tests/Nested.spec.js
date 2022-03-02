@@ -43,7 +43,7 @@ const LIST = [
         text: 'BarFoo',
         active: true
     }
-]
+];
 
 describe('DraalNestedView', () => {
     let elAttach;

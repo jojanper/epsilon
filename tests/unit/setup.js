@@ -1,4 +1,4 @@
-/* eslint-disable no-empty-pattern */
+/* eslint-disable no-empty-pattern, class-methods-use-this */
 import Vue from 'vue';
 import Vuex from 'vuex';
 import Vuetify from 'vuetify/lib';
