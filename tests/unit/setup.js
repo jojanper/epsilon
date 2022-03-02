@@ -1,4 +1,4 @@
-/* eslint-disable no-empty-pattern */
+/* eslint-disable no-empty-pattern, class-methods-use-this */
 import Vue from 'vue';
 import Vuex from 'vuex';
 import Vuetify from 'vuetify/lib';
@@ -131,6 +131,14 @@ global.flushTestAll = async (allTimers = false) => {
 };
 
 window.URL.createObjectURL = function createObjectURL() { };
+
+class ResizeObserver {
+    observe() { }
+
+    disconnect() { }
+}
+
+window.ResizeObserver = ResizeObserver;
 
 const noop = () => { };
 Object.defineProperty(window, 'scrollTo', { value: noop, writable: true });

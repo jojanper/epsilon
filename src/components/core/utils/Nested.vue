@@ -19,7 +19,7 @@
         <draal-nested-view
           class="pl-2 ml-2"
           :nodes="node.children"
-          @selected="$emit('selected', i, node)"
+          @selected="(index, data) => $emit('selected', index, data)"
         />
       </v-list-group>
       <v-list-group
