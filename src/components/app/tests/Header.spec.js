@@ -20,9 +20,7 @@ describe('DraalHeader', () => {
         ]
     };
 
-    beforeAll(() => {
-        prepareVuetify();
-    });
+    setupVuetifyForTests(beforeAll, afterAll);
 
     beforeEach(() => {
         localVue = createLocalVue();

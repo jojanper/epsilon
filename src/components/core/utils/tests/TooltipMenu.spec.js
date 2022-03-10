@@ -1,16 +1,7 @@
 import DraalTooltipMenu from '../TooltipMenu.vue';
 
 describe('DraalTooltipMenu', () => {
-    let elAttach;
-
-    beforeAll(() => {
-        prepareVuetify();
-        elAttach = createDataApp();
-    });
-
-    afterAll(() => {
-        removeDataApp(elAttach);
-    });
+    setupVuetifyForTests(beforeAll, afterAll);
 
     function getTestComponent(template, propsData = {}) {
         return createTestComponent(

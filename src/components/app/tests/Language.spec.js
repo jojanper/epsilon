@@ -36,10 +36,9 @@ describe('DraalLanguageSelection', () => {
     let wrapper;
     let store;
 
-    beforeEach(() => {
-        prepareVuetify();
-        prepareVuex();
+    setupVuetifyForTests(beforeAll, afterAll, prepareVuex);
 
+    beforeEach(() => {
         const localVue = createLocalVue();
 
         store = createTestStore(storeModule);

@@ -1,10 +1,7 @@
 import DraalIconDialog from '../IconDialog.vue';
 
 describe('DraalIconDialog', () => {
-    beforeAll(() => {
-        prepareVuetify();
-        createDataApp();
-    });
+    setupVuetifyForTests(beforeAll, afterAll);
 
     function factory(propsData = {}) {
         return mountedComponentFactory(DraalIconDialog, {

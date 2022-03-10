@@ -27,10 +27,7 @@ function execTerminal(wrapper, data) {
 }
 
 describe('terminalMixin', () => {
-    beforeAll(() => {
-        prepareVuetify();
-        prepareVuex();
-    });
+    setupVuetifyForTests(beforeAll, afterAll, prepareVuex);
 
     it('data is provided to mixin', async () => {
         const localVue = createLocalVue();

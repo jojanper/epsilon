@@ -130,6 +130,26 @@ global.flushTestAll = async (allTimers = false) => {
     await flushPromises();
 };
 
+// Prepare test suite for tests that include Vuetify components
+global.setupVuetifyForTests = (beforeAll, afterAll, beforeCb) => {
+    let elAttach;
+
+    beforeAll(() => {
+        prepareVuetify();
+        elAttach = createDataApp();
+
+        if (beforeCb) {
+            beforeCb();
+        }
+    });
+
+    afterAll(() => {
+        removeDataApp(elAttach);
+    });
+
+    return elAttach;
+};
+
 window.URL.createObjectURL = function createObjectURL() { };
 
 class ResizeObserver {

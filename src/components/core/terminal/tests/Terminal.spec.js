@@ -3,9 +3,7 @@ import { mount } from '@vue/test-utils';
 import DraalTerminal from '../Terminal.vue';
 
 describe('DraalTerminal', () => {
-    beforeAll(() => {
-        prepareVuetify();
-    });
+    setupVuetifyForTests(beforeAll, afterAll);
 
     function factory(propsData = {}) {
         return mount(DraalTerminal, {

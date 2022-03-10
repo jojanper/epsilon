@@ -1,21 +1,12 @@
 import DraalSimpleDialog from '../SimpleDialog.vue';
 
 describe('DraalSimpleDialog', () => {
-    let elAttach;
-
     const props = {
         title: 'Tile',
         content: 'Content'
     };
 
-    beforeAll(() => {
-        prepareVuetify();
-        elAttach = createDataApp();
-    });
-
-    afterAll(() => {
-        removeDataApp(elAttach);
-    });
+    setupVuetifyForTests(beforeAll, afterAll);
 
     function factory(propsData = {}) {
         return mountedComponentFactory(DraalSimpleDialog, propsData);

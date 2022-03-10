@@ -1,10 +1,7 @@
 import DraalExpandItem from '../ExpandItem.vue';
 
 describe('DraalExpandItem', () => {
-    beforeAll(() => {
-        prepareVuetify();
-        createDataApp();
-    });
+    setupVuetifyForTests(beforeAll, afterAll);
 
     function factory(propsData = {}) {
         return mountedComponentFactory(DraalExpandItem, {

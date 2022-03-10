@@ -5,10 +5,7 @@ describe('DraalFileImport', () => {
     const dropEvent = getDropEvent('drop', { files });
     const tooltipText = 'Import data from file';
 
-    beforeAll(() => {
-        prepareVuetify();
-        createDataApp();
-    });
+    setupVuetifyForTests(beforeAll, afterAll);
 
     function factory(propsData = {}) {
         return mountedComponentFactory(DraalFileImport, {

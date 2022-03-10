@@ -1,10 +1,7 @@
 import DraalMenu from '../Menu.vue';
 
 describe('DraalMenu', () => {
-    beforeAll(() => {
-        prepareVuetify();
-        createDataApp();
-    });
+    setupVuetifyForTests(beforeAll, afterAll);
 
     function createMenu(menuItems, template) {
         function callback() { }

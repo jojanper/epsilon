@@ -93,6 +93,7 @@
         "shallowMountedComponentFactory": false,
         "attachToDocument": false,
         "flushTest": false,
-        "flushTestAll": false
+        "flushTestAll": false,
+        "setupVuetifyForTests": false
     }
 }
