@@ -3,9 +3,7 @@ import { shallowMount } from '@vue/test-utils';
 import DraalGo2Top from '../Gotop.vue';
 
 describe('DraalGo2Top', () => {
-    beforeAll(() => {
-        prepareVuetify();
-    });
+    setupVuetifyForTests(beforeAll, afterAll);
 
     it('renders correctly', done => {
         const wrapper = shallowMount(DraalGo2Top, {

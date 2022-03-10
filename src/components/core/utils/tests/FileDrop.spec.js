@@ -6,10 +6,7 @@ describe('DraalFileDrop', () => {
     const dropEvent = getDropEvent('drop', { files });
     const dragEvent = getDropEvent('dragenter', { files });
 
-    beforeAll(() => {
-        prepareVuetify();
-        createDataApp();
-    });
+    setupVuetifyForTests(beforeAll, afterAll);
 
     it('file is dropped', async () => {
         // GIVEN file drop component

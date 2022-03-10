@@ -46,16 +46,7 @@ const LIST = [
 ];
 
 describe('DraalNestedView', () => {
-    let elAttach;
-
-    beforeAll(() => {
-        prepareVuetify();
-        elAttach = createDataApp();
-    });
-
-    afterAll(() => {
-        removeDataApp(elAttach);
-    });
+    setupVuetifyForTests(beforeAll, afterAll);
 
     function factory(propsData = {}) {
         return mountedComponentFactory(DraalNestedView, propsData);

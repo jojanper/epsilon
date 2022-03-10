@@ -20,18 +20,7 @@ const PROPS = {
 };
 
 describe('DraalMultiStageSelect', () => {
-    let el;
-
-    beforeAll(() => {
-        prepareVuetify();
-        el = createDataApp();
-
-        jest.useFakeTimers('modern');
-    });
-
-    afterAll(() => {
-        removeDataApp(el);
-    });
+    setupVuetifyForTests(beforeAll, afterAll, () => jest.useFakeTimers('modern'));
 
     function factory(propsData = {}, params = {}) {
         return mountedComponentFactory(DraalMultiStageSelect, {

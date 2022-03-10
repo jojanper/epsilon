@@ -7,9 +7,7 @@ describe('DraalUploadTerminal', () => {
     const files = ['This is a file'];
     const dropEvent = getDropEvent('drop', { files });
 
-    beforeAll(() => {
-        prepareVuetify();
-    });
+    setupVuetifyForTests(beforeAll, afterAll);
 
     it('file is dropped', async () => {
         // GIVEN file upload component

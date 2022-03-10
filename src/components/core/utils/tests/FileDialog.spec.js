@@ -1,10 +1,7 @@
 import DraalFileDialog from '../FileDialog.vue';
 
 describe('DraalFileDialog', () => {
-    beforeAll(() => {
-        prepareVuetify();
-        createDataApp();
-    });
+    setupVuetifyForTests(beforeAll, afterAll);
 
     function factory(propsData) {
         return mountedComponentFactory(DraalFileDialog, {

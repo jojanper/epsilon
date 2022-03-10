@@ -7,9 +7,7 @@ describe('DraalDialog', () => {
     const title = 'dialog title';
     const model = true;
 
-    beforeAll(() => {
-        prepareVuetify();
-    });
+    setupVuetifyForTests(beforeAll, afterAll);
 
     it('close event is emitted', () => {
         // GIVEN dialog
