@@ -3,6 +3,7 @@
     v-slot="{ errors }"
     :name="name"
     :rules="rules"
+    v-bind="validationProviderAttrs"
   >
     <v-text-field
       :class="classes"

@@ -5,7 +5,7 @@ import InputHelp from './InputHelp.vue';
 import {
     placeholder, label, name, value, rules, help, classes, clearable,
     outlined, draggingColor, loadingStatus, dataRelInput, dataRelTarget,
-    defaultValue
+    defaultValue, immediate
 } from './options';
 
 import * as validation from '@/components/core/form/rules';
@@ -30,6 +30,7 @@ export default {
         draggingColor,
         loadingStatus,
         defaultValue,
+        immediate,
         dataRelInput,
         dataRelTarget,
         /**
@@ -51,6 +52,7 @@ export default {
     },
     data() {
         const fieldValue = this.getInitialValue(this.value);
+        const validationProviderAttrs = this.getValidationAttrs();
 
         return {
             loading: false,
@@ -58,7 +60,9 @@ export default {
             overlay: false,
 
             fieldValue,
-            inputAttrs: this.getInputAttrs()
+            inputAttrs: this.getInputAttrs(),
+
+            validationProviderAttrs
         };
     },
     created() {
@@ -154,6 +158,17 @@ export default {
 
             if (this.outlined) {
                 attrs.outlined = true;
+            }
+
+            return attrs;
+        },
+
+        // Return attributes for ValidationProvider
+        getValidationAttrs() {
+            const attrs = {};
+
+            if (this.immediate) {
+                attrs.immediate = true;
             }
 
             return attrs;
