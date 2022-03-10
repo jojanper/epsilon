@@ -1,10 +1,33 @@
 <template>
-  <div class="mt-3 mb-3">
+  <div class="m-3">
     <!--div class="mx-auto" style="width: 1000px; overflow-x: scroll; "-->
     <!--canvas height="256" width="4099" ref="canvas"></canvas-->
+
+    <div class="p-2 border rounded elevation-3">
+      <draal-tooltip
+        name="Zoom-out"
+        icon="mdi-magnify-minus-outline"
+        @clicked="handleZoom(-1)"
+        :onWheel="true"
+      ></draal-tooltip>
+      <draal-tooltip
+        name="Zoom-in"
+        icon="mdi-magnify-plus-outline"
+        @clicked="handleZoom(1)"
+      ></draal-tooltip>
+      <draal-tooltip
+        name="Zoom via scroll"
+        icon="mdi-magnify-scan"
+        :onWheel="true"
+        @scroll="handleScroll"
+      ></draal-tooltip>
+    </div>
+
     <div
+      class="mt-3"
       style="overflow:auto"
-      v-on:wheel.prevent="handleWheel"
+      @wheel.prevent="handleWheel"
+      ref="timeline"
     >
       <canvas ref="canvas"></canvas>
     </div>
@@ -103,6 +126,7 @@
 import DraalFileImport from '@/components/core/utils/FileImport.vue';
 import DraalIconDialog from '@/components/core/utils/IconDialog.vue';
 import DraalExpandItem from '@/components/core/utils/ExpandItem.vue';
+import DraalTooltip from '@/components/core/utils/Tooltip.vue';
 import DraalExport from '@/components/core/utils/Export.vue';
 import DraalImport from '@/components/core/Import.vue';
 import DraalAudioPlayer from '@/components/core/AudioPlayer.vue';
@@ -120,7 +144,8 @@ export default {
         DraalExpandItem,
         DraalAudioPlayer,
         DraalExport,
-        DraalImport
+        DraalImport,
+        DraalTooltip
     },
     data() {
         return {
@@ -453,18 +478,23 @@ export default {
         },
 
         handleWheel(data) {
-            // console.log(data);
+            this.$refs.timeline.scrollBy({
+                left: data.deltaY < 0 ? -30 : 30
+            });
+        },
+
+        handleScroll(data) {
             if (data.deltaY < 0) {
-                this.zoomLevel += 1;
-
-                console.log('scrolling up', this.zoomLevel);
+                this.handleZoom(1);
             } else if (data.deltaY > 0) {
-                this.zoomLevel -= 1;
-                if (this.zoomLevel < 1) {
-                    this.zoomLevel = 1;
-                }
+                this.handleZoom(-1);
+            }
+        },
 
-                console.log('scrolling down', this.zoomLevel);
+        handleZoom(inc) {
+            this.zoomLevel += inc;
+            if (this.zoomLevel < 1) {
+                this.zoomLevel = 1;
             }
 
             this.renderAudio();
