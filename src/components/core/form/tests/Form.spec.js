@@ -3,14 +3,25 @@ import { storeModule } from '@/store/modules/app';
 import { initialize } from '@/components/core/form/vee-validate';
 import i18n from '@/i18n';
 
-const TEXT_SCHEMA = [{
+const TEXT_SCHEMA_BASE = {
     type: 'text',
     placeholder: 'Enter text',
     label: 'Text',
     name: 'text',
     rules: 'required',
-    debounce: 0,
+    debounce: 0
+};
+
+// Text input schema that have default value for input
+const TEXT_SCHEMA = [{
+    ...TEXT_SCHEMA_BASE,
     defaultValue: 'I am default value'
+}];
+
+// Text input schema with immediate input validation
+const TEXT_SCHEMA2 = [{
+    ...TEXT_SCHEMA_BASE,
+    immediate: true
 }];
 
 const OPTIONS = {
@@ -20,13 +31,18 @@ const OPTIONS = {
 
 const TEXT_VALUE = 'My text';
 
-describe('DraalFormGenerator', () => {
-    beforeAll(() => {
-        prepareVuex();
-        prepareVuetify();
-        createDataApp();
-        initialize(i18n);
+const FORM_PROPS = {
+    options: OPTIONS,
+    debouncedDisabled: 0,
+    value: {
+        text: null
+    }
+};
 
+describe('DraalFormGenerator:text-input', () => {
+    setupVuetifyForTests(beforeAll, afterAll, () => {
+        prepareVuex();
+        initialize(i18n);
         jest.useFakeTimers('modern');
     });
 
@@ -42,14 +58,24 @@ describe('DraalFormGenerator', () => {
         return wrapper.find('input[type="text"]');
     }
 
+    it('text input is immediately validated', async () => {
+        const props = {
+            ...FORM_PROPS,
+            schema: TEXT_SCHEMA2
+        };
+
+        const wrapper = factory(props);
+        await flushTestAll();
+
+        // Error is reported after initial rendering
+        const errorEl = wrapper.find('.v-messages');
+        expect(errorEl.text()).toContain('Required');
+    });
+
     it('text input is supported', async () => {
         const props = {
-            schema: TEXT_SCHEMA,
-            options: OPTIONS,
-            debouncedDisabled: 0,
-            value: {
-                text: null
-            }
+            ...FORM_PROPS,
+            schema: TEXT_SCHEMA
         };
 
         const wrapper = factory(props);

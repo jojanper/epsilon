@@ -53,14 +53,20 @@ export const data = {
     required: true
 };
 
-// Data selection field from data object.
+// Enforce immediate (after rendering) form input validation
+export const immediate = {
+    required: false,
+    default: false
+};
+
+// Data selection field from data object
 export const dataKey = {
     type: String,
     required: false,
     default: ''
 };
 
-// Data drop icon tooltip text.
+// Data drop icon tooltip text
 export const dropTitle = {
     type: String,
     required: false,
@@ -81,7 +87,7 @@ export const clearable = {
     default: false
 };
 
-// Apply the outlined style to the input.
+// Apply the outlined style to the input
 export const outlined = {
     type: Boolean,
     required: false,
@@ -95,7 +101,7 @@ export const draggingColor = {
     default: '#EE82EE' // violet
 };
 
-// Data query function. Must return observable.
+// Data query function. Must return observable
 export const dataQuery = {
     type: Function,
     required: true
@@ -115,7 +121,7 @@ export const dataRelTarget = {
     default: () => []
 };
 
-// Data relation observable for providing updates from other form inputs.
+// Data relation observable for providing updates from other form inputs
 export const dataRelInput = {
     type: Object,
     required: false,
