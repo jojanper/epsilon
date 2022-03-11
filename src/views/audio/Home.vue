@@ -8,7 +8,6 @@
         name="Zoom-out"
         icon="mdi-magnify-minus-outline"
         @clicked="handleZoom(-1)"
-        :onWheel="true"
       ></draal-tooltip>
       <draal-tooltip
         name="Zoom-in"
@@ -18,7 +17,6 @@
       <draal-tooltip
         name="Zoom via scroll"
         icon="mdi-magnify-scan"
-        :onWheel="true"
         @scroll="handleScroll"
       ></draal-tooltip>
     </div>
