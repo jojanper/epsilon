@@ -22,12 +22,23 @@
     </div>
 
     <div
+      v-show="audioData"
       class="mt-3"
-      style="overflow:auto"
+      style="overflow:auto;"
       @wheel.prevent="handleWheel"
       ref="timeline"
     >
-      <canvas ref="canvas"></canvas>
+      <div style="position: relative; height: 320px;">
+        <canvas
+          ref="canvas"
+          style="position: absolute; left: 0; top: 0; z-index: 0;"
+        ></canvas>
+        <canvas
+          ref="playpos"
+          style2="border: 1px solid black;"
+          style="position: absolute; left: 0; top: 0; z-index: 1;"
+        ></canvas>
+      </div>
     </div>
     <!--/div-->
 
@@ -95,6 +106,7 @@
               :name="file.url"
               :url="file.url"
               :init-activate="index === 0 ? true : false"
+              @audio-position="audioPlayPosition"
             ></draal-audio-player>
           </div>
           <template slot="action-0">
@@ -133,6 +145,68 @@ import {
 } from '@/common/utils';
 
 const MP3 = 'http://codeskulptor-demos.commondatastorage.googleapis.com/GalaxyInvaders/theme_01.mp3';
+
+/**
+ * Grid:
+ * 10ms  :   1ms step
+ * 50ms  :  10ms step
+ * 100ms :  50ms step
+ * 500ms : 100ms step
+ * 1s    :  0,5s step
+ * 5s    :    1s step
+ * 10s   :    5s step
+ * 30s   :   10s step
+ * 1min  :   30s step
+ * 5min  :  1min step
+ *
+ * On initial render, determine optimal step size.
+ *  - Get window/element width
+ *
+ * Draw audio timeline
+ */
+
+const TIMEAXIS = [
+    {
+        grid: 0.1,
+        step: 0.05,
+        gain: 0.1
+    },
+    {
+        grid: 0.5,
+        step: 0.1,
+        gain: 0.2
+    },
+    {
+        grid: 1,
+        step: 0.5,
+        gain: 1
+    },
+    {
+        grid: 5,
+        step: 1,
+        gain: 2
+    },
+    {
+        grid: 10,
+        step: 5,
+        gain: 10
+    },
+    {
+        grid: 30,
+        step: 10,
+        gain: 20
+    },
+    {
+        grid: 60,
+        step: 30,
+        gain: 60
+    },
+    {
+        grid: 300,
+        step: 60,
+        gain: 120
+    }
+];
 
 export default {
     name: 'DraalAppAudioHome',
@@ -180,8 +254,8 @@ export default {
             ],
 
             audioData: null,
-            zoomLevel: 1,
-            chunkSize: 128
+            zoomLevel: TIMEAXIS.length - 1,
+            chunkSize: 512
         };
     },
     destroyed() {
@@ -202,6 +276,7 @@ export default {
         });
 
         this.canvas = this.$refs.canvas;
+        this.playpos = this.$refs.playpos;
     },
     computed: {
         exportFiles() {
@@ -242,6 +317,9 @@ export default {
                     console.log(data);
                     // console.log(data.getChannelData(0));
 
+                    this.renderAudioZoom();
+
+                    /*
                     const audio = [];
                     for (let ch = 0; ch < data.numberOfChannels; ch++) {
                         audio.push(data.getChannelData(ch));
@@ -253,6 +331,7 @@ export default {
                         data: audio,
                         chunkSize: this.chunkSize
                     });
+                    */
                 },
                 console.log
             );
@@ -262,6 +341,66 @@ export default {
             URL.revokeObjectURL(this.files[index].url);
             this.files.splice(index, 1);
             this.exportPlaylist();
+        },
+
+        getDisplayTime(time) {
+            let timeSec = time;
+
+            let hours = Math.floor(timeSec / 3600);
+            timeSec = time - hours * 3600;
+            let minutes = Math.floor(timeSec / 60);
+
+            // As we are rounding the seconds, make sure to it stays valid value
+            let seconds = parseInt((timeSec % 60).toFixed(0), 10);
+            if (seconds === 60) {
+                seconds = 0;
+                minutes += 1;
+            }
+
+            // Minutes was increased to full minute -> increase hours instead
+            if (minutes === 60) {
+                minutes = 0;
+                hours += 1;
+            }
+
+            const hh = (hours < 10) ? `0${hours}` : hours;
+            const mm = (minutes < 10) ? `0${minutes}` : minutes;
+            const ss = (seconds < 10) ? `0${seconds}` : `${seconds}`;
+
+            return hours === 0 ? `${mm}:${ss}` : `${hh}:${mm}:${ss}`;
+        },
+
+        audioPlayPosition(pos) {
+            // console.log(pos);
+
+            // Avoid floating-point coordinates and use integers instead
+
+            const { canvas, playpos } = this.$refs;
+
+            playpos.width = canvas.width;
+            playpos.height = canvas.height;
+
+            const ctx = playpos.getContext('2d');
+
+            const normPos = pos / this.audioData.duration;
+
+            const width = playpos.width - 6;
+            const waveformHeight = playpos.height - 64; // / waveform.channels;
+
+            const timePos = 4 + width * normPos;
+
+            console.log(normPos, pos, this.audioData.duration, playpos.width, playpos.height, timePos);
+
+            ctx.clearRect(0, 0, playpos.width, playpos.height);
+
+            ctx.strokeStyle = 'grey';
+            ctx.beginPath();
+            ctx.lineTo(timePos, 0);
+            ctx.lineTo(timePos, waveformHeight);
+            ctx.closePath();
+            ctx.stroke();
+            ctx.fill();
+            ctx.restore();
         },
 
         calculateAudioDataLength(nSamples, scale) {
@@ -280,8 +419,6 @@ export default {
             const INT8_MAX = 127;
             const INT8_MIN = -128;
             const scale = 1.0;
-
-            // console.log(chunkSize, length / chunkSize, length / 25000);
 
             const minPeaks = [[], []];
             const maxPeaks = [[], []];
@@ -340,6 +477,8 @@ export default {
             // console.log(minPeaks[0]);
             // console.log(maxPeaks[0]);
 
+            console.log('CHUNK', chunkSize, length, length / chunkSize, minPeaks[0].length);
+
             this.drawWaveform(minPeaks, maxPeaks, 1, minPeaks[0].length);
         },
 
@@ -350,11 +489,11 @@ export default {
 
             // this.ctx.canvas.width = 4050;// numPeaks;
 
-            console.log(canvas.width, numPeaks);
+            console.log('CANVAS WIDTH', canvas.width, numPeaks);
 
-            canvas.height = 256;
+            canvas.height = 320;
             // canvas.style.height = `${canvas.height}px`;
-            canvas.width = numPeaks;
+            canvas.width = numPeaks + 5;
             // canvas.style.width = `${canvas.width}px`;
 
             this.ctx.save();
@@ -382,14 +521,14 @@ export default {
             // square(this.ctx, 200);
             */
 
-            const { width } = canvas;
+            const width = canvas.width - 6;
 
             const offsetX = 0;
             // if (offsetX > waveform.length - canvas.width) {
             // offsetX = waveform.length - canvas.width;
             // }
 
-            const waveformHeight = canvas.height; // / waveform.channels;
+            const waveformHeight = canvas.height - 64; // / waveform.channels;
 
             console.log(waveformHeight, width, numPeaks, canvas, canvas.width, canvas.height);
 
@@ -410,7 +549,7 @@ export default {
                 // eslint-disable-next-line no-plusplus
                 // for (x = 0, i = offsetX; x < width && i < numPeaks ; x++, i++) {
                 // eslint-disable-next-line no-plusplus
-                for (x = 0, i = offsetX; x < width && i < numPeaks; x++, i++) {
+                for (x = 5, i = offsetX; x < width && i < numPeaks; x++, i++) {
                     const val = audioPeaks[i];
                     // console.log(x, val);
                     // console.log(x + 0.5, offsetY + scaleY(val, waveformHeight) + 0.5);
@@ -423,7 +562,7 @@ export default {
 
                 // x = canvas.width - 1
                 // eslint-disable-next-line no-plusplus
-                for (x = width - 1, i = offsetX + width - 1; x >= 0; x--, i--) {
+                for (x = width - 1 + 5, i = offsetX + width - 1; x >= 0; x--, i--) {
                     const val = audioPeaks[i];
                     this.ctx.lineTo(x + 0.5, offsetY + scaleY(val, waveformHeight) + 0.5);
                 }
@@ -432,6 +571,54 @@ export default {
                 this.ctx.stroke();
                 this.ctx.fill();
             }
+
+            /*
+            this.ctx.strokeStyle = 'blue';
+            this.ctx.beginPath();
+            this.ctx.lineTo(100, 0);
+            this.ctx.lineTo(100, waveformHeight);
+            this.ctx.closePath();
+            this.ctx.stroke();
+            this.ctx.fill();
+            */
+
+            const axis = this.getTimeAxis();
+            const inc = width / this.audioData.duration;
+
+            const axisData = [];
+
+            console.log('WIDTH', canvas.width, width, inc);
+
+            // let pos = 0;
+            let offset = 5;
+            for (let i = 0; i < axis.length; i++) {
+                offset = 5 + axis[i].pos2 * inc;
+                axisData.push({ pos: axis[i].pos, offset });
+                console.log(offset, axis[i].pos2, inc, axis[i].pos2 * inc);
+            }
+
+            console.log(axisData);
+
+            const markerHeight = 20;
+
+            this.ctx.strokeStyle = 'grey';
+            this.ctx.fillStyle = 'grey';
+
+            for (let i = 0; i < axisData.length; i++) {
+                const start = axisData[i].offset;
+                const label = this.getDisplayTime(axisData[i].pos.toString());
+
+                this.ctx.beginPath();
+                this.ctx.lineTo(start, 260);
+                this.ctx.lineTo(start, 260 + markerHeight);
+                this.ctx.closePath();
+                this.ctx.stroke();
+
+                const labelWidth = this.ctx.measureText(label).width;
+                this.ctx.fillText(label, start - labelWidth / 2, 320 - 1 - markerHeight);
+            }
+
+            // console.log(canvas.height, labelWidth);
 
             this.ctx.restore();
         },
@@ -467,15 +654,21 @@ export default {
                 audio.push(this.audioData.getChannelData(ch));
             }
 
+            console.log(
+                'NUMBER OF CHUNKS',
+                this.audioData.length / (this.chunkSize * TIMEAXIS[this.zoomLevel].gain)
+            );
+
             this.audioPeaks({
                 length: this.audioData.length,
                 numberOfChannels: this.audioData.numberOfChannels,
                 data: audio,
-                chunkSize: this.chunkSize * this.zoomLevel
+                chunkSize: Math.floor(this.chunkSize * TIMEAXIS[this.zoomLevel].gain)
             });
         },
 
         handleWheel(data) {
+            console.log('WHEEL');
             this.$refs.timeline.scrollBy({
                 left: data.deltaY < 0 ? -30 : 30
             });
@@ -491,11 +684,46 @@ export default {
 
         handleZoom(inc) {
             this.zoomLevel += inc;
-            if (this.zoomLevel < 1) {
-                this.zoomLevel = 1;
+            if (this.zoomLevel < 0) {
+                this.zoomLevel = 0;
+            } else if (this.zoomLevel > TIMEAXIS.length - 1) {
+                this.zoomLevel = TIMEAXIS.length - 1;
             }
 
             this.renderAudio();
+        },
+
+        getTimeAxis() {
+            const { duration } = this.audioData;
+            console.log(duration);
+
+            const step = TIMEAXIS[this.zoomLevel].grid;
+            const inc = Math.floor(duration / step);
+
+            console.log(inc, duration - step * inc);
+
+            const axisData = [];
+
+            let offset = 0;
+            while (offset < duration) {
+                axisData.push({
+                    pos: offset,
+                    pos2: offset
+                });
+
+                offset += step;
+            }
+
+            if (offset > duration) {
+                axisData.push({
+                    pos: '',
+                    pos2: duration
+                });
+            }
+
+            console.log(axisData);
+
+            return axisData;
         }
     }
 };
